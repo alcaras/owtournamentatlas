@@ -8,10 +8,13 @@
       "options": [
         "TERRAIN_JUNGLE"
       ],
-      "verdict": "GUARANTEED \u2014 100% in-band, no rerolls (pool pick)",
+      "tip": "pool pick",
+      "critPct": 10,
+      "okPct": 10,
+      "n": 10,
       "sites": "19 [16\u201324]",
       "crow": "68",
-      "land": "68 [65\u201370]",
+      "land": "68 [64\u201370]",
       "landConnPct": 100,
       "previews": [
         "rec/dota-jungle/seed-1.png",
@@ -33,10 +36,13 @@
       "options": [
         "TERRAIN_SAND"
       ],
-      "verdict": "GUARANTEED \u2014 100% in-band (pool pick, drier corridor)",
+      "tip": "drier corridor",
+      "critPct": 10,
+      "okPct": 10,
+      "n": 10,
       "sites": "18 [14\u201320]",
       "crow": "68",
-      "land": "68 [66\u201370]",
+      "land": "68 [63\u201370]",
       "landConnPct": 100,
       "previews": [
         "rec/dota-sand/seed-1.png",
@@ -58,10 +64,13 @@
       "options": [
         "TERRAIN_WATER"
       ],
-      "verdict": "GUARANTEED \u2014 100% in-band (pool pick, water corridor)",
+      "tip": "water corridor",
+      "critPct": 10,
+      "okPct": 10,
+      "n": 10,
       "sites": "18 [16\u201322]",
-      "crow": "69",
-      "land": "69 [66\u201371]",
+      "crow": "68",
+      "land": "68 [62\u201370]",
       "landConnPct": 100,
       "previews": [
         "rec/dota-water/seed-1.png",
@@ -83,10 +92,13 @@
       "options": [
         "PLAYER_START_ANYWHERE"
       ],
-      "verdict": "Screen-and-reroll (~25% in hard band; ~57% in 18\u201323 soft band)",
+      "tip": "ANYWHERE start",
+      "critPct": 10,
+      "okPct": 10,
+      "n": 10,
       "sites": "24 [18\u201328]",
-      "crow": "29",
-      "land": "30 [19\u201345]",
+      "crow": "32",
+      "land": "33 [7\u201375]",
       "landConnPct": 100,
       "previews": [
         "rec/continent/seed-1.png",
@@ -108,10 +120,13 @@
       "options": [
         "PLAYER_START_ANYWHERE"
       ],
-      "verdict": "Screen-and-reroll (~10\u201313%) \u2014 heaviest tournament use historically",
+      "tip": "heaviest historical tournament use",
+      "critPct": 10,
+      "okPct": 40,
+      "n": 10,
       "sites": "16 [14\u201320]",
-      "crow": "29",
-      "land": "31 [9\u201376]",
+      "crow": "39",
+      "land": "41 [11\u201373]",
       "landConnPct": 100,
       "previews": [
         "rec/coastal-rain-basin/seed-1.png",
@@ -133,10 +148,13 @@
       "options": [
         "(defaults)"
       ],
-      "verdict": "Screen-and-reroll (~43%) \u2014 best of the open scripts",
+      "tip": "best of the open scripts",
+      "critPct": 40,
+      "okPct": 50,
+      "n": 10,
       "sites": "18 [16\u201320]",
-      "crow": "34",
-      "land": "35 [18\u201367]",
+      "crow": "42",
+      "land": "62 [43\u201377]",
       "landConnPct": 100,
       "previews": [
         "rec/inland-sea/seed-1.png",
@@ -158,10 +176,13 @@
       "options": [
         "DONUT_PLAYER_START_OUTER_SEA"
       ],
-      "verdict": "Screen-and-reroll (~35%) \u2014 use OUTER SEA start (Inland \u2192 60% conn)",
+      "tip": "OUTER SEA start (Inner \u2192 60% connected)",
+      "critPct": 0,
+      "okPct": 10,
+      "n": 10,
       "sites": "14 [12\u201316]",
-      "crow": "28",
-      "land": "30 [9\u201354]",
+      "crow": "26",
+      "land": "40 [9\u201377]",
       "landConnPct": 90,
       "previews": [
         "rec/donut/seed-1.png",
@@ -183,10 +204,13 @@
       "options": [
         "ARID_WATER_SIZE_SMALL"
       ],
-      "verdict": "Screen-and-reroll (~30%)",
+      "tip": "SMALL water size",
+      "critPct": 20,
+      "okPct": 50,
+      "n": 10,
       "sites": "16 [13\u201319]",
-      "crow": "32",
-      "land": "34 [19\u201351]",
+      "crow": "34",
+      "land": "39 [11\u201353]",
       "landConnPct": 100,
       "previews": [
         "rec/arid-plateau/seed-1.png",
@@ -209,10 +233,13 @@
         "DESERT_COAST_NONE",
         "DESERT_SIZE_NORMAL"
       ],
-      "verdict": "Screen-and-reroll (~25%) \u2014 avoid Double size (~45 sites)",
+      "tip": "NORMAL size (Double size \u2192 ~45 sites)",
+      "critPct": 0,
+      "okPct": 0,
+      "n": 10,
       "sites": "16 [14\u201319]",
-      "crow": "33",
-      "land": "33 [19\u201341]",
+      "crow": "32",
+      "land": "32 [9\u201342]",
       "landConnPct": 100,
       "previews": [
         "rec/extreme-desert/seed-1.png",
@@ -234,10 +261,13 @@
       "options": [
         "HARDWOOD_FOREST_PLAYER_START_SEA"
       ],
-      "verdict": "Screen-and-reroll (~25%) \u2014 use COASTAL start (Inland collapses dist)",
+      "tip": "COASTAL start (Inland collapses distance)",
+      "critPct": 10,
+      "okPct": 20,
+      "n": 10,
       "sites": "14 [10\u201318]",
-      "crow": "40",
-      "land": "40 [10\u201356]",
+      "crow": "43",
+      "land": "43 [11\u201356]",
       "landConnPct": 100,
       "previews": [
         "rec/hardwood-forest/seed-1.png",
@@ -259,10 +289,13 @@
       "options": [
         "MOUNTAIN_PASS_PLAYER_START_SIDE"
       ],
-      "verdict": "Screen-and-reroll (~40%) \u2014 use SIDES start (Central \u2192 0%)",
+      "tip": "SIDES start (Central \u2192 0% connected)",
+      "critPct": 10,
+      "okPct": 40,
+      "n": 10,
       "sites": "15 [12\u201318]",
-      "crow": "39",
-      "land": "41 [18\u201375]",
+      "crow": "56",
+      "land": "59 [27\u201377]",
       "landConnPct": 100,
       "previews": [
         "rec/mountain-pass/seed-1.png",
@@ -284,10 +317,13 @@
       "options": [
         "(defaults)"
       ],
-      "verdict": "Screen-and-reroll (~30%) \u2014 no map-option lever",
+      "tip": "no map-option lever",
+      "critPct": 40,
+      "okPct": 40,
+      "n": 10,
       "sites": "18 [15\u201324]",
-      "crow": "29",
-      "land": "31 [12\u201360]",
+      "crow": "24",
+      "land": "32 [1\u201360]",
       "landConnPct": 100,
       "previews": [
         "rec/wetlands/seed-1.png",
@@ -310,11 +346,14 @@
         "ARCHIPELAGO_LANDMASS_LARGE",
         "ARCHIPELAGO_WATER_SIZE_MERGED"
       ],
-      "verdict": "NOT RECOMMENDED \u2014 ~0% in hard band, never 100% land-connected",
+      "tip": "rarely land-connected",
+      "critPct": 0,
+      "okPct": 0,
+      "n": 10,
       "sites": "31 [25\u201340]",
-      "crow": "24",
-      "land": "24 [13\u201335]",
-      "landConnPct": 90,
+      "crow": "22",
+      "land": "26 [10\u201370]",
+      "landConnPct": 100,
       "previews": [
         "rec/archipelago/seed-1.png",
         "rec/archipelago/seed-2.png",

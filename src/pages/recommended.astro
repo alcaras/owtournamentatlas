@@ -14,68 +14,75 @@ const scripts = order.filter(s => byScript[s]);
 
 const D = (o: any) => o == null ? '—'
   : `${o.mean.toFixed(0)} <span class="dim">[${o.min}–${o.max}]</span>`;
-// best variant per script = highest pass%, then conn%, then sites near 20
+// ranking comes from the corrected (symmetric-capital) rec sweep
+const ranked = [...recs.maps].sort((a:any,b:any)=>
+  b.okPct-a.okPct || b.critPct-a.critPct);
+// knob tables (below) still read the option sweep; highlight best row
 const best: Record<string, any> = {};
 for (const s of scripts) {
   best[s] = [...byScript[s]].sort((a,b)=>
     b.passPct-a.passPct || b.landConnPct-a.landConnPct ||
     Math.abs(a.sites.mean-20)-Math.abs(b.sites.mean-20))[0];
 }
-// hard pool = pass 100
-const pool = scripts.filter(s => best[s].passPct >= 100);
 ---
 <Base title="Recommended Settings">
   <p class="lede">
-    Hard tournament pool: <b>every</b> generated map must be
-    land-connected, land path 40–80 hex, city sites 12–28. Each script
-    holds its best size/aspect/point-sym; we sweep the one map-option
-    that moves land-connection or capital distance. <b>Pass%</b> = share
-    of blind maps meeting all hard bounds (100% = poolable with no
-    rerolls). N={opt.N}/variant.
+    The <i>ideal map</i> we tune settings toward: land-connected,
+    18–22 city sites, 45–65-hex land distance (15–25 sites acceptable).
+    We don't screen or reject maps — these are targets, not gates.
+    <b>% meet criteria</b> = share of blind maps hitting the ideal band;
+    <b>acceptable</b> = the looser 15–25-site band. n=10/config.
+    Distances use the corrected even-r model with symmetric capitals
+    (a prior bug placed the two capitals non-symmetrically — now fixed).
   </p>
 
   <section class="pool">
-    <h2 class="pool__h">✅ Guaranteed pool (100% pass — zero rerolls)</h2>
-    {pool.length === 0 && <p class="dim">none</p>}
+    <h2 class="pool__h">Scripts ranked by how often they hit criteria</h2>
     <div class="cards">
-      {pool.map(s => {
-        const b = best[s];
-        return (
-          <div class="card">
-            <div class="card__t">{s}</div>
-            <div class="card__cfg">{b.base} · {b.axis}: <b>{b.variant}</b></div>
-            <div class="card__m">
-              sites <b>{b.sites.mean}</b> [{b.sites.min}–{b.sites.max}] ·
-              land <b>{b.landPath?.mean}</b> [{b.landPath?.min}–{b.landPath?.max}] ·
-              scout {b.scout?.mean} · 100% connected
-            </div>
+      {ranked.slice(0,6).map((m:any) => (
+        <div class="card">
+          <div class="card__t">{m.label}</div>
+          <div class="card__cfg">{m.setting}{m.tip ? ` · ${m.tip}` : ''}</div>
+          <div class="card__m">
+            <b class={m.critPct>=70?'g':m.critPct>=30?'o':'n'}>{m.critPct}% criteria</b> ·
+            {m.okPct}% acceptable · sites {m.sites} · land {m.land}
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
     <p class="note">
-      Only DOTA passes every blind map. The other scripts can't guarantee
-      the bounds (variance / occasional naval-only or too-close roll) —
-      they need a generate-check-reroll step. The actual tournament
-      historically used Coastal Rain Basin, Continent and Inland Sea
-      ({tour.count} games on the <a href={`${import.meta.env.BASE_URL}calibration`}>calibration</a> page) — all
-      screen-and-reroll scripts.
+      Note: with symmetric capitals corrected, no open script lands in
+      the tight ideal band on every blind map (the earlier
+      "DOTA = 100%" result was an artifact of the capital-placement
+      bug — DOTA ultrawide actually runs ~68 land, just over the 65
+      cap). Inland Sea / Wetlands hit the band most often. This is why
+      we treat the bands as targets and only reroll on a true failure
+      (no land connection). Historically the tournament used Coastal
+      Rain Basin, Continent and Inland Sea ({tour.count} games on the
+      <a href={`${import.meta.env.BASE_URL}calibration`}>calibration</a> page).
+      The per-map knob tables below are being regenerated on the fixed
+      binary.
     </p>
   </section>
 
   <h2 class="sec">Recommended setting per map + {recs.N} hex previews</h2>
   <p class="note">Each card = the recommended config for that script.
-    Capitals are the bold white-ringed markers; gold = city sites, red =
-    tribe camps. Real pointy-top hex (even-r, game-matched).</p>
+    Capitals are the big <b>player-colored stars</b> (red = player 1,
+    blue = player 2); gold = city sites, red dots = tribe camps. Real
+    pointy-top hex (even-r, game-matched).</p>
   {recs.maps.map((m:any) => (
     <section class="rec">
       <header class="rec__hd">
         <h3 class="rec__name">{m.label}</h3>
-        <span class={'rec__verdict ' + (m.verdict.startsWith('GUARANTEED') ? 'g' : m.verdict.startsWith('NOT') ? 'n' : 'o')}>{m.verdict}</span>
+        <span class={'rec__pct ' + (m.critPct >= 70 ? 'g' : m.critPct >= 30 ? 'o' : 'n')}>
+          {m.critPct}% meet criteria
+          <span class="rec__ok">· {m.okPct}% acceptable · n={m.n}</span>
+        </span>
       </header>
       <div class="rec__cfg">
         <b>Settings:</b> {m.setting}
         {m.options && m.options[0] !== '(defaults)' && <span> · <b>option:</b> {m.options.join(', ')}</span>}
+        {m.tip && <span> · {m.tip}</span>}
       </div>
       <div class="rec__stats">
         sites <b>{m.sites}</b> · capital crow <b>{m.crow}</b> · land path
@@ -156,11 +163,13 @@ const pool = scripts.filter(s => best[s].passPct >= 100);
       border-radius:6px; padding:0.9rem 1.1rem; margin-bottom:1rem; }
     .rec__hd { display:flex; align-items:baseline; gap:0.8rem; flex-wrap:wrap; }
     .rec__name { font-family:var(--font-display); font-weight:700; font-size:1.25rem; color:var(--text); }
-    .rec__verdict { font-size:0.66rem; font-family:var(--font-ui); letter-spacing:0.1em;
-      text-transform:uppercase; padding:0.12rem 0.5rem; border-radius:999px; border:1px solid; }
-    .rec__verdict.g { color:#7fb069; border-color:#3b6e3b; }
-    .rec__verdict.o { color:#caa84a; border-color:var(--gold-deep); }
-    .rec__verdict.n { color:#b06a5f; border-color:#5a2e28; }
+    .rec__pct { font-size:0.78rem; font-family:var(--font-ui); font-weight:700;
+      letter-spacing:0.04em; padding:0.16rem 0.6rem; border-radius:999px; border:1px solid; }
+    .rec__pct.g { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
+    .rec__pct.o { color:#e0c061; border-color:var(--gold-deep); background:#231f0d; }
+    .rec__pct.n { color:#d08070; border-color:#5a2e28; background:#2a1512; }
+    .rec__ok { font-weight:400; font-size:0.66rem; color:var(--text-faint);
+      letter-spacing:0.02em; }
     .rec__cfg { font-size:0.9rem; color:var(--text-soft); margin:0.4rem 0 0.2rem; }
     .rec__cfg b, .rec__stats b { color:var(--text); }
     .rec__stats { font-size:0.82rem; color:var(--text-faint); margin-bottom:0.6rem; }
