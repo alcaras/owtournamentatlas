@@ -56,12 +56,16 @@ const nice = (n: string) => n.replace(/_/g, ' ');
         <tr><td>Resources</td><td>{g.resourceCount}</td></tr>
       </table>
 
-      <h2>Yield tiles (best improvement)</h2>
+      <h2>Yield tiles — count of land tiles whose best improvement gives ≥N</h2>
       <table class="kv">
-        <tr><td>6+ &nbsp;F·I·W·S</td><td class="mono">
-          {g.yield6 ? `${g.yield6.food}·${g.yield6.iron}·${g.yield6.wood}·${g.yield6.stone}` : '—'}</td></tr>
-        <tr><td>8+ &nbsp;F·I·W·S</td><td class="mono">
-          {g.yield8 ? `${g.yield8.food}·${g.yield8.iron}·${g.yield8.wood}·${g.yield8.stone}` : '—'}</td></tr>
+        <tr><td>threshold</td><td class="mono">Food·Iron·Wood·Stone</td></tr>
+        {[5,6,7,8,9,10].map(k => {
+          const y = (g as any)['yield'+k];
+          return (
+            <tr><td>{k}+</td><td class="mono">
+              {y ? `${y.food}·${y.iron}·${y.wood}·${y.stone}` : '—'}</td></tr>
+          );
+        })}
       </table>
 
       <h2>Resources <span class="rh">({g.resourceCount} total · grey = absent)</span></h2>

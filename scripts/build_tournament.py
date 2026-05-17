@@ -92,7 +92,10 @@ def analyze(zp: str) -> dict | None:
     pct = pm.get("pct", {})
     y5 = pm.get("yield5", {})
     y6 = pm.get("yield6", {})
+    y7 = pm.get("yield7", {})
     y8 = pm.get("yield8", {})
+    y9 = pm.get("yield9", {})
+    y10 = pm.get("yield10", {})
     res = pm.get("resources", {})
 
     landok, waterok = set(), set()
@@ -153,7 +156,8 @@ def analyze(zp: str) -> dict | None:
         "resourceCount": sum(res.values()),
         "resources": {k.replace("RESOURCE_", "").title(): v
                       for k, v in sorted(res.items(), key=lambda x: -x[1])},
-        "yield5": y5, "yield6": y6, "yield8": y8,
+        "yield5": y5, "yield6": y6, "yield7": y7, "yield8": y8,
+        "yield9": y9, "yield10": y10,
         "crow": hex_distance(A, B),
         "land": land,
         "landConnected": land is not None,

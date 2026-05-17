@@ -70,6 +70,12 @@
     "Thracians",
     "Vandals"
    ],
+   "yield10": {
+    "food": 32,
+    "iron": 0,
+    "stone": 198,
+    "wood": 0
+   },
    "yield5": {
     "food": 772,
     "iron": 822,
@@ -82,11 +88,23 @@
     "stone": 502,
     "wood": 21
    },
+   "yield7": {
+    "food": 430,
+    "iron": 192,
+    "stone": 388,
+    "wood": 21
+   },
    "yield8": {
     "food": 148,
     "iron": 192,
     "stone": 314,
     "wood": 21
+   },
+   "yield9": {
+    "food": 135,
+    "iron": 2,
+    "stone": 292,
+    "wood": 0
    }
   },
   {
@@ -159,6 +177,12 @@
     "Huns",
     "Vandals"
    ],
+   "yield10": {
+    "food": 21,
+    "iron": 0,
+    "stone": 248,
+    "wood": 0
+   },
    "yield5": {
     "food": 1170,
     "iron": 1452,
@@ -171,11 +195,23 @@
     "stone": 814,
     "wood": 10
    },
+   "yield7": {
+    "food": 444,
+    "iron": 434,
+    "stone": 520,
+    "wood": 10
+   },
    "yield8": {
     "food": 118,
     "iron": 434,
     "stone": 434,
     "wood": 10
+   },
+   "yield9": {
+    "food": 109,
+    "iron": 6,
+    "stone": 388,
+    "wood": 0
    }
   },
   {
@@ -246,6 +282,12 @@
     "Gauls",
     "Huns"
    ],
+   "yield10": {
+    "food": 29,
+    "iron": 0,
+    "stone": 1000,
+    "wood": 0
+   },
    "yield5": {
     "food": 1528,
     "iron": 2268,
@@ -258,11 +300,23 @@
     "stone": 1936,
     "wood": 15
    },
+   "yield7": {
+    "food": 935,
+    "iron": 416,
+    "stone": 1442,
+    "wood": 15
+   },
    "yield8": {
     "food": 217,
     "iron": 416,
     "stone": 1308,
     "wood": 15
+   },
+   "yield9": {
+    "food": 211,
+    "iron": 2,
+    "stone": 1190,
+    "wood": 0
    }
   }
  ],
