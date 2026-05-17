@@ -29,6 +29,8 @@ LAB = ATLAS.parent / "owmapgen-lab"
 sys.path.insert(0, str(LAB / "scripts"))
 from parse_map import hex_distance, _odd_r_neighbors          # noqa: E402
 from movement_model import slinger_turns, _costs              # noqa: E402
+from parse_map import parse_map                                # noqa: E402
+import tempfile                                                # noqa: E402
 
 EXAMPLES = ATLAS / "examples" / "unpacked"
 RT = ("RiverW", "RiverSW", "RiverSE", "RiverE", "RiverNW", "RiverNE")
@@ -37,7 +39,21 @@ RT = ("RiverW", "RiverSW", "RiverSE", "RiverE", "RiverNW", "RiverNE")
 def analyze(zp: str) -> dict | None:
     z = zipfile.ZipFile(zp)
     xn = [n for n in z.namelist() if n.endswith(".xml")][0]
-    r = ET.parse(io.BytesIO(z.read(xn))).getroot()
+    xbytes = z.read(xn)
+    # reuse parse_map for terrain / resources / 5+ & 8+ yield / tribes
+    with tempfile.NamedTemporaryFile("wb", suffix=".xml", delete=False) as tf:
+        tf.write(xbytes)
+        _tmp = tf.name
+    try:
+        pm = parse_map(_tmp)
+    except Exception:
+        pm = {}
+    finally:
+        try:
+            os.unlink(_tmp)
+        except OSError:
+            pass
+    r = ET.fromstring(xbytes)
     W = int(r.attrib["MapWidth"])
     names = {p.attrib.get("ID"): (p.attrib.get("Name") or "?")
              for p in r.findall("Player")}
@@ -70,18 +86,13 @@ def analyze(zp: str) -> dict | None:
     b = cap[pls[1]][1]
     A, B = (a % W, a // W), (b % W, b // W)
 
-    cs = sum(1 for t in r.findall("Tile") if t.find("CitySite") is not None)
-
-    GENERIC_TRIBES = {"TRIBE_BARBARIANS", "TRIBE_ANARCHY", "TRIBE_RAIDERS",
-                      "TRIBE_REBELS", "TRIBE_GENERIC"}
-    tribe_camps = collections.Counter()
-    for t in r.findall("Tile"):
-        ts = t.find("TribeSite")
-        if ts is not None:
-            tn = (ts.text or "").strip()
-            if tn and tn not in GENERIC_TRIBES:
-                tribe_camps[tn] += 1
-    tribes = sorted(k.replace("TRIBE_", "").title() for k in tribe_camps)
+    cs = pm.get("citySiteCount") or sum(
+        1 for t in r.findall("Tile") if t.find("CitySite") is not None)
+    tribes = [k.replace("TRIBE_", "").title() for k in pm.get("tribes", [])]
+    pct = pm.get("pct", {})
+    y5 = pm.get("yield5", {})
+    y8 = pm.get("yield8", {})
+    res = pm.get("resources", {})
 
     landok, waterok = set(), set()
     for (x, y), (te, h, *_rest) in grid.items():
@@ -126,8 +137,16 @@ def analyze(zp: str) -> dict | None:
         "size": r.attrib.get("MapSize", "").replace("MAPSIZE_", ""),
         "aspect": r.attrib.get("MapAspectRatio", "").replace("MAPASPECTRATIO_", ""),
         "citySites": cs,
-        "tribeCount": len(tribe_camps),
+        "tribeCount": len(tribes),
         "tribes": tribes,
+        "oceanPct": round(pct.get("ocean", 0) + pct.get("lake", 0), 1),
+        "forestPct": round(pct.get("forest", 0) + pct.get("jungle", 0), 1),
+        "hillPct": round(pct.get("hill", 0), 1),
+        "mountainPct": round(pct.get("mountain", 0) + pct.get("volcano", 0), 1),
+        "resourceCount": sum(res.values()),
+        "resources": {k.replace("RESOURCE_", "").title(): v
+                      for k, v in sorted(res.items(), key=lambda x: -x[1])},
+        "yield5": y5, "yield8": y8,
         "crow": hex_distance(A, B),
         "land": land,
         "landConnected": land is not None,

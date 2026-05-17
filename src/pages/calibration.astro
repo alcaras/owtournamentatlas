@@ -44,6 +44,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
             <th>#</th><th>Matchup</th><th>Size</th><th>Aspect</th>
             <th>City sites</th><th>Tribes</th><th>Crow</th><th>Land</th><th>Conn</th>
             <th>Scout</th><th>Slinger L</th><th>Sl Sea</th><th>Sl Hatti</th>
+            <th>Ocean%</th><th>Res</th><th>8+ F·I·W·S</th>
           </tr></thead>
           <tbody>
             {byScript[s].sort((a,b)=>(+a.id||999)-(+b.id||999)).map(g => (
@@ -61,6 +62,10 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
                 <td class="mono">{g.slingerLand ?? '—'}</td>
                 <td class="mono">{g.slingerSea ?? '—'}</td>
                 <td class="mono">{g.slingerHatti ?? '—'}</td>
+                <td class="mono" title={`forest ${g.forestPct}% · hills ${g.hillPct}% · mtn ${g.mountainPct}%`}>{g.oceanPct ?? '—'}</td>
+                <td class="mono" title={Object.entries(g.resources||{}).slice(0,12).map(([k,v])=>`${k} ${v}`).join(', ')}>{g.resourceCount ?? '—'}</td>
+                <td class="mono" title={g.yield5 ? `5+  F${g.yield5.food} I${g.yield5.iron} W${g.yield5.wood} S${g.yield5.stone}` : ''}>
+                  {g.yield8 ? `${g.yield8.food}·${g.yield8.iron}·${g.yield8.wood}·${g.yield8.stone}` : '—'}</td>
               </tr>
             ))}
           </tbody>
@@ -116,6 +121,11 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
     walkable-land BFS (water/mountain impassable); Scout = orders for a
     Scout (move 3) capital→capital; Slinger = move 2 (L land / Sea
     coastal / Hatti ignores hill). Exploration law assumed (rivers fast).
+    <b>Ocean%</b> = water share (hover: forest/hills/mtn). <b>Res</b> =
+    total resources on the map (hover: top types). <b>8+ F·I·W·S</b> =
+    land tiles that can yield 8+ Food/Iron/Wood/Stone via the best
+    improvement (hover shows the 5+ counts). Tribes = distinct named
+    tribes spawned (Barbarians excluded; hover lists them).
   </p>
 </Base>
 
