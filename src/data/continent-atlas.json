@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-17 09:42 UTC",
+  "generatedAt": "2026-05-17 10:25 UTC",
   "owmapgenSha": "59d8b18",
-  "atlasId": "20260517-022445",
+  "atlasId": "20260517-025838",
   "seedsPerCell": 30,
   "target": [
     18,
@@ -12,138 +12,6 @@
     25
   ],
   "script": "Continent",
-  "recommended": {
-    "size": "tiny",
-    "sizeLabel": "Tiny",
-    "pointSymmetry": false,
-    "aspect": "square",
-    "dims": "58x58",
-    "n": 30,
-    "mean": 23.17,
-    "sd": 2.3,
-    "min": 19,
-    "max": 27,
-    "median": 23.0,
-    "pctTarget": 56.7,
-    "pctAccept": 83.3,
-    "capitalDistance": {
-      "mean": 22.37,
-      "sd": 7.29,
-      "min": 13,
-      "max": 42,
-      "median": 20.0,
-      "n": 30
-    },
-    "landPath": {
-      "mean": 25.28,
-      "sd": 10.34,
-      "min": 13,
-      "max": 47,
-      "median": 21,
-      "n": 29
-    },
-    "waterPath": {
-      "mean": 23.1,
-      "sd": 7.67,
-      "min": 13,
-      "max": 42,
-      "median": 20.0,
-      "n": 30
-    },
-    "landConnectedPct": 96.7,
-    "slingerTurns": {
-      "land": {
-        "mean": 14.913333333333334,
-        "sd": 2.7,
-        "min": 8,
-        "max": 25,
-        "median": 14.913333333333334,
-        "n": 30
-      },
-      "sea": {
-        "mean": 13.98125,
-        "sd": 2.5,
-        "min": 8,
-        "max": 23,
-        "median": 13.98125,
-        "n": 30
-      },
-      "hatti": {
-        "mean": 13.98125,
-        "sd": 2.5,
-        "min": 8,
-        "max": 23,
-        "median": 13.98125,
-        "n": 30
-      }
-    },
-    "yield6Mean": {
-      "food": 720.2,
-      "iron": 341.4,
-      "wood": 42.9,
-      "stone": 213.0
-    },
-    "yield8Mean": {
-      "food": 149.0,
-      "iron": 341.4,
-      "wood": 42.9,
-      "stone": 0.0
-    },
-    "tribeMean": 21.17,
-    "resourceTotalMean": 118.07,
-    "terrainPctMean": {
-      "flat": 30.706,
-      "forest": 8.846,
-      "hill": 10.149,
-      "jungle": 0.0,
-      "lake": 0.477,
-      "mountain": 5.619,
-      "ocean": 52.236,
-      "river": 6.238,
-      "scrub": 4.687,
-      "volcano": 0.812,
-      "water": 52.713
-    },
-    "resourcesMeanPerMap": {
-      "RESOURCE_BARLEY": 5.367,
-      "RESOURCE_CAMEL": 2.967,
-      "RESOURCE_CATTLE": 2.967,
-      "RESOURCE_CITRUS": 4.633,
-      "RESOURCE_CRAB": 5.667,
-      "RESOURCE_DYE": 8.167,
-      "RESOURCE_ELEPHANT": 4.2,
-      "RESOURCE_FISH": 7.033,
-      "RESOURCE_FUR": 1.933,
-      "RESOURCE_GAME": 6.4,
-      "RESOURCE_GEM": 2.633,
-      "RESOURCE_GOAT": 3.667,
-      "RESOURCE_GOLD": 2.667,
-      "RESOURCE_HONEY": 4.033,
-      "RESOURCE_HORSE": 9.433,
-      "RESOURCE_INCENSE": 1.667,
-      "RESOURCE_LAVENDER": 2.867,
-      "RESOURCE_MARBLE": 6.867,
-      "RESOURCE_OLIVE": 3.067,
-      "RESOURCE_ORE": 3.833,
-      "RESOURCE_PEARL": 6.667,
-      "RESOURCE_PIG": 1.3,
-      "RESOURCE_SALT": 3.767,
-      "RESOURCE_SHEEP": 3.5,
-      "RESOURCE_SILVER": 2.8,
-      "RESOURCE_SORGHUM": 2.167,
-      "RESOURCE_WHEAT": 6.3,
-      "RESOURCE_WINE": 1.5
-    },
-    "tiles": 3364,
-    "scoutOrders": {
-      "mean": 10.168181818181818,
-      "sd": 1.8,
-      "min": 6,
-      "max": 17,
-      "median": 10.168181818181818,
-      "n": 30
-    }
-  },
   "cells": [
     {
       "size": "smallest",
@@ -184,30 +52,38 @@
         "n": 30
       },
       "landConnectedPct": 93.3,
+      "scoutOrders": {
+        "mean": 9.64,
+        "sd": 3.58,
+        "min": 4,
+        "max": 18,
+        "median": 9.5,
+        "n": 28
+      },
       "slingerTurns": {
         "land": {
-          "mean": 14.333333333333334,
-          "sd": 2.6,
-          "min": 8,
-          "max": 24,
-          "median": 14.333333333333334,
-          "n": 30
+          "mean": 14.18,
+          "sd": 5.46,
+          "min": 5,
+          "max": 27,
+          "median": 14.5,
+          "n": 28
         },
         "sea": {
-          "mean": 13.4375,
-          "sd": 2.4,
-          "min": 8,
-          "max": 22,
-          "median": 13.4375,
+          "mean": 11.73,
+          "sd": 4.06,
+          "min": 5,
+          "max": 19,
+          "median": 11.0,
           "n": 30
         },
         "hatti": {
-          "mean": 13.4375,
-          "sd": 2.4,
-          "min": 8,
-          "max": 22,
-          "median": 13.4375,
-          "n": 30
+          "mean": 12.86,
+          "sd": 5.17,
+          "min": 4,
+          "max": 24,
+          "median": 12.5,
+          "n": 28
         }
       },
       "yield6Mean": {
@@ -266,14 +142,6 @@
         "RESOURCE_SORGHUM": 2.0,
         "RESOURCE_WHEAT": 2.033,
         "RESOURCE_WINE": 1.267
-      },
-      "scoutOrders": {
-        "mean": 9.772727272727272,
-        "sd": 1.8,
-        "min": 5,
-        "max": 16,
-        "median": 9.772727272727272,
-        "n": 30
       }
     },
     {
@@ -315,30 +183,38 @@
         "n": 30
       },
       "landConnectedPct": 86.7,
+      "scoutOrders": {
+        "mean": 8.5,
+        "sd": 5.08,
+        "min": 3,
+        "max": 24,
+        "median": 6.5,
+        "n": 26
+      },
       "slingerTurns": {
         "land": {
-          "mean": 14.200000000000001,
-          "sd": 2.6,
-          "min": 8,
-          "max": 24,
-          "median": 14.200000000000001,
-          "n": 30
+          "mean": 12.62,
+          "sd": 7.64,
+          "min": 4,
+          "max": 36,
+          "median": 9.5,
+          "n": 26
         },
         "sea": {
-          "mean": 13.3125,
-          "sd": 2.4,
-          "min": 7,
-          "max": 22,
-          "median": 13.3125,
+          "mean": 11.73,
+          "sd": 6.23,
+          "min": 4,
+          "max": 24,
+          "median": 10.5,
           "n": 30
         },
         "hatti": {
-          "mean": 13.3125,
-          "sd": 2.4,
-          "min": 7,
-          "max": 22,
-          "median": 13.3125,
-          "n": 30
+          "mean": 11.42,
+          "sd": 6.63,
+          "min": 4,
+          "max": 31,
+          "median": 9.0,
+          "n": 26
         }
       },
       "yield6Mean": {
@@ -397,14 +273,6 @@
         "RESOURCE_SORGHUM": 1.2,
         "RESOURCE_WHEAT": 2.767,
         "RESOURCE_WINE": 1.0
-      },
-      "scoutOrders": {
-        "mean": 9.681818181818182,
-        "sd": 1.7,
-        "min": 5,
-        "max": 16,
-        "median": 9.681818181818182,
-        "n": 30
       }
     },
     {
@@ -446,30 +314,38 @@
         "n": 30
       },
       "landConnectedPct": 96.7,
+      "scoutOrders": {
+        "mean": 10.9,
+        "sd": 5.31,
+        "min": 4,
+        "max": 25,
+        "median": 9,
+        "n": 29
+      },
       "slingerTurns": {
         "land": {
-          "mean": 17.486666666666668,
-          "sd": 3.1,
-          "min": 10,
-          "max": 29,
-          "median": 17.486666666666668,
-          "n": 30
+          "mean": 16.03,
+          "sd": 7.84,
+          "min": 6,
+          "max": 37,
+          "median": 13,
+          "n": 29
         },
         "sea": {
-          "mean": 16.39375,
-          "sd": 3.0,
-          "min": 9,
-          "max": 27,
-          "median": 16.39375,
+          "mean": 13.63,
+          "sd": 7.04,
+          "min": 6,
+          "max": 29,
+          "median": 11.0,
           "n": 30
         },
         "hatti": {
-          "mean": 16.39375,
-          "sd": 3.0,
-          "min": 9,
-          "max": 27,
-          "median": 16.39375,
-          "n": 30
+          "mean": 14.48,
+          "sd": 7.24,
+          "min": 6,
+          "max": 33,
+          "median": 12,
+          "n": 29
         }
       },
       "yield6Mean": {
@@ -528,14 +404,6 @@
         "RESOURCE_SORGHUM": 1.533,
         "RESOURCE_WHEAT": 2.133,
         "RESOURCE_WINE": 0.833
-      },
-      "scoutOrders": {
-        "mean": 11.922727272727272,
-        "sd": 2.1,
-        "min": 7,
-        "max": 20,
-        "median": 11.922727272727272,
-        "n": 30
       }
     },
     {
@@ -577,30 +445,38 @@
         "n": 30
       },
       "landConnectedPct": 96.7,
+      "scoutOrders": {
+        "mean": 9.72,
+        "sd": 4.35,
+        "min": 3,
+        "max": 19,
+        "median": 10,
+        "n": 29
+      },
       "slingerTurns": {
         "land": {
-          "mean": 14.686666666666667,
-          "sd": 2.6,
-          "min": 8,
-          "max": 24,
-          "median": 14.686666666666667,
-          "n": 30
+          "mean": 14.38,
+          "sd": 6.48,
+          "min": 5,
+          "max": 28,
+          "median": 14,
+          "n": 29
         },
         "sea": {
-          "mean": 13.76875,
-          "sd": 2.5,
-          "min": 8,
-          "max": 23,
-          "median": 13.76875,
+          "mean": 12.03,
+          "sd": 5.52,
+          "min": 5,
+          "max": 25,
+          "median": 10.0,
           "n": 30
         },
         "hatti": {
-          "mean": 13.76875,
-          "sd": 2.5,
-          "min": 8,
-          "max": 23,
-          "median": 13.76875,
-          "n": 30
+          "mean": 12.93,
+          "sd": 5.43,
+          "min": 5,
+          "max": 24,
+          "median": 13,
+          "n": 29
         }
       },
       "yield6Mean": {
@@ -659,14 +535,6 @@
         "RESOURCE_SORGHUM": 3.0,
         "RESOURCE_WHEAT": 2.867,
         "RESOURCE_WINE": 1.533
-      },
-      "scoutOrders": {
-        "mean": 10.013636363636364,
-        "sd": 1.8,
-        "min": 6,
-        "max": 17,
-        "median": 10.013636363636364,
-        "n": 30
       }
     },
     {
@@ -708,30 +576,38 @@
         "n": 30
       },
       "landConnectedPct": 93.3,
+      "scoutOrders": {
+        "mean": 10.5,
+        "sd": 4.43,
+        "min": 4,
+        "max": 20,
+        "median": 9.0,
+        "n": 28
+      },
       "slingerTurns": {
         "land": {
-          "mean": 18.18,
-          "sd": 3.3,
-          "min": 10,
+          "mean": 15.46,
+          "sd": 6.78,
+          "min": 5,
           "max": 30,
-          "median": 18.18,
-          "n": 30
+          "median": 13.0,
+          "n": 28
         },
         "sea": {
-          "mean": 17.04375,
-          "sd": 3.1,
-          "min": 10,
-          "max": 28,
-          "median": 17.04375,
+          "mean": 14.3,
+          "sd": 6.12,
+          "min": 5,
+          "max": 26,
+          "median": 13.0,
           "n": 30
         },
         "hatti": {
-          "mean": 17.04375,
-          "sd": 3.1,
-          "min": 10,
-          "max": 28,
-          "median": 17.04375,
-          "n": 30
+          "mean": 14.39,
+          "sd": 6.34,
+          "min": 5,
+          "max": 27,
+          "median": 12.0,
+          "n": 28
         }
       },
       "yield6Mean": {
@@ -790,14 +666,6 @@
         "RESOURCE_SORGHUM": 1.733,
         "RESOURCE_WHEAT": 2.733,
         "RESOURCE_WINE": 0.867
-      },
-      "scoutOrders": {
-        "mean": 12.395454545454545,
-        "sd": 2.2,
-        "min": 7,
-        "max": 21,
-        "median": 12.395454545454545,
-        "n": 30
       }
     },
     {
@@ -839,30 +707,38 @@
         "n": 30
       },
       "landConnectedPct": 96.7,
+      "scoutOrders": {
+        "mean": 11.07,
+        "sd": 5.15,
+        "min": 6,
+        "max": 25,
+        "median": 9,
+        "n": 29
+      },
       "slingerTurns": {
         "land": {
-          "mean": 18.713333333333335,
-          "sd": 3.4,
-          "min": 11,
-          "max": 31,
-          "median": 18.713333333333335,
-          "n": 30
+          "mean": 16.34,
+          "sd": 7.72,
+          "min": 8,
+          "max": 37,
+          "median": 13,
+          "n": 29
         },
         "sea": {
-          "mean": 17.54375,
-          "sd": 3.2,
-          "min": 10,
-          "max": 29,
-          "median": 17.54375,
+          "mean": 14.5,
+          "sd": 7.16,
+          "min": 7,
+          "max": 32,
+          "median": 12.5,
           "n": 30
         },
         "hatti": {
-          "mean": 17.54375,
-          "sd": 3.2,
-          "min": 10,
-          "max": 29,
-          "median": 17.54375,
-          "n": 30
+          "mean": 14.24,
+          "sd": 6.43,
+          "min": 8,
+          "max": 33,
+          "median": 12,
+          "n": 29
         }
       },
       "yield6Mean": {
@@ -921,14 +797,6 @@
         "RESOURCE_SORGHUM": 1.933,
         "RESOURCE_WHEAT": 2.133,
         "RESOURCE_WINE": 1.467
-      },
-      "scoutOrders": {
-        "mean": 12.759090909090908,
-        "sd": 2.3,
-        "min": 7,
-        "max": 21,
-        "median": 12.759090909090908,
-        "n": 30
       }
     },
     {
@@ -970,30 +838,38 @@
         "n": 30
       },
       "landConnectedPct": 96.7,
+      "scoutOrders": {
+        "mean": 10.03,
+        "sd": 4.85,
+        "min": 4,
+        "max": 21,
+        "median": 8,
+        "n": 29
+      },
       "slingerTurns": {
         "land": {
-          "mean": 14.913333333333334,
-          "sd": 2.7,
-          "min": 8,
-          "max": 25,
-          "median": 14.913333333333334,
-          "n": 30
+          "mean": 14.83,
+          "sd": 7.2,
+          "min": 6,
+          "max": 31,
+          "median": 12,
+          "n": 29
         },
         "sea": {
-          "mean": 13.98125,
-          "sd": 2.5,
-          "min": 8,
-          "max": 23,
-          "median": 13.98125,
+          "mean": 12.67,
+          "sd": 4.73,
+          "min": 6,
+          "max": 24,
+          "median": 11.0,
           "n": 30
         },
         "hatti": {
-          "mean": 13.98125,
-          "sd": 2.5,
-          "min": 8,
-          "max": 23,
-          "median": 13.98125,
-          "n": 30
+          "mean": 13.34,
+          "sd": 6.3,
+          "min": 6,
+          "max": 29,
+          "median": 11,
+          "n": 29
         }
       },
       "yield6Mean": {
@@ -1052,14 +928,6 @@
         "RESOURCE_SORGHUM": 2.167,
         "RESOURCE_WHEAT": 6.3,
         "RESOURCE_WINE": 1.5
-      },
-      "scoutOrders": {
-        "mean": 10.168181818181818,
-        "sd": 1.8,
-        "min": 6,
-        "max": 17,
-        "median": 10.168181818181818,
-        "n": 30
       }
     },
     {
@@ -1101,29 +969,37 @@
         "n": 30
       },
       "landConnectedPct": 100.0,
+      "scoutOrders": {
+        "mean": 9.8,
+        "sd": 4.64,
+        "min": 4,
+        "max": 26,
+        "median": 8.0,
+        "n": 30
+      },
       "slingerTurns": {
         "land": {
-          "mean": 17.286666666666665,
-          "sd": 3.1,
-          "min": 10,
-          "max": 29,
-          "median": 17.286666666666665,
+          "mean": 14.5,
+          "sd": 6.97,
+          "min": 6,
+          "max": 39,
+          "median": 12.0,
           "n": 30
         },
         "sea": {
-          "mean": 16.206249999999997,
-          "sd": 2.9,
-          "min": 9,
-          "max": 27,
-          "median": 16.206249999999997,
+          "mean": 13.37,
+          "sd": 5.58,
+          "min": 6,
+          "max": 30,
+          "median": 12.0,
           "n": 30
         },
         "hatti": {
-          "mean": 16.206249999999997,
-          "sd": 2.9,
-          "min": 9,
-          "max": 27,
-          "median": 16.206249999999997,
+          "mean": 13.53,
+          "sd": 6.33,
+          "min": 6,
+          "max": 37,
+          "median": 12.0,
           "n": 30
         }
       },
@@ -1183,14 +1059,6 @@
         "RESOURCE_SORGHUM": 2.9,
         "RESOURCE_WHEAT": 3.833,
         "RESOURCE_WINE": 2.167
-      },
-      "scoutOrders": {
-        "mean": 11.786363636363635,
-        "sd": 2.1,
-        "min": 7,
-        "max": 20,
-        "median": 11.786363636363635,
-        "n": 30
       }
     },
     {
@@ -1232,30 +1100,38 @@
         "n": 30
       },
       "landConnectedPct": 93.3,
+      "scoutOrders": {
+        "mean": 11.0,
+        "sd": 3.78,
+        "min": 6,
+        "max": 22,
+        "median": 10.5,
+        "n": 28
+      },
       "slingerTurns": {
         "land": {
-          "mean": 18.286666666666665,
-          "sd": 3.3,
-          "min": 10,
-          "max": 31,
-          "median": 18.286666666666665,
-          "n": 30
+          "mean": 16.43,
+          "sd": 5.72,
+          "min": 9,
+          "max": 33,
+          "median": 16.0,
+          "n": 28
         },
         "sea": {
-          "mean": 17.143749999999997,
-          "sd": 3.1,
-          "min": 10,
-          "max": 29,
-          "median": 17.143749999999997,
+          "mean": 14.23,
+          "sd": 4.6,
+          "min": 9,
+          "max": 33,
+          "median": 13.0,
           "n": 30
         },
         "hatti": {
-          "mean": 17.143749999999997,
-          "sd": 3.1,
-          "min": 10,
-          "max": 29,
-          "median": 17.143749999999997,
-          "n": 30
+          "mean": 15.07,
+          "sd": 4.93,
+          "min": 8,
+          "max": 32,
+          "median": 14.5,
+          "n": 28
         }
       },
       "yield6Mean": {
@@ -1314,14 +1190,6 @@
         "RESOURCE_SORGHUM": 2.367,
         "RESOURCE_WHEAT": 4.8,
         "RESOURCE_WINE": 2.133
-      },
-      "scoutOrders": {
-        "mean": 12.468181818181817,
-        "sd": 2.2,
-        "min": 7,
-        "max": 21,
-        "median": 12.468181818181817,
-        "n": 30
       }
     },
     {
@@ -1363,30 +1231,38 @@
         "n": 30
       },
       "landConnectedPct": 93.3,
+      "scoutOrders": {
+        "mean": 11.32,
+        "sd": 4.37,
+        "min": 5,
+        "max": 22,
+        "median": 10.5,
+        "n": 28
+      },
       "slingerTurns": {
         "land": {
-          "mean": 17.333333333333332,
-          "sd": 3.1,
-          "min": 10,
-          "max": 29,
-          "median": 17.333333333333332,
-          "n": 30
+          "mean": 16.64,
+          "sd": 6.45,
+          "min": 7,
+          "max": 32,
+          "median": 15.5,
+          "n": 28
         },
         "sea": {
-          "mean": 16.25,
-          "sd": 2.9,
-          "min": 9,
-          "max": 27,
-          "median": 16.25,
+          "mean": 15.2,
+          "sd": 5.13,
+          "min": 6,
+          "max": 31,
+          "median": 15.0,
           "n": 30
         },
         "hatti": {
-          "mean": 16.25,
-          "sd": 2.9,
-          "min": 9,
-          "max": 27,
-          "median": 16.25,
-          "n": 30
+          "mean": 15.14,
+          "sd": 5.82,
+          "min": 7,
+          "max": 31,
+          "median": 14.5,
+          "n": 28
         }
       },
       "yield6Mean": {
@@ -1445,14 +1321,6 @@
         "RESOURCE_SORGHUM": 3.4,
         "RESOURCE_WHEAT": 3.8,
         "RESOURCE_WINE": 2.067
-      },
-      "scoutOrders": {
-        "mean": 11.818181818181817,
-        "sd": 2.1,
-        "min": 7,
-        "max": 20,
-        "median": 11.818181818181817,
-        "n": 30
       }
     },
     {
@@ -1494,30 +1362,38 @@
         "n": 30
       },
       "landConnectedPct": 96.7,
+      "scoutOrders": {
+        "mean": 12.0,
+        "sd": 5.01,
+        "min": 5,
+        "max": 28,
+        "median": 11,
+        "n": 29
+      },
       "slingerTurns": {
         "land": {
-          "mean": 21.266666666666666,
-          "sd": 3.8,
-          "min": 12,
-          "max": 36,
-          "median": 21.266666666666666,
-          "n": 30
+          "mean": 17.66,
+          "sd": 7.48,
+          "min": 7,
+          "max": 41,
+          "median": 16,
+          "n": 29
         },
         "sea": {
-          "mean": 19.937499999999996,
-          "sd": 3.6,
-          "min": 11,
-          "max": 33,
-          "median": 19.937499999999996,
+          "mean": 16.43,
+          "sd": 6.44,
+          "min": 7,
+          "max": 39,
+          "median": 16.0,
           "n": 30
         },
         "hatti": {
-          "mean": 19.937499999999996,
-          "sd": 3.6,
-          "min": 11,
-          "max": 33,
-          "median": 19.937499999999996,
-          "n": 30
+          "mean": 16.31,
+          "sd": 6.85,
+          "min": 7,
+          "max": 37,
+          "median": 15,
+          "n": 29
         }
       },
       "yield6Mean": {
@@ -1576,14 +1452,6 @@
         "RESOURCE_SORGHUM": 3.0,
         "RESOURCE_WHEAT": 4.267,
         "RESOURCE_WINE": 1.667
-      },
-      "scoutOrders": {
-        "mean": 14.499999999999998,
-        "sd": 2.6,
-        "min": 8,
-        "max": 24,
-        "median": 14.499999999999998,
-        "n": 30
       }
     },
     {
@@ -1625,30 +1493,38 @@
         "n": 30
       },
       "landConnectedPct": 93.3,
+      "scoutOrders": {
+        "mean": 11.04,
+        "sd": 2.47,
+        "min": 5,
+        "max": 16,
+        "median": 11.0,
+        "n": 28
+      },
       "slingerTurns": {
         "land": {
-          "mean": 19.82,
-          "sd": 3.6,
-          "min": 11,
-          "max": 33,
-          "median": 19.82,
-          "n": 30
+          "mean": 16.29,
+          "sd": 3.59,
+          "min": 7,
+          "max": 23,
+          "median": 16.0,
+          "n": 28
         },
         "sea": {
-          "mean": 18.58125,
-          "sd": 3.3,
-          "min": 11,
-          "max": 31,
-          "median": 18.58125,
+          "mean": 15.23,
+          "sd": 3.08,
+          "min": 7,
+          "max": 24,
+          "median": 15.0,
           "n": 30
         },
         "hatti": {
-          "mean": 18.58125,
-          "sd": 3.3,
-          "min": 11,
-          "max": 31,
-          "median": 18.58125,
-          "n": 30
+          "mean": 15.18,
+          "sd": 3.54,
+          "min": 7,
+          "max": 22,
+          "median": 15.0,
+          "n": 28
         }
       },
       "yield6Mean": {
@@ -1707,47 +1583,7 @@
         "RESOURCE_SORGHUM": 2.933,
         "RESOURCE_WHEAT": 5.067,
         "RESOURCE_WINE": 1.667
-      },
-      "scoutOrders": {
-        "mean": 13.513636363636362,
-        "sd": 2.4,
-        "min": 8,
-        "max": 22,
-        "median": 13.513636363636362,
-        "n": 30
       }
     }
-  ],
-  "previews": [
-    "continent/seed-1.png",
-    "continent/seed-2.png",
-    "continent/seed-3.png",
-    "continent/seed-4.png",
-    "continent/seed-5.png",
-    "continent/seed-6.png",
-    "continent/seed-7.png",
-    "continent/seed-8.png",
-    "continent/seed-9.png",
-    "continent/seed-10.png",
-    "continent/seed-11.png",
-    "continent/seed-12.png",
-    "continent/seed-13.png",
-    "continent/seed-14.png",
-    "continent/seed-15.png",
-    "continent/seed-16.png",
-    "continent/seed-17.png",
-    "continent/seed-18.png",
-    "continent/seed-19.png",
-    "continent/seed-20.png",
-    "continent/seed-21.png",
-    "continent/seed-22.png",
-    "continent/seed-23.png",
-    "continent/seed-24.png",
-    "continent/seed-25.png",
-    "continent/seed-26.png",
-    "continent/seed-27.png",
-    "continent/seed-28.png",
-    "continent/seed-29.png",
-    "continent/seed-30.png"
   ]
 }

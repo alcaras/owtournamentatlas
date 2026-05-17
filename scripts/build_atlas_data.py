@@ -42,57 +42,20 @@ def main() -> int:
     cont = next((s for s in data["scripts"] if s["label"] == "Continent"), None)
     if cont is None:
         sys.exit("Continent not in atlas.json")
-    best = cont["best"]
-    w, h = (int(x) for x in best["dims"].split("x"))
-    best = {**best, "tiles": w * h}
-
-    out_img = ATLAS / "public" / "img" / "continent"
-    out_img.mkdir(parents=True, exist_ok=True)
-    for old in out_img.glob("*.png"):
-        old.unlink()
-
-    # Regenerate + render N maps of the recommended variant.
-    previews = []
-    px = 7 if best["size"] == "smallest" else 5
-    import tempfile
-    with tempfile.TemporaryDirectory() as td:
-        tdp = Path(td)
-        for seed in range(1, N_PREVIEW + 1):
-            cmd = [str(OWMAPGEN), "--script", "Continent", "--size", best["size"],
-                   "--players", "2", "--seed", str(seed),
-                   "--aspect-ratio", best["aspect"], "--mirror",
-                   "--output", str(tdp)]
-            if best["pointSymmetry"]:
-                cmd.append("--point-symmetry")
-            subprocess.run(cmd, capture_output=True, text=True, env=ENV)
-            xmls = sorted(tdp.glob("*.xml"), key=lambda p: p.stat().st_mtime)
-            if not xmls:
-                continue
-            png = out_img / f"seed-{seed}.png"
-            subprocess.run(["python3", str(RENDER), str(xmls[-1]), str(png), str(px)],
-                           capture_output=True, env=ENV)
-            for x in xmls:
-                x.unlink(missing_ok=True)
-            if png.exists():
-                previews.append(f"continent/seed-{seed}.png")
-
+    # Data only — no recommended variant, no preview renders.
     payload = {
-        "generatedAt": datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+        "generatedAt": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M UTC"),
         "owmapgenSha": data["owmapgenSha"],
         "atlasId": data["atlasId"],
         "seedsPerCell": data["seedsPerCell"],
         "target": data["target"], "accept": data["accept"],
         "script": "Continent",
-        "recommended": best,
         "cells": cont["cells"],
-        "previews": previews,
     }
     dst = ATLAS / "src" / "data" / "continent-atlas.json"
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(json.dumps(payload, indent=2) + "\n")
-    print(f"✓ {dst.relative_to(ATLAS)} — best {best['sizeLabel']}/"
-          f"{best['aspect']}/sym{int(best['pointSymmetry'])} "
-          f"target {best['pctTarget']}%, {len(previews)} previews")
+    print(f"✓ {dst.relative_to(ATLAS)} — {len(cont['cells'])} cells, data only")
     return 0
 
 
