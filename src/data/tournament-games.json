@@ -10,6 +10,14 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 17,
+      "tribeCount": 5,
+      "tribes": [
+        "Danes",
+        "Numidians",
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 37,
       "land": 42,
       "landConnected": true,
@@ -28,6 +36,13 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 18,
+      "tribeCount": 4,
+      "tribes": [
+        "Gauls",
+        "Numidians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 48,
       "land": 48,
       "landConnected": true,
@@ -46,6 +61,11 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 17,
+      "tribeCount": 2,
+      "tribes": [
+        "Numidians",
+        "Scythians"
+      ],
       "crow": 48,
       "land": 48,
       "landConnected": true,
@@ -64,6 +84,11 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 15,
+      "tribeCount": 2,
+      "tribes": [
+        "Danes",
+        "Gauls"
+      ],
       "crow": 32,
       "land": 32,
       "landConnected": true,
@@ -82,6 +107,14 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 21,
+      "tribeCount": 5,
+      "tribes": [
+        "Gauls",
+        "Numidians",
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 34,
       "land": 44,
       "landConnected": true,
@@ -100,6 +133,13 @@
       "size": "TINY",
       "aspect": "SQUARE",
       "citySites": 29,
+      "tribeCount": 4,
+      "tribes": [
+        "Danes",
+        "Numidians",
+        "Scythians",
+        "Vandals"
+      ],
       "crow": 47,
       "land": 49,
       "landConnected": true,
@@ -118,6 +158,14 @@
       "size": "TINY",
       "aspect": "WIDE",
       "citySites": 23,
+      "tribeCount": 5,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians",
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 52,
       "land": 63,
       "landConnected": true,
@@ -136,6 +184,13 @@
       "size": "TINY",
       "aspect": "WIDE",
       "citySites": 27,
+      "tribeCount": 4,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians",
+        "Scythians"
+      ],
       "crow": 63,
       "land": 64,
       "landConnected": true,
@@ -154,6 +209,12 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 14,
+      "tribeCount": 3,
+      "tribes": [
+        "Danes",
+        "Numidians",
+        "Scythians"
+      ],
       "crow": 35,
       "land": 35,
       "landConnected": true,
@@ -172,6 +233,11 @@
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
       "citySites": 16,
+      "tribeCount": 2,
+      "tribes": [
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 56,
       "land": 57,
       "landConnected": true,
@@ -190,6 +256,10 @@
       "size": "SMALLEST",
       "aspect": "DYNAMIC",
       "citySites": 7,
+      "tribeCount": 1,
+      "tribes": [
+        "Thracians"
+      ],
       "crow": 30,
       "land": 34,
       "landConnected": true,
@@ -208,6 +278,13 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 17,
+      "tribeCount": 4,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians",
+        "Vandals"
+      ],
       "crow": 36,
       "land": 36,
       "landConnected": true,
@@ -226,6 +303,12 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 14,
+      "tribeCount": 3,
+      "tribes": [
+        "Numidians",
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 43,
       "land": 43,
       "landConnected": true,
@@ -244,6 +327,13 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 18,
+      "tribeCount": 4,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians",
+        "Vandals"
+      ],
       "crow": 46,
       "land": 46,
       "landConnected": true,
@@ -262,6 +352,11 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 14,
+      "tribeCount": 2,
+      "tribes": [
+        "Danes",
+        "Numidians"
+      ],
       "crow": 47,
       "land": 49,
       "landConnected": true,
@@ -280,6 +375,14 @@
       "size": "TINY",
       "aspect": "SQUARE",
       "citySites": 25,
+      "tribeCount": 5,
+      "tribes": [
+        "Danes",
+        "Numidians",
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 48,
       "land": 50,
       "landConnected": true,
@@ -298,6 +401,12 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 17,
+      "tribeCount": 3,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians"
+      ],
       "crow": 37,
       "land": 46,
       "landConnected": true,
@@ -316,6 +425,11 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 14,
+      "tribeCount": 2,
+      "tribes": [
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 43,
       "land": 43,
       "landConnected": true,
@@ -334,6 +448,11 @@
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
       "citySites": 15,
+      "tribeCount": 2,
+      "tribes": [
+        "Numidians",
+        "Scythians"
+      ],
       "crow": 49,
       "land": 53,
       "landConnected": true,
@@ -352,6 +471,10 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 10,
+      "tribeCount": 1,
+      "tribes": [
+        "Scythians"
+      ],
       "crow": 45,
       "land": 45,
       "landConnected": true,
@@ -370,6 +493,11 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 15,
+      "tribeCount": 2,
+      "tribes": [
+        "Numidians",
+        "Thracians"
+      ],
       "crow": 35,
       "land": 40,
       "landConnected": true,
@@ -388,6 +516,12 @@
       "size": "TINY",
       "aspect": "WIDE",
       "citySites": 29,
+      "tribeCount": 3,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians"
+      ],
       "crow": 64,
       "land": 71,
       "landConnected": true,
@@ -406,6 +540,12 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 18,
+      "tribeCount": 3,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Thracians"
+      ],
       "crow": 46,
       "land": 47,
       "landConnected": true,
@@ -424,6 +564,11 @@
       "size": "TINY",
       "aspect": "SQUARE",
       "citySites": 26,
+      "tribeCount": 2,
+      "tribes": [
+        "Numidians",
+        "Scythians"
+      ],
       "crow": 47,
       "land": 59,
       "landConnected": true,
@@ -442,6 +587,10 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 12,
+      "tribeCount": 1,
+      "tribes": [
+        "Numidians"
+      ],
       "crow": 31,
       "land": 36,
       "landConnected": true,
@@ -460,6 +609,13 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 19,
+      "tribeCount": 4,
+      "tribes": [
+        "Numidians",
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 35,
       "land": 60,
       "landConnected": true,
@@ -478,6 +634,12 @@
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
       "citySites": 19,
+      "tribeCount": 3,
+      "tribes": [
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 61,
       "land": 61,
       "landConnected": true,
@@ -496,6 +658,13 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 22,
+      "tribeCount": 4,
+      "tribes": [
+        "Gauls",
+        "Numidians",
+        "Scythians",
+        "Vandals"
+      ],
       "crow": 36,
       "land": 37,
       "landConnected": true,
@@ -514,6 +683,11 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 18,
+      "tribeCount": 2,
+      "tribes": [
+        "Numidians",
+        "Thracians"
+      ],
       "crow": 48,
       "land": 66,
       "landConnected": true,
@@ -532,6 +706,14 @@
       "size": "TINY",
       "aspect": "WIDE",
       "citySites": 24,
+      "tribeCount": 5,
+      "tribes": [
+        "Danes",
+        "Numidians",
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 55,
       "land": 59,
       "landConnected": true,
@@ -550,6 +732,11 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 11,
+      "tribeCount": 2,
+      "tribes": [
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 44,
       "land": 48,
       "landConnected": true,
@@ -568,6 +755,11 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 14,
+      "tribeCount": 2,
+      "tribes": [
+        "Numidians",
+        "Scythians"
+      ],
       "crow": 23,
       "land": 25,
       "landConnected": true,
@@ -586,6 +778,11 @@
       "size": "SMALLEST",
       "aspect": "SQUARE",
       "citySites": 12,
+      "tribeCount": 2,
+      "tribes": [
+        "Gauls",
+        "Numidians"
+      ],
       "crow": 27,
       "land": 29,
       "landConnected": true,
@@ -604,6 +801,11 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 14,
+      "tribeCount": 2,
+      "tribes": [
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 43,
       "land": 46,
       "landConnected": true,
@@ -622,6 +824,13 @@
       "size": "TINY",
       "aspect": "SQUARE",
       "citySites": 26,
+      "tribeCount": 4,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 32,
       "land": 32,
       "landConnected": true,
@@ -640,6 +849,14 @@
       "size": "TINY",
       "aspect": "ULTRAWIDE",
       "citySites": 25,
+      "tribeCount": 5,
+      "tribes": [
+        "Gauls",
+        "Numidians",
+        "Scythians",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 67,
       "land": 67,
       "landConnected": true,
@@ -658,6 +875,13 @@
       "size": "SMALLEST",
       "aspect": "WIDE",
       "citySites": 16,
+      "tribeCount": 4,
+      "tribes": [
+        "Danes",
+        "Gauls",
+        "Numidians",
+        "Thracians"
+      ],
       "crow": 48,
       "land": 49,
       "landConnected": true,
@@ -676,6 +900,11 @@
       "size": "TINY",
       "aspect": "ULTRAWIDE",
       "citySites": 25,
+      "tribeCount": 2,
+      "tribes": [
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 75,
       "land": 78,
       "landConnected": true,
@@ -694,6 +923,12 @@
       "size": "TINY",
       "aspect": "ULTRAWIDE",
       "citySites": 34,
+      "tribeCount": 3,
+      "tribes": [
+        "Numidians",
+        "Scythians",
+        "Thracians"
+      ],
       "crow": 92,
       "land": 92,
       "landConnected": true,
@@ -712,6 +947,12 @@
       "size": "TINY",
       "aspect": "ULTRAWIDE",
       "citySites": 31,
+      "tribeCount": 3,
+      "tribes": [
+        "Danes",
+        "Thracians",
+        "Vandals"
+      ],
       "crow": 79,
       "land": 99,
       "landConnected": true,

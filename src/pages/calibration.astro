@@ -42,7 +42,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
         <table class="tbl">
           <thead><tr>
             <th>#</th><th>Matchup</th><th>Size</th><th>Aspect</th>
-            <th>City sites</th><th>Crow</th><th>Land</th><th>Conn</th>
+            <th>City sites</th><th>Tribes</th><th>Crow</th><th>Land</th><th>Conn</th>
             <th>Scout</th><th>Slinger L</th><th>Sl Sea</th><th>Sl Hatti</th>
           </tr></thead>
           <tbody>
@@ -53,6 +53,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
                 <td>{sz(g.size)}</td>
                 <td class="cap">{g.aspect.toLowerCase()}</td>
                 <td><b>{g.citySites}</b></td>
+                <td class="mono" title={(g.tribes || []).join(', ')}>{g.tribeCount ?? '—'}</td>
                 <td class="mono">{g.crow}</td>
                 <td class="mono">{g.land ?? '—'}</td>
                 <td class={g.landConnected ? '' : 'bad'}>{g.landConnected ? 'Y' : 'NO'}</td>

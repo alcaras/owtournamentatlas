@@ -72,6 +72,17 @@ def analyze(zp: str) -> dict | None:
 
     cs = sum(1 for t in r.findall("Tile") if t.find("CitySite") is not None)
 
+    GENERIC_TRIBES = {"TRIBE_BARBARIANS", "TRIBE_ANARCHY", "TRIBE_RAIDERS",
+                      "TRIBE_REBELS", "TRIBE_GENERIC"}
+    tribe_camps = collections.Counter()
+    for t in r.findall("Tile"):
+        ts = t.find("TribeSite")
+        if ts is not None:
+            tn = (ts.text or "").strip()
+            if tn and tn not in GENERIC_TRIBES:
+                tribe_camps[tn] += 1
+    tribes = sorted(k.replace("TRIBE_", "").title() for k in tribe_camps)
+
     landok, waterok = set(), set()
     for (x, y), (te, h, *_rest) in grid.items():
         if h in ("HEIGHT_MOUNTAIN", "HEIGHT_VOLCANO"):
@@ -115,6 +126,8 @@ def analyze(zp: str) -> dict | None:
         "size": r.attrib.get("MapSize", "").replace("MAPSIZE_", ""),
         "aspect": r.attrib.get("MapAspectRatio", "").replace("MAPASPECTRATIO_", ""),
         "citySites": cs,
+        "tribeCount": len(tribe_camps),
+        "tribes": tribes,
         "crow": hex_distance(A, B),
         "land": land,
         "landConnected": land is not None,
