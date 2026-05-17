@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import opt from '../data/options.json';
 import tour from '../data/tournament-games.json';
+import recs from '../data/recommendations.json';
+const baseUrl = import.meta.env.BASE_URL;
 
 // group option rows by script, preserve config order
 const order = ["DOTA","Continent","Coastal Rain Basin","Inland Sea","Donut",
@@ -60,6 +62,34 @@ const pool = scripts.filter(s => best[s].passPct >= 100);
       screen-and-reroll scripts.
     </p>
   </section>
+
+  <h2 class="sec">Recommended setting per map + {recs.N} hex previews</h2>
+  <p class="note">Each card = the recommended config for that script.
+    Capitals are the bold white-ringed markers; gold = city sites, red =
+    tribe camps. Real pointy-top hex (even-r, game-matched).</p>
+  {recs.maps.map((m:any) => (
+    <section class="rec">
+      <header class="rec__hd">
+        <h3 class="rec__name">{m.label}</h3>
+        <span class={'rec__verdict ' + (m.verdict.startsWith('GUARANTEED') ? 'g' : m.verdict.startsWith('NOT') ? 'n' : 'o')}>{m.verdict}</span>
+      </header>
+      <div class="rec__cfg">
+        <b>Settings:</b> {m.setting}
+        {m.options && m.options[0] !== '(defaults)' && <span> · <b>option:</b> {m.options.join(', ')}</span>}
+      </div>
+      <div class="rec__stats">
+        sites <b>{m.sites}</b> · capital crow <b>{m.crow}</b> · land path
+        <b>{m.land}</b> · land-connected <b>{m.landConnPct}%</b>
+      </div>
+      {m.previews && m.previews.length > 0 && (
+        <div class="rec__gal">
+          {m.previews.map((p:string) => (
+            <img src={`${baseUrl}img/${p}`} loading="lazy" alt={`${m.label} sample`} />
+          ))}
+        </div>
+      )}
+    </section>
+  ))}
 
   <h2 class="sec">Per-map: the knob that moves land-connection / distance</h2>
   {scripts.map(s => (
@@ -122,5 +152,20 @@ const pool = scripts.filter(s => best[s].passPct >= 100);
     .dim { color:var(--text-faint); } .good { color:#7fb069; font-weight:600; }
     .bad { color:#b06a5f; font-weight:600; }
     .note { font-size:0.82rem; color:var(--text-faint); line-height:1.5; max-width:82ch; }
+    .rec { background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:6px; padding:0.9rem 1.1rem; margin-bottom:1rem; }
+    .rec__hd { display:flex; align-items:baseline; gap:0.8rem; flex-wrap:wrap; }
+    .rec__name { font-family:var(--font-display); font-weight:700; font-size:1.25rem; color:var(--text); }
+    .rec__verdict { font-size:0.66rem; font-family:var(--font-ui); letter-spacing:0.1em;
+      text-transform:uppercase; padding:0.12rem 0.5rem; border-radius:999px; border:1px solid; }
+    .rec__verdict.g { color:#7fb069; border-color:#3b6e3b; }
+    .rec__verdict.o { color:#caa84a; border-color:var(--gold-deep); }
+    .rec__verdict.n { color:#b06a5f; border-color:#5a2e28; }
+    .rec__cfg { font-size:0.9rem; color:var(--text-soft); margin:0.4rem 0 0.2rem; }
+    .rec__cfg b, .rec__stats b { color:var(--text); }
+    .rec__stats { font-size:0.82rem; color:var(--text-faint); margin-bottom:0.6rem; }
+    .rec__gal { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:0.4rem; }
+    .rec__gal img { width:100%; height:auto; display:block; border-radius:3px;
+      border:1px solid var(--border); image-rendering:auto; }
   </style>
 </Base>

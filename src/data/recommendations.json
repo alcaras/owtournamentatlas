@@ -1,0 +1,332 @@
+{
+  "N": 10,
+  "maps": [
+    {
+      "label": "DOTA Jungle",
+      "slug": "dota-jungle",
+      "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "TERRAIN_JUNGLE"
+      ],
+      "verdict": "GUARANTEED \u2014 100% in-band, no rerolls (pool pick)",
+      "sites": "19 [16\u201324]",
+      "crow": "68",
+      "land": "68 [65\u201370]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/dota-jungle/seed-1.png",
+        "rec/dota-jungle/seed-2.png",
+        "rec/dota-jungle/seed-3.png",
+        "rec/dota-jungle/seed-4.png",
+        "rec/dota-jungle/seed-5.png",
+        "rec/dota-jungle/seed-6.png",
+        "rec/dota-jungle/seed-7.png",
+        "rec/dota-jungle/seed-8.png",
+        "rec/dota-jungle/seed-9.png",
+        "rec/dota-jungle/seed-10.png"
+      ]
+    },
+    {
+      "label": "DOTA Sand",
+      "slug": "dota-sand",
+      "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "TERRAIN_SAND"
+      ],
+      "verdict": "GUARANTEED \u2014 100% in-band (pool pick, drier corridor)",
+      "sites": "18 [14\u201320]",
+      "crow": "68",
+      "land": "68 [66\u201370]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/dota-sand/seed-1.png",
+        "rec/dota-sand/seed-2.png",
+        "rec/dota-sand/seed-3.png",
+        "rec/dota-sand/seed-4.png",
+        "rec/dota-sand/seed-5.png",
+        "rec/dota-sand/seed-6.png",
+        "rec/dota-sand/seed-7.png",
+        "rec/dota-sand/seed-8.png",
+        "rec/dota-sand/seed-9.png",
+        "rec/dota-sand/seed-10.png"
+      ]
+    },
+    {
+      "label": "DOTA Water",
+      "slug": "dota-water",
+      "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "TERRAIN_WATER"
+      ],
+      "verdict": "GUARANTEED \u2014 100% in-band (pool pick, water corridor)",
+      "sites": "18 [16\u201322]",
+      "crow": "69",
+      "land": "69 [66\u201371]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/dota-water/seed-1.png",
+        "rec/dota-water/seed-2.png",
+        "rec/dota-water/seed-3.png",
+        "rec/dota-water/seed-4.png",
+        "rec/dota-water/seed-5.png",
+        "rec/dota-water/seed-6.png",
+        "rec/dota-water/seed-7.png",
+        "rec/dota-water/seed-8.png",
+        "rec/dota-water/seed-9.png",
+        "rec/dota-water/seed-10.png"
+      ]
+    },
+    {
+      "label": "Continent",
+      "slug": "continent",
+      "setting": "Tiny \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "PLAYER_START_ANYWHERE"
+      ],
+      "verdict": "Screen-and-reroll (~25% in hard band; ~57% in 18\u201323 soft band)",
+      "sites": "24 [18\u201328]",
+      "crow": "29",
+      "land": "30 [19\u201345]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/continent/seed-1.png",
+        "rec/continent/seed-2.png",
+        "rec/continent/seed-3.png",
+        "rec/continent/seed-4.png",
+        "rec/continent/seed-5.png",
+        "rec/continent/seed-6.png",
+        "rec/continent/seed-7.png",
+        "rec/continent/seed-8.png",
+        "rec/continent/seed-9.png",
+        "rec/continent/seed-10.png"
+      ]
+    },
+    {
+      "label": "Coastal Rain Basin",
+      "slug": "coastal-rain-basin",
+      "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+      "options": [
+        "PLAYER_START_ANYWHERE"
+      ],
+      "verdict": "Screen-and-reroll (~10\u201313%) \u2014 heaviest tournament use historically",
+      "sites": "16 [14\u201320]",
+      "crow": "29",
+      "land": "31 [9\u201376]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/coastal-rain-basin/seed-1.png",
+        "rec/coastal-rain-basin/seed-2.png",
+        "rec/coastal-rain-basin/seed-3.png",
+        "rec/coastal-rain-basin/seed-4.png",
+        "rec/coastal-rain-basin/seed-5.png",
+        "rec/coastal-rain-basin/seed-6.png",
+        "rec/coastal-rain-basin/seed-7.png",
+        "rec/coastal-rain-basin/seed-8.png",
+        "rec/coastal-rain-basin/seed-9.png",
+        "rec/coastal-rain-basin/seed-10.png"
+      ]
+    },
+    {
+      "label": "Inland Sea",
+      "slug": "inland-sea",
+      "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "(defaults)"
+      ],
+      "verdict": "Screen-and-reroll (~43%) \u2014 best of the open scripts",
+      "sites": "18 [16\u201320]",
+      "crow": "34",
+      "land": "35 [18\u201367]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/inland-sea/seed-1.png",
+        "rec/inland-sea/seed-2.png",
+        "rec/inland-sea/seed-3.png",
+        "rec/inland-sea/seed-4.png",
+        "rec/inland-sea/seed-5.png",
+        "rec/inland-sea/seed-6.png",
+        "rec/inland-sea/seed-7.png",
+        "rec/inland-sea/seed-8.png",
+        "rec/inland-sea/seed-9.png",
+        "rec/inland-sea/seed-10.png"
+      ]
+    },
+    {
+      "label": "Donut",
+      "slug": "donut",
+      "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+      "options": [
+        "DONUT_PLAYER_START_OUTER_SEA"
+      ],
+      "verdict": "Screen-and-reroll (~35%) \u2014 use OUTER SEA start (Inland \u2192 60% conn)",
+      "sites": "14 [12\u201316]",
+      "crow": "28",
+      "land": "30 [9\u201354]",
+      "landConnPct": 90,
+      "previews": [
+        "rec/donut/seed-1.png",
+        "rec/donut/seed-2.png",
+        "rec/donut/seed-3.png",
+        "rec/donut/seed-4.png",
+        "rec/donut/seed-5.png",
+        "rec/donut/seed-6.png",
+        "rec/donut/seed-7.png",
+        "rec/donut/seed-8.png",
+        "rec/donut/seed-9.png",
+        "rec/donut/seed-10.png"
+      ]
+    },
+    {
+      "label": "Arid Plateau",
+      "slug": "arid-plateau",
+      "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+      "options": [
+        "ARID_WATER_SIZE_SMALL"
+      ],
+      "verdict": "Screen-and-reroll (~30%)",
+      "sites": "16 [13\u201319]",
+      "crow": "32",
+      "land": "34 [19\u201351]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/arid-plateau/seed-1.png",
+        "rec/arid-plateau/seed-2.png",
+        "rec/arid-plateau/seed-3.png",
+        "rec/arid-plateau/seed-4.png",
+        "rec/arid-plateau/seed-5.png",
+        "rec/arid-plateau/seed-6.png",
+        "rec/arid-plateau/seed-7.png",
+        "rec/arid-plateau/seed-8.png",
+        "rec/arid-plateau/seed-9.png",
+        "rec/arid-plateau/seed-10.png"
+      ]
+    },
+    {
+      "label": "Extreme Desert",
+      "slug": "extreme-desert",
+      "setting": "Tiny \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+      "options": [
+        "DESERT_COAST_NONE",
+        "DESERT_SIZE_NORMAL"
+      ],
+      "verdict": "Screen-and-reroll (~25%) \u2014 avoid Double size (~45 sites)",
+      "sites": "16 [14\u201319]",
+      "crow": "33",
+      "land": "33 [19\u201341]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/extreme-desert/seed-1.png",
+        "rec/extreme-desert/seed-2.png",
+        "rec/extreme-desert/seed-3.png",
+        "rec/extreme-desert/seed-4.png",
+        "rec/extreme-desert/seed-5.png",
+        "rec/extreme-desert/seed-6.png",
+        "rec/extreme-desert/seed-7.png",
+        "rec/extreme-desert/seed-8.png",
+        "rec/extreme-desert/seed-9.png",
+        "rec/extreme-desert/seed-10.png"
+      ]
+    },
+    {
+      "label": "Hardwood Forest",
+      "slug": "hardwood-forest",
+      "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "HARDWOOD_FOREST_PLAYER_START_SEA"
+      ],
+      "verdict": "Screen-and-reroll (~25%) \u2014 use COASTAL start (Inland collapses dist)",
+      "sites": "14 [10\u201318]",
+      "crow": "40",
+      "land": "40 [10\u201356]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/hardwood-forest/seed-1.png",
+        "rec/hardwood-forest/seed-2.png",
+        "rec/hardwood-forest/seed-3.png",
+        "rec/hardwood-forest/seed-4.png",
+        "rec/hardwood-forest/seed-5.png",
+        "rec/hardwood-forest/seed-6.png",
+        "rec/hardwood-forest/seed-7.png",
+        "rec/hardwood-forest/seed-8.png",
+        "rec/hardwood-forest/seed-9.png",
+        "rec/hardwood-forest/seed-10.png"
+      ]
+    },
+    {
+      "label": "Mountain Pass",
+      "slug": "mountain-pass",
+      "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+      "options": [
+        "MOUNTAIN_PASS_PLAYER_START_SIDE"
+      ],
+      "verdict": "Screen-and-reroll (~40%) \u2014 use SIDES start (Central \u2192 0%)",
+      "sites": "15 [12\u201318]",
+      "crow": "39",
+      "land": "41 [18\u201375]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/mountain-pass/seed-1.png",
+        "rec/mountain-pass/seed-2.png",
+        "rec/mountain-pass/seed-3.png",
+        "rec/mountain-pass/seed-4.png",
+        "rec/mountain-pass/seed-5.png",
+        "rec/mountain-pass/seed-6.png",
+        "rec/mountain-pass/seed-7.png",
+        "rec/mountain-pass/seed-8.png",
+        "rec/mountain-pass/seed-9.png",
+        "rec/mountain-pass/seed-10.png"
+      ]
+    },
+    {
+      "label": "Wetlands",
+      "slug": "wetlands",
+      "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+      "options": [
+        "(defaults)"
+      ],
+      "verdict": "Screen-and-reroll (~30%) \u2014 no map-option lever",
+      "sites": "18 [15\u201324]",
+      "crow": "29",
+      "land": "31 [12\u201360]",
+      "landConnPct": 100,
+      "previews": [
+        "rec/wetlands/seed-1.png",
+        "rec/wetlands/seed-2.png",
+        "rec/wetlands/seed-3.png",
+        "rec/wetlands/seed-4.png",
+        "rec/wetlands/seed-5.png",
+        "rec/wetlands/seed-6.png",
+        "rec/wetlands/seed-7.png",
+        "rec/wetlands/seed-8.png",
+        "rec/wetlands/seed-9.png",
+        "rec/wetlands/seed-10.png"
+      ]
+    },
+    {
+      "label": "Archipelago",
+      "slug": "archipelago",
+      "setting": "Tiny \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+      "options": [
+        "ARCHIPELAGO_LANDMASS_LARGE",
+        "ARCHIPELAGO_WATER_SIZE_MERGED"
+      ],
+      "verdict": "NOT RECOMMENDED \u2014 ~0% in hard band, never 100% land-connected",
+      "sites": "31 [25\u201340]",
+      "crow": "24",
+      "land": "24 [13\u201335]",
+      "landConnPct": 90,
+      "previews": [
+        "rec/archipelago/seed-1.png",
+        "rec/archipelago/seed-2.png",
+        "rec/archipelago/seed-3.png",
+        "rec/archipelago/seed-4.png",
+        "rec/archipelago/seed-5.png",
+        "rec/archipelago/seed-6.png",
+        "rec/archipelago/seed-7.png",
+        "rec/archipelago/seed-8.png",
+        "rec/archipelago/seed-9.png",
+        "rec/archipelago/seed-10.png"
+      ]
+    }
+  ]
+}
