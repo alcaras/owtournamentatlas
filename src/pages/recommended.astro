@@ -29,9 +29,8 @@ const N = dist.configs[0]?.n ?? 0;
   </p>
 
   <div class="legend">
-    <span><span class="k cap1"></span> Player&nbsp;1 capital</span>
-    <span><span class="k cap2"></span> Player&nbsp;2 capital</span>
-    <span><span class="k city"></span> city site</span>
+    <span><span class="k cap"></span> capital (pink star)</span>
+    <span><span class="k city"></span> city site (pink dot)</span>
     <span class="legnote">pointy-top hex, even-r (game-matched) ·
       <a href={`${baseUrl}calibration`}>{tour.count} real games →</a></span>
   </div>
@@ -60,12 +59,12 @@ const N = dist.configs[0]?.n ?? 0;
                 <tr><td class="m">Scout orders</td><Fragment set:html={D(c.dist.scout)} /></tr>
                 <tr><td class="m">Slinger (land)</td><Fragment set:html={D(c.dist.slLand)} /></tr>
                 <tr><td class="m">Crow hex</td><Fragment set:html={D(c.dist.crow)} /></tr>
+                <tr><td class="m">Ocean %</td><Fragment set:html={D(c.dist.oceanPct)} /></tr>
+                <tr><td class="m">Tribes</td><Fragment set:html={D(c.dist.tribes)} /></tr>
+                <tr><td class="m">Resources</td><Fragment set:html={D(c.dist.res)} /></tr>
               </tbody>
             </table>
-            <div class="aux">
-              ocean <b>{c.oceanPct}%</b> · tribes <b>{c.tribes}</b> ·
-              resources <b>{c.res}</b> · n={c.n}
-            </div>
+            <div class="aux">n={c.n}</div>
             <details class="gal">
               <summary>Show all {c.imgs.length} generated maps</summary>
               <div class="gal__grid">
@@ -100,12 +99,11 @@ const N = dist.configs[0]?.n ?? 0;
       border:1px solid var(--border); border-radius:6px;
       padding:0.6rem 0.9rem; margin-bottom:1.6rem; }
     .legend .k { display:inline-block; vertical-align:-1px; margin-right:0.3rem; }
-    .k.cap1 { width:0; height:0; border-left:6px solid transparent;
-      border-right:6px solid transparent; border-bottom:11px solid #e4342d; }
-    .k.cap2 { width:0; height:0; border-left:6px solid transparent;
-      border-right:6px solid transparent; border-bottom:11px solid #2878e0; }
+    .k.cap { width:0; height:0; border-left:7px solid transparent;
+      border-right:7px solid transparent; border-bottom:12px solid #ff2daa;
+      filter:drop-shadow(0 0 1px #fff); }
     .k.city { width:11px; height:11px; border-radius:50%;
-      background:#c9a04a; border:1px solid #141008; }
+      background:#ff2daa; border:1px solid #2a0a1c; }
     .legnote { color:var(--text-faint); margin-left:auto; }
     .grp { margin-bottom:2.2rem; }
     .grp__h { font-size:1.45rem; color:var(--gold); border-bottom:1px solid
@@ -141,8 +139,8 @@ const N = dist.configs[0]?.n ?? 0;
     .gal > summary { cursor:pointer; font-size:0.8rem; color:var(--gold-soft);
       font-family:var(--font-ui); padding:0.3rem 0; user-select:none; }
     .gal > summary:hover { color:var(--gold); }
-    .gal__grid { display:grid; gap:0.45rem; margin-top:0.5rem;
-      grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); }
+    .gal__grid { display:grid; gap:0.6rem; margin-top:0.5rem;
+      grid-template-columns:repeat(auto-fill,minmax(480px,1fr)); }
     .gal__grid img { width:100%; height:auto; display:block;
       border-radius:3px; border:1px solid var(--border-strong);
       image-rendering:auto; }
