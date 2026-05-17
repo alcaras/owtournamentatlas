@@ -55,11 +55,17 @@
         "wood": 258,
         "stone": 1602
       },
+      "yield6": {
+        "food": 702,
+        "iron": 222,
+        "wood": 23,
+        "stone": 716
+      },
       "yield8": {
         "food": 94,
         "iron": 222,
         "wood": 23,
-        "stone": 0
+        "stone": 476
       },
       "crow": 37,
       "land": 42,
@@ -123,11 +129,17 @@
         "wood": 146,
         "stone": 1477
       },
+      "yield6": {
+        "food": 790,
+        "iron": 219,
+        "wood": 17,
+        "stone": 654
+      },
       "yield8": {
         "food": 121,
         "iron": 219,
         "wood": 17,
-        "stone": 0
+        "stone": 457
       },
       "crow": 48,
       "land": 48,
@@ -185,11 +197,17 @@
         "wood": 182,
         "stone": 1529
       },
+      "yield6": {
+        "food": 809,
+        "iron": 304,
+        "wood": 36,
+        "stone": 675
+      },
       "yield8": {
         "food": 132,
         "iron": 304,
         "wood": 36,
-        "stone": 0
+        "stone": 458
       },
       "crow": 48,
       "land": 48,
@@ -245,16 +263,22 @@
         "Sheep": 1
       },
       "yield5": {
-        "food": 642,
+        "food": 654,
         "iron": 738,
         "wood": 138,
         "stone": 730
       },
-      "yield8": {
-        "food": 106,
+      "yield6": {
+        "food": 395,
         "iron": 191,
         "wood": 8,
-        "stone": 0
+        "stone": 251
+      },
+      "yield8": {
+        "food": 151,
+        "iron": 191,
+        "wood": 8,
+        "stone": 154
       },
       "crow": 32,
       "land": 32,
@@ -315,11 +339,17 @@
         "wood": 278,
         "stone": 1540
       },
-      "yield8": {
-        "food": 115,
+      "yield6": {
+        "food": 377,
         "iron": 261,
         "wood": 15,
-        "stone": 0
+        "stone": 398
+      },
+      "yield8": {
+        "food": 141,
+        "iron": 261,
+        "wood": 15,
+        "stone": 163
       },
       "crow": 34,
       "land": 44,
@@ -376,16 +406,22 @@
         "Salt": 2
       },
       "yield5": {
-        "food": 2095,
+        "food": 2122,
         "iron": 2609,
         "wood": 301,
         "stone": 2602
       },
-      "yield8": {
-        "food": 196,
+      "yield6": {
+        "food": 1317,
         "iron": 518,
         "wood": 16,
-        "stone": 0
+        "stone": 1324
+      },
+      "yield8": {
+        "food": 276,
+        "iron": 518,
+        "wood": 16,
+        "stone": 764
       },
       "crow": 47,
       "land": 49,
@@ -445,11 +481,17 @@
         "wood": 198,
         "stone": 1177
       },
+      "yield6": {
+        "food": 521,
+        "iron": 204,
+        "wood": 27,
+        "stone": 649
+      },
       "yield8": {
         "food": 124,
         "iron": 204,
         "wood": 27,
-        "stone": 0
+        "stone": 393
       },
       "crow": 52,
       "land": 63,
@@ -514,11 +556,17 @@
         "wood": 341,
         "stone": 2579
       },
+      "yield6": {
+        "food": 1095,
+        "iron": 262,
+        "wood": 56,
+        "stone": 946
+      },
       "yield8": {
         "food": 159,
         "iron": 262,
         "wood": 56,
-        "stone": 0
+        "stone": 446
       },
       "crow": 63,
       "land": 64,
@@ -579,11 +627,17 @@
         "wood": 178,
         "stone": 1599
       },
+      "yield6": {
+        "food": 675,
+        "iron": 343,
+        "wood": 29,
+        "stone": 830
+      },
       "yield8": {
         "food": 113,
         "iron": 343,
         "wood": 29,
-        "stone": 0
+        "stone": 501
       },
       "crow": 35,
       "land": 35,
@@ -639,16 +693,22 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 700,
+        "food": 711,
         "iron": 753,
         "wood": 148,
         "stone": 734
       },
-      "yield8": {
-        "food": 122,
+      "yield6": {
+        "food": 450,
         "iron": 188,
         "wood": 27,
-        "stone": 0
+        "stone": 113
+      },
+      "yield8": {
+        "food": 151,
+        "iron": 188,
+        "wood": 27,
+        "stone": 55
       },
       "crow": 43,
       "land": 44,
@@ -706,11 +766,17 @@
         "wood": 51,
         "stone": 723
       },
+      "yield6": {
+        "food": 412,
+        "iron": 129,
+        "wood": 10,
+        "stone": 190
+      },
       "yield8": {
         "food": 94,
         "iron": 129,
         "wood": 10,
-        "stone": 0
+        "stone": 109
       },
       "crow": 56,
       "land": 57,
@@ -763,11 +829,17 @@
         "wood": 87,
         "stone": 665
       },
+      "yield6": {
+        "food": 240,
+        "iron": 118,
+        "wood": 6,
+        "stone": 445
+      },
       "yield8": {
         "food": 15,
         "iron": 118,
         "wood": 6,
-        "stone": 0
+        "stone": 328
       },
       "crow": 30,
       "land": 34,
@@ -825,16 +897,22 @@
         "Fish": 1
       },
       "yield5": {
-        "food": 1211,
+        "food": 1225,
         "iron": 1579,
         "wood": 196,
         "stone": 1558
       },
-      "yield8": {
-        "food": 126,
+      "yield6": {
+        "food": 708,
         "iron": 324,
         "wood": 19,
-        "stone": 0
+        "stone": 762
+      },
+      "yield8": {
+        "food": 161,
+        "iron": 324,
+        "wood": 19,
+        "stone": 442
       },
       "crow": 36,
       "land": 36,
@@ -885,16 +963,22 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 734,
+        "food": 745,
         "iron": 769,
         "wood": 127,
         "stone": 765
       },
-      "yield8": {
-        "food": 72,
+      "yield6": {
+        "food": 496,
         "iron": 216,
         "wood": 15,
-        "stone": 0
+        "stone": 210
+      },
+      "yield8": {
+        "food": 118,
+        "iron": 216,
+        "wood": 15,
+        "stone": 141
       },
       "crow": 43,
       "land": 43,
@@ -946,16 +1030,22 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 644,
+        "food": 682,
         "iron": 733,
         "wood": 150,
         "stone": 723
       },
-      "yield8": {
-        "food": 106,
+      "yield6": {
+        "food": 460,
         "iron": 239,
         "wood": 21,
-        "stone": 0
+        "stone": 344
+      },
+      "yield8": {
+        "food": 179,
+        "iron": 239,
+        "wood": 21,
+        "stone": 259
       },
       "crow": 49,
       "land": 53,
@@ -1007,16 +1097,22 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 1173,
+        "food": 1182,
         "iron": 1512,
         "wood": 146,
         "stone": 1494
       },
-      "yield8": {
-        "food": 167,
+      "yield6": {
+        "food": 791,
         "iron": 355,
         "wood": 32,
-        "stone": 0
+        "stone": 957
+      },
+      "yield8": {
+        "food": 220,
+        "iron": 355,
+        "wood": 32,
+        "stone": 607
       },
       "crow": 45,
       "land": 45,
@@ -1072,11 +1168,17 @@
         "wood": 151,
         "stone": 1439
       },
+      "yield6": {
+        "food": 345,
+        "iron": 290,
+        "wood": 12,
+        "stone": 618
+      },
       "yield8": {
         "food": 118,
         "iron": 290,
         "wood": 12,
-        "stone": 0
+        "stone": 309
       },
       "crow": 35,
       "land": 40,
@@ -1138,16 +1240,22 @@
         "Sorghum": 1
       },
       "yield5": {
-        "food": 1927,
+        "food": 1941,
         "iron": 2242,
         "wood": 320,
         "stone": 2243
       },
-      "yield8": {
-        "food": 119,
+      "yield6": {
+        "food": 808,
         "iron": 634,
         "wood": 17,
-        "stone": 0
+        "stone": 980
+      },
+      "yield8": {
+        "food": 236,
+        "iron": 634,
+        "wood": 17,
+        "stone": 508
       },
       "crow": 64,
       "land": 71,
@@ -1208,16 +1316,22 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 1257,
+        "food": 1259,
         "iron": 1562,
         "wood": 231,
         "stone": 1561
       },
-      "yield8": {
-        "food": 143,
+      "yield6": {
+        "food": 786,
         "iron": 311,
         "wood": 30,
-        "stone": 0
+        "stone": 827
+      },
+      "yield8": {
+        "food": 167,
+        "iron": 311,
+        "wood": 30,
+        "stone": 515
       },
       "crow": 46,
       "land": 47,
@@ -1276,16 +1390,22 @@
         "Lavender": 1
       },
       "yield5": {
-        "food": 2143,
+        "food": 2149,
         "iron": 2430,
         "wood": 371,
         "stone": 2411
       },
-      "yield8": {
-        "food": 178,
+      "yield6": {
+        "food": 852,
         "iron": 543,
         "wood": 43,
-        "stone": 0
+        "stone": 817
+      },
+      "yield8": {
+        "food": 208,
+        "iron": 543,
+        "wood": 43,
+        "stone": 500
       },
       "crow": 47,
       "land": 59,
@@ -1347,11 +1467,17 @@
         "wood": 123,
         "stone": 799
       },
+      "yield6": {
+        "food": 293,
+        "iron": 218,
+        "wood": 22,
+        "stone": 524
+      },
       "yield8": {
         "food": 78,
         "iron": 218,
         "wood": 22,
-        "stone": 0
+        "stone": 354
       },
       "crow": 31,
       "land": 36,
@@ -1410,16 +1536,22 @@
         "Silver": 1
       },
       "yield5": {
-        "food": 1076,
+        "food": 1084,
         "iron": 1386,
         "wood": 189,
         "stone": 1347
       },
-      "yield8": {
-        "food": 73,
+      "yield6": {
+        "food": 364,
         "iron": 375,
         "wood": 12,
-        "stone": 0
+        "stone": 648
+      },
+      "yield8": {
+        "food": 101,
+        "iron": 375,
+        "wood": 12,
+        "stone": 335
       },
       "crow": 35,
       "land": 60,
@@ -1476,11 +1608,17 @@
         "wood": 139,
         "stone": 666
       },
+      "yield6": {
+        "food": 368,
+        "iron": 163,
+        "wood": 30,
+        "stone": 255
+      },
       "yield8": {
         "food": 101,
         "iron": 163,
         "wood": 30,
-        "stone": 0
+        "stone": 179
       },
       "crow": 44,
       "land": 48,
@@ -1527,16 +1665,22 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 651,
+        "food": 655,
         "iron": 677,
         "wood": 166,
         "stone": 668
       },
-      "yield8": {
-        "food": 155,
+      "yield6": {
+        "food": 478,
         "iron": 95,
         "wood": 20,
-        "stone": 0
+        "stone": 151
+      },
+      "yield8": {
+        "food": 179,
+        "iron": 95,
+        "wood": 20,
+        "stone": 95
       },
       "crow": 23,
       "land": 25,
@@ -1589,16 +1733,22 @@
         "Lavender": 1
       },
       "yield5": {
-        "food": 578,
+        "food": 581,
         "iron": 638,
         "wood": 59,
         "stone": 625
       },
-      "yield8": {
-        "food": 63,
+      "yield6": {
+        "food": 328,
         "iron": 139,
         "wood": 13,
-        "stone": 0
+        "stone": 227
+      },
+      "yield8": {
+        "food": 103,
+        "iron": 139,
+        "wood": 13,
+        "stone": 122
       },
       "crow": 27,
       "land": 29,
@@ -1657,11 +1807,17 @@
         "wood": 136,
         "stone": 749
       },
+      "yield6": {
+        "food": 447,
+        "iron": 110,
+        "wood": 41,
+        "stone": 258
+      },
       "yield8": {
         "food": 108,
         "iron": 110,
         "wood": 41,
-        "stone": 0
+        "stone": 192
       },
       "crow": 43,
       "land": 46,
@@ -1716,16 +1872,22 @@
         "Gem": 1
       },
       "yield5": {
-        "food": 1722,
+        "food": 1737,
         "iron": 2381,
         "wood": 108,
         "stone": 2365
       },
-      "yield8": {
-        "food": 170,
+      "yield6": {
+        "food": 968,
         "iron": 633,
         "wood": 12,
-        "stone": 0
+        "stone": 1685
+      },
+      "yield8": {
+        "food": 207,
+        "iron": 633,
+        "wood": 12,
+        "stone": 1155
       },
       "crow": 75,
       "land": 78,
@@ -1790,11 +1952,17 @@
         "wood": 159,
         "stone": 1352
       },
+      "yield6": {
+        "food": 445,
+        "iron": 241,
+        "wood": 24,
+        "stone": 472
+      },
       "yield8": {
         "food": 87,
         "iron": 241,
         "wood": 24,
-        "stone": 0
+        "stone": 356
       },
       "crow": 39,
       "land": 48,
@@ -1847,16 +2015,22 @@
         "Crab": 1
       },
       "yield5": {
-        "food": 738,
+        "food": 742,
         "iron": 833,
         "wood": 167,
         "stone": 813
       },
-      "yield8": {
-        "food": 88,
+      "yield6": {
+        "food": 458,
         "iron": 253,
         "wood": 23,
-        "stone": 0
+        "stone": 321
+      },
+      "yield8": {
+        "food": 132,
+        "iron": 253,
+        "wood": 23,
+        "stone": 167
       },
       "crow": 31,
       "land": 33,
@@ -1916,11 +2090,17 @@
         "wood": 280,
         "stone": 1531
       },
+      "yield6": {
+        "food": 684,
+        "iron": 360,
+        "wood": 16,
+        "stone": 695
+      },
       "yield8": {
         "food": 145,
         "iron": 360,
         "wood": 16,
-        "stone": 0
+        "stone": 399
       },
       "crow": 46,
       "land": 46,
@@ -1973,16 +2153,22 @@
         "Game": 1
       },
       "yield5": {
-        "food": 1173,
+        "food": 1179,
         "iron": 1519,
         "wood": 202,
         "stone": 1503
       },
-      "yield8": {
-        "food": 165,
+      "yield6": {
+        "food": 796,
         "iron": 290,
         "wood": 36,
-        "stone": 0
+        "stone": 755
+      },
+      "yield8": {
+        "food": 190,
+        "iron": 290,
+        "wood": 36,
+        "stone": 474
       },
       "crow": 47,
       "land": 49,
@@ -2040,16 +2226,22 @@
         "Salt": 1
       },
       "yield5": {
-        "food": 1814,
+        "food": 1818,
         "iron": 2574,
         "wood": 434,
         "stone": 2532
       },
-      "yield8": {
-        "food": 210,
+      "yield6": {
+        "food": 990,
         "iron": 548,
         "wood": 69,
-        "stone": 0
+        "stone": 1511
+      },
+      "yield8": {
+        "food": 239,
+        "iron": 548,
+        "wood": 69,
+        "stone": 803
       },
       "crow": 48,
       "land": 50,
@@ -2109,16 +2301,22 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 1254,
+        "food": 1262,
         "iron": 1496,
         "wood": 151,
         "stone": 1468
       },
-      "yield8": {
-        "food": 96,
+      "yield6": {
+        "food": 495,
         "iron": 421,
         "wood": 17,
-        "stone": 0
+        "stone": 618
+      },
+      "yield8": {
+        "food": 153,
+        "iron": 421,
+        "wood": 17,
+        "stone": 340
       },
       "crow": 37,
       "land": 46,
@@ -2174,16 +2372,22 @@
         "Salt": 2
       },
       "yield5": {
-        "food": 1289,
+        "food": 1300,
         "iron": 1596,
         "wood": 198,
         "stone": 1581
       },
-      "yield8": {
-        "food": 103,
+      "yield6": {
+        "food": 691,
         "iron": 403,
         "wood": 16,
-        "stone": 0
+        "stone": 1005
+      },
+      "yield8": {
+        "food": 198,
+        "iron": 403,
+        "wood": 16,
+        "stone": 691
       },
       "crow": 43,
       "land": 43,
@@ -2227,16 +2431,22 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 718,
+        "food": 723,
         "iron": 828,
         "wood": 143,
         "stone": 826
       },
-      "yield8": {
-        "food": 110,
+      "yield6": {
+        "food": 433,
         "iron": 197,
         "wood": 24,
-        "stone": 0
+        "stone": 450
+      },
+      "yield8": {
+        "food": 170,
+        "iron": 197,
+        "wood": 24,
+        "stone": 328
       },
       "crow": 24,
       "land": 28,
@@ -2292,16 +2502,22 @@
         "Sorghum": 1
       },
       "yield5": {
-        "food": 1147,
+        "food": 1151,
         "iron": 1409,
         "wood": 214,
         "stone": 1369
       },
-      "yield8": {
-        "food": 117,
+      "yield6": {
+        "food": 583,
         "iron": 410,
         "wood": 23,
-        "stone": 0
+        "stone": 556
+      },
+      "yield8": {
+        "food": 159,
+        "iron": 410,
+        "wood": 23,
+        "stone": 269
       },
       "crow": 55,
       "land": 59,
@@ -2352,16 +2568,22 @@
         "Goat": 1
       },
       "yield5": {
-        "food": 1289,
+        "food": 1303,
         "iron": 1459,
         "wood": 187,
         "stone": 1433
       },
-      "yield8": {
-        "food": 51,
+      "yield6": {
+        "food": 384,
         "iron": 300,
         "wood": 12,
-        "stone": 0
+        "stone": 551
+      },
+      "yield8": {
+        "food": 87,
+        "iron": 300,
+        "wood": 12,
+        "stone": 298
       },
       "crow": 48,
       "land": 66,
@@ -2423,11 +2645,17 @@
         "wood": 158,
         "stone": 1529
       },
+      "yield6": {
+        "food": 776,
+        "iron": 299,
+        "wood": 13,
+        "stone": 546
+      },
       "yield8": {
         "food": 122,
         "iron": 299,
         "wood": 13,
-        "stone": 0
+        "stone": 420
       },
       "crow": 36,
       "land": 37,
@@ -2483,16 +2711,22 @@
         "Goat": 1
       },
       "yield5": {
-        "food": 1279,
+        "food": 1289,
         "iron": 1601,
         "wood": 90,
         "stone": 1579
       },
-      "yield8": {
-        "food": 113,
+      "yield6": {
+        "food": 787,
         "iron": 380,
         "wood": 25,
-        "stone": 0
+        "stone": 1071
+      },
+      "yield8": {
+        "food": 159,
+        "iron": 380,
+        "wood": 25,
+        "stone": 740
       },
       "crow": 62,
       "land": 63,
@@ -2549,11 +2783,17 @@
         "wood": 110,
         "stone": 1549
       },
+      "yield6": {
+        "food": 789,
+        "iron": 197,
+        "wood": 6,
+        "stone": 649
+      },
       "yield8": {
         "food": 138,
         "iron": 197,
         "wood": 6,
-        "stone": 0
+        "stone": 484
       },
       "crow": 61,
       "land": 61,
@@ -2610,16 +2850,22 @@
         "Sorghum": 2
       },
       "yield5": {
-        "food": 1363,
+        "food": 1383,
         "iron": 1524,
         "wood": 166,
         "stone": 1566
       },
-      "yield8": {
-        "food": 117,
+      "yield6": {
+        "food": 973,
         "iron": 406,
         "wood": 25,
-        "stone": 0
+        "stone": 886
+      },
+      "yield8": {
+        "food": 180,
+        "iron": 406,
+        "wood": 25,
+        "stone": 680
       },
       "crow": 62,
       "land": 65,
@@ -2665,16 +2911,22 @@
         "Silver": 1
       },
       "yield5": {
-        "food": 1322,
+        "food": 1325,
         "iron": 1463,
         "wood": 217,
         "stone": 1424
       },
-      "yield8": {
-        "food": 80,
+      "yield6": {
+        "food": 470,
         "iron": 352,
         "wood": 27,
-        "stone": 0
+        "stone": 378
+      },
+      "yield8": {
+        "food": 119,
+        "iron": 352,
+        "wood": 27,
+        "stone": 158
       },
       "crow": 35,
       "land": 40,
@@ -2732,16 +2984,22 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 2306,
+        "food": 2313,
         "iron": 2493,
         "wood": 321,
         "stone": 2533
       },
-      "yield8": {
-        "food": 209,
+      "yield6": {
+        "food": 1295,
         "iron": 396,
         "wood": 26,
-        "stone": 0
+        "stone": 930
+      },
+      "yield8": {
+        "food": 230,
+        "iron": 396,
+        "wood": 26,
+        "stone": 749
       },
       "crow": 81,
       "land": 84,
@@ -2797,16 +3055,22 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 980,
+        "food": 983,
         "iron": 1125,
         "wood": 89,
         "stone": 1093
       },
-      "yield8": {
-        "food": 152,
+      "yield6": {
+        "food": 589,
         "iron": 223,
         "wood": 43,
-        "stone": 0
+        "stone": 433
+      },
+      "yield8": {
+        "food": 192,
+        "iron": 223,
+        "wood": 43,
+        "stone": 256
       },
       "crow": 67,
       "land": 67,
@@ -2864,16 +3128,22 @@
         "Silver": 1
       },
       "yield5": {
-        "food": 1295,
+        "food": 1297,
         "iron": 1509,
         "wood": 346,
         "stone": 1502
       },
-      "yield8": {
-        "food": 108,
+      "yield6": {
+        "food": 696,
         "iron": 432,
         "wood": 36,
-        "stone": 0
+        "stone": 567
+      },
+      "yield8": {
+        "food": 139,
+        "iron": 432,
+        "wood": 36,
+        "stone": 288
       },
       "crow": 32,
       "land": 32,
@@ -2933,16 +3203,22 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 2308,
+        "food": 2326,
         "iron": 2504,
         "wood": 457,
         "stone": 2494
       },
-      "yield8": {
-        "food": 119,
+      "yield6": {
+        "food": 762,
         "iron": 434,
         "wood": 30,
-        "stone": 0
+        "stone": 606
+      },
+      "yield8": {
+        "food": 157,
+        "iron": 434,
+        "wood": 30,
+        "stone": 415
       },
       "crow": 41,
       "land": 50,
@@ -3003,11 +3279,17 @@
         "wood": 151,
         "stone": 1452
       },
-      "yield8": {
-        "food": 136,
+      "yield6": {
+        "food": 613,
         "iron": 560,
         "wood": 11,
-        "stone": 0
+        "stone": 920
+      },
+      "yield8": {
+        "food": 155,
+        "iron": 560,
+        "wood": 11,
+        "stone": 439
       },
       "crow": 48,
       "land": 49,
@@ -3062,11 +3344,17 @@
         "wood": 117,
         "stone": 633
       },
+      "yield6": {
+        "food": 327,
+        "iron": 172,
+        "wood": 8,
+        "stone": 284
+      },
       "yield8": {
         "food": 139,
         "iron": 172,
         "wood": 8,
-        "stone": 0
+        "stone": 193
       },
       "crow": 41,
       "land": 43,
@@ -3127,16 +3415,22 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 2149,
+        "food": 2175,
         "iron": 2375,
         "wood": 336,
         "stone": 2325
       },
-      "yield8": {
-        "food": 151,
+      "yield6": {
+        "food": 750,
         "iron": 503,
         "wood": 21,
-        "stone": 0
+        "stone": 413
+      },
+      "yield8": {
+        "food": 265,
+        "iron": 503,
+        "wood": 21,
+        "stone": 168
       },
       "crow": 92,
       "land": 92,
@@ -3197,16 +3491,22 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 1936,
+        "food": 1944,
         "iron": 2287,
         "wood": 255,
         "stone": 2238
       },
-      "yield8": {
-        "food": 117,
+      "yield6": {
+        "food": 624,
         "iron": 520,
         "wood": 15,
-        "stone": 0
+        "stone": 926
+      },
+      "yield8": {
+        "food": 153,
+        "iron": 520,
+        "wood": 15,
+        "stone": 494
       },
       "crow": 79,
       "land": 99,
@@ -3268,11 +3568,17 @@
         "wood": 225,
         "stone": 1468
       },
-      "yield8": {
-        "food": 45,
+      "yield6": {
+        "food": 344,
         "iron": 217,
         "wood": 16,
-        "stone": 0
+        "stone": 225
+      },
+      "yield8": {
+        "food": 75,
+        "iron": 217,
+        "wood": 16,
+        "stone": 104
       },
       "crow": 46,
       "land": 52,
@@ -3326,16 +3632,22 @@
         "Citrus": 1
       },
       "yield5": {
-        "food": 1162,
+        "food": 1170,
         "iron": 1454,
         "wood": 106,
         "stone": 1382
       },
-      "yield8": {
-        "food": 72,
+      "yield6": {
+        "food": 400,
         "iron": 397,
         "wood": 1,
-        "stone": 0
+        "stone": 794
+      },
+      "yield8": {
+        "food": 108,
+        "iron": 397,
+        "wood": 1,
+        "stone": 499
       },
       "crow": 49,
       "land": 60,

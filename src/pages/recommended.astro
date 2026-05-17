@@ -1,180 +1,155 @@
 ---
 import Base from '../layouts/Base.astro';
-import opt from '../data/options.json';
+import dist from '../data/atlas-dist.json';
 import tour from '../data/tournament-games.json';
-import recs from '../data/recommendations.json';
 const baseUrl = import.meta.env.BASE_URL;
 
-// group option rows by script, preserve config order
-const order = ["DOTA","Continent","Coastal Rain Basin","Inland Sea","Donut",
-  "Archipelago","Arid Plateau","Desert","Hardwood Forest","Mountain Pass"];
-const byScript: Record<string, any[]> = {};
-for (const r of opt.rows) (byScript[r.script] ??= []).push(r);
-const scripts = order.filter(s => byScript[s]);
+const byGroup: Record<string, any[]> = {};
+for (const c of dist.configs) (byGroup[c.group] ??= []).push(c);
+const groups = dist.groups.filter((g: string) => byGroup[g]);
 
-const D = (o: any) => o == null ? '—'
-  : `${o.mean.toFixed(0)} <span class="dim">[${o.min}–${o.max}]</span>`;
-// ranking comes from the corrected (symmetric-capital) rec sweep
-const ranked = [...recs.maps].sort((a:any,b:any)=>
-  b.okPct-a.okPct || b.critPct-a.critPct);
-// knob tables (below) still read the option sweep; highlight best row
-const best: Record<string, any> = {};
-for (const s of scripts) {
-  best[s] = [...byScript[s]].sort((a,b)=>
-    b.passPct-a.passPct || b.landConnPct-a.landConnPct ||
-    Math.abs(a.sites.mean-20)-Math.abs(b.sites.mean-20))[0];
-}
+// no pass / no bands — just the distribution. connected% is the one gate.
+const connClass = (p: number) => p >= 95 ? 'g' : p >= 75 ? 'o' : 'n';
+const D = (o: any) => o == null ? '<td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>'
+  : `<td><b>${o.mean}</b> <span class="sd">±${o.sd}</span></td>`
+  + `<td>${o.med}</td>`
+  + `<td class="mono">${o.p10}–${o.p90}</td>`
+  + `<td class="mono dim">${o.min}–${o.max}</td>`;
+const N = dist.configs[0]?.n ?? 0;
 ---
-<Base title="Recommended Settings">
+<Base title="Map Distributions">
   <p class="lede">
-    The <i>ideal map</i> we tune settings toward: land-connected,
-    18–22 city sites, 45–65-hex land distance (15–25 sites acceptable).
-    We don't screen or reject maps — these are targets, not gates.
-    <b>% meet criteria</b> = share of blind maps hitting the ideal band;
-    <b>acceptable</b> = the looser 15–25-site band. n=10/config.
-    Distances use the corrected even-r model with symmetric capitals
-    (a prior bug placed the two capitals non-symmetrically — now fixed).
+    What each map setting actually produces over {N} blind random seeds —
+    the full distribution, not a pass/fail. We don't screen or reject
+    maps; these numbers tell you what you'll typically get and how wide
+    the spread is. <b>p10–p90</b> is the typical range (9 in 10 maps);
+    <b>min–max</b> is the worst observed. The only hard gate is
+    <b>land-connected %</b> — the one true reroll trigger. Distances use
+    the corrected even-r model with symmetric capitals.
   </p>
 
-  <section class="pool">
-    <h2 class="pool__h">Scripts ranked by how often they hit criteria</h2>
-    <div class="cards">
-      {ranked.slice(0,6).map((m:any) => (
-        <div class="card">
-          <div class="card__t">{m.label}</div>
-          <div class="card__cfg">{m.setting}{m.tip ? ` · ${m.tip}` : ''}</div>
-          <div class="card__m">
-            <b class={m.critPct>=70?'g':m.critPct>=30?'o':'n'}>{m.critPct}% criteria</b> ·
-            {m.okPct}% acceptable · sites {m.sites} · land {m.land}
+  <div class="legend">
+    <span><span class="k cap1"></span> Player&nbsp;1 capital</span>
+    <span><span class="k cap2"></span> Player&nbsp;2 capital</span>
+    <span><span class="k city"></span> city site</span>
+    <span><span class="k tribe"></span> tribe camp</span>
+    <span class="legnote">pointy-top hex, even-r (game-matched) ·
+      <a href={`${baseUrl}calibration`}>{tour.count} real games →</a></span>
+  </div>
+
+  {groups.map((g: string) => (
+    <section class="grp">
+      <h2 class="grp__h">{g}</h2>
+      {byGroup[g].map((c: any) => (
+        <div class="cfg">
+          <div class="cfg__hd">
+            <span class="cfg__name">{c.label}</span>
+            <span class={'conn ' + connClass(c.connPct)}>
+              {c.connPct}% land-connected
+            </span>
+            <span class="cfg__set">{c.setting}{c.tip ? ` · ${c.tip}` : ''}</span>
+          </div>
+          <div class="cfg__body">
+            <table class="dt">
+              <thead><tr>
+                <th>metric</th><th>mean</th><th>med</th>
+                <th>p10–p90</th><th>min–max</th>
+              </tr></thead>
+              <tbody>
+                <tr><td class="m">Land hex dist</td><Fragment set:html={D(c.dist.land)} /></tr>
+                <tr><td class="m">City sites</td><Fragment set:html={D(c.dist.sites)} /></tr>
+                <tr><td class="m">Scout orders</td><Fragment set:html={D(c.dist.scout)} /></tr>
+                <tr><td class="m">Slinger (land)</td><Fragment set:html={D(c.dist.slLand)} /></tr>
+                <tr><td class="m">Crow hex</td><Fragment set:html={D(c.dist.crow)} /></tr>
+              </tbody>
+            </table>
+            <div class="aux">
+              ocean <b>{c.oceanPct}%</b> · tribes <b>{c.tribes}</b> ·
+              resources <b>{c.res}</b> · n={c.n}
+            </div>
+            <details class="gal">
+              <summary>Show all {c.imgs.length} generated maps</summary>
+              <div class="gal__grid">
+                {c.imgs.map((p: string) => (
+                  <img src={`${baseUrl}img/${p}`} loading="lazy"
+                       alt={`${c.label} sample`} />
+                ))}
+              </div>
+            </details>
           </div>
         </div>
       ))}
-    </div>
-    <p class="note">
-      Note: with symmetric capitals corrected, no open script lands in
-      the tight ideal band on every blind map (the earlier
-      "DOTA = 100%" result was an artifact of the capital-placement
-      bug — DOTA ultrawide actually runs ~68 land, just over the 65
-      cap). Inland Sea / Wetlands hit the band most often. This is why
-      we treat the bands as targets and only reroll on a true failure
-      (no land connection). Historically the tournament used Coastal
-      Rain Basin, Continent and Inland Sea ({tour.count} games on the
-      <a href={`${import.meta.env.BASE_URL}calibration`}>calibration</a> page).
-      The per-map knob tables below are being regenerated on the fixed
-      binary.
-    </p>
-  </section>
-
-  <h2 class="sec">Recommended setting per map + {recs.N} hex previews</h2>
-  <p class="note">Each card = the recommended config for that script.
-    Capitals are the big <b>player-colored stars</b> (red = player 1,
-    blue = player 2); gold = city sites, red dots = tribe camps. Real
-    pointy-top hex (even-r, game-matched).</p>
-  {recs.maps.map((m:any) => (
-    <section class="rec">
-      <header class="rec__hd">
-        <h3 class="rec__name">{m.label}</h3>
-        <span class={'rec__pct ' + (m.critPct >= 70 ? 'g' : m.critPct >= 30 ? 'o' : 'n')}>
-          {m.critPct}% meet criteria
-          <span class="rec__ok">· {m.okPct}% acceptable · n={m.n}</span>
-        </span>
-      </header>
-      <div class="rec__cfg">
-        <b>Settings:</b> {m.setting}
-        {m.options && m.options[0] !== '(defaults)' && <span> · <b>option:</b> {m.options.join(', ')}</span>}
-        {m.tip && <span> · {m.tip}</span>}
-      </div>
-      <div class="rec__stats">
-        sites <b>{m.sites}</b> · capital crow <b>{m.crow}</b> · land path
-        <b>{m.land}</b> · land-connected <b>{m.landConnPct}%</b>
-      </div>
-      {m.previews && m.previews.length > 0 && (
-        <div class="rec__gal">
-          {m.previews.map((p:string) => (
-            <img src={`${baseUrl}img/${p}`} loading="lazy" alt={`${m.label} sample`} />
-          ))}
-        </div>
-      )}
     </section>
   ))}
 
-  <h2 class="sec">Per-map: the knob that moves land-connection / distance</h2>
-  {scripts.map(s => (
-    <section class="grp">
-      <h3 class="grp__h">{s} <span class="grp__b">{byScript[s][0].base} · {byScript[s][0].axis}</span></h3>
-      <div class="tscroll">
-        <table class="tbl">
-          <thead><tr>
-            <th>Variant</th><th>Land-conn%</th><th>Pass%</th>
-            <th>City sites</th><th>Crow</th><th>Land path</th><th>Scout</th>
-          </tr></thead>
-          <tbody>
-            {byScript[s].map((r:any) => (
-              <tr class={r === best[s] ? 'is-best' : ''}>
-                <td><b>{r.variant}</b></td>
-                <td class={r.landConnPct < 100 ? 'bad' : ''}>{r.landConnPct}%</td>
-                <td class={r.passPct >= 100 ? 'good' : r.passPct >= 30 ? '' : 'bad'}>{r.passPct}%</td>
-                <td class="mono" set:html={D(r.sites)} />
-                <td class="mono" set:html={D(r.crow)} />
-                <td class="mono" set:html={D(r.landPath)} />
-                <td class="mono">{r.scout?.mean ?? '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  ))}
-
-  <p class="note" style="margin-top:1.4rem;">
-    Inland Sea &amp; Wetlands have no connection/distance map-option (base
-    only). Distances even-r (game-verified). Pass band: land 40–80, sites
-    12–28, land-connected — applied to every seed, not the average.
+  <p class="note">
+    {dist.configCount} configs × {N} seeds. No pass/fail and no fixed
+    band — pick the targets you want and read them off the distribution.
+    Capital distance is symmetric (player&nbsp;1's placed tile reflected
+    for player&nbsp;2, as Old World does fair MP). Land path = walkable
+    BFS (water/mountain impassable); Scout = orders for a move-3 Scout
+    capital→capital; Crow = even-r hex ignoring terrain. Generated
+    headless from owmapgen.
   </p>
 
   <style>
-    .lede { font-family: var(--font-display); font-style: italic; font-size: 1.05rem;
-      line-height: 1.55; color: var(--text-soft); max-width: 76ch; margin: 0.6rem 0 1.4rem; }
-    .pool { background: var(--bg-elev); border: 1px solid var(--gold-deep);
-      border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 2rem; }
-    .pool__h { font-size: 1.2rem; color: var(--gold); margin-bottom: 0.7rem; }
-    .cards { display:flex; flex-wrap:wrap; gap:0.7rem; }
-    .card { background:#16181d; border:1px solid var(--gold-deep); border-radius:5px;
-      padding:0.7rem 0.9rem; min-width:230px; }
-    .card__t { font-family:var(--font-display); font-weight:700; font-size:1.15rem; color:var(--gold); }
-    .card__cfg { font-size:0.82rem; color:var(--text-soft); margin:0.15rem 0 0.3rem; }
-    .card__m { font-size:0.78rem; color:var(--text-faint); }
-    .sec { font-size:1.35rem; border-bottom:1px solid var(--gold-deep);
-      padding-bottom:0.3rem; margin:1.6rem 0 0.6rem; }
-    .grp { margin-bottom:1.4rem; }
-    .grp__h { font-size:1.1rem; } .grp__b { font-size:0.74rem; color:var(--text-faint); font-family:var(--font-mono); }
-    .tscroll { overflow-x:auto; }
-    .tbl { width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.3rem; }
-    .tbl thead th { font-family:var(--font-ui); font-size:0.56rem; letter-spacing:0.13em;
-      text-transform:uppercase; color:var(--text-dim); font-weight:600; text-align:left;
-      padding:0.3rem 0.6rem; border-bottom:1px solid var(--border-strong); white-space:nowrap; }
-    .tbl td { padding:0.34rem 0.6rem; border-bottom:1px solid var(--border); white-space:nowrap; }
-    .tbl tr.is-best td { background:#16290f; }
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:80ch; margin:0.6rem 0 1rem; }
+    .legend { display:flex; flex-wrap:wrap; gap:1.1rem; align-items:center;
+      font-size:0.78rem; color:var(--text-soft); background:var(--bg-elev);
+      border:1px solid var(--border); border-radius:6px;
+      padding:0.6rem 0.9rem; margin-bottom:1.6rem; }
+    .legend .k { display:inline-block; vertical-align:-1px; margin-right:0.3rem; }
+    .k.cap1 { width:0; height:0; border-left:6px solid transparent;
+      border-right:6px solid transparent; border-bottom:11px solid #e4342d; }
+    .k.cap2 { width:0; height:0; border-left:6px solid transparent;
+      border-right:6px solid transparent; border-bottom:11px solid #2878e0; }
+    .k.city { width:11px; height:11px; border-radius:50%;
+      background:#c9a04a; border:1px solid #141008; }
+    .k.tribe { width:9px; height:9px; border-radius:50%;
+      background:#aa463c; border:1px solid #140a08; }
+    .legnote { color:var(--text-faint); margin-left:auto; }
+    .grp { margin-bottom:2.2rem; }
+    .grp__h { font-size:1.45rem; color:var(--gold); border-bottom:1px solid
+      var(--gold-deep); padding-bottom:0.3rem; margin-bottom:0.7rem; }
+    .cfg { background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:6px; padding:0.8rem 1rem; margin-bottom:0.8rem; }
+    .cfg__hd { display:flex; align-items:baseline; gap:0.8rem; flex-wrap:wrap; }
+    .cfg__name { font-family:var(--font-display); font-weight:700;
+      font-size:1.18rem; color:var(--text); }
+    .conn { font-family:var(--font-ui); font-weight:700; font-size:0.74rem;
+      padding:0.14rem 0.55rem; border-radius:999px; border:1px solid; }
+    .conn.g { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
+    .conn.o { color:#e0c061; border-color:var(--gold-deep); background:#231f0d; }
+    .conn.n { color:#d08070; border-color:#5a2e28; background:#2a1512; }
+    .cfg__set { font-size:0.78rem; color:var(--text-faint);
+      font-family:var(--font-mono); margin-left:auto; }
+    .cfg__body { margin-top:0.6rem; }
+    .dt { border-collapse:collapse; font-size:0.84rem; min-width:440px; }
+    .dt thead th { font-family:var(--font-ui); font-size:0.56rem;
+      letter-spacing:0.13em; text-transform:uppercase; color:var(--text-dim);
+      font-weight:600; text-align:left; padding:0.25rem 0.9rem 0.25rem 0;
+      border-bottom:1px solid var(--border-strong); }
+    .dt td { padding:0.26rem 0.9rem 0.26rem 0;
+      border-bottom:1px solid var(--border); white-space:nowrap; }
+    .dt td.m { color:var(--text-soft); }
+    .dt td b { color:var(--text); }
+    .sd { color:var(--text-faint); font-size:0.82em; }
     .mono { font-family:var(--font-mono); font-size:0.82em; }
-    .dim { color:var(--text-faint); } .good { color:#7fb069; font-weight:600; }
-    .bad { color:#b06a5f; font-weight:600; }
-    .note { font-size:0.82rem; color:var(--text-faint); line-height:1.5; max-width:82ch; }
-    .rec { background:var(--bg-elev); border:1px solid var(--border);
-      border-radius:6px; padding:0.9rem 1.1rem; margin-bottom:1rem; }
-    .rec__hd { display:flex; align-items:baseline; gap:0.8rem; flex-wrap:wrap; }
-    .rec__name { font-family:var(--font-display); font-weight:700; font-size:1.25rem; color:var(--text); }
-    .rec__pct { font-size:0.78rem; font-family:var(--font-ui); font-weight:700;
-      letter-spacing:0.04em; padding:0.16rem 0.6rem; border-radius:999px; border:1px solid; }
-    .rec__pct.g { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
-    .rec__pct.o { color:#e0c061; border-color:var(--gold-deep); background:#231f0d; }
-    .rec__pct.n { color:#d08070; border-color:#5a2e28; background:#2a1512; }
-    .rec__ok { font-weight:400; font-size:0.66rem; color:var(--text-faint);
-      letter-spacing:0.02em; }
-    .rec__cfg { font-size:0.9rem; color:var(--text-soft); margin:0.4rem 0 0.2rem; }
-    .rec__cfg b, .rec__stats b { color:var(--text); }
-    .rec__stats { font-size:0.82rem; color:var(--text-faint); margin-bottom:0.6rem; }
-    .rec__gal { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:0.4rem; }
-    .rec__gal img { width:100%; height:auto; display:block; border-radius:3px;
-      border:1px solid var(--border); image-rendering:auto; }
+    .dim { color:var(--text-faint); }
+    .dash { color:var(--text-dim); }
+    .aux { font-size:0.78rem; color:var(--text-faint); margin:0.5rem 0; }
+    .aux b { color:var(--text-soft); }
+    .gal > summary { cursor:pointer; font-size:0.8rem; color:var(--gold-soft);
+      font-family:var(--font-ui); padding:0.3rem 0; user-select:none; }
+    .gal > summary:hover { color:var(--gold); }
+    .gal__grid { display:grid; gap:0.45rem; margin-top:0.5rem;
+      grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); }
+    .gal__grid img { width:100%; height:auto; display:block;
+      border-radius:3px; border:1px solid var(--border-strong);
+      image-rendering:auto; }
+    .note { font-size:0.8rem; color:var(--text-faint); line-height:1.5;
+      max-width:84ch; margin-top:1.6rem; }
   </style>
 </Base>

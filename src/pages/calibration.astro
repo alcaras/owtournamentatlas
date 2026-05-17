@@ -64,7 +64,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
                 <td class="mono">{g.slingerHatti ?? '—'}</td>
                 <td class="mono" title={`forest ${g.forestPct}% · hills ${g.hillPct}% · mtn ${g.mountainPct}%`}>{g.oceanPct ?? '—'}</td>
                 <td class="mono" title={Object.entries(g.resources||{}).slice(0,12).map(([k,v])=>`${k} ${v}`).join(', ')}>{g.resourceCount ?? '—'}</td>
-                <td class="mono" title={g.yield5 ? `5+  F${g.yield5.food} I${g.yield5.iron} W${g.yield5.wood} S${g.yield5.stone}` : ''}>
+                <td class="mono" title={g.yield6 ? `6+  F${g.yield6.food} I${g.yield6.iron} W${g.yield6.wood} S${g.yield6.stone}` : ''}>
                   {g.yield8 ? `${g.yield8.food}·${g.yield8.iron}·${g.yield8.wood}·${g.yield8.stone}` : '—'}</td>
               </tr>
             ))}
@@ -124,7 +124,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
     <b>Ocean%</b> = water share (hover: forest/hills/mtn). <b>Res</b> =
     total resources on the map (hover: top types). <b>8+ F·I·W·S</b> =
     land tiles that can yield 8+ Food/Iron/Wood/Stone via the best
-    improvement (hover shows the 5+ counts). Tribes = distinct named
+    improvement (hover shows the 6+ counts). Tribes = distinct named
     tribes spawned (Barbarians excluded; hover lists them).
   </p>
 </Base>

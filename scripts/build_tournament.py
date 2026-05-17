@@ -91,6 +91,7 @@ def analyze(zp: str) -> dict | None:
     tribes = [k.replace("TRIBE_", "").title() for k in pm.get("tribes", [])]
     pct = pm.get("pct", {})
     y5 = pm.get("yield5", {})
+    y6 = pm.get("yield6", {})
     y8 = pm.get("yield8", {})
     res = pm.get("resources", {})
 
@@ -152,7 +153,7 @@ def analyze(zp: str) -> dict | None:
         "resourceCount": sum(res.values()),
         "resources": {k.replace("RESOURCE_", "").title(): v
                       for k, v in sorted(res.items(), key=lambda x: -x[1])},
-        "yield5": y5, "yield8": y8,
+        "yield5": y5, "yield6": y6, "yield8": y8,
         "crow": hex_distance(A, B),
         "land": land,
         "landConnected": land is not None,
