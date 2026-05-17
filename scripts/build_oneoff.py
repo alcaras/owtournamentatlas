@@ -27,8 +27,8 @@ IMG = ATLAS / "public" / "img" / "oneoff"
 # Display names match build_tournament's RESOURCE_*.replace().title().
 RES_BY_IMP = {
     "Farm": ["Wheat", "Barley", "Sorghum"],
-    "Pasture": ["Cattle", "Sheep", "Pig", "Goat", "Horse", "Camel"],
-    "Camp": ["Game", "Fur", "Elephant", "Ivory", "Exotic_Fur",
+    "Pasture": ["Cattle", "Sheep", "Pig", "Goat", "Horse"],
+    "Camp": ["Game", "Fur", "Elephant", "Ivory", "Camel", "Exotic_Fur",
              "Exotic_Animals"],
     "Grove": ["Wine", "Olive", "Citrus", "Honey", "Incense", "Lavender",
               "Silk", "Spices", "Tea"],

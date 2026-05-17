@@ -282,8 +282,7 @@
     "Sheep",
     "Pig",
     "Goat",
-    "Horse",
-    "Camel"
+    "Horse"
    ]
   ],
   [
@@ -293,6 +292,7 @@
     "Fur",
     "Elephant",
     "Ivory",
+    "Camel",
     "Exotic_Fur",
     "Exotic_Animals"
    ]
