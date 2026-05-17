@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import data from '../data/tournament-games.json';
+
+const games = [...data.games];
+// group by map type for readability
+const byScript: Record<string, typeof games> = {};
+for (const g of games) (byScript[g.script] ??= []).push(g);
+const scripts = Object.keys(byScript).sort();
+const cap = (s: string) => s ? s[0] + s.slice(1).toLowerCase() : s;
+const sz = (s: string) => s === 'SMALLEST' ? 'Duel' : cap(s);
+---
+<Base title="Tournament Calibration">
+  <p class="lede">
+    {data.count} completed competitive games, measured with the exact
+    even-r atlas model (verified against the game's own
+    <code>Tile.cs::tileAdjacent</code>). Tag which felt good / too
+    big / too close and we calibrate the recommended settings per map
+    from real outcomes. ID = tournament game number.
+  </p>
+
+  {scripts.map(s => (
+    <section class="grp">
+      <h2 class="grp__h">{s}</h2>
+      <div class="tscroll">
+        <table class="tbl">
+          <thead><tr>
+            <th>#</th><th>Matchup</th><th>Size</th><th>Aspect</th>
+            <th>City sites</th><th>Crow</th><th>Land</th><th>Conn</th>
+            <th>Scout</th><th>Slinger L</th><th>Sl Sea</th><th>Sl Hatti</th>
+          </tr></thead>
+          <tbody>
+            {byScript[s].sort((a,b)=>(+a.id||999)-(+b.id||999)).map(g => (
+              <tr>
+                <td class="mono id">{g.id}</td>
+                <td>{g.matchup}</td>
+                <td>{sz(g.size)}</td>
+                <td class="cap">{g.aspect.toLowerCase()}</td>
+                <td><b>{g.citySites}</b></td>
+                <td class="mono">{g.crow}</td>
+                <td class="mono">{g.land ?? '—'}</td>
+                <td class={g.landConnected ? '' : 'bad'}>{g.landConnected ? 'Y' : 'NO'}</td>
+                <td class="mono"><b>{g.scout ?? '—'}</b></td>
+                <td class="mono">{g.slingerLand ?? '—'}</td>
+                <td class="mono">{g.slingerSea ?? '—'}</td>
+                <td class="mono">{g.slingerHatti ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+
+  <p class="note" style="margin-top:1.6rem;">
+    Capital = each player's <i>original</i> capital (the founded
+    <code>&lt;Capital/&gt;</code>, FirstPlayer == player) — robust to
+    captures. Distances: Crow = even-r hex (terrain ignored); Land =
+    walkable-land BFS (water/mountain impassable); Scout = orders for a
+    Scout (move 3) capital→capital; Slinger = move 2 (L land / Sea
+    coastal / Hatti ignores hill). Exploration law assumed (rivers fast).
+  </p>
+</Base>
+
+<style>
+  .lede { font-family: var(--font-display); font-style: italic; font-size: 1.05rem;
+    line-height: 1.55; color: var(--text-soft); max-width: 74ch; margin: 0.6rem 0 1.6rem; }
+  .grp { margin-bottom: 2rem; }
+  .grp__h { font-size: 1.35rem; border-bottom: 1px solid var(--gold-deep);
+    padding-bottom: 0.3rem; margin-bottom: 0.5rem; }
+  .tscroll { overflow-x: auto; }
+  .tbl { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  .tbl thead th { font-family: var(--font-ui); font-size: 0.56rem; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--text-dim); font-weight: 600; text-align: left;
+    padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
+  .tbl td { padding: 0.36rem 0.6rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .tbl tbody tr:hover td { background: #1c1f25; }
+  .mono { font-family: var(--font-mono); font-size: 0.82em; }
+  .id { color: var(--gold-soft); }
+  .cap { text-transform: capitalize; }
+  .bad { color: #b06a5f; font-weight: 600; }
+  .note { font-size: 0.82rem; color: var(--text-faint); line-height: 1.5; max-width: 82ch; }
+</style>
