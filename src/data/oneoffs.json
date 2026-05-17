@@ -73,39 +73,39 @@
     "Vandals"
    ],
    "yield10": {
-    "food": 32,
+    "food": 22,
     "iron": 0,
-    "stone": 198,
+    "stone": 48,
     "wood": 0
    },
    "yield5": {
-    "food": 772,
-    "iron": 822,
-    "stone": 832,
+    "food": 595,
+    "iron": 640,
+    "stone": 650,
     "wood": 122
    },
    "yield6": {
-    "food": 441,
+    "food": 401,
     "iron": 192,
-    "stone": 502,
+    "stone": 320,
     "wood": 21
    },
    "yield7": {
-    "food": 430,
+    "food": 390,
     "iron": 192,
-    "stone": 388,
+    "stone": 206,
     "wood": 21
    },
    "yield8": {
-    "food": 148,
+    "food": 134,
     "iron": 192,
-    "stone": 314,
+    "stone": 134,
     "wood": 21
    },
    "yield9": {
-    "food": 135,
+    "food": 121,
     "iron": 2,
-    "stone": 292,
+    "stone": 112,
     "wood": 0
    }
   },
@@ -182,39 +182,39 @@
     "Vandals"
    ],
    "yield10": {
-    "food": 13,
+    "food": 7,
     "iron": 0,
-    "stone": 183,
+    "stone": 55,
     "wood": 0
    },
    "yield5": {
-    "food": 852,
-    "iron": 1111,
-    "stone": 1116,
+    "food": 671,
+    "iron": 930,
+    "stone": 935,
     "wood": 135
    },
    "yield6": {
-    "food": 329,
+    "food": 304,
     "iron": 344,
-    "stone": 680,
+    "stone": 499,
     "wood": 8
    },
    "yield7": {
-    "food": 319,
+    "food": 294,
     "iron": 344,
-    "stone": 420,
+    "stone": 239,
     "wood": 8
    },
    "yield8": {
-    "food": 99,
+    "food": 89,
     "iron": 344,
-    "stone": 349,
+    "stone": 173,
     "wood": 8
    },
    "yield9": {
-    "food": 90,
+    "food": 80,
     "iron": 6,
-    "stone": 310,
+    "stone": 134,
     "wood": 0
    }
   },
@@ -289,39 +289,39 @@
     "Huns"
    ],
    "yield10": {
-    "food": 29,
+    "food": 10,
     "iron": 0,
-    "stone": 517,
+    "stone": 112,
     "wood": 0
    },
    "yield5": {
-    "food": 750,
-    "iron": 1046,
-    "stone": 984,
+    "food": 333,
+    "iron": 625,
+    "stone": 563,
     "wood": 57
    },
    "yield6": {
-    "food": 536,
+    "food": 238,
     "iron": 309,
-    "stone": 824,
+    "stone": 405,
     "wood": 0
    },
    "yield7": {
-    "food": 531,
+    "food": 233,
     "iron": 309,
-    "stone": 726,
+    "stone": 307,
     "wood": 0
    },
    "yield8": {
-    "food": 86,
+    "food": 60,
     "iron": 309,
-    "stone": 662,
+    "stone": 243,
     "wood": 0
    },
    "yield9": {
-    "food": 80,
+    "food": 54,
     "iron": 2,
-    "stone": 620,
+    "stone": 201,
     "wood": 0
    }
   }
@@ -401,16 +401,6 @@
    "Lumbermill",
    [
     "Ebony"
-   ]
-  ],
-  [
-   "Urban (no tile improvement)",
-   [
-    "Literature",
-    "Porcelain",
-    "Perfume",
-    "Wootz_Steel",
-    "Silphium"
    ]
   ]
  ]

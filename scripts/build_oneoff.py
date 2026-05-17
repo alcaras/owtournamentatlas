@@ -36,8 +36,6 @@ RES_BY_IMP = {
     "Mine": ["Ore", "Gem", "Gold", "Silver", "Salt", "Jade"],
     "Quarry": ["Marble"],
     "Lumbermill": ["Ebony"],
-    "Urban (no tile improvement)": ["Literature", "Porcelain", "Perfume",
-                                    "Wootz_Steel", "Silphium"],
 }
 
 

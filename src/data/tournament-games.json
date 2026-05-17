@@ -9,6 +9,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1522,
+      "boundaryTiles": 502,
       "citySites": 17,
       "tribeCount": 5,
       "tribes": [
@@ -18,10 +20,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 14.9,
-      "forestPct": 12.8,
-      "hillPct": 11.0,
-      "mountainPct": 14.5,
+      "oceanPct": 12.4,
+      "forestPct": 13.3,
+      "hillPct": 12.2,
+      "mountainPct": 15.9,
       "resourceCount": 80,
       "resources": {
         "Horse": 10,
@@ -50,22 +52,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 1327,
-        "iron": 1596,
-        "wood": 258,
-        "stone": 1602
+        "food": 906,
+        "iron": 976,
+        "wood": 201,
+        "stone": 982
       },
       "yield6": {
-        "food": 702,
-        "iron": 222,
+        "food": 486,
+        "iron": 185,
         "wood": 23,
-        "stone": 716
+        "stone": 209
+      },
+      "yield7": {
+        "food": 472,
+        "iron": 185,
+        "wood": 23,
+        "stone": 149
       },
       "yield8": {
-        "food": 94,
-        "iron": 222,
+        "food": 65,
+        "iron": 185,
         "wood": 23,
-        "stone": 476
+        "stone": 120
+      },
+      "yield9": {
+        "food": 51,
+        "iron": 1,
+        "wood": 0,
+        "stone": 108
+      },
+      "yield10": {
+        "food": 2,
+        "iron": 0,
+        "wood": 0,
+        "stone": 49
       },
       "crow": 37,
       "land": 42,
@@ -84,6 +104,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1561,
+      "boundaryTiles": 411,
       "citySites": 18,
       "tribeCount": 4,
       "tribes": [
@@ -92,10 +114,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 13.3,
-      "forestPct": 9.2,
-      "hillPct": 11.1,
-      "mountainPct": 14.4,
+      "oceanPct": 8.3,
+      "forestPct": 11.0,
+      "hillPct": 12.4,
+      "mountainPct": 14.0,
       "resourceCount": 97,
       "resources": {
         "Game": 15,
@@ -124,22 +146,40 @@
         "Lavender": 1
       },
       "yield5": {
-        "food": 1235,
-        "iron": 1449,
-        "wood": 146,
-        "stone": 1477
+        "food": 877,
+        "iron": 1056,
+        "wood": 136,
+        "stone": 1041
       },
       "yield6": {
-        "food": 790,
-        "iron": 219,
-        "wood": 17,
-        "stone": 654
+        "food": 568,
+        "iron": 194,
+        "wood": 15,
+        "stone": 299
+      },
+      "yield7": {
+        "food": 560,
+        "iron": 194,
+        "wood": 15,
+        "stone": 169
       },
       "yield8": {
-        "food": 121,
-        "iron": 219,
-        "wood": 17,
-        "stone": 457
+        "food": 100,
+        "iron": 194,
+        "wood": 15,
+        "stone": 123
+      },
+      "yield9": {
+        "food": 74,
+        "iron": 2,
+        "wood": 0,
+        "stone": 116
+      },
+      "yield10": {
+        "food": 10,
+        "iron": 0,
+        "wood": 0,
+        "stone": 38
       },
       "crow": 48,
       "land": 48,
@@ -158,16 +198,18 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1559,
+      "boundaryTiles": 413,
       "citySites": 17,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Scythians"
       ],
-      "oceanPct": 15.1,
-      "forestPct": 9.4,
-      "hillPct": 15.4,
-      "mountainPct": 13.6,
+      "oceanPct": 10.7,
+      "forestPct": 10.1,
+      "hillPct": 18.6,
+      "mountainPct": 12.6,
       "resourceCount": 77,
       "resources": {
         "Fur": 15,
@@ -192,22 +234,40 @@
         "Dye": 1
       },
       "yield5": {
-        "food": 1288,
-        "iron": 1545,
-        "wood": 182,
-        "stone": 1529
+        "food": 936,
+        "iron": 1066,
+        "wood": 155,
+        "stone": 1050
       },
       "yield6": {
-        "food": 809,
-        "iron": 304,
-        "wood": 36,
-        "stone": 675
+        "food": 595,
+        "iron": 290,
+        "wood": 28,
+        "stone": 282
+      },
+      "yield7": {
+        "food": 586,
+        "iron": 290,
+        "wood": 28,
+        "stone": 188
       },
       "yield8": {
-        "food": 132,
-        "iron": 304,
-        "wood": 36,
-        "stone": 458
+        "food": 120,
+        "iron": 290,
+        "wood": 28,
+        "stone": 123
+      },
+      "yield9": {
+        "food": 110,
+        "iron": 2,
+        "wood": 0,
+        "stone": 103
+      },
+      "yield10": {
+        "food": 7,
+        "iron": 0,
+        "wood": 0,
+        "stone": 34
       },
       "crow": 48,
       "land": 48,
@@ -226,16 +286,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1556,
+      "boundaryTiles": 468,
       "citySites": 15,
       "tribeCount": 2,
       "tribes": [
         "Danes",
         "Gauls"
       ],
-      "oceanPct": 60.8,
-      "forestPct": 7.5,
-      "hillPct": 9.4,
-      "mountainPct": 3.4,
+      "oceanPct": 49.0,
+      "forestPct": 9.7,
+      "hillPct": 12.3,
+      "mountainPct": 4.4,
       "resourceCount": 78,
       "resources": {
         "Crab": 10,
@@ -263,22 +325,40 @@
         "Sheep": 1
       },
       "yield5": {
-        "food": 654,
-        "iron": 738,
+        "food": 585,
+        "iron": 669,
         "wood": 138,
-        "stone": 730
+        "stone": 661
       },
       "yield6": {
-        "food": 395,
+        "food": 375,
         "iron": 191,
         "wood": 8,
-        "stone": 251
+        "stone": 182
+      },
+      "yield7": {
+        "food": 370,
+        "iron": 191,
+        "wood": 8,
+        "stone": 115
       },
       "yield8": {
-        "food": 151,
+        "food": 131,
         "iron": 191,
         "wood": 8,
-        "stone": 154
+        "stone": 85
+      },
+      "yield9": {
+        "food": 124,
+        "iron": 5,
+        "wood": 0,
+        "stone": 59
+      },
+      "yield10": {
+        "food": 18,
+        "iron": 0,
+        "wood": 0,
+        "stone": 20
       },
       "crow": 32,
       "land": 32,
@@ -297,6 +377,8 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1673,
+      "boundaryTiles": 351,
       "citySites": 21,
       "tribeCount": 5,
       "tribes": [
@@ -306,10 +388,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 17.8,
-      "forestPct": 14.0,
-      "hillPct": 12.9,
-      "mountainPct": 4.8,
+      "oceanPct": 21.2,
+      "forestPct": 11.7,
+      "hillPct": 12.7,
+      "mountainPct": 5.6,
       "resourceCount": 112,
       "resources": {
         "Sheep": 19,
@@ -334,22 +416,40 @@
         "Gold": 1
       },
       "yield5": {
-        "food": 1375,
-        "iron": 1559,
-        "wood": 278,
-        "stone": 1540
+        "food": 941,
+        "iron": 1120,
+        "wood": 189,
+        "stone": 1101
       },
       "yield6": {
-        "food": 377,
-        "iron": 261,
+        "food": 310,
+        "iron": 213,
         "wood": 15,
-        "stone": 398
+        "stone": 290
+      },
+      "yield7": {
+        "food": 285,
+        "iron": 213,
+        "wood": 15,
+        "stone": 100
       },
       "yield8": {
-        "food": 141,
-        "iron": 261,
+        "food": 124,
+        "iron": 213,
         "wood": 15,
-        "stone": 163
+        "stone": 68
+      },
+      "yield9": {
+        "food": 112,
+        "iron": 8,
+        "wood": 0,
+        "stone": 60
+      },
+      "yield10": {
+        "food": 21,
+        "iron": 0,
+        "wood": 0,
+        "stone": 20
       },
       "crow": 34,
       "land": 44,
@@ -368,6 +468,8 @@
       "script": "CoastalRainBasin",
       "size": "TINY",
       "aspect": "SQUARE",
+      "tiles": 2773,
+      "boundaryTiles": 591,
       "citySites": 29,
       "tribeCount": 4,
       "tribes": [
@@ -376,10 +478,10 @@
         "Scythians",
         "Vandals"
       ],
-      "oceanPct": 13.6,
-      "forestPct": 9.7,
-      "hillPct": 15.4,
-      "mountainPct": 13.2,
+      "oceanPct": 11.1,
+      "forestPct": 8.9,
+      "hillPct": 17.5,
+      "mountainPct": 13.7,
       "resourceCount": 141,
       "resources": {
         "Elephant": 17,
@@ -406,22 +508,40 @@
         "Salt": 2
       },
       "yield5": {
-        "food": 2122,
-        "iron": 2609,
-        "wood": 301,
-        "stone": 2602
+        "food": 1512,
+        "iron": 1811,
+        "wood": 223,
+        "stone": 1806
       },
       "yield6": {
-        "food": 1317,
-        "iron": 518,
+        "food": 983,
+        "iron": 486,
         "wood": 16,
-        "stone": 1324
+        "stone": 686
+      },
+      "yield7": {
+        "food": 963,
+        "iron": 486,
+        "wood": 16,
+        "stone": 366
       },
       "yield8": {
-        "food": 276,
-        "iron": 518,
+        "food": 215,
+        "iron": 486,
         "wood": 16,
-        "stone": 764
+        "stone": 253
+      },
+      "yield9": {
+        "food": 204,
+        "iron": 7,
+        "wood": 0,
+        "stone": 209
+      },
+      "yield10": {
+        "food": 24,
+        "iron": 0,
+        "wood": 0,
+        "stone": 104
       },
       "crow": 47,
       "land": 49,
@@ -440,6 +560,8 @@
       "script": "Continent",
       "size": "TINY",
       "aspect": "WIDE",
+      "tiles": 2520,
+      "boundaryTiles": 810,
       "citySites": 23,
       "tribeCount": 5,
       "tribes": [
@@ -449,10 +571,10 @@
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 59.0,
-      "forestPct": 6.4,
-      "hillPct": 6.1,
-      "mountainPct": 7.1,
+      "oceanPct": 45.9,
+      "forestPct": 8.5,
+      "hillPct": 8.1,
+      "mountainPct": 9.4,
       "resourceCount": 114,
       "resources": {
         "Barley": 12,
@@ -476,22 +598,40 @@
         "Incense": 1
       },
       "yield5": {
-        "food": 927,
-        "iron": 1162,
+        "food": 714,
+        "iron": 938,
         "wood": 198,
-        "stone": 1177
+        "stone": 939
       },
       "yield6": {
-        "food": 521,
+        "food": 504,
         "iron": 204,
         "wood": 27,
-        "stone": 649
+        "stone": 411
+      },
+      "yield7": {
+        "food": 500,
+        "iron": 204,
+        "wood": 27,
+        "stone": 221
       },
       "yield8": {
         "food": 124,
         "iron": 204,
         "wood": 27,
-        "stone": 393
+        "stone": 155
+      },
+      "yield9": {
+        "food": 112,
+        "iron": 2,
+        "wood": 0,
+        "stone": 139
+      },
+      "yield10": {
+        "food": 12,
+        "iron": 0,
+        "wood": 0,
+        "stone": 58
       },
       "crow": 52,
       "land": 63,
@@ -510,6 +650,8 @@
       "script": "CoastalRainBasin",
       "size": "TINY",
       "aspect": "WIDE",
+      "tiles": 2458,
+      "boundaryTiles": 872,
       "citySites": 27,
       "tribeCount": 4,
       "tribes": [
@@ -518,10 +660,10 @@
         "Numidians",
         "Scythians"
       ],
-      "oceanPct": 16.6,
-      "forestPct": 10.5,
-      "hillPct": 7.9,
-      "mountainPct": 8.3,
+      "oceanPct": 15.1,
+      "forestPct": 11.1,
+      "hillPct": 9.4,
+      "mountainPct": 8.2,
       "resourceCount": 141,
       "resources": {
         "Wheat": 24,
@@ -551,22 +693,40 @@
         "Incense": 1
       },
       "yield5": {
-        "food": 2051,
-        "iron": 2580,
-        "wood": 341,
-        "stone": 2579
+        "food": 1663,
+        "iron": 1714,
+        "wood": 264,
+        "stone": 1713
       },
       "yield6": {
-        "food": 1095,
-        "iron": 262,
-        "wood": 56,
-        "stone": 946
+        "food": 786,
+        "iron": 232,
+        "wood": 42,
+        "stone": 174
+      },
+      "yield7": {
+        "food": 747,
+        "iron": 232,
+        "wood": 42,
+        "stone": 99
       },
       "yield8": {
-        "food": 159,
-        "iron": 262,
-        "wood": 56,
-        "stone": 446
+        "food": 129,
+        "iron": 232,
+        "wood": 42,
+        "stone": 75
+      },
+      "yield9": {
+        "food": 104,
+        "iron": 7,
+        "wood": 0,
+        "stone": 75
+      },
+      "yield10": {
+        "food": 1,
+        "iron": 0,
+        "wood": 0,
+        "stone": 28
       },
       "crow": 63,
       "land": 64,
@@ -585,6 +745,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1489,
+      "boundaryTiles": 535,
       "citySites": 14,
       "tribeCount": 3,
       "tribes": [
@@ -592,10 +754,10 @@
         "Numidians",
         "Scythians"
       ],
-      "oceanPct": 15.7,
-      "forestPct": 9.4,
-      "hillPct": 16.9,
-      "mountainPct": 15.0,
+      "oceanPct": 14.0,
+      "forestPct": 10.1,
+      "hillPct": 19.3,
+      "mountainPct": 14.5,
       "resourceCount": 77,
       "resources": {
         "Sheep": 11,
@@ -622,22 +784,40 @@
         "Citrus": 1
       },
       "yield5": {
-        "food": 1275,
-        "iron": 1609,
-        "wood": 178,
-        "stone": 1599
+        "food": 908,
+        "iron": 971,
+        "wood": 139,
+        "stone": 962
       },
       "yield6": {
-        "food": 675,
-        "iron": 343,
-        "wood": 29,
-        "stone": 830
+        "food": 501,
+        "iron": 288,
+        "wood": 27,
+        "stone": 223
+      },
+      "yield7": {
+        "food": 492,
+        "iron": 288,
+        "wood": 27,
+        "stone": 140
       },
       "yield8": {
-        "food": 113,
-        "iron": 343,
-        "wood": 29,
-        "stone": 501
+        "food": 93,
+        "iron": 288,
+        "wood": 27,
+        "stone": 107
+      },
+      "yield9": {
+        "food": 80,
+        "iron": 0,
+        "wood": 0,
+        "stone": 93
+      },
+      "yield10": {
+        "food": 4,
+        "iron": 0,
+        "wood": 0,
+        "stone": 42
       },
       "crow": 35,
       "land": 35,
@@ -656,6 +836,8 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1539,
+      "boundaryTiles": 433,
       "citySites": 14,
       "tribeCount": 3,
       "tribes": [
@@ -663,10 +845,10 @@
         "Scythians",
         "Vandals"
       ],
-      "oceanPct": 58.7,
-      "forestPct": 7.7,
-      "hillPct": 9.5,
-      "mountainPct": 1.8,
+      "oceanPct": 47.1,
+      "forestPct": 9.9,
+      "hillPct": 12.2,
+      "mountainPct": 2.3,
       "resourceCount": 78,
       "resources": {
         "Elephant": 9,
@@ -693,22 +875,40 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 711,
-        "iron": 753,
+        "food": 675,
+        "iron": 717,
         "wood": 148,
-        "stone": 734
+        "stone": 698
       },
       "yield6": {
-        "food": 450,
+        "food": 424,
         "iron": 188,
         "wood": 27,
-        "stone": 113
+        "stone": 77
+      },
+      "yield7": {
+        "food": 412,
+        "iron": 188,
+        "wood": 27,
+        "stone": 30
       },
       "yield8": {
-        "food": 151,
+        "food": 133,
         "iron": 188,
         "wood": 27,
-        "stone": 55
+        "stone": 19
+      },
+      "yield9": {
+        "food": 116,
+        "iron": 2,
+        "wood": 0,
+        "stone": 14
+      },
+      "yield10": {
+        "food": 7,
+        "iron": 0,
+        "wood": 0,
+        "stone": 3
       },
       "crow": 43,
       "land": 44,
@@ -727,16 +927,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
+      "tiles": 1553,
+      "boundaryTiles": 463,
       "citySites": 16,
       "tribeCount": 2,
       "tribes": [
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 55.9,
-      "forestPct": 2.8,
-      "hillPct": 6.4,
-      "mountainPct": 3.6,
+      "oceanPct": 42.7,
+      "forestPct": 3.7,
+      "hillPct": 8.3,
+      "mountainPct": 4.7,
       "resourceCount": 79,
       "resources": {
         "Game": 9,
@@ -761,22 +963,40 @@
         "Sorghum": 2
       },
       "yield5": {
-        "food": 660,
-        "iron": 736,
+        "food": 590,
+        "iron": 663,
         "wood": 51,
-        "stone": 723
+        "stone": 650
       },
       "yield6": {
-        "food": 412,
+        "food": 411,
         "iron": 129,
         "wood": 10,
-        "stone": 190
+        "stone": 118
+      },
+      "yield7": {
+        "food": 404,
+        "iron": 129,
+        "wood": 10,
+        "stone": 64
       },
       "yield8": {
         "food": 94,
         "iron": 129,
         "wood": 10,
-        "stone": 109
+        "stone": 37
+      },
+      "yield9": {
+        "food": 73,
+        "iron": 4,
+        "wood": 0,
+        "stone": 30
+      },
+      "yield10": {
+        "food": 4,
+        "iron": 0,
+        "wood": 0,
+        "stone": 12
       },
       "crow": 56,
       "land": 57,
@@ -795,15 +1015,17 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "DYNAMIC",
+      "tiles": 1487,
+      "boundaryTiles": 485,
       "citySites": 7,
       "tribeCount": 1,
       "tribes": [
         "Thracians"
       ],
-      "oceanPct": 60.4,
-      "forestPct": 4.8,
-      "hillPct": 6.0,
-      "mountainPct": 10.6,
+      "oceanPct": 47.5,
+      "forestPct": 6.3,
+      "hillPct": 7.9,
+      "mountainPct": 14.1,
       "resourceCount": 40,
       "resources": {
         "Fish": 6,
@@ -824,22 +1046,40 @@
         "Salt": 1
       },
       "yield5": {
-        "food": 484,
-        "iron": 616,
+        "food": 353,
+        "iron": 462,
         "wood": 87,
-        "stone": 665
+        "stone": 455
       },
       "yield6": {
-        "food": 240,
+        "food": 232,
         "iron": 118,
         "wood": 6,
-        "stone": 445
+        "stone": 235
+      },
+      "yield7": {
+        "food": 226,
+        "iron": 118,
+        "wood": 6,
+        "stone": 176
       },
       "yield8": {
         "food": 15,
         "iron": 118,
         "wood": 6,
-        "stone": 328
+        "stone": 118
+      },
+      "yield9": {
+        "food": 6,
+        "iron": 3,
+        "wood": 0,
+        "stone": 106
+      },
+      "yield10": {
+        "food": 0,
+        "iron": 0,
+        "wood": 0,
+        "stone": 41
       },
       "crow": 30,
       "land": 34,
@@ -858,6 +1098,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1586,
+      "boundaryTiles": 438,
       "citySites": 17,
       "tribeCount": 4,
       "tribes": [
@@ -866,10 +1108,10 @@
         "Numidians",
         "Vandals"
       ],
-      "oceanPct": 16.4,
-      "forestPct": 10.5,
-      "hillPct": 16.0,
-      "mountainPct": 12.5,
+      "oceanPct": 13.9,
+      "forestPct": 11.0,
+      "hillPct": 18.5,
+      "mountainPct": 12.2,
       "resourceCount": 89,
       "resources": {
         "Sheep": 10,
@@ -897,22 +1139,40 @@
         "Fish": 1
       },
       "yield5": {
-        "food": 1225,
-        "iron": 1579,
-        "wood": 196,
-        "stone": 1558
+        "food": 876,
+        "iron": 1061,
+        "wood": 158,
+        "stone": 1042
       },
       "yield6": {
-        "food": 708,
-        "iron": 324,
+        "food": 515,
+        "iron": 293,
         "wood": 19,
-        "stone": 762
+        "stone": 327
+      },
+      "yield7": {
+        "food": 496,
+        "iron": 293,
+        "wood": 19,
+        "stone": 168
       },
       "yield8": {
-        "food": 161,
-        "iron": 324,
+        "food": 133,
+        "iron": 293,
         "wood": 19,
-        "stone": 442
+        "stone": 118
+      },
+      "yield9": {
+        "food": 120,
+        "iron": 3,
+        "wood": 0,
+        "stone": 92
+      },
+      "yield10": {
+        "food": 8,
+        "iron": 0,
+        "wood": 0,
+        "stone": 36
       },
       "crow": 36,
       "land": 36,
@@ -931,6 +1191,8 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1482,
+      "boundaryTiles": 490,
       "citySites": 14,
       "tribeCount": 3,
       "tribes": [
@@ -938,10 +1200,10 @@
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 57.8,
-      "forestPct": 7.0,
-      "hillPct": 11.0,
-      "mountainPct": 3.7,
+      "oceanPct": 43.8,
+      "forestPct": 9.3,
+      "hillPct": 14.6,
+      "mountainPct": 4.9,
       "resourceCount": 62,
       "resources": {
         "Sheep": 17,
@@ -963,22 +1225,40 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 745,
-        "iron": 769,
+        "food": 673,
+        "iron": 697,
         "wood": 127,
-        "stone": 765
+        "stone": 693
       },
       "yield6": {
-        "food": 496,
+        "food": 454,
         "iron": 216,
         "wood": 15,
-        "stone": 210
+        "stone": 138
+      },
+      "yield7": {
+        "food": 444,
+        "iron": 216,
+        "wood": 15,
+        "stone": 103
       },
       "yield8": {
-        "food": 118,
+        "food": 91,
         "iron": 216,
         "wood": 15,
-        "stone": 141
+        "stone": 69
+      },
+      "yield9": {
+        "food": 74,
+        "iron": 0,
+        "wood": 0,
+        "stone": 51
+      },
+      "yield10": {
+        "food": 16,
+        "iron": 0,
+        "wood": 0,
+        "stone": 18
       },
       "crow": 43,
       "land": 43,
@@ -997,16 +1277,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
+      "tiles": 1558,
+      "boundaryTiles": 458,
       "citySites": 15,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Scythians"
       ],
-      "oceanPct": 60.0,
-      "forestPct": 8.2,
-      "hillPct": 11.9,
-      "mountainPct": 7.3,
+      "oceanPct": 48.3,
+      "forestPct": 10.7,
+      "hillPct": 15.3,
+      "mountainPct": 9.5,
       "resourceCount": 78,
       "resources": {
         "Horse": 14,
@@ -1030,22 +1312,40 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 682,
-        "iron": 733,
+        "food": 534,
+        "iron": 585,
         "wood": 150,
-        "stone": 723
+        "stone": 575
       },
       "yield6": {
-        "food": 460,
+        "food": 386,
         "iron": 239,
         "wood": 21,
-        "stone": 344
+        "stone": 196
+      },
+      "yield7": {
+        "food": 381,
+        "iron": 239,
+        "wood": 21,
+        "stone": 174
       },
       "yield8": {
-        "food": 179,
+        "food": 136,
         "iron": 239,
         "wood": 21,
-        "stone": 259
+        "stone": 111
+      },
+      "yield9": {
+        "food": 123,
+        "iron": 4,
+        "wood": 0,
+        "stone": 94
+      },
+      "yield10": {
+        "food": 31,
+        "iron": 0,
+        "wood": 0,
+        "stone": 27
       },
       "crow": 49,
       "land": 53,
@@ -1064,14 +1364,16 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1554,
+      "boundaryTiles": 418,
       "citySites": 10,
       "tribeCount": 1,
       "tribes": [
         "Scythians"
       ],
-      "oceanPct": 14.6,
-      "forestPct": 8.5,
-      "hillPct": 18.0,
+      "oceanPct": 10.1,
+      "forestPct": 9.8,
+      "hillPct": 20.9,
       "mountainPct": 17.8,
       "resourceCount": 73,
       "resources": {
@@ -1097,22 +1399,40 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 1182,
-        "iron": 1512,
-        "wood": 146,
-        "stone": 1494
+        "food": 763,
+        "iron": 948,
+        "wood": 130,
+        "stone": 930
       },
       "yield6": {
-        "food": 791,
-        "iron": 355,
+        "food": 543,
+        "iron": 325,
         "wood": 32,
-        "stone": 957
+        "stone": 449
+      },
+      "yield7": {
+        "food": 530,
+        "iron": 325,
+        "wood": 32,
+        "stone": 266
       },
       "yield8": {
-        "food": 220,
-        "iron": 355,
+        "food": 169,
+        "iron": 325,
         "wood": 32,
-        "stone": 607
+        "stone": 181
+      },
+      "yield9": {
+        "food": 152,
+        "iron": 0,
+        "wood": 0,
+        "stone": 156
+      },
+      "yield10": {
+        "food": 15,
+        "iron": 0,
+        "wood": 0,
+        "stone": 65
       },
       "crow": 45,
       "land": 45,
@@ -1131,16 +1451,18 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1658,
+      "boundaryTiles": 366,
       "citySites": 15,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Thracians"
       ],
-      "oceanPct": 22.5,
-      "forestPct": 7.6,
-      "hillPct": 14.3,
-      "mountainPct": 8.4,
+      "oceanPct": 27.4,
+      "forestPct": 3.3,
+      "hillPct": 10.7,
+      "mountainPct": 7.8,
       "resourceCount": 59,
       "resources": {
         "Pearl": 7,
@@ -1163,22 +1485,40 @@
         "Wheat": 2
       },
       "yield5": {
-        "food": 1246,
-        "iron": 1444,
-        "wood": 151,
-        "stone": 1439
+        "food": 808,
+        "iron": 949,
+        "wood": 51,
+        "stone": 944
       },
       "yield6": {
-        "food": 345,
-        "iron": 290,
-        "wood": 12,
-        "stone": 618
+        "food": 243,
+        "iron": 177,
+        "wood": 8,
+        "stone": 339
+      },
+      "yield7": {
+        "food": 239,
+        "iron": 177,
+        "wood": 8,
+        "stone": 130
       },
       "yield8": {
-        "food": 118,
-        "iron": 290,
-        "wood": 12,
-        "stone": 309
+        "food": 74,
+        "iron": 177,
+        "wood": 8,
+        "stone": 97
+      },
+      "yield9": {
+        "food": 63,
+        "iron": 0,
+        "wood": 0,
+        "stone": 74
+      },
+      "yield10": {
+        "food": 2,
+        "iron": 0,
+        "wood": 0,
+        "stone": 35
       },
       "crow": 35,
       "land": 40,
@@ -1197,6 +1537,8 @@
       "script": "InlandSea2",
       "size": "TINY",
       "aspect": "WIDE",
+      "tiles": 2864,
+      "boundaryTiles": 466,
       "citySites": 29,
       "tribeCount": 3,
       "tribes": [
@@ -1204,10 +1546,10 @@
         "Gauls",
         "Numidians"
       ],
-      "oceanPct": 24.9,
-      "forestPct": 9.8,
-      "hillPct": 19.0,
-      "mountainPct": 8.1,
+      "oceanPct": 28.6,
+      "forestPct": 8.4,
+      "hillPct": 17.5,
+      "mountainPct": 8.3,
       "resourceCount": 135,
       "resources": {
         "Citrus": 12,
@@ -1240,22 +1582,40 @@
         "Sorghum": 1
       },
       "yield5": {
-        "food": 1941,
-        "iron": 2242,
-        "wood": 320,
-        "stone": 2243
+        "food": 1297,
+        "iron": 1553,
+        "wood": 233,
+        "stone": 1552
       },
       "yield6": {
-        "food": 808,
-        "iron": 634,
+        "food": 590,
+        "iron": 501,
         "wood": 17,
-        "stone": 980
+        "stone": 615
+      },
+      "yield7": {
+        "food": 565,
+        "iron": 501,
+        "wood": 17,
+        "stone": 306
       },
       "yield8": {
-        "food": 236,
-        "iron": 634,
+        "food": 154,
+        "iron": 501,
         "wood": 17,
-        "stone": 508
+        "stone": 204
+      },
+      "yield9": {
+        "food": 140,
+        "iron": 1,
+        "wood": 0,
+        "stone": 165
+      },
+      "yield10": {
+        "food": 43,
+        "iron": 0,
+        "wood": 0,
+        "stone": 68
       },
       "crow": 64,
       "land": 71,
@@ -1274,6 +1634,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1492,
+      "boundaryTiles": 480,
       "citySites": 18,
       "tribeCount": 3,
       "tribes": [
@@ -1281,10 +1643,10 @@
         "Gauls",
         "Thracians"
       ],
-      "oceanPct": 15.4,
-      "forestPct": 11.8,
-      "hillPct": 15.8,
-      "mountainPct": 15.0,
+      "oceanPct": 11.6,
+      "forestPct": 12.9,
+      "hillPct": 18.8,
+      "mountainPct": 16.0,
       "resourceCount": 76,
       "resources": {
         "Marble": 10,
@@ -1316,22 +1678,40 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 1259,
-        "iron": 1562,
-        "wood": 231,
-        "stone": 1561
+        "food": 867,
+        "iron": 979,
+        "wood": 192,
+        "stone": 978
       },
       "yield6": {
-        "food": 786,
-        "iron": 311,
+        "food": 575,
+        "iron": 280,
         "wood": 30,
-        "stone": 827
+        "stone": 323
+      },
+      "yield7": {
+        "food": 569,
+        "iron": 280,
+        "wood": 30,
+        "stone": 229
       },
       "yield8": {
-        "food": 167,
-        "iron": 311,
+        "food": 127,
+        "iron": 280,
         "wood": 30,
-        "stone": 515
+        "stone": 151
+      },
+      "yield9": {
+        "food": 112,
+        "iron": 6,
+        "wood": 0,
+        "stone": 134
+      },
+      "yield10": {
+        "food": 14,
+        "iron": 0,
+        "wood": 0,
+        "stone": 58
       },
       "crow": 46,
       "land": 47,
@@ -1350,16 +1730,18 @@
       "script": "InlandSea2",
       "size": "TINY",
       "aspect": "SQUARE",
+      "tiles": 2909,
+      "boundaryTiles": 455,
       "citySites": 26,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Scythians"
       ],
-      "oceanPct": 22.1,
-      "forestPct": 11.1,
-      "hillPct": 16.1,
-      "mountainPct": 8.9,
+      "oceanPct": 25.6,
+      "forestPct": 9.8,
+      "hillPct": 16.2,
+      "mountainPct": 9.7,
       "resourceCount": 156,
       "resources": {
         "Wheat": 19,
@@ -1390,22 +1772,40 @@
         "Lavender": 1
       },
       "yield5": {
-        "food": 2149,
-        "iron": 2430,
-        "wood": 371,
-        "stone": 2411
+        "food": 1456,
+        "iron": 1692,
+        "wood": 282,
+        "stone": 1676
       },
       "yield6": {
-        "food": 852,
-        "iron": 543,
-        "wood": 43,
-        "stone": 817
+        "food": 733,
+        "iron": 471,
+        "wood": 29,
+        "stone": 465
+      },
+      "yield7": {
+        "food": 715,
+        "iron": 471,
+        "wood": 29,
+        "stone": 286
       },
       "yield8": {
-        "food": 208,
-        "iron": 543,
-        "wood": 43,
-        "stone": 500
+        "food": 171,
+        "iron": 471,
+        "wood": 29,
+        "stone": 186
+      },
+      "yield9": {
+        "food": 145,
+        "iron": 8,
+        "wood": 0,
+        "stone": 158
+      },
+      "yield10": {
+        "food": 15,
+        "iron": 0,
+        "wood": 0,
+        "stone": 76
       },
       "crow": 47,
       "land": 59,
@@ -1424,15 +1824,17 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1576,
+      "boundaryTiles": 448,
       "citySites": 12,
       "tribeCount": 1,
       "tribes": [
         "Numidians"
       ],
-      "oceanPct": 56.7,
-      "forestPct": 6.3,
-      "hillPct": 10.8,
-      "mountainPct": 9.4,
+      "oceanPct": 44.4,
+      "forestPct": 8.1,
+      "hillPct": 13.8,
+      "mountainPct": 12.1,
       "resourceCount": 75,
       "resources": {
         "Game": 6,
@@ -1462,22 +1864,40 @@
         "Pearl": 1
       },
       "yield5": {
-        "food": 672,
-        "iron": 790,
+        "food": 481,
+        "iron": 599,
         "wood": 123,
-        "stone": 799
+        "stone": 608
       },
       "yield6": {
-        "food": 293,
+        "food": 265,
         "iron": 218,
         "wood": 22,
-        "stone": 524
+        "stone": 333
+      },
+      "yield7": {
+        "food": 255,
+        "iron": 218,
+        "wood": 22,
+        "stone": 212
       },
       "yield8": {
         "food": 78,
         "iron": 218,
         "wood": 22,
-        "stone": 354
+        "stone": 163
+      },
+      "yield9": {
+        "food": 68,
+        "iron": 6,
+        "wood": 0,
+        "stone": 123
+      },
+      "yield10": {
+        "food": 6,
+        "iron": 0,
+        "wood": 0,
+        "stone": 65
       },
       "crow": 31,
       "land": 36,
@@ -1496,6 +1916,8 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1673,
+      "boundaryTiles": 351,
       "citySites": 19,
       "tribeCount": 4,
       "tribes": [
@@ -1504,10 +1926,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 24.2,
-      "forestPct": 9.7,
-      "hillPct": 18.5,
-      "mountainPct": 9.6,
+      "oceanPct": 29.1,
+      "forestPct": 9.6,
+      "hillPct": 17.6,
+      "mountainPct": 9.2,
       "resourceCount": 96,
       "resources": {
         "Game": 16,
@@ -1536,22 +1958,40 @@
         "Silver": 1
       },
       "yield5": {
-        "food": 1084,
-        "iron": 1386,
-        "wood": 189,
-        "stone": 1347
+        "food": 660,
+        "iron": 885,
+        "wood": 153,
+        "stone": 846
       },
       "yield6": {
-        "food": 364,
-        "iron": 375,
+        "food": 269,
+        "iron": 294,
         "wood": 12,
-        "stone": 648
+        "stone": 350
+      },
+      "yield7": {
+        "food": 261,
+        "iron": 294,
+        "wood": 12,
+        "stone": 164
       },
       "yield8": {
-        "food": 101,
-        "iron": 375,
+        "food": 81,
+        "iron": 294,
         "wood": 12,
-        "stone": 335
+        "stone": 113
+      },
+      "yield9": {
+        "food": 71,
+        "iron": 2,
+        "wood": 0,
+        "stone": 94
+      },
+      "yield10": {
+        "food": 16,
+        "iron": 0,
+        "wood": 0,
+        "stone": 45
       },
       "crow": 35,
       "land": 60,
@@ -1570,16 +2010,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1589,
+      "boundaryTiles": 383,
       "citySites": 11,
       "tribeCount": 2,
       "tribes": [
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 62.2,
-      "forestPct": 7.0,
-      "hillPct": 8.3,
-      "mountainPct": 5.7,
+      "oceanPct": 53.1,
+      "forestPct": 8.7,
+      "hillPct": 10.3,
+      "mountainPct": 7.0,
       "resourceCount": 68,
       "resources": {
         "Olive": 6,
@@ -1603,22 +2045,40 @@
         "Crab": 1
       },
       "yield5": {
-        "food": 630,
-        "iron": 671,
-        "wood": 139,
-        "stone": 666
+        "food": 517,
+        "iron": 558,
+        "wood": 138,
+        "stone": 553
       },
       "yield6": {
-        "food": 368,
+        "food": 360,
         "iron": 163,
         "wood": 30,
-        "stone": 255
+        "stone": 142
+      },
+      "yield7": {
+        "food": 352,
+        "iron": 163,
+        "wood": 30,
+        "stone": 94
       },
       "yield8": {
         "food": 101,
         "iron": 163,
         "wood": 30,
-        "stone": 179
+        "stone": 66
+      },
+      "yield9": {
+        "food": 81,
+        "iron": 4,
+        "wood": 0,
+        "stone": 56
+      },
+      "yield10": {
+        "food": 2,
+        "iron": 0,
+        "wood": 0,
+        "stone": 27
       },
       "crow": 44,
       "land": 48,
@@ -1637,16 +2097,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1543,
+      "boundaryTiles": 481,
       "citySites": 14,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Scythians"
       ],
-      "oceanPct": 63.2,
-      "forestPct": 9.3,
-      "hillPct": 4.7,
-      "mountainPct": 2.7,
+      "oceanPct": 51.8,
+      "forestPct": 12.2,
+      "hillPct": 6.2,
+      "mountainPct": 3.5,
       "resourceCount": 51,
       "resources": {
         "Dye": 6,
@@ -1665,22 +2127,40 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 655,
-        "iron": 677,
+        "food": 601,
+        "iron": 623,
         "wood": 166,
-        "stone": 668
+        "stone": 614
       },
       "yield6": {
-        "food": 478,
+        "food": 464,
         "iron": 95,
         "wood": 20,
-        "stone": 151
+        "stone": 97
+      },
+      "yield7": {
+        "food": 463,
+        "iron": 95,
+        "wood": 20,
+        "stone": 69
       },
       "yield8": {
-        "food": 179,
+        "food": 165,
         "iron": 95,
         "wood": 20,
-        "stone": 95
+        "stone": 41
+      },
+      "yield9": {
+        "food": 156,
+        "iron": 2,
+        "wood": 0,
+        "stone": 35
+      },
+      "yield10": {
+        "food": 11,
+        "iron": 0,
+        "wood": 0,
+        "stone": 7
       },
       "crow": 23,
       "land": 25,
@@ -1699,16 +2179,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1520,
+      "boundaryTiles": 504,
       "citySites": 12,
       "tribeCount": 2,
       "tribes": [
         "Gauls",
         "Numidians"
       ],
-      "oceanPct": 61.7,
-      "forestPct": 2.9,
-      "hillPct": 6.9,
-      "mountainPct": 3.5,
+      "oceanPct": 49.0,
+      "forestPct": 3.9,
+      "hillPct": 9.1,
+      "mountainPct": 4.6,
       "resourceCount": 59,
       "resources": {
         "Dye": 8,
@@ -1733,22 +2215,40 @@
         "Lavender": 1
       },
       "yield5": {
-        "food": 581,
-        "iron": 638,
+        "food": 511,
+        "iron": 568,
         "wood": 59,
-        "stone": 625
+        "stone": 555
       },
       "yield6": {
-        "food": 328,
+        "food": 299,
         "iron": 139,
         "wood": 13,
-        "stone": 227
+        "stone": 157
+      },
+      "yield7": {
+        "food": 292,
+        "iron": 139,
+        "wood": 13,
+        "stone": 75
       },
       "yield8": {
-        "food": 103,
+        "food": 83,
         "iron": 139,
         "wood": 13,
-        "stone": 122
+        "stone": 52
+      },
+      "yield9": {
+        "food": 71,
+        "iron": 2,
+        "wood": 0,
+        "stone": 39
+      },
+      "yield10": {
+        "food": 16,
+        "iron": 0,
+        "wood": 0,
+        "stone": 20
       },
       "crow": 27,
       "land": 29,
@@ -1767,16 +2267,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1556,
+      "boundaryTiles": 416,
       "citySites": 14,
       "tribeCount": 2,
       "tribes": [
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 56.2,
-      "forestPct": 7.0,
-      "hillPct": 5.6,
-      "mountainPct": 6.2,
+      "oceanPct": 44.5,
+      "forestPct": 8.9,
+      "hillPct": 7.1,
+      "mountainPct": 7.8,
       "resourceCount": 85,
       "resources": {
         "Pearl": 26,
@@ -1802,22 +2304,40 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 704,
-        "iron": 763,
+        "food": 582,
+        "iron": 641,
         "wood": 136,
-        "stone": 749
+        "stone": 627
       },
       "yield6": {
-        "food": 447,
+        "food": 440,
         "iron": 110,
         "wood": 41,
-        "stone": 258
+        "stone": 136
+      },
+      "yield7": {
+        "food": 429,
+        "iron": 110,
+        "wood": 41,
+        "stone": 90
       },
       "yield8": {
         "food": 108,
         "iron": 110,
         "wood": 41,
-        "stone": 192
+        "stone": 70
+      },
+      "yield9": {
+        "food": 87,
+        "iron": 1,
+        "wood": 0,
+        "stone": 60
+      },
+      "yield10": {
+        "food": 3,
+        "iron": 0,
+        "wood": 0,
+        "stone": 22
       },
       "crow": 43,
       "land": 46,
@@ -1836,16 +2356,18 @@
       "script": "CoastalRainBasin",
       "size": "TINY",
       "aspect": "ULTRAWIDE",
+      "tiles": 2574,
+      "boundaryTiles": 738,
       "citySites": 25,
       "tribeCount": 2,
       "tribes": [
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 13.5,
-      "forestPct": 3.8,
-      "hillPct": 19.1,
-      "mountainPct": 19.9,
+      "oceanPct": 9.5,
+      "forestPct": 4.3,
+      "hillPct": 23.5,
+      "mountainPct": 20.9,
       "resourceCount": 115,
       "resources": {
         "Marble": 31,
@@ -1872,22 +2394,40 @@
         "Gem": 1
       },
       "yield5": {
-        "food": 1737,
-        "iron": 2381,
-        "wood": 108,
-        "stone": 2365
+        "food": 1023,
+        "iron": 1490,
+        "wood": 94,
+        "stone": 1450
       },
       "yield6": {
-        "food": 968,
-        "iron": 633,
+        "food": 623,
+        "iron": 604,
         "wood": 12,
-        "stone": 1685
+        "stone": 835
+      },
+      "yield7": {
+        "food": 619,
+        "iron": 604,
+        "wood": 12,
+        "stone": 519
       },
       "yield8": {
-        "food": 207,
-        "iron": 633,
+        "food": 153,
+        "iron": 604,
         "wood": 12,
-        "stone": 1155
+        "stone": 375
+      },
+      "yield9": {
+        "food": 125,
+        "iron": 2,
+        "wood": 0,
+        "stone": 319
+      },
+      "yield10": {
+        "food": 9,
+        "iron": 0,
+        "wood": 0,
+        "stone": 145
       },
       "crow": 75,
       "land": 78,
@@ -1906,6 +2446,8 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1671,
+      "boundaryTiles": 353,
       "citySites": 21,
       "tribeCount": 6,
       "tribes": [
@@ -1916,10 +2458,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 25.4,
-      "forestPct": 9.3,
-      "hillPct": 11.9,
-      "mountainPct": 10.5,
+      "oceanPct": 30.4,
+      "forestPct": 9.9,
+      "hillPct": 11.3,
+      "mountainPct": 8.1,
       "resourceCount": 107,
       "resources": {
         "Crab": 11,
@@ -1947,22 +2489,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 1290,
-        "iron": 1348,
-        "wood": 159,
-        "stone": 1352
+        "food": 811,
+        "iron": 866,
+        "wood": 136,
+        "stone": 870
       },
       "yield6": {
-        "food": 445,
-        "iron": 241,
-        "wood": 24,
-        "stone": 472
+        "food": 339,
+        "iron": 188,
+        "wood": 22,
+        "stone": 203
+      },
+      "yield7": {
+        "food": 324,
+        "iron": 188,
+        "wood": 22,
+        "stone": 133
       },
       "yield8": {
-        "food": 87,
-        "iron": 241,
-        "wood": 24,
-        "stone": 356
+        "food": 74,
+        "iron": 188,
+        "wood": 22,
+        "stone": 93
+      },
+      "yield9": {
+        "food": 62,
+        "iron": 1,
+        "wood": 0,
+        "stone": 80
+      },
+      "yield10": {
+        "food": 10,
+        "iron": 0,
+        "wood": 0,
+        "stone": 41
       },
       "crow": 39,
       "land": 48,
@@ -1981,6 +2541,8 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1623,
+      "boundaryTiles": 401,
       "citySites": 16,
       "tribeCount": 3,
       "tribes": [
@@ -1988,10 +2550,10 @@
         "Scythians",
         "Vandals"
       ],
-      "oceanPct": 55.0,
-      "forestPct": 8.4,
-      "hillPct": 12.5,
-      "mountainPct": 4.4,
+      "oceanPct": 43.9,
+      "forestPct": 10.5,
+      "hillPct": 15.6,
+      "mountainPct": 5.5,
       "resourceCount": 73,
       "resources": {
         "Game": 12,
@@ -2015,22 +2577,40 @@
         "Crab": 1
       },
       "yield5": {
-        "food": 742,
-        "iron": 833,
+        "food": 653,
+        "iron": 744,
         "wood": 167,
-        "stone": 813
+        "stone": 724
       },
       "yield6": {
-        "food": 458,
+        "food": 424,
         "iron": 253,
         "wood": 23,
-        "stone": 321
+        "stone": 232
+      },
+      "yield7": {
+        "food": 421,
+        "iron": 253,
+        "wood": 23,
+        "stone": 129
       },
       "yield8": {
-        "food": 132,
+        "food": 110,
         "iron": 253,
         "wood": 23,
-        "stone": 167
+        "stone": 78
+      },
+      "yield9": {
+        "food": 97,
+        "iron": 3,
+        "wood": 0,
+        "stone": 65
+      },
+      "yield10": {
+        "food": 21,
+        "iron": 0,
+        "wood": 0,
+        "stone": 27
       },
       "crow": 31,
       "land": 33,
@@ -2049,6 +2629,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1454,
+      "boundaryTiles": 518,
       "citySites": 18,
       "tribeCount": 4,
       "tribes": [
@@ -2057,10 +2639,10 @@
         "Numidians",
         "Vandals"
       ],
-      "oceanPct": 13.8,
-      "forestPct": 14.3,
-      "hillPct": 18.3,
-      "mountainPct": 11.8,
+      "oceanPct": 9.6,
+      "forestPct": 16.2,
+      "hillPct": 23.2,
+      "mountainPct": 11.1,
       "resourceCount": 89,
       "resources": {
         "Game": 10,
@@ -2085,22 +2667,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 1254,
-        "iron": 1566,
-        "wood": 280,
-        "stone": 1531
+        "food": 939,
+        "iron": 1033,
+        "wood": 234,
+        "stone": 1000
       },
       "yield6": {
-        "food": 684,
-        "iron": 360,
+        "food": 514,
+        "iron": 338,
         "wood": 16,
-        "stone": 695
+        "stone": 247
+      },
+      "yield7": {
+        "food": 490,
+        "iron": 338,
+        "wood": 16,
+        "stone": 135
       },
       "yield8": {
-        "food": 145,
-        "iron": 360,
+        "food": 129,
+        "iron": 338,
         "wood": 16,
-        "stone": 399
+        "stone": 94
+      },
+      "yield9": {
+        "food": 109,
+        "iron": 1,
+        "wood": 0,
+        "stone": 88
+      },
+      "yield10": {
+        "food": 2,
+        "iron": 0,
+        "wood": 0,
+        "stone": 34
       },
       "crow": 46,
       "land": 46,
@@ -2119,16 +2719,18 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1493,
+      "boundaryTiles": 479,
       "citySites": 14,
       "tribeCount": 2,
       "tribes": [
         "Danes",
         "Numidians"
       ],
-      "oceanPct": 17.6,
-      "forestPct": 10.5,
-      "hillPct": 14.7,
-      "mountainPct": 14.6,
+      "oceanPct": 14.5,
+      "forestPct": 11.6,
+      "hillPct": 18.0,
+      "mountainPct": 13.3,
       "resourceCount": 67,
       "resources": {
         "Pearl": 10,
@@ -2153,22 +2755,40 @@
         "Game": 1
       },
       "yield5": {
-        "food": 1179,
-        "iron": 1519,
-        "wood": 202,
-        "stone": 1503
+        "food": 818,
+        "iron": 972,
+        "wood": 167,
+        "stone": 956
       },
       "yield6": {
-        "food": 796,
-        "iron": 290,
-        "wood": 36,
-        "stone": 755
+        "food": 601,
+        "iron": 269,
+        "wood": 31,
+        "stone": 291
+      },
+      "yield7": {
+        "food": 599,
+        "iron": 269,
+        "wood": 31,
+        "stone": 155
       },
       "yield8": {
-        "food": 190,
-        "iron": 290,
-        "wood": 36,
-        "stone": 474
+        "food": 155,
+        "iron": 269,
+        "wood": 31,
+        "stone": 102
+      },
+      "yield9": {
+        "food": 149,
+        "iron": 3,
+        "wood": 0,
+        "stone": 94
+      },
+      "yield10": {
+        "food": 13,
+        "iron": 0,
+        "wood": 0,
+        "stone": 39
       },
       "crow": 47,
       "land": 49,
@@ -2187,6 +2807,8 @@
       "script": "CoastalRainBasin",
       "size": "TINY",
       "aspect": "SQUARE",
+      "tiles": 2457,
+      "boundaryTiles": 907,
       "citySites": 25,
       "tribeCount": 5,
       "tribes": [
@@ -2196,10 +2818,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 12.1,
-      "forestPct": 12.9,
-      "hillPct": 16.3,
-      "mountainPct": 13.8,
+      "oceanPct": 10.1,
+      "forestPct": 14.2,
+      "hillPct": 20.3,
+      "mountainPct": 16.3,
       "resourceCount": 117,
       "resources": {
         "Marble": 16,
@@ -2226,22 +2848,40 @@
         "Salt": 1
       },
       "yield5": {
-        "food": 1818,
-        "iron": 2574,
-        "wood": 434,
-        "stone": 2532
+        "food": 1200,
+        "iron": 1576,
+        "wood": 349,
+        "stone": 1536
       },
       "yield6": {
-        "food": 990,
-        "iron": 548,
+        "food": 762,
+        "iron": 499,
         "wood": 69,
-        "stone": 1511
+        "stone": 647
+      },
+      "yield7": {
+        "food": 751,
+        "iron": 499,
+        "wood": 69,
+        "stone": 385
       },
       "yield8": {
-        "food": 239,
-        "iron": 548,
+        "food": 203,
+        "iron": 499,
         "wood": 69,
-        "stone": 803
+        "stone": 259
+      },
+      "yield9": {
+        "food": 183,
+        "iron": 4,
+        "wood": 0,
+        "stone": 224
+      },
+      "yield10": {
+        "food": 13,
+        "iron": 0,
+        "wood": 0,
+        "stone": 112
       },
       "crow": 48,
       "land": 50,
@@ -2260,6 +2900,8 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1673,
+      "boundaryTiles": 351,
       "citySites": 17,
       "tribeCount": 3,
       "tribes": [
@@ -2267,10 +2909,10 @@
         "Gauls",
         "Numidians"
       ],
-      "oceanPct": 21.7,
-      "forestPct": 7.5,
-      "hillPct": 20.8,
-      "mountainPct": 9.0,
+      "oceanPct": 26.0,
+      "forestPct": 6.6,
+      "hillPct": 22.5,
+      "mountainPct": 9.7,
       "resourceCount": 97,
       "resources": {
         "Elephant": 10,
@@ -2301,22 +2943,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 1262,
-        "iron": 1496,
-        "wood": 151,
-        "stone": 1468
+        "food": 792,
+        "iron": 989,
+        "wood": 111,
+        "stone": 961
       },
       "yield6": {
-        "food": 495,
-        "iron": 421,
-        "wood": 17,
-        "stone": 618
+        "food": 367,
+        "iron": 377,
+        "wood": 13,
+        "stone": 376
+      },
+      "yield7": {
+        "food": 359,
+        "iron": 377,
+        "wood": 13,
+        "stone": 218
       },
       "yield8": {
-        "food": 153,
-        "iron": 421,
-        "wood": 17,
-        "stone": 340
+        "food": 110,
+        "iron": 377,
+        "wood": 13,
+        "stone": 140
+      },
+      "yield9": {
+        "food": 105,
+        "iron": 1,
+        "wood": 0,
+        "stone": 118
+      },
+      "yield10": {
+        "food": 10,
+        "iron": 0,
+        "wood": 0,
+        "stone": 37
       },
       "crow": 37,
       "land": 46,
@@ -2335,16 +2995,18 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1496,
+      "boundaryTiles": 476,
       "citySites": 14,
       "tribeCount": 2,
       "tribes": [
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 15.2,
-      "forestPct": 10.6,
-      "hillPct": 20.4,
-      "mountainPct": 20.6,
+      "oceanPct": 11.3,
+      "forestPct": 11.7,
+      "hillPct": 24.1,
+      "mountainPct": 21.9,
       "resourceCount": 85,
       "resources": {
         "Incense": 8,
@@ -2372,22 +3034,40 @@
         "Salt": 2
       },
       "yield5": {
-        "food": 1300,
-        "iron": 1596,
-        "wood": 198,
-        "stone": 1581
+        "food": 785,
+        "iron": 928,
+        "wood": 163,
+        "stone": 913
       },
       "yield6": {
-        "food": 691,
-        "iron": 403,
-        "wood": 16,
-        "stone": 1005
+        "food": 435,
+        "iron": 360,
+        "wood": 10,
+        "stone": 355
+      },
+      "yield7": {
+        "food": 416,
+        "iron": 360,
+        "wood": 10,
+        "stone": 266
       },
       "yield8": {
-        "food": 198,
-        "iron": 403,
-        "wood": 16,
-        "stone": 691
+        "food": 123,
+        "iron": 360,
+        "wood": 10,
+        "stone": 194
+      },
+      "yield9": {
+        "food": 113,
+        "iron": 4,
+        "wood": 0,
+        "stone": 174
+      },
+      "yield10": {
+        "food": 26,
+        "iron": 0,
+        "wood": 0,
+        "stone": 71
       },
       "crow": 43,
       "land": 43,
@@ -2406,16 +3086,18 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1544,
+      "boundaryTiles": 480,
       "citySites": 11,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Thracians"
       ],
-      "oceanPct": 56.7,
-      "forestPct": 7.4,
-      "hillPct": 9.7,
-      "mountainPct": 9.6,
+      "oceanPct": 43.2,
+      "forestPct": 9.7,
+      "hillPct": 12.8,
+      "mountainPct": 12.6,
       "resourceCount": 49,
       "resources": {
         "Game": 16,
@@ -2431,22 +3113,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 723,
-        "iron": 828,
+        "food": 529,
+        "iron": 634,
         "wood": 143,
-        "stone": 826
+        "stone": 632
       },
       "yield6": {
-        "food": 433,
+        "food": 397,
         "iron": 197,
         "wood": 24,
-        "stone": 450
+        "stone": 256
+      },
+      "yield7": {
+        "food": 389,
+        "iron": 197,
+        "wood": 24,
+        "stone": 187
       },
       "yield8": {
-        "food": 170,
+        "food": 136,
         "iron": 197,
         "wood": 24,
-        "stone": 328
+        "stone": 134
+      },
+      "yield9": {
+        "food": 129,
+        "iron": 1,
+        "wood": 0,
+        "stone": 113
+      },
+      "yield10": {
+        "food": 28,
+        "iron": 0,
+        "wood": 0,
+        "stone": 54
       },
       "crow": 24,
       "land": 28,
@@ -2465,6 +3165,8 @@
       "script": "Continent",
       "size": "TINY",
       "aspect": "WIDE",
+      "tiles": 2595,
+      "boundaryTiles": 735,
       "citySites": 24,
       "tribeCount": 5,
       "tribes": [
@@ -2474,10 +3176,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 52.3,
-      "forestPct": 6.5,
-      "hillPct": 12.3,
-      "mountainPct": 4.7,
+      "oceanPct": 38.8,
+      "forestPct": 8.3,
+      "hillPct": 15.8,
+      "mountainPct": 6.0,
       "resourceCount": 93,
       "resources": {
         "Sheep": 10,
@@ -2502,22 +3204,40 @@
         "Sorghum": 1
       },
       "yield5": {
-        "food": 1151,
-        "iron": 1409,
+        "food": 996,
+        "iron": 1254,
         "wood": 214,
-        "stone": 1369
+        "stone": 1214
       },
       "yield6": {
-        "food": 583,
+        "food": 541,
         "iron": 410,
         "wood": 23,
-        "stone": 556
+        "stone": 401
+      },
+      "yield7": {
+        "food": 520,
+        "iron": 410,
+        "wood": 23,
+        "stone": 150
       },
       "yield8": {
-        "food": 159,
+        "food": 133,
         "iron": 410,
         "wood": 23,
-        "stone": 269
+        "stone": 114
+      },
+      "yield9": {
+        "food": 130,
+        "iron": 8,
+        "wood": 0,
+        "stone": 94
+      },
+      "yield10": {
+        "food": 22,
+        "iron": 0,
+        "wood": 0,
+        "stone": 44
       },
       "crow": 55,
       "land": 59,
@@ -2536,16 +3256,18 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1611,
+      "boundaryTiles": 361,
       "citySites": 18,
       "tribeCount": 2,
       "tribes": [
         "Numidians",
         "Thracians"
       ],
-      "oceanPct": 18.5,
-      "forestPct": 10.3,
-      "hillPct": 15.2,
-      "mountainPct": 9.5,
+      "oceanPct": 22.7,
+      "forestPct": 9.0,
+      "hillPct": 15.7,
+      "mountainPct": 10.2,
       "resourceCount": 86,
       "resources": {
         "Sheep": 15,
@@ -2568,22 +3290,40 @@
         "Goat": 1
       },
       "yield5": {
-        "food": 1303,
-        "iron": 1459,
-        "wood": 187,
-        "stone": 1433
+        "food": 793,
+        "iron": 934,
+        "wood": 128,
+        "stone": 910
       },
       "yield6": {
-        "food": 384,
-        "iron": 300,
+        "food": 301,
+        "iron": 253,
         "wood": 12,
-        "stone": 551
+        "stone": 311
+      },
+      "yield7": {
+        "food": 282,
+        "iron": 253,
+        "wood": 12,
+        "stone": 116
       },
       "yield8": {
-        "food": 87,
-        "iron": 300,
+        "food": 45,
+        "iron": 253,
         "wood": 12,
-        "stone": 298
+        "stone": 86
+      },
+      "yield9": {
+        "food": 35,
+        "iron": 4,
+        "wood": 0,
+        "stone": 64
+      },
+      "yield10": {
+        "food": 4,
+        "iron": 0,
+        "wood": 0,
+        "stone": 37
       },
       "crow": 48,
       "land": 66,
@@ -2602,6 +3342,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1639,
+      "boundaryTiles": 385,
       "citySites": 22,
       "tribeCount": 4,
       "tribes": [
@@ -2610,10 +3352,10 @@
         "Scythians",
         "Vandals"
       ],
-      "oceanPct": 13.3,
-      "forestPct": 7.8,
-      "hillPct": 14.8,
-      "mountainPct": 12.3,
+      "oceanPct": 9.6,
+      "forestPct": 8.4,
+      "hillPct": 17.2,
+      "mountainPct": 11.3,
       "resourceCount": 86,
       "resources": {
         "Fur": 9,
@@ -2640,22 +3382,40 @@
         "Barley": 1
       },
       "yield5": {
-        "food": 1410,
-        "iron": 1504,
-        "wood": 158,
-        "stone": 1529
+        "food": 1047,
+        "iron": 1131,
+        "wood": 138,
+        "stone": 1116
       },
       "yield6": {
-        "food": 776,
-        "iron": 299,
+        "food": 562,
+        "iron": 282,
         "wood": 13,
-        "stone": 546
+        "stone": 220
+      },
+      "yield7": {
+        "food": 548,
+        "iron": 282,
+        "wood": 13,
+        "stone": 171
       },
       "yield8": {
-        "food": 122,
-        "iron": 299,
+        "food": 107,
+        "iron": 282,
         "wood": 13,
-        "stone": 420
+        "stone": 125
+      },
+      "yield9": {
+        "food": 96,
+        "iron": 4,
+        "wood": 0,
+        "stone": 105
+      },
+      "yield10": {
+        "food": 2,
+        "iron": 0,
+        "wood": 0,
+        "stone": 36
       },
       "crow": 36,
       "land": 37,
@@ -2674,6 +3434,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
+      "tiles": 1625,
+      "boundaryTiles": 391,
       "citySites": 18,
       "tribeCount": 4,
       "tribes": [
@@ -2682,10 +3444,10 @@
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 14.4,
-      "forestPct": 5.3,
-      "hillPct": 18.8,
-      "mountainPct": 22.2,
+      "oceanPct": 8.3,
+      "forestPct": 5.0,
+      "hillPct": 20.7,
+      "mountainPct": 22.7,
       "resourceCount": 73,
       "resources": {
         "Gem": 8,
@@ -2711,22 +3473,40 @@
         "Goat": 1
       },
       "yield5": {
-        "food": 1289,
-        "iron": 1601,
-        "wood": 90,
-        "stone": 1579
+        "food": 764,
+        "iron": 996,
+        "wood": 65,
+        "stone": 974
       },
       "yield6": {
-        "food": 787,
-        "iron": 380,
-        "wood": 25,
-        "stone": 1071
+        "food": 487,
+        "iron": 337,
+        "wood": 16,
+        "stone": 517
+      },
+      "yield7": {
+        "food": 485,
+        "iron": 337,
+        "wood": 16,
+        "stone": 291
       },
       "yield8": {
-        "food": 159,
-        "iron": 380,
-        "wood": 25,
-        "stone": 740
+        "food": 111,
+        "iron": 337,
+        "wood": 16,
+        "stone": 217
+      },
+      "yield9": {
+        "food": 97,
+        "iron": 2,
+        "wood": 0,
+        "stone": 177
+      },
+      "yield10": {
+        "food": 17,
+        "iron": 0,
+        "wood": 0,
+        "stone": 99
       },
       "crow": 62,
       "land": 63,
@@ -2745,6 +3525,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
+      "tiles": 1612,
+      "boundaryTiles": 404,
       "citySites": 19,
       "tribeCount": 3,
       "tribes": [
@@ -2752,10 +3534,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 15.3,
-      "forestPct": 5.5,
-      "hillPct": 9.8,
-      "mountainPct": 14.4,
+      "oceanPct": 9.4,
+      "forestPct": 5.7,
+      "hillPct": 10.8,
+      "mountainPct": 12.7,
       "resourceCount": 96,
       "resources": {
         "Marble": 14,
@@ -2778,22 +3560,40 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 1378,
-        "iron": 1551,
-        "wood": 110,
-        "stone": 1549
+        "food": 1036,
+        "iron": 1104,
+        "wood": 91,
+        "stone": 1098
       },
       "yield6": {
-        "food": 789,
-        "iron": 197,
+        "food": 570,
+        "iron": 174,
         "wood": 6,
-        "stone": 649
+        "stone": 236
+      },
+      "yield7": {
+        "food": 552,
+        "iron": 174,
+        "wood": 6,
+        "stone": 155
       },
       "yield8": {
-        "food": 138,
-        "iron": 197,
+        "food": 116,
+        "iron": 174,
         "wood": 6,
-        "stone": 484
+        "stone": 102
+      },
+      "yield9": {
+        "food": 101,
+        "iron": 2,
+        "wood": 0,
+        "stone": 95
+      },
+      "yield10": {
+        "food": 2,
+        "iron": 0,
+        "wood": 0,
+        "stone": 25
       },
       "crow": 61,
       "land": 61,
@@ -2812,6 +3612,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "ULTRAWIDE",
+      "tiles": 1599,
+      "boundaryTiles": 417,
       "citySites": 20,
       "tribeCount": 5,
       "tribes": [
@@ -2821,9 +3623,9 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 14.6,
-      "forestPct": 8.5,
-      "hillPct": 20.1,
+      "oceanPct": 8.1,
+      "forestPct": 10.3,
+      "hillPct": 24.6,
       "mountainPct": 21.0,
       "resourceCount": 99,
       "resources": {
@@ -2850,22 +3652,40 @@
         "Sorghum": 2
       },
       "yield5": {
-        "food": 1383,
-        "iron": 1524,
-        "wood": 166,
-        "stone": 1566
+        "food": 906,
+        "iron": 1023,
+        "wood": 159,
+        "stone": 1002
       },
       "yield6": {
-        "food": 973,
-        "iron": 406,
-        "wood": 25,
-        "stone": 886
+        "food": 619,
+        "iron": 394,
+        "wood": 22,
+        "stone": 383
+      },
+      "yield7": {
+        "food": 604,
+        "iron": 394,
+        "wood": 22,
+        "stone": 285
       },
       "yield8": {
-        "food": 180,
-        "iron": 406,
-        "wood": 25,
-        "stone": 680
+        "food": 117,
+        "iron": 394,
+        "wood": 22,
+        "stone": 194
+      },
+      "yield9": {
+        "food": 102,
+        "iron": 2,
+        "wood": 0,
+        "stone": 178
+      },
+      "yield10": {
+        "food": 17,
+        "iron": 0,
+        "wood": 0,
+        "stone": 81
       },
       "crow": 62,
       "land": 65,
@@ -2884,16 +3704,18 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "SQUARE",
+      "tiles": 1673,
+      "boundaryTiles": 351,
       "citySites": 19,
       "tribeCount": 2,
       "tribes": [
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 23.4,
-      "forestPct": 10.9,
-      "hillPct": 17.4,
-      "mountainPct": 4.3,
+      "oceanPct": 28.2,
+      "forestPct": 9.2,
+      "hillPct": 18.6,
+      "mountainPct": 2.8,
       "resourceCount": 72,
       "resources": {
         "Marble": 14,
@@ -2911,22 +3733,40 @@
         "Silver": 1
       },
       "yield5": {
-        "food": 1325,
-        "iron": 1463,
-        "wood": 217,
-        "stone": 1424
+        "food": 932,
+        "iron": 1068,
+        "wood": 151,
+        "stone": 1029
       },
       "yield6": {
-        "food": 470,
-        "iron": 352,
-        "wood": 27,
-        "stone": 378
+        "food": 377,
+        "iron": 311,
+        "wood": 20,
+        "stone": 253
+      },
+      "yield7": {
+        "food": 369,
+        "iron": 311,
+        "wood": 20,
+        "stone": 78
       },
       "yield8": {
-        "food": 119,
-        "iron": 352,
-        "wood": 27,
-        "stone": 158
+        "food": 89,
+        "iron": 311,
+        "wood": 20,
+        "stone": 48
+      },
+      "yield9": {
+        "food": 76,
+        "iron": 2,
+        "wood": 0,
+        "stone": 40
+      },
+      "yield10": {
+        "food": 16,
+        "iron": 0,
+        "wood": 0,
+        "stone": 17
       },
       "crow": 35,
       "land": 40,
@@ -2945,16 +3785,18 @@
       "script": "CoastalRainBasin",
       "size": "TINY",
       "aspect": "ULTRAWIDE",
+      "tiles": 2751,
+      "boundaryTiles": 561,
       "citySites": 30,
       "tribeCount": 2,
       "tribes": [
         "Danes",
         "Thracians"
       ],
-      "oceanPct": 14.2,
-      "forestPct": 9.8,
-      "hillPct": 12.0,
-      "mountainPct": 14.0,
+      "oceanPct": 10.0,
+      "forestPct": 11.4,
+      "hillPct": 13.0,
+      "mountainPct": 13.5,
       "resourceCount": 149,
       "resources": {
         "Horse": 14,
@@ -2984,22 +3826,40 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 2313,
-        "iron": 2493,
-        "wood": 321,
-        "stone": 2533
+        "food": 1738,
+        "iron": 1885,
+        "wood": 309,
+        "stone": 1846
       },
       "yield6": {
-        "food": 1295,
-        "iron": 396,
+        "food": 930,
+        "iron": 358,
         "wood": 26,
-        "stone": 930
+        "stone": 335
+      },
+      "yield7": {
+        "food": 910,
+        "iron": 358,
+        "wood": 26,
+        "stone": 249
       },
       "yield8": {
-        "food": 230,
-        "iron": 396,
+        "food": 199,
+        "iron": 358,
         "wood": 26,
-        "stone": 749
+        "stone": 187
+      },
+      "yield9": {
+        "food": 176,
+        "iron": 4,
+        "wood": 0,
+        "stone": 166
+      },
+      "yield10": {
+        "food": 12,
+        "iron": 0,
+        "wood": 0,
+        "stone": 73
       },
       "crow": 81,
       "land": 84,
@@ -3018,6 +3878,8 @@
       "script": "Continent",
       "size": "TINY",
       "aspect": "ULTRAWIDE",
+      "tiles": 2512,
+      "boundaryTiles": 800,
       "citySites": 25,
       "tribeCount": 5,
       "tribes": [
@@ -3027,10 +3889,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 57.2,
-      "forestPct": 2.7,
-      "hillPct": 6.7,
-      "mountainPct": 4.7,
+      "oceanPct": 43.6,
+      "forestPct": 3.6,
+      "hillPct": 8.9,
+      "mountainPct": 6.2,
       "resourceCount": 106,
       "resources": {
         "Wheat": 18,
@@ -3055,22 +3917,40 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 983,
-        "iron": 1125,
+        "food": 826,
+        "iron": 968,
         "wood": 89,
-        "stone": 1093
+        "stone": 936
       },
       "yield6": {
-        "food": 589,
+        "food": 535,
         "iron": 223,
         "wood": 43,
-        "stone": 433
+        "stone": 277
+      },
+      "yield7": {
+        "food": 509,
+        "iron": 223,
+        "wood": 43,
+        "stone": 170
       },
       "yield8": {
-        "food": 192,
+        "food": 169,
         "iron": 223,
         "wood": 43,
-        "stone": 256
+        "stone": 100
+      },
+      "yield9": {
+        "food": 143,
+        "iron": 2,
+        "wood": 0,
+        "stone": 92
+      },
+      "yield10": {
+        "food": 39,
+        "iron": 0,
+        "wood": 0,
+        "stone": 36
       },
       "crow": 67,
       "land": 67,
@@ -3089,6 +3969,8 @@
       "script": "Continent",
       "size": "TINY",
       "aspect": "SQUARE",
+      "tiles": 2656,
+      "boundaryTiles": 708,
       "citySites": 26,
       "tribeCount": 4,
       "tribes": [
@@ -3097,10 +3979,10 @@
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 51.3,
-      "forestPct": 10.3,
-      "hillPct": 12.8,
-      "mountainPct": 4.6,
+      "oceanPct": 38.4,
+      "forestPct": 13.1,
+      "hillPct": 16.3,
+      "mountainPct": 5.9,
       "resourceCount": 127,
       "resources": {
         "Horse": 20,
@@ -3128,22 +4010,40 @@
         "Silver": 1
       },
       "yield5": {
-        "food": 1297,
-        "iron": 1509,
+        "food": 1141,
+        "iron": 1353,
         "wood": 346,
-        "stone": 1502
+        "stone": 1346
       },
       "yield6": {
-        "food": 696,
+        "food": 653,
         "iron": 432,
         "wood": 36,
-        "stone": 567
+        "stone": 411
+      },
+      "yield7": {
+        "food": 634,
+        "iron": 432,
+        "wood": 36,
+        "stone": 196
       },
       "yield8": {
-        "food": 139,
+        "food": 125,
         "iron": 432,
         "wood": 36,
-        "stone": 288
+        "stone": 132
+      },
+      "yield9": {
+        "food": 105,
+        "iron": 5,
+        "wood": 0,
+        "stone": 104
+      },
+      "yield10": {
+        "food": 11,
+        "iron": 0,
+        "wood": 0,
+        "stone": 38
       },
       "crow": 32,
       "land": 32,
@@ -3162,6 +4062,8 @@
       "script": "InlandSea2",
       "size": "TINY",
       "aspect": "SQUARE",
+      "tiles": 2909,
+      "boundaryTiles": 455,
       "citySites": 31,
       "tribeCount": 3,
       "tribes": [
@@ -3169,10 +4071,10 @@
         "Gauls",
         "Vandals"
       ],
-      "oceanPct": 21.3,
-      "forestPct": 13.7,
-      "hillPct": 12.9,
-      "mountainPct": 6.9,
+      "oceanPct": 24.4,
+      "forestPct": 13.1,
+      "hillPct": 13.7,
+      "mountainPct": 7.8,
       "resourceCount": 149,
       "resources": {
         "Horse": 14,
@@ -3203,22 +4105,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 2326,
-        "iron": 2504,
-        "wood": 457,
-        "stone": 2494
+        "food": 1674,
+        "iron": 1831,
+        "wood": 378,
+        "stone": 1821
       },
       "yield6": {
-        "food": 762,
-        "iron": 434,
+        "food": 652,
+        "iron": 398,
         "wood": 30,
-        "stone": 606
+        "stone": 336
+      },
+      "yield7": {
+        "food": 628,
+        "iron": 398,
+        "wood": 30,
+        "stone": 228
       },
       "yield8": {
-        "food": 157,
-        "iron": 434,
+        "food": 108,
+        "iron": 398,
         "wood": 30,
-        "stone": 415
+        "stone": 177
+      },
+      "yield9": {
+        "food": 83,
+        "iron": 1,
+        "wood": 0,
+        "stone": 149
+      },
+      "yield10": {
+        "food": 12,
+        "iron": 0,
+        "wood": 0,
+        "stone": 57
       },
       "crow": 41,
       "land": 50,
@@ -3237,6 +4157,8 @@
       "script": "CoastalRainBasin",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1435,
+      "boundaryTiles": 537,
       "citySites": 16,
       "tribeCount": 4,
       "tribes": [
@@ -3245,10 +4167,10 @@
         "Numidians",
         "Thracians"
       ],
-      "oceanPct": 13.9,
-      "forestPct": 8.1,
-      "hillPct": 28.4,
-      "mountainPct": 12.5,
+      "oceanPct": 10.0,
+      "forestPct": 9.5,
+      "hillPct": 34.6,
+      "mountainPct": 14.2,
       "resourceCount": 77,
       "resources": {
         "Game": 10,
@@ -3274,22 +4196,40 @@
         "Ore": 1
       },
       "yield5": {
-        "food": 1065,
-        "iron": 1496,
-        "wood": 151,
-        "stone": 1452
+        "food": 760,
+        "iron": 949,
+        "wood": 127,
+        "stone": 909
       },
       "yield6": {
-        "food": 613,
-        "iron": 560,
+        "food": 471,
+        "iron": 496,
         "wood": 11,
-        "stone": 920
+        "stone": 433
+      },
+      "yield7": {
+        "food": 456,
+        "iron": 496,
+        "wood": 11,
+        "stone": 238
       },
       "yield8": {
-        "food": 155,
-        "iron": 560,
+        "food": 131,
+        "iron": 496,
         "wood": 11,
-        "stone": 439
+        "stone": 166
+      },
+      "yield9": {
+        "food": 115,
+        "iron": 1,
+        "wood": 0,
+        "stone": 154
+      },
+      "yield10": {
+        "food": 19,
+        "iron": 0,
+        "wood": 0,
+        "stone": 56
       },
       "crow": 48,
       "land": 49,
@@ -3308,6 +4248,8 @@
       "script": "Continent",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1565,
+      "boundaryTiles": 407,
       "citySites": 13,
       "tribeCount": 3,
       "tribes": [
@@ -3315,10 +4257,10 @@
         "Numidians",
         "Thracians"
       ],
-      "oceanPct": 62.6,
-      "forestPct": 6.0,
-      "hillPct": 8.7,
-      "mountainPct": 6.1,
+      "oceanPct": 52.9,
+      "forestPct": 7.6,
+      "hillPct": 11.0,
+      "mountainPct": 7.7,
       "resourceCount": 57,
       "resources": {
         "Dye": 9,
@@ -3339,22 +4281,40 @@
         "Wheat": 1
       },
       "yield5": {
-        "food": 599,
-        "iron": 651,
+        "food": 479,
+        "iron": 531,
         "wood": 117,
-        "stone": 633
+        "stone": 513
       },
       "yield6": {
-        "food": 327,
+        "food": 324,
         "iron": 172,
         "wood": 8,
-        "stone": 284
+        "stone": 164
+      },
+      "yield7": {
+        "food": 324,
+        "iron": 172,
+        "wood": 8,
+        "stone": 110
       },
       "yield8": {
         "food": 139,
         "iron": 172,
         "wood": 8,
-        "stone": 193
+        "stone": 73
+      },
+      "yield9": {
+        "food": 135,
+        "iron": 2,
+        "wood": 0,
+        "stone": 64
+      },
+      "yield10": {
+        "food": 6,
+        "iron": 0,
+        "wood": 0,
+        "stone": 20
       },
       "crow": 41,
       "land": 43,
@@ -3373,6 +4333,8 @@
       "script": "InlandSea2",
       "size": "TINY",
       "aspect": "ULTRAWIDE",
+      "tiles": 2809,
+      "boundaryTiles": 503,
       "citySites": 34,
       "tribeCount": 3,
       "tribes": [
@@ -3380,10 +4342,10 @@
         "Scythians",
         "Thracians"
       ],
-      "oceanPct": 19.7,
-      "forestPct": 10.4,
-      "hillPct": 15.2,
-      "mountainPct": 2.5,
+      "oceanPct": 22.9,
+      "forestPct": 8.4,
+      "hillPct": 13.9,
+      "mountainPct": 2.8,
       "resourceCount": 179,
       "resources": {
         "Horse": 21,
@@ -3415,22 +4377,40 @@
         "Wine": 1
       },
       "yield5": {
-        "food": 2175,
-        "iron": 2375,
-        "wood": 336,
-        "stone": 2325
+        "food": 1654,
+        "iron": 1809,
+        "wood": 227,
+        "stone": 1764
       },
       "yield6": {
-        "food": 750,
-        "iron": 503,
-        "wood": 21,
-        "stone": 413
+        "food": 608,
+        "iron": 390,
+        "wood": 19,
+        "stone": 267
+      },
+      "yield7": {
+        "food": 580,
+        "iron": 390,
+        "wood": 19,
+        "stone": 126
       },
       "yield8": {
-        "food": 265,
-        "iron": 503,
-        "wood": 21,
-        "stone": 168
+        "food": 184,
+        "iron": 390,
+        "wood": 19,
+        "stone": 76
+      },
+      "yield9": {
+        "food": 158,
+        "iron": 4,
+        "wood": 0,
+        "stone": 56
+      },
+      "yield10": {
+        "food": 45,
+        "iron": 0,
+        "wood": 0,
+        "stone": 23
       },
       "crow": 92,
       "land": 92,
@@ -3449,6 +4429,8 @@
       "script": "InlandSea2",
       "size": "TINY",
       "aspect": "ULTRAWIDE",
+      "tiles": 2809,
+      "boundaryTiles": 503,
       "citySites": 31,
       "tribeCount": 3,
       "tribes": [
@@ -3456,10 +4438,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 23.3,
-      "forestPct": 7.7,
-      "hillPct": 15.7,
-      "mountainPct": 8.8,
+      "oceanPct": 27.3,
+      "forestPct": 4.4,
+      "hillPct": 15.9,
+      "mountainPct": 9.5,
       "resourceCount": 139,
       "resources": {
         "Game": 14,
@@ -3491,22 +4473,40 @@
         "Wine": 2
       },
       "yield5": {
-        "food": 1944,
-        "iron": 2287,
-        "wood": 255,
-        "stone": 2238
+        "food": 1237,
+        "iron": 1531,
+        "wood": 123,
+        "stone": 1484
       },
       "yield6": {
-        "food": 624,
-        "iron": 520,
-        "wood": 15,
-        "stone": 926
+        "food": 485,
+        "iron": 448,
+        "wood": 13,
+        "stone": 552
+      },
+      "yield7": {
+        "food": 461,
+        "iron": 448,
+        "wood": 13,
+        "stone": 246
       },
       "yield8": {
-        "food": 153,
-        "iron": 520,
-        "wood": 15,
-        "stone": 494
+        "food": 125,
+        "iron": 448,
+        "wood": 13,
+        "stone": 182
+      },
+      "yield9": {
+        "food": 102,
+        "iron": 2,
+        "wood": 0,
+        "stone": 144
+      },
+      "yield10": {
+        "food": 17,
+        "iron": 0,
+        "wood": 0,
+        "stone": 66
       },
       "crow": 79,
       "land": 99,
@@ -3525,6 +4525,8 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1613,
+      "boundaryTiles": 359,
       "citySites": 20,
       "tribeCount": 3,
       "tribes": [
@@ -3532,10 +4534,10 @@
         "Thracians",
         "Vandals"
       ],
-      "oceanPct": 18.5,
-      "forestPct": 11.9,
-      "hillPct": 11.0,
-      "mountainPct": 2.8,
+      "oceanPct": 22.3,
+      "forestPct": 12.1,
+      "hillPct": 11.5,
+      "mountainPct": 3.5,
       "resourceCount": 89,
       "resources": {
         "Lavender": 10,
@@ -3563,22 +4565,40 @@
         "Sheep": 1
       },
       "yield5": {
-        "food": 1406,
-        "iron": 1481,
-        "wood": 225,
-        "stone": 1468
+        "food": 1006,
+        "iron": 1070,
+        "wood": 186,
+        "stone": 1057
       },
       "yield6": {
-        "food": 344,
-        "iron": 217,
-        "wood": 16,
-        "stone": 225
+        "food": 266,
+        "iron": 185,
+        "wood": 14,
+        "stone": 149
+      },
+      "yield7": {
+        "food": 244,
+        "iron": 185,
+        "wood": 14,
+        "stone": 76
       },
       "yield8": {
-        "food": 75,
-        "iron": 217,
-        "wood": 16,
-        "stone": 104
+        "food": 53,
+        "iron": 185,
+        "wood": 14,
+        "stone": 48
+      },
+      "yield9": {
+        "food": 47,
+        "iron": 4,
+        "wood": 0,
+        "stone": 36
+      },
+      "yield10": {
+        "food": 15,
+        "iron": 0,
+        "wood": 0,
+        "stone": 12
       },
       "crow": 46,
       "land": 52,
@@ -3597,16 +4617,18 @@
       "script": "InlandSea2",
       "size": "SMALLEST",
       "aspect": "WIDE",
+      "tiles": 1613,
+      "boundaryTiles": 359,
       "citySites": 16,
       "tribeCount": 2,
       "tribes": [
         "Danes",
         "Scythians"
       ],
-      "oceanPct": 21.2,
-      "forestPct": 5.7,
-      "hillPct": 20.1,
-      "mountainPct": 14.4,
+      "oceanPct": 25.9,
+      "forestPct": 5.2,
+      "hillPct": 21.3,
+      "mountainPct": 14.7,
       "resourceCount": 92,
       "resources": {
         "Pearl": 12,
@@ -3632,22 +4654,40 @@
         "Citrus": 1
       },
       "yield5": {
-        "food": 1170,
-        "iron": 1454,
-        "wood": 106,
-        "stone": 1382
+        "food": 636,
+        "iron": 869,
+        "wood": 78,
+        "stone": 800
       },
       "yield6": {
-        "food": 400,
-        "iron": 397,
+        "food": 293,
+        "iron": 344,
         "wood": 1,
-        "stone": 794
+        "stone": 384
+      },
+      "yield7": {
+        "food": 280,
+        "iron": 344,
+        "wood": 1,
+        "stone": 231
       },
       "yield8": {
-        "food": 108,
-        "iron": 397,
+        "food": 79,
+        "iron": 344,
         "wood": 1,
-        "stone": 499
+        "stone": 173
+      },
+      "yield9": {
+        "food": 67,
+        "iron": 2,
+        "wood": 0,
+        "stone": 141
+      },
+      "yield10": {
+        "food": 4,
+        "iron": 0,
+        "wood": 0,
+        "stone": 70
       },
       "crow": 49,
       "land": 60,
