@@ -10,10 +10,10 @@ const scripts = Object.keys(byScript).sort();
 const cap = (s: string) => s ? s[0] + s.slice(1).toLowerCase() : s;
 const sz = (s: string) => s === 'SMALLEST' ? 'Duel' : cap(s);
 // Tournament criteria: land-connected · 15–25 sites (ideal 18–22) ·
-// land path 45–65 hex.
+// land path 45–70 hex.
 function tier(g: any): '' | 'ok' | 'ideal' {
   if (!g.landConnected || g.land == null) return '';
-  if (g.land < 45 || g.land > 65) return '';
+  if (g.land < 45 || g.land > 70) return '';
   if (g.citySites < 15 || g.citySites > 25) return '';
   return (g.citySites >= 18 && g.citySites <= 22) ? 'ideal' : 'ok';
 }
@@ -32,7 +32,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
     <span class="dot ideal"></span><b>{nIdeal} IDEAL</b> &nbsp;
     <span class="dot ok"></span><b>{nOk} acceptable</b> &nbsp; — meet
     tournament criteria: <i>land-connected · 15–25 city sites (ideal
-    18–22) · land path 45–65 hex</i>. Highlighted rows below.
+    18–22) · land path 45–70 hex</i>. Highlighted rows below.
   </p>
 
   {scripts.map(s => (
