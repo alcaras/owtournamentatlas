@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+import opt from '../data/options.json';
+import tour from '../data/tournament-games.json';
+
+// group option rows by script, preserve config order
+const order = ["DOTA","Continent","Coastal Rain Basin","Inland Sea","Donut",
+  "Archipelago","Arid Plateau","Desert","Hardwood Forest","Mountain Pass"];
+const byScript: Record<string, any[]> = {};
+for (const r of opt.rows) (byScript[r.script] ??= []).push(r);
+const scripts = order.filter(s => byScript[s]);
+
+const D = (o: any) => o == null ? '—'
+  : `${o.mean.toFixed(0)} <span class="dim">[${o.min}–${o.max}]</span>`;
+// best variant per script = highest pass%, then conn%, then sites near 20
+const best: Record<string, any> = {};
+for (const s of scripts) {
+  best[s] = [...byScript[s]].sort((a,b)=>
+    b.passPct-a.passPct || b.landConnPct-a.landConnPct ||
+    Math.abs(a.sites.mean-20)-Math.abs(b.sites.mean-20))[0];
+}
+// hard pool = pass 100
+const pool = scripts.filter(s => best[s].passPct >= 100);
+---
+<Base title="Recommended Settings">
+  <p class="lede">
+    Hard tournament pool: <b>every</b> generated map must be
+    land-connected, land path 40–80 hex, city sites 12–28. Each script
+    holds its best size/aspect/point-sym; we sweep the one map-option
+    that moves land-connection or capital distance. <b>Pass%</b> = share
+    of blind maps meeting all hard bounds (100% = poolable with no
+    rerolls). N={opt.N}/variant.
+  </p>
+
+  <section class="pool">
+    <h2 class="pool__h">✅ Guaranteed pool (100% pass — zero rerolls)</h2>
+    {pool.length === 0 && <p class="dim">none</p>}
+    <div class="cards">
+      {pool.map(s => {
+        const b = best[s];
+        return (
+          <div class="card">
+            <div class="card__t">{s}</div>
+            <div class="card__cfg">{b.base} · {b.axis}: <b>{b.variant}</b></div>
+            <div class="card__m">
+              sites <b>{b.sites.mean}</b> [{b.sites.min}–{b.sites.max}] ·
+              land <b>{b.landPath?.mean}</b> [{b.landPath?.min}–{b.landPath?.max}] ·
+              scout {b.scout?.mean} · 100% connected
+            </div>
+          </div>
+        );
+      })}
+    </div>
+    <p class="note">
+      Only DOTA passes every blind map. The other scripts can't guarantee
+      the bounds (variance / occasional naval-only or too-close roll) —
+      they need a generate-check-reroll step. The actual tournament
+      historically used Coastal Rain Basin, Continent and Inland Sea
+      ({tour.count} games on the <a href={`${import.meta.env.BASE_URL}calibration`}>calibration</a> page) — all
+      screen-and-reroll scripts.
+    </p>
+  </section>
+
+  <h2 class="sec">Per-map: the knob that moves land-connection / distance</h2>
+  {scripts.map(s => (
+    <section class="grp">
+      <h3 class="grp__h">{s} <span class="grp__b">{byScript[s][0].base} · {byScript[s][0].axis}</span></h3>
+      <div class="tscroll">
+        <table class="tbl">
+          <thead><tr>
+            <th>Variant</th><th>Land-conn%</th><th>Pass%</th>
+            <th>City sites</th><th>Crow</th><th>Land path</th><th>Scout</th>
+          </tr></thead>
+          <tbody>
+            {byScript[s].map((r:any) => (
+              <tr class={r === best[s] ? 'is-best' : ''}>
+                <td><b>{r.variant}</b></td>
+                <td class={r.landConnPct < 100 ? 'bad' : ''}>{r.landConnPct}%</td>
+                <td class={r.passPct >= 100 ? 'good' : r.passPct >= 30 ? '' : 'bad'}>{r.passPct}%</td>
+                <td class="mono" set:html={D(r.sites)} />
+                <td class="mono" set:html={D(r.crow)} />
+                <td class="mono" set:html={D(r.landPath)} />
+                <td class="mono">{r.scout?.mean ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+
+  <p class="note" style="margin-top:1.4rem;">
+    Inland Sea &amp; Wetlands have no connection/distance map-option (base
+    only). Distances even-r (game-verified). Pass band: land 40–80, sites
+    12–28, land-connected — applied to every seed, not the average.
+  </p>
+
+  <style>
+    .lede { font-family: var(--font-display); font-style: italic; font-size: 1.05rem;
+      line-height: 1.55; color: var(--text-soft); max-width: 76ch; margin: 0.6rem 0 1.4rem; }
+    .pool { background: var(--bg-elev); border: 1px solid var(--gold-deep);
+      border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 2rem; }
+    .pool__h { font-size: 1.2rem; color: var(--gold); margin-bottom: 0.7rem; }
+    .cards { display:flex; flex-wrap:wrap; gap:0.7rem; }
+    .card { background:#16181d; border:1px solid var(--gold-deep); border-radius:5px;
+      padding:0.7rem 0.9rem; min-width:230px; }
+    .card__t { font-family:var(--font-display); font-weight:700; font-size:1.15rem; color:var(--gold); }
+    .card__cfg { font-size:0.82rem; color:var(--text-soft); margin:0.15rem 0 0.3rem; }
+    .card__m { font-size:0.78rem; color:var(--text-faint); }
+    .sec { font-size:1.35rem; border-bottom:1px solid var(--gold-deep);
+      padding-bottom:0.3rem; margin:1.6rem 0 0.6rem; }
+    .grp { margin-bottom:1.4rem; }
+    .grp__h { font-size:1.1rem; } .grp__b { font-size:0.74rem; color:var(--text-faint); font-family:var(--font-mono); }
+    .tscroll { overflow-x:auto; }
+    .tbl { width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.3rem; }
+    .tbl thead th { font-family:var(--font-ui); font-size:0.56rem; letter-spacing:0.13em;
+      text-transform:uppercase; color:var(--text-dim); font-weight:600; text-align:left;
+      padding:0.3rem 0.6rem; border-bottom:1px solid var(--border-strong); white-space:nowrap; }
+    .tbl td { padding:0.34rem 0.6rem; border-bottom:1px solid var(--border); white-space:nowrap; }
+    .tbl tr.is-best td { background:#16290f; }
+    .mono { font-family:var(--font-mono); font-size:0.82em; }
+    .dim { color:var(--text-faint); } .good { color:#7fb069; font-weight:600; }
+    .bad { color:#b06a5f; font-weight:600; }
+    .note { font-size:0.82rem; color:var(--text-faint); line-height:1.5; max-width:82ch; }
+  </style>
+</Base>
