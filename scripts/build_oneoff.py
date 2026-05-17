@@ -21,16 +21,24 @@ from render_pretty import render_pretty          # noqa: E402
 ONE = ATLAS / "one-offs"
 IMG = ATLAS / "public" / "img" / "oneoff"
 
-# Curated taxonomy (resource.xml carries no luxury flag). Display names
-# match build_tournament's RESOURCE_*.replace().title().
-RES_STRATEGIC = ["Marble", "Ore", "Horse"]
-RES_FOOD = ["Wheat", "Barley", "Sorghum", "Cattle", "Sheep", "Pig",
-            "Goat", "Camel", "Elephant", "Game", "Fish", "Crab"]
-RES_LUX = ["Salt", "Wine", "Olive", "Incense", "Dye", "Honey", "Citrus",
-           "Lavender", "Fur", "Gem", "Gold", "Silver", "Pearl", "Silk",
-           "Spices", "Ivory", "Jade", "Ebony", "Tea", "Porcelain",
-           "Perfume", "Exotic_Fur", "Exotic_Animals", "Literature",
-           "Silphium", "Wootz_Steel"]
+# Resources grouped by the IMPROVEMENT used to work them. Farm/Mine/
+# Quarry/Lumbermill/Grove/Nets are authoritative from improvement.xml;
+# Pasture/Camp/Urban curated (game doesn't tag those in improvement.xml).
+# Display names match build_tournament's RESOURCE_*.replace().title().
+RES_BY_IMP = {
+    "Farm": ["Wheat", "Barley", "Sorghum"],
+    "Pasture": ["Cattle", "Sheep", "Pig", "Goat", "Horse", "Camel"],
+    "Camp": ["Game", "Fur", "Elephant", "Ivory", "Exotic_Fur",
+             "Exotic_Animals"],
+    "Grove": ["Wine", "Olive", "Citrus", "Honey", "Incense", "Lavender",
+              "Silk", "Spices", "Tea"],
+    "Nets": ["Fish", "Crab", "Pearl", "Dye"],
+    "Mine": ["Ore", "Gem", "Gold", "Silver", "Salt", "Jade"],
+    "Quarry": ["Marble"],
+    "Lumbermill": ["Ebony"],
+    "Urban (no tile improvement)": ["Literature", "Porcelain", "Perfume",
+                                    "Wootz_Steel", "Silphium"],
+}
 
 
 def caps_and_cities(xbytes: bytes):
@@ -101,8 +109,7 @@ def main():
     recs = [r for r in (one(z) for z in zps) if r]
     (ATLAS / "src" / "data" / "oneoffs.json").write_text(
         json.dumps({"maps": recs,
-                    "resTax": {"lux": RES_LUX, "strategic": RES_STRATEGIC,
-                               "food": RES_FOOD}},
+                    "resTax": list(RES_BY_IMP.items())},
                    indent=1, sort_keys=True) + "\n")
     print(f"→ oneoffs.json ({len(recs)} maps)")
     return 0

@@ -10,9 +10,7 @@ export function getStaticPaths() {
 }
 const { g, resTax } = Astro.props as { g: any; resTax: any };
 const have = (n: string): number => (g.resources || {})[n] || 0;
-const groups: [string, string[]][] = [
-  ['Luxury', resTax.lux], ['Strategic', resTax.strategic],
-  ['Food', resTax.food]];
+const groups: [string, string[]][] = resTax;
 const nice = (n: string) => n.replace(/_/g, ' ');
 ---
 <Base title={`One-off · ${g.matchup}`}>

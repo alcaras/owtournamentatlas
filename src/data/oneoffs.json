@@ -266,53 +266,92 @@
    }
   }
  ],
- "resTax": {
-  "food": [
-   "Wheat",
-   "Barley",
-   "Sorghum",
-   "Cattle",
-   "Sheep",
-   "Pig",
-   "Goat",
-   "Camel",
-   "Elephant",
-   "Game",
-   "Fish",
-   "Crab"
+ "resTax": [
+  [
+   "Farm",
+   [
+    "Wheat",
+    "Barley",
+    "Sorghum"
+   ]
   ],
-  "lux": [
-   "Salt",
-   "Wine",
-   "Olive",
-   "Incense",
-   "Dye",
-   "Honey",
-   "Citrus",
-   "Lavender",
-   "Fur",
-   "Gem",
-   "Gold",
-   "Silver",
-   "Pearl",
-   "Silk",
-   "Spices",
-   "Ivory",
-   "Jade",
-   "Ebony",
-   "Tea",
-   "Porcelain",
-   "Perfume",
-   "Exotic_Fur",
-   "Exotic_Animals",
-   "Literature",
-   "Silphium",
-   "Wootz_Steel"
+  [
+   "Pasture",
+   [
+    "Cattle",
+    "Sheep",
+    "Pig",
+    "Goat",
+    "Horse",
+    "Camel"
+   ]
   ],
-  "strategic": [
-   "Marble",
-   "Ore",
-   "Horse"
+  [
+   "Camp",
+   [
+    "Game",
+    "Fur",
+    "Elephant",
+    "Ivory",
+    "Exotic_Fur",
+    "Exotic_Animals"
+   ]
+  ],
+  [
+   "Grove",
+   [
+    "Wine",
+    "Olive",
+    "Citrus",
+    "Honey",
+    "Incense",
+    "Lavender",
+    "Silk",
+    "Spices",
+    "Tea"
+   ]
+  ],
+  [
+   "Nets",
+   [
+    "Fish",
+    "Crab",
+    "Pearl",
+    "Dye"
+   ]
+  ],
+  [
+   "Mine",
+   [
+    "Ore",
+    "Gem",
+    "Gold",
+    "Silver",
+    "Salt",
+    "Jade"
+   ]
+  ],
+  [
+   "Quarry",
+   [
+    "Marble"
+   ]
+  ],
+  [
+   "Lumbermill",
+   [
+    "Ebony"
+   ]
+  ],
+  [
+   "Urban (no tile improvement)",
+   [
+    "Literature",
+    "Porcelain",
+    "Perfume",
+    "Wootz_Steel",
+    "Silphium"
+   ]
   ]
- }
+ ]
 }
