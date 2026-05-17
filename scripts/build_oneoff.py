@@ -16,6 +16,7 @@ sys.path.insert(0, str(LAB / "scripts"))
 sys.path.insert(0, str(ATLAS / "scripts"))
 from build_tournament import analyze            # noqa: E402
 from render_map import render                   # noqa: E402
+from render_pretty import render_pretty          # noqa: E402
 
 ONE = ATLAS / "one-offs"
 IMG = ATLAS / "public" / "img" / "oneoff"
@@ -80,8 +81,10 @@ def one(zp: str) -> dict | None:
     # city SITES only (consistent with the sweep maps); founded cities
     # overlaid on top produced confusing "double" pips.
     render(tmp, IMG / f"{slug}.png", 9, caps=caps)
+    render_pretty(tmp, IMG / f"{slug}-pretty.png", 26, caps=caps)
     os.unlink(tmp)
     rec.update({"slug": slug, "file": fn, "img": f"oneoff/{slug}.png",
+                "imgPretty": f"oneoff/{slug}-pretty.png",
                 "caps": caps, "players": pnames, "cityCount": len(cities)})
     print(f"  {fn}: {rec['matchup']} {rec['script']}/{rec['size']} "
           f"sites={rec['citySites']} land={rec['land']} "

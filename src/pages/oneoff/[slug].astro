@@ -18,15 +18,17 @@ const nice = (n: string) => n.replace(/_/g, ' ');
 <Base title={`One-off · ${g.matchup}`}>
   <p class="back"><a href={`${baseUrl}oneoff`}>← all one-offs</a></p>
   <p class="lede">
-    <b>{g.matchup}</b> · <span class="mono">{g.file}</span>. Capitals are
-    the big pink stars; pink dots = city sites. Even-r distance model.
+    <b>{g.matchup}</b> · <span class="mono">{g.file}</span>. High-res
+    tactical view — rivers (blue) and game resource icons shown; pink
+    stars = capitals, pink dots = city sites. Even-r distance model.
   </p>
 
   <div class="grid">
     <figure class="mapfig">
-      <img src={`${baseUrl}img/${g.img}`} alt={`${g.matchup} map`} />
+      <img src={`${baseUrl}img/${g.imgPretty ?? g.img}`} alt={`${g.matchup} map`} />
       <figcaption>
         {g.script} · {g.size} · {g.aspect} — {g.players?.[0]} ▪ {g.players?.[1]}
+        {g.imgPretty && <span> · <a href={`${baseUrl}img/${g.img}`}>mini</a></span>}
       </figcaption>
     </figure>
 
