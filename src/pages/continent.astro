@@ -61,6 +61,17 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
         <div><span>Stone · Quarry</span><b>{r.yield6Mean.stone.toFixed(0)} / {r.yield8Mean.stone.toFixed(0)}</b><i>6+ / 8+</i></div>
       </div>
     </div>
+    <div class="rec__econ">
+      <div class="rec__econ-tag">Capital reach (Slinger ≈ orders; Exploration law assumed — rivers are fast)</div>
+      <div class="rec__grid">
+        <div><span>Crow-flies</span><b>{cd(r).mean.toFixed(0)}</b><i>hex tiles</i></div>
+        <div><span>Land path</span><b>{r.landPath ? r.landPath.mean.toFixed(0) : '—'}</b><i>tiles</i></div>
+        <div><span>Land-connected</span><b>{r.landConnectedPct ?? 100}%</b><i>of maps</i></div>
+        <div><span>Slinger (land)</span><b>{r.slingerTurns.land ?? '—'}</b><i>orders</i></div>
+        <div><span>Slinger (sea ok)</span><b>{r.slingerTurns.water ?? '—'}</b><i>orders</i></div>
+        <div><span>Hatti Slinger</span><b>{r.slingerTurns.hattiLand ?? '—'}</b><i>orders, land</i></div>
+      </div>
+    </div>
   </section>
 
   <h2 class="sec">Every setting — the full decision table</h2>
@@ -93,6 +104,47 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
               <td class="mono">{c.yield6Mean.wood.toFixed(0)}<span class="dim">/</span><b>{c.yield8Mean.wood.toFixed(0)}</b></td>
               <td class="mono">{c.yield6Mean.stone.toFixed(0)}<span class="dim">/</span>{c.yield8Mean.stone.toFixed(0)}</td>
               <td>{c.terrainPctMean.ocean.toFixed(0)}%</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sec">Capital distance &amp; movement — all settings</h2>
+  <p class="note">
+    <b>Crow-flies</b> = straight hex distance (terrain ignored).
+    <b>Land path</b> = shortest walkable-land route (water &amp;
+    mountains impassable); <b>Land-conn</b> = % of maps where a land
+    route exists at all. <b>Slinger</b> = turns ≈ orders for a Slinger
+    (move 2) to march capital→capital, Exploration law assumed (rivers
+    are fast corridors, cost 6); <b>sea</b> allows coastal/anchored-boat
+    water; <b>Hatti</b> ignores hill cost. A proxy — see notes below.
+  </p>
+  <div class="tscroll">
+    <table class="tbl">
+      <thead><tr>
+        <th>Size</th><th>Pt-sym</th><th>Aspect</th>
+        <th>Crow-flies</th><th>Land path</th><th>Land-conn</th><th>Sea path</th>
+        <th>Slinger land</th><th>Slinger sea</th>
+        <th>Hatti land</th><th>Hatti sea</th>
+      </tr></thead>
+      <tbody>
+        {cells.map(c => {
+          const isRec = c.size === r.size && c.pointSymmetry === r.pointSymmetry && c.aspect === r.aspect;
+          const lp = c.landPath, wp = c.waterPath, sl = c.slingerTurns || {};
+          return (
+            <tr class={isRec ? 'is-rec' : ''}>
+              <td>{c.sizeLabel}</td><td>{sym(c.pointSymmetry)}</td><td class="cap">{c.aspect}</td>
+              <td class="mono">{cd(c).mean.toFixed(0)} <span class="dim">±{cd(c).sd.toFixed(0)}</span></td>
+              <td class="mono">{lp ? lp.mean.toFixed(0) : '—'}</td>
+              <td class={c.landConnectedPct != null && c.landConnectedPct < 100 ? 'bad' : ''}>
+                {c.landConnectedPct ?? 100}%</td>
+              <td class="mono">{wp ? wp.mean.toFixed(0) : '—'}</td>
+              <td class="mono"><b>{sl.land ?? '—'}</b></td>
+              <td class="mono">{sl.water ?? '—'}</td>
+              <td class="mono">{sl.hattiLand ?? '—'}</td>
+              <td class="mono">{sl.hattiWater ?? '—'}</td>
             </tr>
           );
         })}
@@ -139,10 +191,21 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
     ))}
   </div>
 
+  <p class="note" style="margin-top:1.4rem;">
+    <b>Movement proxy.</b> Slinger (move 2). Tile cost = terrain + height
+    + vegetation (flat = 1 move; sand/marsh/forest/jungle = 2; hill +1).
+    Mountains/volcanoes impassable. Exploration law assumed → river tiles
+    are fast corridors (cost 6, no crossing penalty). Turns ≈ ceil(path
+    cost ÷ move-per-turn); one Order is spent per turn a unit moves, so
+    turns ≈ orders for a single unit. Ignored: the "always move ≥1
+    tile/turn" rule, movement carry-over, roads, ZoC, embark consuming a
+    full turn (sea is a flat per-tile proxy), improvement adjacency.
+  </p>
   <p class="prov">owmapgen <span class="mono">{atlas.owmapgenSha}</span> ·
     sweep <span class="mono">{atlas.atlasId}</span> ·
-    {atlas.seedsPerCell} seeds/cell · capital distance = hex-grid steps
-    between the 2 player starts (as-the-crow-flies in tiles).</p>
+    {atlas.seedsPerCell} seeds/cell · crow-flies = hex-grid steps between
+    the 2 player starts; land/sea paths = BFS tiles; Slinger = Dijkstra
+    move-cost proxy.</p>
 </Base>
 
 <style>
