@@ -11,14 +11,15 @@ export function getStaticPaths() {
 const { g, resTax } = Astro.props as { g: any; resTax: any };
 const have = (n: string): number => (g.resources || {})[n] || 0;
 const groups: [string, string[]][] = [
-  ['Luxury', resTax.lux], ['Strategic & food', resTax.other]];
+  ['Luxury', resTax.lux], ['Strategic', resTax.strategic],
+  ['Food', resTax.food]];
 const nice = (n: string) => n.replace(/_/g, ' ');
 ---
 <Base title={`One-off · ${g.matchup}`}>
   <p class="back"><a href={`${baseUrl}oneoff`}>← all one-offs</a></p>
   <p class="lede">
     <b>{g.matchup}</b> · <span class="mono">{g.file}</span>. Capitals are
-    the big pink stars; pink dots = founded cities. Even-r distance model.
+    the big pink stars; pink dots = city sites. Even-r distance model.
   </p>
 
   <div class="grid">

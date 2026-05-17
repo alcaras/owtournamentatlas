@@ -22,9 +22,9 @@ IMG = ATLAS / "public" / "img" / "oneoff"
 
 # Curated taxonomy (resource.xml carries no luxury flag). Display names
 # match build_tournament's RESOURCE_*.replace().title().
-RES_OTHER = ["Marble", "Ore", "Horse", "Wheat", "Barley", "Sorghum",
-             "Cattle", "Sheep", "Pig", "Goat", "Camel", "Elephant",
-             "Game", "Fish", "Crab"]
+RES_STRATEGIC = ["Marble", "Ore", "Horse"]
+RES_FOOD = ["Wheat", "Barley", "Sorghum", "Cattle", "Sheep", "Pig",
+            "Goat", "Camel", "Elephant", "Game", "Fish", "Crab"]
 RES_LUX = ["Salt", "Wine", "Olive", "Incense", "Dye", "Honey", "Citrus",
            "Lavender", "Fur", "Gem", "Gold", "Silver", "Pearl", "Silk",
            "Spices", "Ivory", "Jade", "Ebony", "Tea", "Porcelain",
@@ -77,7 +77,9 @@ def one(zp: str) -> dict | None:
     with tempfile.NamedTemporaryFile("wb", suffix=".xml", delete=False) as tf:
         tf.write(xbytes)
         tmp = tf.name
-    render(tmp, IMG / f"{slug}.png", 9, caps=caps, cities=cities)
+    # city SITES only (consistent with the sweep maps); founded cities
+    # overlaid on top produced confusing "double" pips.
+    render(tmp, IMG / f"{slug}.png", 9, caps=caps)
     os.unlink(tmp)
     rec.update({"slug": slug, "file": fn, "img": f"oneoff/{slug}.png",
                 "caps": caps, "players": pnames, "cityCount": len(cities)})
@@ -96,7 +98,8 @@ def main():
     recs = [r for r in (one(z) for z in zps) if r]
     (ATLAS / "src" / "data" / "oneoffs.json").write_text(
         json.dumps({"maps": recs,
-                    "resTax": {"lux": RES_LUX, "other": RES_OTHER}},
+                    "resTax": {"lux": RES_LUX, "strategic": RES_STRATEGIC,
+                               "food": RES_FOOD}},
                    indent=1, sort_keys=True) + "\n")
     print(f"→ oneoffs.json ({len(recs)} maps)")
     return 0

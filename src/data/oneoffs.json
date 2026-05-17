@@ -264,6 +264,20 @@
   }
  ],
  "resTax": {
+  "food": [
+   "Wheat",
+   "Barley",
+   "Sorghum",
+   "Cattle",
+   "Sheep",
+   "Pig",
+   "Goat",
+   "Camel",
+   "Elephant",
+   "Game",
+   "Fish",
+   "Crab"
+  ],
   "lux": [
    "Salt",
    "Wine",
@@ -292,22 +306,10 @@
    "Silphium",
    "Wootz_Steel"
   ],
-  "other": [
+  "strategic": [
    "Marble",
    "Ore",
-   "Horse",
-   "Wheat",
-   "Barley",
-   "Sorghum",
-   "Cattle",
-   "Sheep",
-   "Pig",
-   "Goat",
-   "Camel",
-   "Elephant",
-   "Game",
-   "Fish",
-   "Crab"
+   "Horse"
   ]
  }
 }
