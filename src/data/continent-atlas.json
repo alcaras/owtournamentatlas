@@ -1,0 +1,145 @@
+{
+  "generatedAt": "placeholder",
+  "owmapgenSha": "pending",
+  "atlasId": "pending",
+  "seedsPerCell": 30,
+  "target": [
+    18,
+    23
+  ],
+  "accept": [
+    15,
+    25
+  ],
+  "script": "Continent",
+  "recommended": {
+    "size": "tiny",
+    "sizeLabel": "Tiny",
+    "pointSymmetry": false,
+    "aspect": "square",
+    "dims": "46x44",
+    "mean": 23.2,
+    "sd": 2.3,
+    "min": 19,
+    "max": 27,
+    "median": 23.2,
+    "n": 30,
+    "pctTarget": 57,
+    "pctAccept": 83,
+    "capitalDistance": {
+      "mean": 33.0,
+      "sd": 4.0,
+      "min": 22,
+      "max": 44,
+      "median": 33,
+      "n": 30
+    },
+    "tribeMean": 8.0,
+    "resourceTotalMean": 70.0,
+    "terrainPctMean": {
+      "water": 57,
+      "ocean": 56,
+      "lake": 1,
+      "hill": 12,
+      "mountain": 2.0,
+      "volcano": 1,
+      "flat": 40,
+      "river": 4,
+      "forest": 6,
+      "jungle": 0,
+      "scrub": 1
+    },
+    "resourcesMeanPerMap": {
+      "RESOURCE_HORSE": 6.0,
+      "RESOURCE_PEARL": 5.0
+    },
+    "tiles": 3364
+  },
+  "cells": [
+    {
+      "size": "smallest",
+      "sizeLabel": "Duel",
+      "pointSymmetry": false,
+      "aspect": "square",
+      "dims": "46x44",
+      "mean": 13.7,
+      "sd": 1.9,
+      "min": 9,
+      "max": 17,
+      "median": 13.7,
+      "n": 30,
+      "pctTarget": 30,
+      "pctAccept": 80,
+      "capitalDistance": {
+        "mean": 33.0,
+        "sd": 4.0,
+        "min": 22,
+        "max": 44,
+        "median": 33,
+        "n": 30
+      },
+      "tribeMean": 8.0,
+      "resourceTotalMean": 70.0,
+      "terrainPctMean": {
+        "water": 57,
+        "ocean": 56,
+        "lake": 1,
+        "hill": 12,
+        "mountain": 2.0,
+        "volcano": 1,
+        "flat": 40,
+        "river": 4,
+        "forest": 6,
+        "jungle": 0,
+        "scrub": 1
+      },
+      "resourcesMeanPerMap": {
+        "RESOURCE_HORSE": 6.0,
+        "RESOURCE_PEARL": 5.0
+      }
+    },
+    {
+      "size": "tiny",
+      "sizeLabel": "Tiny",
+      "pointSymmetry": false,
+      "aspect": "square",
+      "dims": "46x44",
+      "mean": 23.2,
+      "sd": 2.3,
+      "min": 19,
+      "max": 27,
+      "median": 23.2,
+      "n": 30,
+      "pctTarget": 57,
+      "pctAccept": 83,
+      "capitalDistance": {
+        "mean": 33.0,
+        "sd": 4.0,
+        "min": 22,
+        "max": 44,
+        "median": 33,
+        "n": 30
+      },
+      "tribeMean": 8.0,
+      "resourceTotalMean": 70.0,
+      "terrainPctMean": {
+        "water": 57,
+        "ocean": 56,
+        "lake": 1,
+        "hill": 12,
+        "mountain": 2.0,
+        "volcano": 1,
+        "flat": 40,
+        "river": 4,
+        "forest": 6,
+        "jungle": 0,
+        "scrub": 1
+      },
+      "resourcesMeanPerMap": {
+        "RESOURCE_HORSE": 6.0,
+        "RESOURCE_PEARL": 5.0
+      }
+    }
+  ],
+  "previews": []
+}

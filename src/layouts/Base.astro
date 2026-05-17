@@ -1,0 +1,64 @@
+---
+interface Props { title: string; description?: string; }
+const { title, description } = Astro.props;
+const desc = description ?? "Empirical Old World map analysis for tournament organizers — city-site counts, capital distance, terrain and resources across map size, point-symmetry and aspect.";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · OW Tournament Map Atlas</title>
+    <meta name="description" content={desc} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style is:global>
+      :root {
+        --bg: #0e0f12; --bg-elev: #16181d; --border: #2a2d35;
+        --border-strong: #3a3e48; --text: #e8e4da; --text-soft: #b9b3a6;
+        --text-faint: #847e72; --text-dim: #5f5a50;
+        --gold: #d8b465; --gold-soft: #c9a04a; --gold-deep: #6e5a2c;
+        --font-display: 'Cormorant Garamond', Georgia, serif;
+        --font-ui: 'Inter', system-ui, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: var(--bg); color: var(--text);
+        font-family: var(--font-ui); font-size: 15px; line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+      a { color: var(--gold-soft); text-decoration: none; }
+      a:hover { color: var(--gold); text-decoration: underline; }
+      h1, h2, h3 { font-family: var(--font-display); color: var(--text); margin: 0; font-weight: 600; }
+      .hdr {
+        display: flex; align-items: baseline; gap: 0.8rem;
+        border-bottom: 1px solid var(--gold-deep); padding-bottom: 0.6rem; margin-bottom: 0.4rem;
+      }
+      .hdr h1 { font-size: 2rem; }
+      .hdr__tag {
+        font-family: var(--font-ui); font-size: 0.62rem; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--gold-soft);
+      }
+      footer.foot {
+        margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border);
+        font-size: 0.72rem; color: var(--text-faint); font-family: var(--font-mono);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hdr">
+        <h1>{title}</h1>
+        <span class="hdr__tag">Old World · Tournament Map Atlas</span>
+      </header>
+      <slot />
+      <footer class="foot">
+        Generated from owmapgen (the game's own map-gen code, run headless).
+        Independent fan project — not affiliated with Mohawk Games.
+      </footer>
+    </div>
+  </body>
+</html>

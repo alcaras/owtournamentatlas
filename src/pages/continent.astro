@@ -1,0 +1,204 @@
+---
+import Base from '../layouts/Base.astro';
+import atlas from '../data/continent-atlas.json';
+
+const base = import.meta.env.BASE_URL;
+const r = atlas.recommended;
+const [tlo, thi] = atlas.target;
+const [alo, ahi] = atlas.accept;
+
+const TERRAIN_ROWS: [string, string][] = [
+  ['ocean', 'Ocean / coast'], ['lake', 'Lakes'], ['river', 'River tiles'],
+  ['forest', 'Forest'], ['jungle', 'Jungle'], ['scrub', 'Scrub'],
+  ['flat', 'Flat land'], ['hill', 'Hills'], ['mountain', 'Mountains'],
+  ['volcano', 'Volcanoes'],
+];
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const sym = (b: boolean) => (b ? 'on' : '—');
+const cd = (c: any) => c.capitalDistance;
+
+// cells sorted: size, sym, aspect
+const aspOrd: Record<string, number> = { square: 0, wide: 1, ultrawide: 2 };
+const cells = [...atlas.cells].sort((a, b) =>
+  (a.size === b.size ? 0 : a.size === 'smallest' ? -1 : 1) ||
+  (Number(a.pointSymmetry) - Number(b.pointSymmetry)) ||
+  (aspOrd[a.aspect] - aspOrd[b.aspect]));
+
+const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>)
+  .sort((a, b) => b[1] - a[1]);
+---
+
+<Base title="Continent">
+  <p style="font-family:var(--font-display);font-style:italic;font-size:1.05rem;color:var(--text-soft);max-width:70ch;margin:0.6rem 0 1.4rem;">
+    Tournament maps are blind &amp; random — players don't see them in
+    advance. So the question isn't "which seed" but "which
+    <b>size + aspect + point-symmetry</b> makes a random Continent map most
+    likely to land in the target city-site band ({tlo}–{thi}, acceptable
+    {alo}–{ahi})." Every figure below is measured over {atlas.seedsPerCell}
+    generated maps per setting (2 players, mirror always on).
+  </p>
+
+  <section class="rec">
+    <div class="rec__tag">Recommended for {tlo}–{thi} city sites</div>
+    <div class="rec__big">
+      {r.sizeLabel} · {cap(r.aspect)} · point-symmetry {sym(r.pointSymmetry)}
+    </div>
+    <div class="rec__grid">
+      <div><span>City sites</span><b>{r.mean.toFixed(1)} ± {r.sd.toFixed(1)}</b><i>{r.min}–{r.max}</i></div>
+      <div><span>In {tlo}–{thi}</span><b>{r.pctTarget}%</b><i>of maps</i></div>
+      <div><span>In {alo}–{ahi}</span><b>{r.pctAccept}%</b><i>of maps</i></div>
+      <div><span>Capital dist.</span><b>{cd(r).mean.toFixed(0)} ± {cd(r).sd.toFixed(0)}</b><i>{cd(r).min}–{cd(r).max} hex</i></div>
+      <div><span>Map size</span><b>{r.dims}</b><i>tiles</i></div>
+      <div><span>Ocean</span><b>{r.terrainPctMean.ocean.toFixed(0)}%</b><i>of map</i></div>
+    </div>
+  </section>
+
+  <h2 class="sec">Every setting — the full decision table</h2>
+  <p class="note">All {cells.length} combinations. The recommended row is highlighted.
+    “Cap.dist” = hex-grid distance between the two capitals.</p>
+  <div class="tscroll">
+    <table class="tbl">
+      <thead><tr>
+        <th>Size</th><th>Pt-sym</th><th>Aspect</th><th>Dims</th>
+        <th>City sites</th><th>{tlo}–{thi}</th><th>{alo}–{ahi}</th>
+        <th>Cap.dist (hex)</th><th>Ocean</th><th>River</th><th>Forest</th><th>Mtn</th>
+      </tr></thead>
+      <tbody>
+        {cells.map(c => {
+          const isRec = c.size === r.size && c.pointSymmetry === r.pointSymmetry && c.aspect === r.aspect;
+          return (
+            <tr class={isRec ? 'is-rec' : ''}>
+              <td>{c.sizeLabel}</td>
+              <td>{sym(c.pointSymmetry)}</td>
+              <td class="cap">{c.aspect}</td>
+              <td class="mono">{c.dims}</td>
+              <td><b>{c.mean.toFixed(1)}</b> <span class="dim">±{c.sd.toFixed(1)}</span></td>
+              <td class={c.pctTarget >= 40 ? 'good' : c.pctTarget >= 20 ? '' : 'bad'}>{c.pctTarget}%</td>
+              <td>{c.pctAccept}%</td>
+              <td class="mono">{cd(c).mean.toFixed(0)}<span class="dim"> ±{cd(c).sd.toFixed(0)} [{cd(c).min}-{cd(c).max}]</span></td>
+              <td>{c.terrainPctMean.ocean.toFixed(0)}%</td>
+              <td>{c.terrainPctMean.river.toFixed(0)}%</td>
+              <td>{c.terrainPctMean.forest.toFixed(0)}%</td>
+              <td>{c.terrainPctMean.mountain.toFixed(1)}%</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two">
+    <div>
+      <h2 class="sec">Terrain — recommended variant</h2>
+      <table class="tbl tbl--kv">
+        <tbody>
+          {TERRAIN_ROWS.map(([k, label]) => (
+            <tr><td>{label}</td>
+              <td class="mono">{(r.terrainPctMean as any)[k].toFixed(2)}%</td>
+              <td class="dim mono">{(((r.terrainPctMean as any)[k] / 100) * r.tiles).toFixed(0)} tiles</td>
+            </tr>
+          ))}
+          <tr><td>Tribe sites</td><td class="mono">{r.tribeMean.toFixed(1)}</td><td class="dim">avg / map</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2 class="sec">Resources — recommended variant</h2>
+      <p class="note">Mean count per map, all {resSorted.length} types present.</p>
+      <table class="tbl tbl--kv">
+        <tbody>
+          {resSorted.map(([k, v]) => (
+            <tr><td class="cap">{k.replace('RESOURCE_', '').toLowerCase().replace(/_/g, ' ')}</td>
+              <td class="mono">{(v as number).toFixed(2)}</td></tr>
+          ))}
+          <tr class="is-rec"><td><b>Total</b></td><td class="mono"><b>{r.resourceTotalMean.toFixed(1)}</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="sec">What it looks like — {atlas.previews.length} random {r.sizeLabel} / {cap(r.aspect)} maps</h2>
+  <p class="note">Recommended variant, {atlas.previews.length} different seeds.
+    Gold pips = city sites · red = tribe sites · terrain coloured like the minimap.</p>
+  <div class="gallery">
+    {atlas.previews.map((p: string, i: number) => (
+      <figure><img src={`${base}img/${p}`} alt={`Continent sample ${i + 1}`} loading="lazy" /></figure>
+    ))}
+  </div>
+
+  <p class="prov">owmapgen <span class="mono">{atlas.owmapgenSha}</span> ·
+    sweep <span class="mono">{atlas.atlasId}</span> ·
+    {atlas.seedsPerCell} seeds/cell · capital distance = hex-grid steps
+    between the 2 player starts (as-the-crow-flies in tiles).</p>
+</Base>
+
+<style>
+  .rec {
+    background: var(--bg-elev); border: 1px solid var(--gold-deep);
+    border-radius: 6px; padding: 1.1rem 1.3rem; margin-bottom: 2rem;
+  }
+  .rec__tag {
+    font-family: var(--font-ui); font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold-soft);
+  }
+  .rec__big {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.9rem;
+    color: var(--gold); margin: 0.2rem 0 0.9rem;
+  }
+  .rec__grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.8rem 1.4rem;
+  }
+  .rec__grid div { display: flex; flex-direction: column; }
+  .rec__grid span {
+    font-family: var(--font-ui); font-size: 0.58rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .rec__grid b { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); }
+  .rec__grid i { font-style: normal; font-size: 0.72rem; color: var(--text-faint); }
+
+  .sec {
+    font-size: 1.35rem; margin: 2rem 0 0.3rem;
+    border-bottom: 1px solid var(--gold-deep); padding-bottom: 0.3rem;
+  }
+  .note { font-size: 0.82rem; color: var(--text-faint); margin: 0.3rem 0 0.7rem; }
+
+  .tscroll { overflow-x: auto; }
+  .tbl { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .tbl thead th {
+    font-family: var(--font-ui); font-size: 0.56rem; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--text-dim); font-weight: 600;
+    text-align: left; padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .tbl td { padding: 0.36rem 0.6rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .tbl tbody tr:hover td { background: #1c1f25; }
+  .tbl tr.is-rec td { background: #241f12; }
+  .tbl tr.is-rec:hover td { background: #2c2615; }
+  .tbl--kv { font-size: 0.86rem; }
+  .tbl--kv td:first-child { color: var(--text-soft); }
+  .mono { font-family: var(--font-mono); font-size: 0.82em; }
+  .cap { text-transform: capitalize; }
+  .dim { color: var(--text-faint); }
+  .good { color: #7fb069; font-weight: 600; }
+  .bad { color: #b06a5f; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2.5rem; align-items: start; }
+  @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+
+  .gallery {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.6rem; margin-top: 0.6rem;
+  }
+  .gallery figure {
+    margin: 0; background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 4px; padding: 0.3rem;
+  }
+  .gallery img { width: 100%; height: auto; display: block; image-rendering: pixelated; border-radius: 2px; }
+
+  .prov {
+    margin-top: 1.6rem; font-size: 0.72rem; color: var(--text-faint);
+    font-family: var(--font-mono); border-top: 1px solid var(--border); padding-top: 0.7rem;
+  }
+</style>

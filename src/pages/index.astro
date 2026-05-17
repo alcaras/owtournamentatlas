@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import atlas from '../data/continent-atlas.json';
+const base = import.meta.env.BASE_URL;
+const r = atlas.recommended;
+const [tlo, thi] = atlas.target;
+---
+<Base title="Map Atlas">
+  <p style="font-family:var(--font-display);font-style:italic;font-size:1.05rem;color:var(--text-soft);max-width:68ch;margin:0.7rem 0 1.6rem;">
+    For tournament organizers: empirical, blind-random map analysis of
+    Old World map scripts — measured by running the game's own
+    generation code thousands of times. Pick the size, aspect ratio and
+    point-symmetry that reliably produce the city-site count you want.
+  </p>
+
+  <a class="card" href={`${base}continent`}>
+    <div class="card__name">Continent</div>
+    <div class="card__rec">
+      Recommended for {tlo}–{thi} sites: <b>{r.sizeLabel} · {r.aspect} ·
+      point-sym {r.pointSymmetry ? 'on' : 'off'}</b>
+      — {r.pctTarget}% of maps in range
+    </div>
+    <div class="card__go">View full analysis →</div>
+  </a>
+
+  <p class="soon">More scripts coming: Archipelago, Inland Sea, Donut,
+    Hardwood Forest, Mountain Pass, Wetlands, the DOTA variants and more.</p>
+
+  <style>
+    .card {
+      display: block; background: var(--bg-elev); border: 1px solid var(--gold-deep);
+      border-radius: 6px; padding: 1.2rem 1.4rem; text-decoration: none; color: inherit;
+      max-width: 560px; transition: border-color .15s, transform .15s;
+    }
+    .card:hover { border-color: var(--gold); transform: translateY(-1px); text-decoration: none; }
+    .card__name { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; color: var(--text); }
+    .card__rec { color: var(--text-soft); font-size: 0.9rem; margin: 0.35rem 0 0.6rem; }
+    .card__rec b { color: var(--gold); }
+    .card__go { font-family: var(--font-ui); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-soft); }
+    .soon { margin-top: 1.5rem; font-size: 0.82rem; color: var(--text-faint); font-style: italic; font-family: var(--font-display); }
+  </style>
+</Base>
