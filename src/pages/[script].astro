@@ -63,7 +63,42 @@ const cd = (c: any) => c.capitalDistance;
   </div>
   <p class="prov">owmapgen <span class="mono">{atlas.owmapgenSha}</span> ·
     sweep <span class="mono">{atlas.atlasId}</span> ·
-    {atlas.seedsPerCell} seeds/cell · even-r adjacency (game-authoritative).</p>
+    {atlas.seedsPerCell} seeds/cell · even-r adjacency (game-authoritative)
+    · click a header to sort.</p>
+
+  <script is:inline>
+    (function () {
+      function val(cell) {
+        var t = (cell.textContent || '').trim();
+        if (t === '' || t === '—') return -Infinity;
+        var m = t.match(/-?\d+(\.\d+)?/);
+        return m ? parseFloat(m[0]) : t.toLowerCase();
+      }
+      document.querySelectorAll('table.tbl').forEach(function (tbl) {
+        var ths = tbl.tHead.rows[0].cells;
+        Array.prototype.forEach.call(ths, function (th, i) {
+          th.addEventListener('click', function () {
+            var asc = th.dataset.asc !== 'true';
+            Array.prototype.forEach.call(ths, function (h) {
+              h.removeAttribute('data-asc');
+              h.textContent = h.textContent.replace(/[ ▲▼]+$/, '');
+            });
+            th.dataset.asc = asc;
+            th.textContent = th.textContent + (asc ? ' ▲' : ' ▼');
+            var tb = tbl.tBodies[0];
+            Array.prototype.slice.call(tb.rows).sort(function (a, b) {
+              var x = val(a.cells[i]), y = val(b.cells[i]);
+              if (typeof x === 'string' || typeof y === 'string') {
+                x = String(x); y = String(y);
+                return asc ? x.localeCompare(y) : y.localeCompare(x);
+              }
+              return asc ? x - y : y - x;
+            }).forEach(function (r) { tb.appendChild(r); });
+          });
+        });
+      });
+    })();
+  </script>
 
   <style>
     .lede { font-family: var(--font-display); font-style: italic; font-size: 1rem;
@@ -72,7 +107,9 @@ const cd = (c: any) => c.capitalDistance;
     .tbl { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
     .tbl thead th { font-family: var(--font-ui); font-size: 0.56rem; letter-spacing: 0.13em;
       text-transform: uppercase; color: var(--text-dim); font-weight: 600; text-align: left;
-      padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--border-strong); white-space: nowrap;
+      cursor: pointer; user-select: none; }
+    .tbl thead th:hover { color: var(--gold-soft); }
     .tbl td { padding: 0.38rem 0.6rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
     .tbl tbody tr:hover td { background: #1c1f25; }
     .sep { border-left: 2px solid var(--gold-deep); }
