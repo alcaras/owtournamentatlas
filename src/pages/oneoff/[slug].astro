@@ -48,6 +48,8 @@ const nice = (n: string) => n.replace(/_/g, ' ');
 
       <h2>Map</h2>
       <table class="kv">
+        <tr><td>Playable tiles</td><td><b>{g.tiles}</b>
+          {g.boundaryTiles ? <span class="mono"> (+{g.boundaryTiles} OOB)</span> : null}</td></tr>
         <tr><td>City sites</td><td><b>{g.citySites}</b></td></tr>
         <tr><td>Founded cities</td><td>{g.cityCount}</td></tr>
         <tr><td>Tribes ({g.tribeCount})</td><td>{(g.tribes||[]).join(', ') || '—'}</td></tr>

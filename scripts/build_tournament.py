@@ -146,6 +146,8 @@ def analyze(zp: str) -> dict | None:
         "script": r.attrib.get("MapClass", "").replace("MAPCLASS_MapScript", "").replace("MAPCLASS_", ""),
         "size": r.attrib.get("MapSize", "").replace("MAPSIZE_", ""),
         "aspect": r.attrib.get("MapAspectRatio", "").replace("MAPASPECTRATIO_", ""),
+        "tiles": pm.get("tiles"),
+        "boundaryTiles": pm.get("boundaryTiles"),
         "citySites": cs,
         "tribeCount": len(tribes),
         "tribes": tribes,

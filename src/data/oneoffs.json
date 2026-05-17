@@ -2,6 +2,7 @@
  "maps": [
   {
    "aspect": "SQUARE",
+   "boundaryTiles": 390,
    "caps": [
     [
      38,
@@ -16,8 +17,8 @@
    "citySites": 12,
    "crow": 42,
    "file": "OW-Yuezhi-Year68-2026-05-16-20-40-32",
-   "forestPct": 6.1,
-   "hillPct": 9.5,
+   "forestPct": 7.5,
+   "hillPct": 11.8,
    "id": "OW-Yuezhi-Year68-2026-05-16-20-40-32",
    "img": "oneoff/ow-yuezhi-year68-2026-05-16-20-40-32.png",
    "imgPretty": "oneoff/ow-yuezhi-year68-2026-05-16-20-40-32-pretty.png",
@@ -25,8 +26,8 @@
    "land": 42,
    "landConnected": true,
    "matchup": "ninja v sion",
-   "mountainPct": 9.0,
-   "oceanPct": 54.0,
+   "mountainPct": 11.1,
+   "oceanPct": 43.0,
    "players": [
     "ninja",
     "sion"
@@ -64,6 +65,7 @@
    "slingerLand": 20,
    "slingerSea": 20,
    "slug": "ow-yuezhi-year68-2026-05-16-20-40-32",
+   "tiles": 1634,
    "tribeCount": 3,
    "tribes": [
     "Gauls",
@@ -109,6 +111,7 @@
   },
   {
    "aspect": "SQUARE",
+   "boundaryTiles": 351,
    "caps": [
     [
      40,
@@ -123,8 +126,8 @@
    "citySites": 18,
    "crow": 52,
    "file": "OW-Tamilakam-Year59-2026-04-20-15-31-43",
-   "forestPct": 8.7,
-   "hillPct": 21.4,
+   "forestPct": 8.2,
+   "hillPct": 20.6,
    "id": "OW-Tamilakam-Year59-2026-04-20-15-31-43",
    "img": "oneoff/ow-tamilakam-year59-2026-04-20-15-31-43.png",
    "imgPretty": "oneoff/ow-tamilakam-year59-2026-04-20-15-31-43-pretty.png",
@@ -132,8 +135,8 @@
    "land": 58,
    "landConnected": true,
    "matchup": "Aran v Sion",
-   "mountainPct": 11.0,
-   "oceanPct": 19.9,
+   "mountainPct": 10.8,
+   "oceanPct": 24.1,
    "players": [
     "Aran",
     "Sion"
@@ -170,6 +173,7 @@
    "slingerLand": 36,
    "slingerSea": 24,
    "slug": "ow-tamilakam-year59-2026-04-20-15-31-43",
+   "tiles": 1673,
    "tribeCount": 4,
    "tribes": [
     "Danes",
@@ -178,44 +182,45 @@
     "Vandals"
    ],
    "yield10": {
-    "food": 21,
+    "food": 13,
     "iron": 0,
-    "stone": 248,
+    "stone": 183,
     "wood": 0
    },
    "yield5": {
-    "food": 1170,
-    "iron": 1452,
-    "stone": 1459,
-    "wood": 174
+    "food": 852,
+    "iron": 1111,
+    "stone": 1116,
+    "wood": 135
    },
    "yield6": {
-    "food": 454,
-    "iron": 434,
-    "stone": 814,
-    "wood": 10
+    "food": 329,
+    "iron": 344,
+    "stone": 680,
+    "wood": 8
    },
    "yield7": {
-    "food": 444,
-    "iron": 434,
-    "stone": 520,
-    "wood": 10
+    "food": 319,
+    "iron": 344,
+    "stone": 420,
+    "wood": 8
    },
    "yield8": {
-    "food": 118,
-    "iron": 434,
-    "stone": 434,
-    "wood": 10
+    "food": 99,
+    "iron": 344,
+    "stone": 349,
+    "wood": 8
    },
    "yield9": {
-    "food": 109,
+    "food": 90,
     "iron": 6,
-    "stone": 388,
+    "stone": 310,
     "wood": 0
    }
   },
   {
    "aspect": "SQUARE",
+   "boundaryTiles": 1388,
    "caps": [
     [
      40,
@@ -230,8 +235,8 @@
    "citySites": 12,
    "crow": 42,
    "file": "OW-Aksum-Year85-2026-05-17-12-09-50",
-   "forestPct": 6.8,
-   "hillPct": 16.0,
+   "forestPct": 4.9,
+   "hillPct": 25.5,
    "id": "OW-Aksum-Year85-2026-05-17-12-09-50",
    "img": "oneoff/ow-aksum-year85-2026-05-17-12-09-50.png",
    "imgPretty": "oneoff/ow-aksum-year85-2026-05-17-12-09-50-pretty.png",
@@ -239,8 +244,8 @@
    "land": 42,
    "landConnected": true,
    "matchup": "Aran v Siontific",
-   "mountainPct": 29.6,
-   "oceanPct": 0.8,
+   "mountainPct": 34.7,
+   "oceanPct": 1.3,
    "players": [
     "Aran",
     "Siontific"
@@ -277,6 +282,7 @@
    "slingerLand": 26,
    "slingerSea": 26,
    "slug": "ow-aksum-year85-2026-05-17-12-09-50",
+   "tiles": 1212,
    "tribeCount": 2,
    "tribes": [
     "Gauls",
@@ -285,37 +291,37 @@
    "yield10": {
     "food": 29,
     "iron": 0,
-    "stone": 1000,
+    "stone": 517,
     "wood": 0
    },
    "yield5": {
-    "food": 1528,
-    "iron": 2268,
-    "stone": 2215,
-    "wood": 176
+    "food": 750,
+    "iron": 1046,
+    "stone": 984,
+    "wood": 57
    },
    "yield6": {
-    "food": 940,
-    "iron": 416,
-    "stone": 1936,
-    "wood": 15
+    "food": 536,
+    "iron": 309,
+    "stone": 824,
+    "wood": 0
    },
    "yield7": {
-    "food": 935,
-    "iron": 416,
-    "stone": 1442,
-    "wood": 15
+    "food": 531,
+    "iron": 309,
+    "stone": 726,
+    "wood": 0
    },
    "yield8": {
-    "food": 217,
-    "iron": 416,
-    "stone": 1308,
-    "wood": 15
+    "food": 86,
+    "iron": 309,
+    "stone": 662,
+    "wood": 0
    },
    "yield9": {
-    "food": 211,
+    "food": 80,
     "iron": 2,
-    "stone": 1190,
+    "stone": 620,
     "wood": 0
    }
   }
