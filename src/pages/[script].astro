@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import atlas from '../data/atlas-all.json';
+
+export function getStaticPaths() {
+  return atlas.scripts.map(s => ({ params: { script: s.slug }, props: { s } }));
+}
+const { s } = Astro.props;
+
+const aspOrd: Record<string, number> = { square: 0, wide: 1, ultrawide: 2 };
+const cells = [...s.cells].sort((a: any, b: any) =>
+  (a.size === b.size ? 0 : a.size === 'smallest' ? -1 : 1) ||
+  (Number(a.pointSymmetry) - Number(b.pointSymmetry)) ||
+  (aspOrd[a.aspect] - aspOrd[b.aspect]));
+const sym = (b: boolean) => (b ? 'on' : '—');
+const fd = (o: any) => o == null ? '—'
+  : `<b>${o.mean.toFixed(0)}</b> <span class="dim">±${o.sd.toFixed(0)} [${o.min}–${o.max}]</span>`;
+const cd = (c: any) => c.capitalDistance;
+---
+<Base title={s.label}>
+  <p class="lede">
+    Blind random maps — {atlas.seedsPerCell} per setting (2 players,
+    mirror on), even-r model (game-verified). Distance cells:
+    <b>avg ±sd [min–max]</b>. <b>Crow</b> = straight hex (terrain
+    ignored). <b>Land</b> = walkable-land route; <b>Conn</b> = % of maps
+    with any land route. <b>Scout</b> = orders for a Scout (move 3) to
+    reach the other capital (first contact). <b>Slinger</b> (move 2):
+    land / sea (coastal) / Hatti (ignores hill). Exploration law assumed.
+  </p>
+  <div class="tscroll">
+    <table class="tbl">
+      <thead><tr>
+        <th>Size</th><th>Pt-sym</th><th>Aspect</th><th>Dims</th>
+        <th>City sites (avg ±sd)</th><th>Med</th><th>Min–Max</th>
+        <th class="sep">Crow</th><th>Land</th><th>Conn</th>
+        <th>Scout</th><th>Sl land</th><th>Sl sea</th><th>Sl Hatti</th>
+      </tr></thead>
+      <tbody>
+        {cells.map((c: any) => {
+          const sl = c.slingerTurns || {};
+          return (
+            <tr>
+              <td>{c.sizeLabel}</td>
+              <td>{sym(c.pointSymmetry)}</td>
+              <td class="cap">{c.aspect}</td>
+              <td class="mono">{c.dims}</td>
+              <td><b>{c.mean.toFixed(1)}</b> <span class="dim">±{c.sd.toFixed(1)}</span></td>
+              <td class="mono">{c.median}</td>
+              <td class="mono">{c.min}–{c.max}</td>
+              <td class="mono sep" set:html={fd(cd(c))} />
+              <td class="mono" set:html={fd(c.landPath)} />
+              <td class={c.landConnectedPct != null && c.landConnectedPct < 100 ? 'bad' : ''}>
+                {c.landConnectedPct ?? 100}%</td>
+              <td class="mono" set:html={fd(c.scoutOrders)} />
+              <td class="mono" set:html={fd(sl.land)} />
+              <td class="mono" set:html={fd(sl.sea)} />
+              <td class="mono" set:html={fd(sl.hatti)} />
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+  <p class="prov">owmapgen <span class="mono">{atlas.owmapgenSha}</span> ·
+    sweep <span class="mono">{atlas.atlasId}</span> ·
+    {atlas.seedsPerCell} seeds/cell · even-r adjacency (game-authoritative).</p>
+
+  <style>
+    .lede { font-family: var(--font-display); font-style: italic; font-size: 1rem;
+      line-height: 1.55; color: var(--text-soft); max-width: 78ch; margin: 0.6rem 0 1.4rem; }
+    .tscroll { overflow-x: auto; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .tbl thead th { font-family: var(--font-ui); font-size: 0.56rem; letter-spacing: 0.13em;
+      text-transform: uppercase; color: var(--text-dim); font-weight: 600; text-align: left;
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
+    .tbl td { padding: 0.38rem 0.6rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .tbl tbody tr:hover td { background: #1c1f25; }
+    .sep { border-left: 2px solid var(--gold-deep); }
+    .mono { font-family: var(--font-mono); font-size: 0.82em; }
+    .cap { text-transform: capitalize; }
+    .dim { color: var(--text-faint); }
+    .bad { color: #b06a5f; font-weight: 600; }
+    .prov { margin-top: 1.2rem; font-size: 0.72rem; color: var(--text-faint);
+      font-family: var(--font-mono); border-top: 1px solid var(--border); padding-top: 0.7rem; }
+  </style>
+</Base>
