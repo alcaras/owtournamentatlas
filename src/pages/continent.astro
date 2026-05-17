@@ -52,6 +52,15 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
       <div><span>Map size</span><b>{r.dims}</b><i>tiles</i></div>
       <div><span>Ocean</span><b>{r.terrainPctMean.ocean.toFixed(0)}%</b><i>of map</i></div>
     </div>
+    <div class="rec__econ">
+      <div class="rec__econ-tag">Land tiles giving 6+ / 8+ yield (best valid improvement, avg per map)</div>
+      <div class="rec__grid">
+        <div><span>Food · Farm</span><b>{r.yield6Mean.food.toFixed(0)} / {r.yield8Mean.food.toFixed(0)}</b><i>6+ / 8+</i></div>
+        <div><span>Iron · Mine</span><b>{r.yield6Mean.iron.toFixed(0)} / {r.yield8Mean.iron.toFixed(0)}</b><i>6+ / 8+</i></div>
+        <div><span>Wood · Lumber</span><b>{r.yield6Mean.wood.toFixed(0)} / {r.yield8Mean.wood.toFixed(0)}</b><i>6+ / 8+</i></div>
+        <div><span>Stone · Quarry</span><b>{r.yield6Mean.stone.toFixed(0)} / {r.yield8Mean.stone.toFixed(0)}</b><i>6+ / 8+</i></div>
+      </div>
+    </div>
   </section>
 
   <h2 class="sec">Every setting — the full decision table</h2>
@@ -62,7 +71,9 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
       <thead><tr>
         <th>Size</th><th>Pt-sym</th><th>Aspect</th><th>Dims</th>
         <th>City sites</th><th>{tlo}–{thi}</th><th>{alo}–{ahi}</th>
-        <th>Cap.dist (hex)</th><th>Ocean</th><th>River</th><th>Forest</th><th>Mtn</th>
+        <th>Cap.dist (hex)</th>
+        <th>Food 6/8+</th><th>Iron 6/8+</th><th>Wood 6/8+</th><th>Stone 6/8+</th>
+        <th>Ocean</th>
       </tr></thead>
       <tbody>
         {cells.map(c => {
@@ -77,10 +88,11 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
               <td class={c.pctTarget >= 40 ? 'good' : c.pctTarget >= 20 ? '' : 'bad'}>{c.pctTarget}%</td>
               <td>{c.pctAccept}%</td>
               <td class="mono">{cd(c).mean.toFixed(0)}<span class="dim"> ±{cd(c).sd.toFixed(0)} [{cd(c).min}-{cd(c).max}]</span></td>
+              <td class="mono">{c.yield6Mean.food.toFixed(0)}<span class="dim">/</span><b>{c.yield8Mean.food.toFixed(0)}</b></td>
+              <td class="mono">{c.yield6Mean.iron.toFixed(0)}<span class="dim">/</span><b>{c.yield8Mean.iron.toFixed(0)}</b></td>
+              <td class="mono">{c.yield6Mean.wood.toFixed(0)}<span class="dim">/</span><b>{c.yield8Mean.wood.toFixed(0)}</b></td>
+              <td class="mono">{c.yield6Mean.stone.toFixed(0)}<span class="dim">/</span>{c.yield8Mean.stone.toFixed(0)}</td>
               <td>{c.terrainPctMean.ocean.toFixed(0)}%</td>
-              <td>{c.terrainPctMean.river.toFixed(0)}%</td>
-              <td>{c.terrainPctMean.forest.toFixed(0)}%</td>
-              <td>{c.terrainPctMean.mountain.toFixed(1)}%</td>
             </tr>
           );
         })}
@@ -157,6 +169,12 @@ const resSorted = Object.entries(r.resourcesMeanPerMap as Record<string, number>
   }
   .rec__grid b { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); }
   .rec__grid i { font-style: normal; font-size: 0.72rem; color: var(--text-faint); }
+
+  .rec__econ { margin-top: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--border); }
+  .rec__econ-tag {
+    font-family: var(--font-ui); font-size: 0.58rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem;
+  }
 
   .sec {
     font-size: 1.35rem; margin: 2rem 0 0.3rem;

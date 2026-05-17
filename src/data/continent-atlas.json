@@ -53,7 +53,19 @@
       "RESOURCE_HORSE": 6.0,
       "RESOURCE_PEARL": 5.0
     },
-    "tiles": 3364
+    "tiles": 3364,
+    "yield8Mean": {
+      "food": 150,
+      "iron": 130,
+      "wood": 45,
+      "stone": 3
+    },
+    "yield6Mean": {
+      "food": 520,
+      "iron": 130,
+      "wood": 70,
+      "stone": 15
+    }
   },
   "cells": [
     {
@@ -96,6 +108,18 @@
       "resourcesMeanPerMap": {
         "RESOURCE_HORSE": 6.0,
         "RESOURCE_PEARL": 5.0
+      },
+      "yield8Mean": {
+        "food": 95,
+        "iron": 80,
+        "wood": 28,
+        "stone": 2
+      },
+      "yield6Mean": {
+        "food": 480,
+        "iron": 85,
+        "wood": 60,
+        "stone": 12
       }
     },
     {
@@ -138,6 +162,18 @@
       "resourcesMeanPerMap": {
         "RESOURCE_HORSE": 6.0,
         "RESOURCE_PEARL": 5.0
+      },
+      "yield8Mean": {
+        "food": 95,
+        "iron": 80,
+        "wood": 28,
+        "stone": 2
+      },
+      "yield6Mean": {
+        "food": 480,
+        "iron": 85,
+        "wood": 60,
+        "stone": 12
       }
     }
   ],
