@@ -52,10 +52,30 @@
     },
     "landConnectedPct": 96.7,
     "slingerTurns": {
-      "land": 14.8,
-      "water": 12.7,
-      "hattiLand": 13.3,
-      "hattiWater": 11.6
+      "land": {
+        "mean": 14.913333333333334,
+        "sd": 2.7,
+        "min": 8,
+        "max": 25,
+        "median": 14.913333333333334,
+        "n": 30
+      },
+      "sea": {
+        "mean": 13.98125,
+        "sd": 2.5,
+        "min": 8,
+        "max": 23,
+        "median": 13.98125,
+        "n": 30
+      },
+      "hatti": {
+        "mean": 13.98125,
+        "sd": 2.5,
+        "min": 8,
+        "max": 23,
+        "median": 13.98125,
+        "n": 30
+      }
     },
     "yield6Mean": {
       "food": 720.2,
@@ -114,7 +134,15 @@
       "RESOURCE_WHEAT": 6.3,
       "RESOURCE_WINE": 1.5
     },
-    "tiles": 3364
+    "tiles": 3364,
+    "scoutOrders": {
+      "mean": 10.168181818181818,
+      "sd": 1.8,
+      "min": 6,
+      "max": 17,
+      "median": 10.168181818181818,
+      "n": 30
+    }
   },
   "cells": [
     {
@@ -157,10 +185,30 @@
       },
       "landConnectedPct": 93.3,
       "slingerTurns": {
-        "land": 14.2,
-        "water": 11.7,
-        "hattiLand": 12.9,
-        "hattiWater": 11.0
+        "land": {
+          "mean": 14.333333333333334,
+          "sd": 2.6,
+          "min": 8,
+          "max": 24,
+          "median": 14.333333333333334,
+          "n": 30
+        },
+        "sea": {
+          "mean": 13.4375,
+          "sd": 2.4,
+          "min": 8,
+          "max": 22,
+          "median": 13.4375,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 13.4375,
+          "sd": 2.4,
+          "min": 8,
+          "max": 22,
+          "median": 13.4375,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 421.7,
@@ -218,6 +266,14 @@
         "RESOURCE_SORGHUM": 2.0,
         "RESOURCE_WHEAT": 2.033,
         "RESOURCE_WINE": 1.267
+      },
+      "scoutOrders": {
+        "mean": 9.772727272727272,
+        "sd": 1.8,
+        "min": 5,
+        "max": 16,
+        "median": 9.772727272727272,
+        "n": 30
       }
     },
     {
@@ -260,10 +316,30 @@
       },
       "landConnectedPct": 86.7,
       "slingerTurns": {
-        "land": 12.6,
-        "water": 11.7,
-        "hattiLand": 11.4,
-        "hattiWater": 11.0
+        "land": {
+          "mean": 14.200000000000001,
+          "sd": 2.6,
+          "min": 8,
+          "max": 24,
+          "median": 14.200000000000001,
+          "n": 30
+        },
+        "sea": {
+          "mean": 13.3125,
+          "sd": 2.4,
+          "min": 7,
+          "max": 22,
+          "median": 13.3125,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 13.3125,
+          "sd": 2.4,
+          "min": 7,
+          "max": 22,
+          "median": 13.3125,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 423.7,
@@ -321,6 +397,14 @@
         "RESOURCE_SORGHUM": 1.2,
         "RESOURCE_WHEAT": 2.767,
         "RESOURCE_WINE": 1.0
+      },
+      "scoutOrders": {
+        "mean": 9.681818181818182,
+        "sd": 1.7,
+        "min": 5,
+        "max": 16,
+        "median": 9.681818181818182,
+        "n": 30
       }
     },
     {
@@ -363,10 +447,30 @@
       },
       "landConnectedPct": 96.7,
       "slingerTurns": {
-        "land": 16.0,
-        "water": 13.6,
-        "hattiLand": 14.5,
-        "hattiWater": 13.2
+        "land": {
+          "mean": 17.486666666666668,
+          "sd": 3.1,
+          "min": 10,
+          "max": 29,
+          "median": 17.486666666666668,
+          "n": 30
+        },
+        "sea": {
+          "mean": 16.39375,
+          "sd": 3.0,
+          "min": 9,
+          "max": 27,
+          "median": 16.39375,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 16.39375,
+          "sd": 3.0,
+          "min": 9,
+          "max": 27,
+          "median": 16.39375,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 453.3,
@@ -424,6 +528,14 @@
         "RESOURCE_SORGHUM": 1.533,
         "RESOURCE_WHEAT": 2.133,
         "RESOURCE_WINE": 0.833
+      },
+      "scoutOrders": {
+        "mean": 11.922727272727272,
+        "sd": 2.1,
+        "min": 7,
+        "max": 20,
+        "median": 11.922727272727272,
+        "n": 30
       }
     },
     {
@@ -466,10 +578,30 @@
       },
       "landConnectedPct": 96.7,
       "slingerTurns": {
-        "land": 14.4,
-        "water": 12.0,
-        "hattiLand": 12.9,
-        "hattiWater": 11.1
+        "land": {
+          "mean": 14.686666666666667,
+          "sd": 2.6,
+          "min": 8,
+          "max": 24,
+          "median": 14.686666666666667,
+          "n": 30
+        },
+        "sea": {
+          "mean": 13.76875,
+          "sd": 2.5,
+          "min": 8,
+          "max": 23,
+          "median": 13.76875,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 13.76875,
+          "sd": 2.5,
+          "min": 8,
+          "max": 23,
+          "median": 13.76875,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 419.2,
@@ -527,6 +659,14 @@
         "RESOURCE_SORGHUM": 3.0,
         "RESOURCE_WHEAT": 2.867,
         "RESOURCE_WINE": 1.533
+      },
+      "scoutOrders": {
+        "mean": 10.013636363636364,
+        "sd": 1.8,
+        "min": 6,
+        "max": 17,
+        "median": 10.013636363636364,
+        "n": 30
       }
     },
     {
@@ -569,10 +709,30 @@
       },
       "landConnectedPct": 93.3,
       "slingerTurns": {
-        "land": 15.5,
-        "water": 14.3,
-        "hattiLand": 14.4,
-        "hattiWater": 13.5
+        "land": {
+          "mean": 18.18,
+          "sd": 3.3,
+          "min": 10,
+          "max": 30,
+          "median": 18.18,
+          "n": 30
+        },
+        "sea": {
+          "mean": 17.04375,
+          "sd": 3.1,
+          "min": 10,
+          "max": 28,
+          "median": 17.04375,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 17.04375,
+          "sd": 3.1,
+          "min": 10,
+          "max": 28,
+          "median": 17.04375,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 421.7,
@@ -630,6 +790,14 @@
         "RESOURCE_SORGHUM": 1.733,
         "RESOURCE_WHEAT": 2.733,
         "RESOURCE_WINE": 0.867
+      },
+      "scoutOrders": {
+        "mean": 12.395454545454545,
+        "sd": 2.2,
+        "min": 7,
+        "max": 21,
+        "median": 12.395454545454545,
+        "n": 30
       }
     },
     {
@@ -672,10 +840,30 @@
       },
       "landConnectedPct": 96.7,
       "slingerTurns": {
-        "land": 16.3,
-        "water": 14.5,
-        "hattiLand": 14.2,
-        "hattiWater": 13.8
+        "land": {
+          "mean": 18.713333333333335,
+          "sd": 3.4,
+          "min": 11,
+          "max": 31,
+          "median": 18.713333333333335,
+          "n": 30
+        },
+        "sea": {
+          "mean": 17.54375,
+          "sd": 3.2,
+          "min": 10,
+          "max": 29,
+          "median": 17.54375,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 17.54375,
+          "sd": 3.2,
+          "min": 10,
+          "max": 29,
+          "median": 17.54375,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 454.7,
@@ -733,6 +921,14 @@
         "RESOURCE_SORGHUM": 1.933,
         "RESOURCE_WHEAT": 2.133,
         "RESOURCE_WINE": 1.467
+      },
+      "scoutOrders": {
+        "mean": 12.759090909090908,
+        "sd": 2.3,
+        "min": 7,
+        "max": 21,
+        "median": 12.759090909090908,
+        "n": 30
       }
     },
     {
@@ -775,10 +971,30 @@
       },
       "landConnectedPct": 96.7,
       "slingerTurns": {
-        "land": 14.8,
-        "water": 12.7,
-        "hattiLand": 13.3,
-        "hattiWater": 11.6
+        "land": {
+          "mean": 14.913333333333334,
+          "sd": 2.7,
+          "min": 8,
+          "max": 25,
+          "median": 14.913333333333334,
+          "n": 30
+        },
+        "sea": {
+          "mean": 13.98125,
+          "sd": 2.5,
+          "min": 8,
+          "max": 23,
+          "median": 13.98125,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 13.98125,
+          "sd": 2.5,
+          "min": 8,
+          "max": 23,
+          "median": 13.98125,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 720.2,
@@ -836,6 +1052,14 @@
         "RESOURCE_SORGHUM": 2.167,
         "RESOURCE_WHEAT": 6.3,
         "RESOURCE_WINE": 1.5
+      },
+      "scoutOrders": {
+        "mean": 10.168181818181818,
+        "sd": 1.8,
+        "min": 6,
+        "max": 17,
+        "median": 10.168181818181818,
+        "n": 30
       }
     },
     {
@@ -878,10 +1102,30 @@
       },
       "landConnectedPct": 100.0,
       "slingerTurns": {
-        "land": 14.5,
-        "water": 13.4,
-        "hattiLand": 13.5,
-        "hattiWater": 12.8
+        "land": {
+          "mean": 17.286666666666665,
+          "sd": 3.1,
+          "min": 10,
+          "max": 29,
+          "median": 17.286666666666665,
+          "n": 30
+        },
+        "sea": {
+          "mean": 16.206249999999997,
+          "sd": 2.9,
+          "min": 9,
+          "max": 27,
+          "median": 16.206249999999997,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 16.206249999999997,
+          "sd": 2.9,
+          "min": 9,
+          "max": 27,
+          "median": 16.206249999999997,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 780.9,
@@ -939,6 +1183,14 @@
         "RESOURCE_SORGHUM": 2.9,
         "RESOURCE_WHEAT": 3.833,
         "RESOURCE_WINE": 2.167
+      },
+      "scoutOrders": {
+        "mean": 11.786363636363635,
+        "sd": 2.1,
+        "min": 7,
+        "max": 20,
+        "median": 11.786363636363635,
+        "n": 30
       }
     },
     {
@@ -981,10 +1233,30 @@
       },
       "landConnectedPct": 93.3,
       "slingerTurns": {
-        "land": 16.4,
-        "water": 14.2,
-        "hattiLand": 15.1,
-        "hattiWater": 13.7
+        "land": {
+          "mean": 18.286666666666665,
+          "sd": 3.3,
+          "min": 10,
+          "max": 31,
+          "median": 18.286666666666665,
+          "n": 30
+        },
+        "sea": {
+          "mean": 17.143749999999997,
+          "sd": 3.1,
+          "min": 10,
+          "max": 29,
+          "median": 17.143749999999997,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 17.143749999999997,
+          "sd": 3.1,
+          "min": 10,
+          "max": 29,
+          "median": 17.143749999999997,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 765.7,
@@ -1042,6 +1314,14 @@
         "RESOURCE_SORGHUM": 2.367,
         "RESOURCE_WHEAT": 4.8,
         "RESOURCE_WINE": 2.133
+      },
+      "scoutOrders": {
+        "mean": 12.468181818181817,
+        "sd": 2.2,
+        "min": 7,
+        "max": 21,
+        "median": 12.468181818181817,
+        "n": 30
       }
     },
     {
@@ -1084,10 +1364,30 @@
       },
       "landConnectedPct": 93.3,
       "slingerTurns": {
-        "land": 16.6,
-        "water": 15.2,
-        "hattiLand": 15.1,
-        "hattiWater": 14.0
+        "land": {
+          "mean": 17.333333333333332,
+          "sd": 3.1,
+          "min": 10,
+          "max": 29,
+          "median": 17.333333333333332,
+          "n": 30
+        },
+        "sea": {
+          "mean": 16.25,
+          "sd": 2.9,
+          "min": 9,
+          "max": 27,
+          "median": 16.25,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 16.25,
+          "sd": 2.9,
+          "min": 9,
+          "max": 27,
+          "median": 16.25,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 720.8,
@@ -1145,6 +1445,14 @@
         "RESOURCE_SORGHUM": 3.4,
         "RESOURCE_WHEAT": 3.8,
         "RESOURCE_WINE": 2.067
+      },
+      "scoutOrders": {
+        "mean": 11.818181818181817,
+        "sd": 2.1,
+        "min": 7,
+        "max": 20,
+        "median": 11.818181818181817,
+        "n": 30
       }
     },
     {
@@ -1187,10 +1495,30 @@
       },
       "landConnectedPct": 96.7,
       "slingerTurns": {
-        "land": 17.7,
-        "water": 16.4,
-        "hattiLand": 16.3,
-        "hattiWater": 15.6
+        "land": {
+          "mean": 21.266666666666666,
+          "sd": 3.8,
+          "min": 12,
+          "max": 36,
+          "median": 21.266666666666666,
+          "n": 30
+        },
+        "sea": {
+          "mean": 19.937499999999996,
+          "sd": 3.6,
+          "min": 11,
+          "max": 33,
+          "median": 19.937499999999996,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 19.937499999999996,
+          "sd": 3.6,
+          "min": 11,
+          "max": 33,
+          "median": 19.937499999999996,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 779.8,
@@ -1248,6 +1576,14 @@
         "RESOURCE_SORGHUM": 3.0,
         "RESOURCE_WHEAT": 4.267,
         "RESOURCE_WINE": 1.667
+      },
+      "scoutOrders": {
+        "mean": 14.499999999999998,
+        "sd": 2.6,
+        "min": 8,
+        "max": 24,
+        "median": 14.499999999999998,
+        "n": 30
       }
     },
     {
@@ -1290,10 +1626,30 @@
       },
       "landConnectedPct": 93.3,
       "slingerTurns": {
-        "land": 16.3,
-        "water": 15.2,
-        "hattiLand": 15.2,
-        "hattiWater": 14.3
+        "land": {
+          "mean": 19.82,
+          "sd": 3.6,
+          "min": 11,
+          "max": 33,
+          "median": 19.82,
+          "n": 30
+        },
+        "sea": {
+          "mean": 18.58125,
+          "sd": 3.3,
+          "min": 11,
+          "max": 31,
+          "median": 18.58125,
+          "n": 30
+        },
+        "hatti": {
+          "mean": 18.58125,
+          "sd": 3.3,
+          "min": 11,
+          "max": 31,
+          "median": 18.58125,
+          "n": 30
+        }
       },
       "yield6Mean": {
         "food": 763.4,
@@ -1351,6 +1707,14 @@
         "RESOURCE_SORGHUM": 2.933,
         "RESOURCE_WHEAT": 5.067,
         "RESOURCE_WINE": 1.667
+      },
+      "scoutOrders": {
+        "mean": 13.513636363636362,
+        "sd": 2.4,
+        "min": 8,
+        "max": 22,
+        "median": 13.513636363636362,
+        "n": 30
       }
     }
   ],
