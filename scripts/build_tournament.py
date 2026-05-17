@@ -124,9 +124,15 @@ def analyze(zp: str) -> dict | None:
         return v
 
     fn = os.path.basename(zp).replace(".zip", "")
-    m = re.match(r"(\d+)-(.+)", fn)
-    gid = m.group(1) if m else fn
-    matchup = (m.group(2) if m else fn).replace("_", " ").replace("-", " v ", 1)
+    mc = re.match(r"match_(\d+)_(.+)", fn)        # Challonge bundle
+    mn = re.match(r"(\d+)-(.+)", fn)              # legacy NN-a-b
+    if mc:
+        gid = mc.group(1); rest = mc.group(2)
+    elif mn:
+        gid = mn.group(1); rest = mn.group(2)
+    else:
+        gid = fn; rest = fn
+    matchup = " v ".join(names[p] for p in pls)   # from save Player names
     land = bfs(landok)
     return {
         "id": gid,
@@ -160,14 +166,24 @@ def analyze(zp: str) -> dict | None:
 
 def main() -> int:
     files = sorted(glob.glob(str(EXAMPLES / "**" / "*.zip"), recursive=True))
-    games = []
+    # prefer named files over generic (save.zip / *Auto* / Final save)
+    def rank(p):
+        b = os.path.basename(p).lower()
+        return 1 if ("_save.zip" in b or "auto" in b or "final save" in b
+                     or b.endswith("/save.zip")) else 0
+    files.sort(key=rank)
+    by_id = {}
     for f in files:
         try:
             g = analyze(f)
-            if g:
-                games.append(g)
         except Exception as e:
             print(f"  ! {os.path.basename(f)}: {e}", file=sys.stderr)
+            continue
+        if not g:
+            continue
+        if g["id"] not in by_id:          # dedupe: 1 game per match id
+            by_id[g["id"]] = g
+    games = list(by_id.values())
     games.sort(key=lambda g: (len(g["id"]), g["id"]))
     out = ATLAS / "src" / "data" / "tournament-games.json"
     out.write_text(json.dumps({"count": len(games), "games": games}, indent=2) + "\n")
