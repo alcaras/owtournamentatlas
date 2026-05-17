@@ -32,10 +32,10 @@ const cells = [...atlas.cells].sort((a, b) =>
 
   <h2 class="sec">City sites &amp; capital distance — every setting</h2>
   <p class="note">
-    City-site target band {tlo}–{thi} (acceptable {alo}–{ahi});
-    “In {tlo}–{thi}” = share of random maps in the band. Distance cells
-    show <b>avg ±sd [min–max]</b> — the spread matters as much as the
-    average. <b>Crow-flies</b> = straight hex distance (terrain ignored).
+    City sites and distance per setting, over {atlas.seedsPerCell} random
+    maps each. Distance cells show <b>avg ±sd [min–max]</b> — the spread
+    matters as much as the average.
+    <b>Crow-flies</b> = straight hex distance (terrain ignored).
     <b>Land path</b> = hex land route; <b>Land-conn</b> = % of maps with
     any land route (low ⇒ some maps are naval-only). <b>Scout</b> =
     orders for a Scout (move 3) to reach the other capital — how fast
@@ -47,8 +47,7 @@ const cells = [...atlas.cells].sort((a, b) =>
     <table class="tbl">
       <thead><tr>
         <th>Size</th><th>Pt-sym</th><th>Aspect</th><th>Dims</th>
-        <th>City sites avg</th><th>±sd</th><th>Med</th><th>Min–Max</th>
-        <th>In {tlo}–{thi}</th><th>In {alo}–{ahi}</th>
+        <th>City sites (avg ±sd)</th><th>Med</th><th>Min–Max</th>
         <th class="sep">Crow-flies</th><th>Land path</th><th>Land-conn</th>
         <th>Scout (contact)</th><th>Slinger land</th><th>Slinger sea</th><th>Slinger Hatti</th>
       </tr></thead>
@@ -61,12 +60,9 @@ const cells = [...atlas.cells].sort((a, b) =>
               <td>{sym(c.pointSymmetry)}</td>
               <td class="cap">{c.aspect}</td>
               <td class="mono">{c.dims}</td>
-              <td><b>{c.mean.toFixed(1)}</b></td>
-              <td class="mono dim">±{c.sd.toFixed(1)}</td>
+              <td><b>{c.mean.toFixed(1)}</b> <span class="dim">±{c.sd.toFixed(1)}</span></td>
               <td class="mono">{c.median}</td>
               <td class="mono">{c.min}–{c.max}</td>
-              <td class={c.pctTarget >= 40 ? 'good' : c.pctTarget >= 20 ? '' : 'bad'}>{c.pctTarget}%</td>
-              <td>{c.pctAccept}%</td>
               <td class="mono sep" set:html={fd(cd(c))} />
               <td class="mono" set:html={fd(c.landPath)} />
               <td class={c.landConnectedPct != null && c.landConnectedPct < 100 ? 'bad' : ''}>
