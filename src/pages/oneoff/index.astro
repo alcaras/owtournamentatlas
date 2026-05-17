@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import data from '../../data/oneoffs.json';
+const maps = data.maps;
+const baseUrl = import.meta.env.BASE_URL;
+---
+<Base title="One-off Maps">
+  <p class="lede">
+    Detailed reads of individual dropped saves — one page per map.
+    Capitals are red (player&nbsp;1) / blue (player&nbsp;2) stars; gold =
+    founded cities; red dots = tribe camps. {maps.length} map{maps.length === 1 ? '' : 's'}.
+  </p>
+
+  <div class="cards">
+    {maps.map((g: any) => (
+      <a class="card" href={`${baseUrl}oneoff/${g.slug}`}>
+        <img src={`${baseUrl}img/${g.img}`} loading="lazy" alt={g.matchup} />
+        <div class="card__b">
+          <div class="card__t">{g.matchup}</div>
+          <div class="card__s">{g.script} · {g.size} · {g.aspect}</div>
+          <div class="card__m">
+            sites <b>{g.citySites}</b> · land <b>{g.land ?? '—'}</b>
+            <span class={g.landConnected ? 'ok' : 'bad'}>
+              {g.landConnected ? 'connected' : 'NO connection'}</span>
+            · scout {g.scout ?? '—'}
+          </div>
+          <div class="card__f">{g.file}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <style>
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:80ch; margin:0.6rem 0 1.4rem; }
+    .cards { display:grid; gap:1rem;
+      grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
+    .card { display:block; background:var(--bg-elev);
+      border:1px solid var(--border); border-radius:6px; overflow:hidden;
+      color:inherit; text-decoration:none; }
+    .card:hover { border-color:var(--gold-deep); text-decoration:none; }
+    .card img { width:100%; height:auto; display:block; background:#0b0c0f;
+      border-bottom:1px solid var(--border); }
+    .card__b { padding:0.7rem 0.9rem; }
+    .card__t { font-family:var(--font-display); font-weight:700;
+      font-size:1.15rem; color:var(--text); }
+    .card__s { font-size:0.78rem; color:var(--text-faint);
+      font-family:var(--font-mono); margin:0.15rem 0 0.4rem; }
+    .card__m { font-size:0.82rem; color:var(--text-soft); }
+    .card__m b { color:var(--text); }
+    .card__m .ok { color:#9fd07f; } .card__m .bad { color:#d08070; font-weight:700; }
+    .card__f { font-size:0.68rem; color:var(--text-dim);
+      font-family:var(--font-mono); margin-top:0.45rem;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  </style>
+</Base>

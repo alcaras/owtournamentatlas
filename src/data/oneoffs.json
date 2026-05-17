@@ -1,0 +1,313 @@
+{
+ "maps": [
+  {
+   "aspect": "SQUARE",
+   "caps": [
+    [
+     38,
+     33
+    ],
+    [
+     7,
+     10
+    ]
+   ],
+   "cityCount": 12,
+   "citySites": 12,
+   "crow": 42,
+   "file": "OW-Yuezhi-Year68-2026-05-16-20-40-32",
+   "forestPct": 6.1,
+   "hillPct": 9.5,
+   "id": "OW-Yuezhi-Year68-2026-05-16-20-40-32",
+   "img": "oneoff/ow-yuezhi-year68-2026-05-16-20-40-32.png",
+   "label": "ninja v sion",
+   "land": 42,
+   "landConnected": true,
+   "matchup": "ninja v sion",
+   "mountainPct": 9.0,
+   "oceanPct": 54.0,
+   "players": [
+    "ninja",
+    "sion"
+   ],
+   "resourceCount": 77,
+   "resources": {
+    "Barley": 2,
+    "Camel": 4,
+    "Citrus": 4,
+    "Crab": 2,
+    "Dye": 8,
+    "Elephant": 4,
+    "Fish": 4,
+    "Fur": 2,
+    "Game": 2,
+    "Goat": 2,
+    "Honey": 6,
+    "Horse": 10,
+    "Marble": 2,
+    "Olive": 2,
+    "Ore": 2,
+    "Pearl": 2,
+    "Sheep": 2,
+    "Silk": 1,
+    "Silver": 2,
+    "Sorghum": 6,
+    "Spices": 6,
+    "Wheat": 2
+   },
+   "scout": 14,
+   "script": "Continent",
+   "sea": 42,
+   "size": "SMALLEST",
+   "slingerHatti": 18,
+   "slingerLand": 20,
+   "slingerSea": 20,
+   "slug": "ow-yuezhi-year68-2026-05-16-20-40-32",
+   "tribeCount": 3,
+   "tribes": [
+    "Gauls",
+    "Thracians",
+    "Vandals"
+   ],
+   "yield5": {
+    "food": 772,
+    "iron": 822,
+    "stone": 832,
+    "wood": 122
+   },
+   "yield6": {
+    "food": 441,
+    "iron": 192,
+    "stone": 502,
+    "wood": 21
+   },
+   "yield8": {
+    "food": 148,
+    "iron": 192,
+    "stone": 314,
+    "wood": 21
+   }
+  },
+  {
+   "aspect": "SQUARE",
+   "caps": [
+    [
+     40,
+     38
+    ],
+    [
+     5,
+     5
+    ]
+   ],
+   "cityCount": 15,
+   "citySites": 18,
+   "crow": 52,
+   "file": "OW-Tamilakam-Year59-2026-04-20-15-31-43",
+   "forestPct": 8.7,
+   "hillPct": 21.4,
+   "id": "OW-Tamilakam-Year59-2026-04-20-15-31-43",
+   "img": "oneoff/ow-tamilakam-year59-2026-04-20-15-31-43.png",
+   "label": "Aran v Sion",
+   "land": 58,
+   "landConnected": true,
+   "matchup": "Aran v Sion",
+   "mountainPct": 11.0,
+   "oceanPct": 19.9,
+   "players": [
+    "Aran",
+    "Sion"
+   ],
+   "resourceCount": 94,
+   "resources": {
+    "Barley": 2,
+    "Camel": 2,
+    "Cattle": 4,
+    "Crab": 6,
+    "Dye": 2,
+    "Elephant": 2,
+    "Fish": 2,
+    "Fur": 4,
+    "Game": 2,
+    "Gem": 2,
+    "Goat": 6,
+    "Gold": 6,
+    "Horse": 8,
+    "Incense": 6,
+    "Lavender": 6,
+    "Marble": 8,
+    "Ore": 6,
+    "Salt": 2,
+    "Silver": 4,
+    "Sorghum": 10,
+    "Wheat": 4
+   },
+   "scout": 24,
+   "script": "InlandSea2",
+   "sea": 52,
+   "size": "SMALLEST",
+   "slingerHatti": 32,
+   "slingerLand": 36,
+   "slingerSea": 24,
+   "slug": "ow-tamilakam-year59-2026-04-20-15-31-43",
+   "tribeCount": 4,
+   "tribes": [
+    "Danes",
+    "Gauls",
+    "Huns",
+    "Vandals"
+   ],
+   "yield5": {
+    "food": 1170,
+    "iron": 1452,
+    "stone": 1459,
+    "wood": 174
+   },
+   "yield6": {
+    "food": 454,
+    "iron": 434,
+    "stone": 814,
+    "wood": 10
+   },
+   "yield8": {
+    "food": 118,
+    "iron": 434,
+    "stone": 434,
+    "wood": 10
+   }
+  },
+  {
+   "aspect": "SQUARE",
+   "caps": [
+    [
+     40,
+     12
+    ],
+    [
+     11,
+     37
+    ]
+   ],
+   "cityCount": 12,
+   "citySites": 12,
+   "crow": 42,
+   "file": "OW-Aksum-Year85-2026-05-17-12-09-50",
+   "forestPct": 6.8,
+   "hillPct": 16.0,
+   "id": "OW-Aksum-Year85-2026-05-17-12-09-50",
+   "img": "oneoff/ow-aksum-year85-2026-05-17-12-09-50.png",
+   "label": "Aran v Siontific",
+   "land": 42,
+   "landConnected": true,
+   "matchup": "Aran v Siontific",
+   "mountainPct": 29.6,
+   "oceanPct": 0.8,
+   "players": [
+    "Aran",
+    "Siontific"
+   ],
+   "resourceCount": 72,
+   "resources": {
+    "Barley": 4,
+    "Camel": 4,
+    "Ebony": 7,
+    "Elephant": 2,
+    "Game": 2,
+    "Gem": 4,
+    "Goat": 2,
+    "Gold": 6,
+    "Honey": 4,
+    "Horse": 8,
+    "Incense": 2,
+    "Jade": 2,
+    "Marble": 4,
+    "Olive": 3,
+    "Ore": 2,
+    "Pig": 2,
+    "Salt": 1,
+    "Sheep": 3,
+    "Silver": 6,
+    "Sorghum": 2,
+    "Wine": 2
+   },
+   "scout": 17,
+   "script": "Highlands",
+   "sea": 42,
+   "size": "SMALLEST",
+   "slingerHatti": 21,
+   "slingerLand": 26,
+   "slingerSea": 26,
+   "slug": "ow-aksum-year85-2026-05-17-12-09-50",
+   "tribeCount": 2,
+   "tribes": [
+    "Gauls",
+    "Huns"
+   ],
+   "yield5": {
+    "food": 1528,
+    "iron": 2268,
+    "stone": 2215,
+    "wood": 176
+   },
+   "yield6": {
+    "food": 940,
+    "iron": 416,
+    "stone": 1936,
+    "wood": 15
+   },
+   "yield8": {
+    "food": 217,
+    "iron": 416,
+    "stone": 1308,
+    "wood": 15
+   }
+  }
+ ],
+ "resTax": {
+  "lux": [
+   "Salt",
+   "Wine",
+   "Olive",
+   "Incense",
+   "Dye",
+   "Honey",
+   "Citrus",
+   "Lavender",
+   "Fur",
+   "Gem",
+   "Gold",
+   "Silver",
+   "Pearl",
+   "Silk",
+   "Spices",
+   "Ivory",
+   "Jade",
+   "Ebony",
+   "Tea",
+   "Porcelain",
+   "Perfume",
+   "Exotic_Fur",
+   "Exotic_Animals",
+   "Literature",
+   "Silphium",
+   "Wootz_Steel"
+  ],
+  "other": [
+   "Marble",
+   "Ore",
+   "Horse",
+   "Wheat",
+   "Barley",
+   "Sorghum",
+   "Cattle",
+   "Sheep",
+   "Pig",
+   "Goat",
+   "Camel",
+   "Elephant",
+   "Game",
+   "Fish",
+   "Crab"
+  ]
+ }
+}

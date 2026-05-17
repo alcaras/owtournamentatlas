@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-build_oneoff.py — render + stat a single save dropped in one-offs/.
-Reuses the calibration analyzer (analyze) for the full metric set, then
-draws a detailed hex map with both original capitals marked. Emits
-src/data/oneoff.json + public/img/oneoff/<slug>.png.
+build_oneoff.py — render + stat EVERY save in one-offs/ (one page each).
+Reuses the calibration analyzer for the full metric set, draws a detailed
+hex map with both original capitals marked. Emits src/data/oneoffs.json
+(list) + public/img/oneoff/<slug>.png each.
 """
 from __future__ import annotations
-import glob, json, os, sys, zipfile
+import glob, json, os, sys, tempfile, zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -19,6 +19,17 @@ from render_map import render                   # noqa: E402
 
 ONE = ATLAS / "one-offs"
 IMG = ATLAS / "public" / "img" / "oneoff"
+
+# Curated taxonomy (resource.xml carries no luxury flag). Display names
+# match build_tournament's RESOURCE_*.replace().title().
+RES_OTHER = ["Marble", "Ore", "Horse", "Wheat", "Barley", "Sorghum",
+             "Cattle", "Sheep", "Pig", "Goat", "Camel", "Elephant",
+             "Game", "Fish", "Crab"]
+RES_LUX = ["Salt", "Wine", "Olive", "Incense", "Dye", "Honey", "Citrus",
+           "Lavender", "Fur", "Gem", "Gold", "Silver", "Pearl", "Silk",
+           "Spices", "Ivory", "Jade", "Ebony", "Tea", "Porcelain",
+           "Perfume", "Exotic_Fur", "Exotic_Animals", "Literature",
+           "Silphium", "Wootz_Steel"]
 
 
 def caps_and_cities(xbytes: bytes):
@@ -45,46 +56,49 @@ def caps_and_cities(xbytes: bytes):
     return [A, B], cities, [names[p] for p in pls]
 
 
+def slugify(s: str) -> str:
+    s = "".join(c if c.isalnum() else "-" for c in s.lower()).strip("-")
+    while "--" in s:
+        s = s.replace("--", "-")
+    return s
+
+
+def one(zp: str) -> dict | None:
+    fn = os.path.basename(zp).replace(".zip", "")
+    rec = analyze(zp)
+    if rec is None:
+        print(f"  skip (no analyze): {fn}")
+        return None
+    z = zipfile.ZipFile(zp)
+    xbytes = z.read([n for n in z.namelist() if n.endswith(".xml")][0])
+    caps, cities, pnames = caps_and_cities(xbytes)
+    slug = slugify(fn)
+    IMG.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile("wb", suffix=".xml", delete=False) as tf:
+        tf.write(xbytes)
+        tmp = tf.name
+    render(tmp, IMG / f"{slug}.png", 9, caps=caps, cities=cities)
+    os.unlink(tmp)
+    rec.update({"slug": slug, "file": fn, "img": f"oneoff/{slug}.png",
+                "caps": caps, "players": pnames, "cityCount": len(cities)})
+    print(f"  {fn}: {rec['matchup']} {rec['script']}/{rec['size']} "
+          f"sites={rec['citySites']} land={rec['land']} "
+          f"conn={rec['landConnected']}")
+    return rec
+
+
 def main():
     zps = sorted(glob.glob(str(ONE / "*.zip")),
                  key=os.path.getmtime, reverse=True)
     if not zps:
-        print("no save in one-offs/")
+        print("no saves in one-offs/")
         return 1
-    zp = zps[0]
-    fn = os.path.basename(zp).replace(".zip", "")
-    rec = analyze(zp)
-    if rec is None:
-        print(f"could not analyze {fn}")
-        return 1
-    xbytes = zipfile.ZipFile(zp).read(
-        [n for n in zipfile.ZipFile(zp).namelist() if n.endswith(".xml")][0])
-    caps, cities, pnames = caps_and_cities(xbytes)
-
-    slug = "".join(c if c.isalnum() else "-" for c in fn.lower()).strip("-")
-    while "--" in slug:
-        slug = slug.replace("--", "-")
-    IMG.mkdir(parents=True, exist_ok=True)
-    import tempfile
-    with tempfile.NamedTemporaryFile("wb", suffix=".xml", delete=False) as tf:
-        tf.write(xbytes)
-        tmp = tf.name
-    png = IMG / f"{slug}.png"
-    render(tmp, png, 9, caps=caps, cities=cities)
-    os.unlink(tmp)
-
-    rec.update({
-        "slug": slug, "file": fn,
-        "img": f"oneoff/{slug}.png",
-        "caps": caps, "players": pnames,
-        "cityCount": len(cities),
-    })
-    (ATLAS / "src" / "data" / "oneoff.json").write_text(
-        json.dumps(rec, indent=1, sort_keys=True) + "\n")
-    print(f"→ oneoff.json + {png.name}  ({fn})")
-    print(f"  {rec['matchup']}  {rec['script']}/{rec['size']}/{rec['aspect']}"
-          f"  sites={rec['citySites']} crow={rec['crow']} land={rec['land']}"
-          f" conn={rec['landConnected']} scout={rec['scout']}")
+    recs = [r for r in (one(z) for z in zps) if r]
+    (ATLAS / "src" / "data" / "oneoffs.json").write_text(
+        json.dumps({"maps": recs,
+                    "resTax": {"lux": RES_LUX, "other": RES_OTHER}},
+                   indent=1, sort_keys=True) + "\n")
+    print(f"→ oneoffs.json ({len(recs)} maps)")
     return 0
 
 
