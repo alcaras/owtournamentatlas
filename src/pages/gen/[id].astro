@@ -18,21 +18,21 @@ const thr = ['5','6','7','8','9','10','11','12'];
   <p class="back"><a href={`${baseUrl}recommended`}>← all recommended</a></p>
   <p class="lede">
     <b>{g.label}</b> · seed {g.seed}. <span class="mono">{g.setting}</span>.
-    <b>Hover any tile</b> for terrain / height / vegetation / resource.
-    Pink stars = capitals, pink dots = city sites; blue = rivers; faded
-    grey = impassable / off-map. (<a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">static image ↗</a>)
+    <b>Hover a tile</b> for details; <b>hover/click a resource below</b>
+    to light up every tile of it. Pink stars = capitals · pink dots =
+    city sites · blue = rivers · faded grey = impassable/off-map.
+    (<a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">static image ↗</a>)
   </p>
 
-  <div class="grid">
-    <figure class="mapfig">
-      <div id="mapwrap" style="position:relative;">
-        <canvas id="cv"></canvas>
-        <div id="tip"></div>
-      </div>
-    </figure>
+  <div id="mapwrap"><canvas id="cv"></canvas><div id="tip"></div></div>
 
-    <div class="stats">
-      <h2>Capital distance</h2>
+  <h2 class="sec">Resources <span class="rh">(hover to highlight)</span></h2>
+  <div id="respanel" class="respanel"></div>
+
+  <h2 class="sec">Stats</h2>
+  <div class="stats">
+    <div class="col">
+      <h3>Capital distance</h3>
       <table class="kv">
         <tr><td>Land-connected</td><td class={g.conn ? 'good' : 'bad'}>
           {g.conn ? 'YES' : 'NO'}</td></tr>
@@ -40,40 +40,37 @@ const thr = ['5','6','7','8','9','10','11','12'];
         <tr><td>Land path</td><td><b>{g.land ?? '—'}</b></td></tr>
         <tr><td>Sea path</td><td>{g.water ?? '—'}</td></tr>
         <tr><td>Scout orders (move 3)</td><td><b>{g.scout ?? '—'}</b></td></tr>
-        <tr><td>Slinger — land / sea / Hatti</td><td>
+        <tr><td>Slinger land/sea/Hatti</td><td>
           {g.slLand ?? '—'} / {g.slSea ?? '—'} / {g.slHatti ?? '—'}</td></tr>
       </table>
-      <h2>Map</h2>
+      <h3>Map</h3>
       <table class="kv">
         <tr><td>City sites</td><td><b>{g.sites ?? '—'}</b></td></tr>
         <tr><td>Playable tiles</td><td>{g.tiles ?? '—'}</td></tr>
         <tr><td>Land tiles</td><td><b>{g.landTiles ?? '—'}</b></td></tr>
         <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
-        <tr><td>Tribes</td><td>{g.tribes ?? '—'}</td></tr>
-        <tr><td>Resources</td><td>{g.res ?? '—'}</td></tr>
+        <tr><td>Tribes / Resources</td><td>{g.tribes ?? '—'} / {g.res ?? '—'}</td></tr>
       </table>
-      <h2>Yield tiles — best improvement ≥N &nbsp;<span class="rh">(Food·Iron·Stone·Wood)</span></h2>
+    </div>
+    <div class="col">
+      <h3>Yield tiles ≥N <span class="rh">(Food·Iron·Stone·Wood)</span></h3>
       <table class="kv">
-        {thr.map(k => {
-          const y = Y[k];
-          return (
-            <tr><td>{k}+</td><td class="mono">
-              {y ? `${y.food}·${y.iron}·${y.stone}·${y.wood}` : '—'}</td></tr>
-          );
-        })}
+        {thr.map(k => { const y=Y[k]; return (
+          <tr><td>{k}+</td><td class="mono">
+            {y ? `${y.food}·${y.iron}·${y.stone}·${y.wood}` : '—'}</td></tr>
+        ); })}
       </table>
     </div>
   </div>
 
-  <h2 class="rsec">Resources <span class="rh">(grey = absent)</span></h2>
+  <h2 class="sec">Resources by improvement <span class="rh">(grey = absent)</span></h2>
   {(resTax as [string,string[]][]).map(([title, list]) => (
     <div class="resgrp">
       <div class="resgrp__t">{title}</div>
       <div class="reschips">
-        {list.map((n) => {
-          const c = have(n);
-          return <span class={'chip' + (c ? '' : ' off')}>{nice(n)}{c ? <b> {c}</b> : null}</span>;
-        })}
+        {list.map((n) => { const c = have(n); return (
+          <span class={'chip' + (c ? '' : ' off')}>{nice(n)}{c ? <b> {c}</b> : null}</span>
+        ); })}
       </div>
     </div>
   ))}
@@ -81,14 +78,9 @@ const thr = ['5','6','7','8','9','10','11','12'];
   <style>
     .back { font-size:0.8rem; margin:0 0 0.4rem; }
     .lede { font-family:var(--font-display); font-style:italic;
-      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
-      max-width:80ch; margin:0.2rem 0 1.4rem; }
-    .grid { display:grid; grid-template-columns:minmax(480px,1.7fr) 1fr;
-      gap:1.6rem; align-items:start; }
-    @media (max-width:880px){ .grid{ grid-template-columns:1fr; } }
-    .mapfig { margin:0; }
-    .mapfig img { width:100%; height:auto; display:block; border-radius:5px;
-      border:1px solid var(--border-strong); background:#0b0c0f; cursor:zoom-in; }
+      font-size:1.02rem; line-height:1.55; color:var(--text-soft);
+      max-width:90ch; margin:0.2rem 0 1.2rem; }
+    #mapwrap { position:relative; width:100%; }
     #cv { width:100%; height:auto; display:block; border-radius:5px;
       border:1px solid var(--border-strong); background:#0b0c0f; }
     #tip { position:absolute; pointer-events:none; display:none; z-index:9;
@@ -97,12 +89,24 @@ const thr = ['5','6','7','8','9','10','11','12'];
       color:var(--text); font-family:var(--font-ui); white-space:nowrap;
       line-height:1.4; }
     #tip b { color:var(--gold); }
-    .stats h2, .rsec { font-size:1.05rem; color:var(--gold); margin:1rem 0 0.3rem; }
-    .stats h2:first-child { margin-top:0; }
-    .rsec { margin-top:1.6rem; }
+    .sec { font-size:1.15rem; color:var(--gold); border-bottom:1px solid
+      var(--gold-deep); padding-bottom:0.25rem; margin:1.5rem 0 0.6rem; }
     .rh { font-size:0.72rem; color:var(--text-faint); font-weight:400; }
+    .respanel { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .rchip { display:flex; align-items:center; gap:0.3rem; cursor:pointer;
+      background:var(--bg-elev); border:1px solid var(--border-strong);
+      border-radius:999px; padding:0.18rem 0.6rem 0.18rem 0.3rem;
+      font-size:0.8rem; color:var(--text); user-select:none; }
+    .rchip img { width:22px; height:22px; display:block; }
+    .rchip b { color:var(--gold); }
+    .rchip:hover, .rchip.pin { border-color:var(--gold);
+      background:#231f0d; }
+    .stats { display:flex; flex-wrap:wrap; gap:1.6rem; }
+    .col { min-width:260px; }
+    .stats h3 { font-size:0.98rem; color:var(--text); margin:0.6rem 0 0.25rem; }
+    .col:first-child h3:first-child { margin-top:0; }
     .kv { width:100%; border-collapse:collapse; font-size:0.86rem; }
-    .kv td { padding:0.28rem 0.4rem; border-bottom:1px solid var(--border); }
+    .kv td { padding:0.26rem 0.4rem; border-bottom:1px solid var(--border); }
     .kv td:first-child { color:var(--text-soft); }
     .kv td:last-child { text-align:right; }
     .kv b { color:var(--text); }
@@ -110,7 +114,7 @@ const thr = ['5','6','7','8','9','10','11','12'];
     .good { color:#9fd07f; font-weight:700; }
     .bad { color:#d08070; font-weight:700; }
     .resgrp { margin:0.3rem 0 0.6rem; }
-    .resgrp__t { font-size:0.68rem; letter-spacing:0.12em;
+    .resgrp__t { font-size:0.66rem; letter-spacing:0.12em;
       text-transform:uppercase; color:var(--text-dim);
       font-family:var(--font-ui); margin-bottom:0.3rem; }
     .reschips { display:flex; flex-wrap:wrap; gap:0.35rem; }
@@ -124,96 +128,142 @@ const thr = ['5','6','7','8','9','10','11','12'];
 
   <script is:inline define:vars={{ gid: g.id, base: baseUrl }}>
     (function(){
-      var TERR={TERRAIN_WATER:[38,71,110],TERRAIN_TEMPERATE:[104,138,74],
-        TERRAIN_LUSH:[74,110,56],TERRAIN_ARID:[170,148,95],
-        TERRAIN_SAND:[206,184,120],TERRAIN_MARSH:[96,110,80],
-        TERRAIN_TUNDRA:[200,205,210],TERRAIN_URBAN:[150,128,116]};
-      function tcol(name){ return TERR[ 'TERRAIN_'+name.toUpperCase().replace(/ /g,'_') ]
-        || TERR['TERRAIN_'+name] || [90,90,90]; }
-      var cv=document.getElementById('cv'), tip=document.getElementById('tip'),
-          ctx=cv.getContext('2d'), D=null, S=11, HW=Math.sqrt(3)*S,
-          VS=1.5*S, PAD=4, cx0;
-      function cen(x,y){ return [ x*HW + (y%2===0?HW/2:0) + HW/2 + PAD,
-                                  y*VS + S + PAD ]; }
-      function hexpath(cx,cy){ ctx.beginPath();
-        for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-90);
-          var px=cx+S*Math.cos(a), py=cy+S*Math.sin(a);
-          i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); }
+      var TERR={WATER:[38,71,110],TEMPERATE:[104,138,74],LUSH:[74,110,56],
+        ARID:[170,148,95],SAND:[206,184,120],MARSH:[96,110,80],
+        TUNDRA:[200,205,210],URBAN:[150,128,116]};
+      var ALIAS={marble:'stone',ore:'iron'};
+      function tcol(n){ return TERR[n.toUpperCase().replace(/ /g,'_')]||[90,90,90]; }
       function lum(c){ return 0.299*c[0]+0.587*c[1]+0.114*c[2]; }
-      fetch(base+'data/gen/'+gid+'.json').then(function(r){return r.json();})
-      .then(function(d){
-        D=d; var W=d.w,H=d.h;
-        cv.width = Math.ceil(W*HW + HW/2 + 2*PAD);
-        cv.height= Math.ceil((H-1)*VS + 2*S + 2*PAD);
+      var cv=document.getElementById('cv'), tip=document.getElementById('tip'),
+          ctx=cv.getContext('2d'), S=11, HW=Math.sqrt(3)*S, VS=1.5*S, PAD=4,
+          D=null, baseImg=null, icons={}, activeRes=null, pinRes=null;
+      function cen(x,y){ return [x*HW+(y%2===0?HW/2:0)+HW/2+PAD, y*VS+S+PAD]; }
+      function hexp(cx,cy,r){ ctx.beginPath();
+        for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-90),
+          px=cx+r*Math.cos(a),py=cy+r*Math.sin(a);
+          i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); }
+      function slug(name){ var s=name.toLowerCase().replace(/ /g,'_');
+        return ALIAS[s]||s; }
+      function drawBase(){
+        var W=D.w,H=D.h,Lt=D.L.terr,Lh=D.L.hgt,Lv=D.L.veg;
         ctx.fillStyle='#0b0c0f'; ctx.fillRect(0,0,cv.width,cv.height);
-        var Lt=d.L.terr, Lh=d.L.hgt, Lv=d.L.veg;
-        for(var i=0;i<W*H;i++){
-          var x=i%W, y=(i/W)|0, c=tcol(Lt[d.terr[i]]||''), h=(Lh[d.hgt[i]]||'').toUpperCase(), v=(Lv[d.veg[i]]||'').toUpperCase();
-          if(v.indexOf('JUNGLE')>=0) c=[c[0]-30,c[1]-6,c[2]-28];
-          else if(v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0) c=[c[0]-22,c[1]+2,c[2]-22];
-          else if(v.indexOf('SCRUB')>=0) c=[c[0]+16,c[1]+12,c[2]-6];
-          if(d.bnd[i]){ var g=lum(c)*0.42; c=[g,g,g]; }
+        for(var i=0;i<W*H;i++){ var x=i%W,y=(i/W)|0,
+          c=tcol(Lt[D.terr[i]]||''), h=(Lh[D.hgt[i]]||'').toUpperCase(),
+          v=(Lv[D.veg[i]]||'').toUpperCase();
+          if(v.indexOf('JUNGLE')>=0)c=[c[0]-30,c[1]-6,c[2]-28];
+          else if(v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0)c=[c[0]-22,c[1]+2,c[2]-22];
+          else if(v.indexOf('SCRUB')>=0)c=[c[0]+16,c[1]+12,c[2]-6];
+          if(D.bnd[i]){var g=lum(c)*0.42;c=[g,g,g];}
           else if(h.indexOf('MOUNTAIN')>=0||h.indexOf('VOLCANO')>=0){
             var b=lum(c)*0.6+26;
-            c = h.indexOf('VOLCANO')>=0 ? [b+14,b-4,b-6] : [b,b,b+3];
-          } else if(h.indexOf('HILL')>=0){ c=[c[0]-14,c[1]-14,c[2]-10]; }
+            c=h.indexOf('VOLCANO')>=0?[b+14,b-4,b-6]:[b,b,b+3];
+          } else if(h.indexOf('HILL')>=0)c=[c[0]-14,c[1]-14,c[2]-10];
           var ce=cen(x,y);
           ctx.fillStyle='rgb('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+')';
-          hexpath(ce[0],ce[1]); ctx.fill();
-          if(!d.bnd[i] && d.cs[i]){ ctx.fillStyle='#ff2daa';
-            ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.42,0,7); ctx.fill(); }
+          hexp(ce[0],ce[1],S); ctx.fill();
+          if(!D.bnd[i]&&D.cs[i]){ ctx.fillStyle='#ff2daa';
+            ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.4,0,7); ctx.fill(); }
         }
-        // rivers
         ctx.strokeStyle='#4696eb'; ctx.lineWidth=Math.max(2,S/4);
-        var DX_E=[0,1,1,1,0,-1], DX_O=[-1,0,1,0,-1,-1], DY=[1,1,0,-1,-1,0],
-            RB={1:5,2:4,4:3};   // RiverW->dir5, SW->4, SE->3
-        for(var i=0;i<W*H;i++){ if(!d.riv[i]||d.bnd[i]) continue;
-          var x=i%W,y=(i/W)|0, ce=cen(x,y);
-          for(var bit in RB){ if(!(d.riv[i]&bit))continue;
-            var di=RB[bit], ox=(y%2===0?DX_E:DX_O)[di],
-                nx=x+ox, ny=y+DY[di];
-            if(nx<0||ny<0||nx>=W||ny>=H) continue;
-            var nc=cen(nx,ny), mx=(ce[0]+nc[0])/2, my=(ce[1]+nc[1])/2,
-                dx=nc[0]-ce[0], dy=nc[1]-ce[1], L=Math.hypot(dx,dy)||1,
-                hh=S/Math.sqrt(3)*0.96;
+        var DXe=[0,1,1,1,0,-1],DXo=[-1,0,1,0,-1,-1],DY=[1,1,0,-1,-1,0],RB={1:5,2:4,4:3};
+        for(var i=0;i<W*H;i++){ if(!D.riv[i]||D.bnd[i])continue;
+          var x=i%W,y=(i/W)|0,ce=cen(x,y);
+          for(var bit in RB){ if(!(D.riv[i]&bit))continue;
+            var di=RB[bit],ox=(y%2===0?DXe:DXo)[di],nx=x+ox,ny=y+DY[di];
+            if(nx<0||ny<0||nx>=W||ny>=H)continue;
+            var nc=cen(nx,ny),mx=(ce[0]+nc[0])/2,my=(ce[1]+nc[1])/2,
+              dx=nc[0]-ce[0],dy=nc[1]-ce[1],L=Math.hypot(dx,dy)||1,hh=S/Math.sqrt(3)*0.96;
             ctx.beginPath();
-            ctx.moveTo(mx - (-dy/L)*hh, my - (dx/L)*hh);
-            ctx.lineTo(mx + (-dy/L)*hh, my + (dx/L)*hh); ctx.stroke(); }
+            ctx.moveTo(mx-(-dy/L)*hh,my-(dx/L)*hh);
+            ctx.lineTo(mx+(-dy/L)*hh,my+(dx/L)*hh); ctx.stroke(); }
         }
-        // capitals
-        (d.caps||[]).forEach(function(p){ var ce=cen(p[0],p[1]), R=S*1.7;
+        // resource icons
+        var is=S*1.5;
+        for(var i=0;i<W*H;i++){ if(D.res[i]<0||D.bnd[i])continue;
+          var im=icons[slug(D.L.res[D.res[i]])]; if(!im||!im.complete)continue;
+          var x=i%W,y=(i/W)|0,ce=cen(x,y);
+          ctx.drawImage(im,ce[0]-is/2,ce[1]-is/2,is,is); }
+        (D.caps||[]).forEach(function(p){ var ce=cen(p[0],p[1]),R=S*1.7;
           ctx.fillStyle='#fff'; ctx.strokeStyle='#000'; ctx.lineWidth=2;
           ctx.beginPath(); ctx.arc(ce[0],ce[1],R,0,7); ctx.fill(); ctx.stroke();
           ctx.fillStyle='#ff2daa'; ctx.beginPath();
           for(var k=0;k<10;k++){ var a=Math.PI/180*(-90+k*36),
-            rr=(k%2?R*0.36:R*0.82), px=ce[0]+rr*Math.cos(a), py=ce[1]+rr*Math.sin(a);
+            rr=(k%2?R*0.36:R*0.82),px=ce[0]+rr*Math.cos(a),py=ce[1]+rr*Math.sin(a);
             k?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); ctx.fill();
+        });
+        baseImg=ctx.getImageData(0,0,cv.width,cv.height);
+      }
+      function overlay(hoverIdx){
+        if(baseImg) ctx.putImageData(baseImg,0,0);
+        var W=D.w, res=pinRes||activeRes;
+        if(res!=null){ ctx.strokeStyle='#ffe24a'; ctx.lineWidth=Math.max(2,S/3);
+          ctx.shadowColor='#ffe24a'; ctx.shadowBlur=S;
+          for(var i=0;i<D.terr.length;i++){ if(D.res[i]<0)continue;
+            if(slug(D.L.res[D.res[i]])!==res)continue;
+            var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.96); ctx.stroke(); }
+          ctx.shadowBlur=0;
+        }
+        if(hoverIdx>=0){ var ce=cen(hoverIdx%W,(hoverIdx/W)|0);
+          ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(2,S/3);
+          hexp(ce[0],ce[1],S*0.98); ctx.stroke(); }
+      }
+      fetch(base+'data/gen/'+gid+'.json').then(function(r){return r.json();})
+      .then(function(d){
+        D=d; cv.width=Math.ceil(d.w*HW+HW/2+2*PAD);
+        cv.height=Math.ceil((d.h-1)*VS+2*S+2*PAD);
+        // counts + preload icons
+        var cnt={};
+        for(var i=0;i<d.res.length;i++){ if(d.res[i]<0)continue;
+          var nm=d.L.res[d.res[i]]; cnt[nm]=(cnt[nm]||0)+1; }
+        var names=Object.keys(cnt).sort();
+        var pending=names.length;
+        function ready(){ pending--; if(pending<=0){ drawBase(); overlay(-1);} }
+        if(!names.length) { drawBase(); overlay(-1); }
+        names.forEach(function(nm){ var sg=slug(nm), im=new Image();
+          icons[sg]=im; im.onload=ready; im.onerror=ready;
+          im.src=base+'img/icons/resources/'+sg+'.png'; });
+        // panel
+        var rp=document.getElementById('respanel');
+        names.forEach(function(nm){ var sg=slug(nm),
+          el=document.createElement('span'); el.className='rchip';
+          el.innerHTML='<img src="'+base+'img/icons/resources/'+sg
+            +'.png" alt=""> '+nm+' <b>'+cnt[nm]+'</b>';
+          el.addEventListener('mouseenter',function(){ if(pinRes)return;
+            activeRes=sg; overlay(-1); });
+          el.addEventListener('mouseleave',function(){ if(pinRes)return;
+            activeRes=null; overlay(-1); });
+          el.addEventListener('click',function(){
+            if(pinRes===sg){ pinRes=null; el.classList.remove('pin'); }
+            else { document.querySelectorAll('.rchip.pin').forEach(function(o){o.classList.remove('pin');});
+              pinRes=sg; el.classList.add('pin'); }
+            activeRes=null; overlay(-1);
+          });
+          rp.appendChild(el);
         });
       });
       cv.addEventListener('mousemove',function(e){
-        if(!D) return; var rect=cv.getBoundingClientRect(),
-          sx=cv.width/rect.width, sy=cv.height/rect.height,
-          mx=(e.clientX-rect.left)*sx, my=(e.clientY-rect.top)*sy,
-          W=D.w,H=D.h, ry=Math.max(0,Math.min(H-1,Math.round((my-PAD-S)/VS))),
-          best=-1,bd=S*S*1.4;
-        for(var yy=ry-1; yy<=ry+1; yy++){ if(yy<0||yy>=H)continue;
+        if(!D)return; var rect=cv.getBoundingClientRect(),
+          mx=(e.clientX-rect.left)*cv.width/rect.width,
+          my=(e.clientY-rect.top)*cv.height/rect.height,
+          W=D.w,H=D.h,ry=Math.max(0,Math.min(H-1,Math.round((my-PAD-S)/VS))),
+          best=-1,bd=S*S*1.5;
+        for(var yy=ry-1;yy<=ry+1;yy++){ if(yy<0||yy>=H)continue;
           for(var xx=0;xx<W;xx++){ var ce=cen(xx,yy),
             dd=(ce[0]-mx)*(ce[0]-mx)+(ce[1]-my)*(ce[1]-my);
-            if(dd<bd){ bd=dd; best=yy*W+xx; } } }
+            if(dd<bd){bd=dd;best=yy*W+xx;} } }
+        overlay(best);
         if(best<0){ tip.style.display='none'; return; }
-        var i=best, x=i%W, y=(i/W)|0,
-          rn=D.res[i]>=0?D.L.res[D.res[i]]:null,
-          html='<b>('+x+','+y+')</b> '+(D.L.terr[D.terr[i]]||'?')
-            +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')
-            +' · '+(D.L.veg[D.veg[i]]||'—')
-            +(rn?'<br><b>'+rn+'</b>':'')
-            +(D.bnd[i]?'<br><i>off-map</i>':'')
-            +(D.cs[i]?'<br>city site':'');
-        tip.innerHTML=html; tip.style.display='block';
+        var i=best,x=i%W,y=(i/W)|0,rn=D.res[i]>=0?D.L.res[D.res[i]]:null;
+        tip.innerHTML='<b>('+x+','+y+')</b> '+(D.L.terr[D.terr[i]]||'?')
+          +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')+' · '+(D.L.veg[D.veg[i]]||'—')
+          +(rn?'<br><b>'+rn+'</b>':'')+(D.bnd[i]?'<br><i>off-map</i>':'')
+          +(D.cs[i]?'<br>city site':'');
+        tip.style.display='block';
         tip.style.left=(e.clientX-rect.left+14)+'px';
         tip.style.top=(e.clientY-rect.top+12)+'px';
       });
-      cv.addEventListener('mouseleave',function(){ tip.style.display='none'; });
+      cv.addEventListener('mouseleave',function(){
+        tip.style.display='none'; overlay(-1); });
     })();
   </script>
 </Base>
