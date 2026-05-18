@@ -9,16 +9,6 @@ for (const g of games) (byScript[g.script] ??= []).push(g);
 const scripts = Object.keys(byScript).sort();
 const cap = (s: string) => s ? s[0] + s.slice(1).toLowerCase() : s;
 const sz = (s: string) => s === 'SMALLEST' ? 'Duel' : cap(s);
-// Tournament criteria: land-connected · 15–25 sites (ideal 18–22) ·
-// land path 45–70 hex.
-function tier(g: any): '' | 'ok' | 'ideal' {
-  if (!g.landConnected || g.land == null) return '';
-  if (g.land < 45 || g.land > 70) return '';
-  if (g.citySites < 15 || g.citySites > 25) return '';
-  return (g.citySites >= 18 && g.citySites <= 22) ? 'ideal' : 'ok';
-}
-const nIdeal = games.filter(g => tier(g) === 'ideal').length;
-const nOk = games.filter(g => tier(g) === 'ok').length;
 ---
 <Base title="Tournament Calibration">
   <p class="lede">
@@ -27,12 +17,6 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
     <code>Tile.cs::tileAdjacent</code>). Tag which felt good / too
     big / too close and we calibrate the recommended settings per map
     from real outcomes. ID = tournament game number.
-  </p>
-  <p class="crit">
-    <span class="dot ideal"></span><b>{nIdeal} IDEAL</b> &nbsp;
-    <span class="dot ok"></span><b>{nOk} acceptable</b> &nbsp; — meet
-    tournament criteria: <i>land-connected · 15–25 city sites (ideal
-    18–22) · land path 45–70 hex</i>. Highlighted rows below.
   </p>
 
   {scripts.map(s => (
@@ -48,7 +32,7 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
           </tr></thead>
           <tbody>
             {byScript[s].sort((a,b)=>(+a.id||999)-(+b.id||999)).map(g => (
-              <tr class={tier(g)}>
+              <tr>
                 <td class="mono id">{g.id}</td>
                 <td>{g.matchup}</td>
                 <td>{sz(g.size)}</td>
@@ -148,14 +132,5 @@ const nOk = games.filter(g => tier(g) === 'ok').length;
   .id { color: var(--gold-soft); }
   .cap { text-transform: capitalize; }
   .bad { color: #b06a5f; font-weight: 600; }
-  .crit { font-size: 0.84rem; color: var(--text-soft); margin: -0.6rem 0 1.4rem; }
-  .crit i { color: var(--text-faint); }
-  .dot { display:inline-block; width:0.7rem; height:0.7rem; border-radius:2px;
-    vertical-align:-1px; margin-right:0.25rem; }
-  .dot.ideal { background:#3b6e3b; } .dot.ok { background:#5a5326; }
-  tr.ideal td { background:#16290f; }
-  tr.ideal:hover td { background:#1d3614; }
-  tr.ok td { background:#231f0d; }
-  tr.ok:hover td { background:#2c2611; }
   .note { font-size: 0.82rem; color: var(--text-faint); line-height: 1.5; max-width: 82ch; }
 </style>

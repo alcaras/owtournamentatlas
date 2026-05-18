@@ -25,18 +25,7 @@ IMG = ATLAS / "public" / "img" / "oneoff"
 # Quarry/Lumbermill/Grove/Nets are authoritative from improvement.xml;
 # Pasture/Camp/Urban curated (game doesn't tag those in improvement.xml).
 # Display names match build_tournament's RESOURCE_*.replace().title().
-RES_BY_IMP = {
-    "Farm": ["Wheat", "Barley", "Sorghum"],
-    "Pasture": ["Cattle", "Sheep", "Pig", "Goat", "Horse"],
-    "Camp": ["Game", "Fur", "Elephant", "Ivory", "Camel", "Exotic_Fur",
-             "Exotic_Animals"],
-    "Grove": ["Wine", "Olive", "Citrus", "Honey", "Incense", "Lavender",
-              "Silk", "Spices", "Tea"],
-    "Nets": ["Fish", "Crab", "Pearl", "Dye"],
-    "Mine": ["Ore", "Gem", "Gold", "Silver", "Salt", "Jade"],
-    "Quarry": ["Marble"],
-    "Lumbermill": ["Ebony"],
-}
+from res_tax import RES_BY_IMP  # shared taxonomy
 
 
 def caps_and_cities(xbytes: bytes):

@@ -21,9 +21,15 @@ const abbr = (c: any) => {
   return (c.variant ? c.variant + ' ' : '') + `${sz}·${asp}·${sym}`;
 };
 
+// DOTA shown as its own heading per subtype (Jungle/Mountain/Water/Sand)
+const dg = (c: any) => c.group === 'DOTA' ? `DOTA · ${c.variant}` : c.group;
 const byGroup: Record<string, any[]> = {};
-for (const c of dist.configs) (byGroup[c.group] ??= []).push(c);
-const groups = dist.groups.filter((g: string) => byGroup[g]);
+const groups: string[] = [];
+for (const c of dist.configs) {
+  const k = dg(c);
+  if (!byGroup[k]) { byGroup[k] = []; groups.push(k); }
+  byGroup[k].push(c);
+}
 
 // no pass / no bands — just the distribution. connected% is the one gate.
 const connClass = (p: number) => p >= 95 ? 'g' : p >= 75 ? 'o' : 'n';
@@ -127,8 +133,9 @@ const pill = (label: string, o: any) => o == null
                     <a class="gal__cell" href={`${baseUrl}gen/${id}`} target="_blank" rel="noopener">
                       <img src={`${baseUrl}img/${p}`} loading="lazy"
                            alt={`${c.group} sample`} />
-                      <div class={'cnbar ' + (gm.split ? 'no' : gm.conn ? 'ok' : 'no')}>
-                        {gm.split ? '⚠ SPLIT LANDMASS' : gm.conn ? 'LAND-CONNECTED' : 'NO LAND CONNECTION'}</div>
+                      <div class={'cnbar ' + (gm.conn ? 'ok' : 'no')}>
+                        {gm.conn ? 'LAND-CONNECTED' : 'NO LAND CONNECTION'}
+                        {gm.split && <span class="splitf">⚠ split landmass</span>}</div>
                       <div class="cap">
                         <span><i>city sites</i><b>{gm.sites ?? '—'}</b></span>
                         <span><i>land hex</i><b>{gm.land ?? '—'}</b></span>
@@ -229,6 +236,9 @@ const pill = (label: string, o: any) => o == null
       letter-spacing:0.06em; padding:0.28rem 0; }
     .cnbar.ok { background:#1e4d18; color:#bfe89f; }
     .cnbar.no { background:#46211b; color:#eaa091; }
+    .cnbar .splitf { margin-left:0.5rem; font-size:0.64rem; font-weight:600;
+      color:#e0c061; background:rgba(0,0,0,0.28); padding:0.05rem 0.35rem;
+      border-radius:3px; letter-spacing:0.02em; }
     .cap { display:grid; grid-template-columns:1fr 1fr 1fr;
       background:#0e0f12; font-size:0.72rem; }
     .cap span { display:flex; flex-direction:column; align-items:center;
