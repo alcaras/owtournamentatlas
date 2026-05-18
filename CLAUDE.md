@@ -117,9 +117,12 @@ configs via direct URL — harmless, just unlinked from `/recommended`.)
   seeds genuinely split (no connected sym pair) — the split-proneness
   metric that *replaces* the old as-dealt connPct. As-dealt pool is
   recoverable from owmapgen-lab git (`f4185e9:data/samples/samples.jsonl`).
-  CAVEAT: `render_recs.py` (→ `recommendations.json`, `public/img/rec/`)
-  does NOT yet apply the gate, so the /recommended *previews* can still
-  show as-dealt (possibly split) placement — follow-up if it matters.
+  `render_recs.py` applies the same gate too, so `recommendations.json`
+  + `public/img/rec/` previews are connected-only as well. The
+  /recommended page shows `dropPct` (Split-dropped % pill, `dropClass`
+  colour) instead of the now-constant connPct. `calibration.astro` is
+  intentionally untouched — it's real `tournament-games.json` outcomes,
+  not the synthetic pool, so its per-game Conn stays meaningful.
 - **`reachPct` / `split`:** BFS from `caps[0]` over walkable land
   (water + mountain/volcano + lake + boundary impassable). `split` =
   reachPct < 85. **Split is a separate signal from land-connected** —
