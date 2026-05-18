@@ -185,7 +185,15 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-90),
           px=cx+r*Math.cos(a),py=cy+r*Math.sin(a);
           i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); }
-      function applyView(){ cv.style.transform='translate('+tx+'px,'+ty+'px) scale('+k+')'; }
+      function minK(){ return cv.width? wrap.clientWidth/cv.width : 0.15; }
+      function clampView(){
+        var W=wrap.clientWidth, H=wrap.clientHeight,
+            kw=cv.width*k, kh=cv.height*k;
+        tx = kw<=W ? (W-kw)/2 : Math.min(0, Math.max(W-kw, tx));
+        ty = kh<=H ? (H-kh)/2 : Math.min(0, Math.max(H-kh, ty));
+      }
+      function applyView(){ clampView();
+        cv.style.transform='translate('+tx+'px,'+ty+'px) scale('+k+')'; }
       var DXe=[0,1,1,1,0,-1],DXo=[-1,0,1,0,-1,-1],DY=[1,1,0,-1,-1,0];
       function drawBase(){
         var W=D.w,H=D.h,Lt=D.L.terr,Lh=D.L.hgt,Lv=D.L.veg;
@@ -408,7 +416,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       // zoom
       wrap.addEventListener('wheel',function(e){ if(!D)return; e.preventDefault();
         var r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top,
-          f=e.deltaY<0?1.15:1/1.15, nk=Math.min(8,Math.max(0.15,k*f));
+          f=e.deltaY<0?1.15:1/1.15, nk=Math.min(8,Math.max(minK(),k*f));
         tx = mx-(mx-tx)*(nk/k); ty = my-(my-ty)*(nk/k); k=nk; applyView();
       },{passive:false});
       // drag
