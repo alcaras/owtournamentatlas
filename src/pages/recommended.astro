@@ -66,7 +66,12 @@ const pill = (label: string, o: any) => o == null
 
   <nav class="snav" id="snav">
     <button id="copyv" class="snav__cv">⬇ COPY VOTES</button>
-    <div class="snav__c">voted <b id="vc">0</b> / {dist.configCount}</div>
+    <div class="snav__c">voted <b id="vc">0</b> / {dist.configCount}<span id="alldone" class="alldone" hidden>✓ all in</span></div>
+    <div class="snav__tly">
+      <span class="tly tly-like">👍 <b id="t-like">0</b></span>
+      <span class="tly tly-maybe">🤷 <b id="t-maybe">0</b></span>
+      <span class="tly tly-no">👎 <b id="t-no">0</b></span>
+    </div>
     <div class="snav__t">Map scripts</div>
     {groups.map((g: string) => (
       <div class="ng" data-g={gslug(g)}>
@@ -211,7 +216,15 @@ const pill = (label: string, o: any) => o == null
       margin-bottom:0.35rem; }
     .snav__cv:hover { background:#2e2810; }
     .snav__c { font-size:0.74rem; color:var(--text-soft);
-      margin-bottom:0.5rem; } .snav__c b { color:var(--gold); }
+      margin-bottom:0.4rem; } .snav__c b { color:var(--gold); }
+    .snav__c .alldone { color:#bfe89f; margin-left:0.3rem; }
+    .snav__tly { display:flex; gap:0.3rem; margin-bottom:0.6rem; }
+    .tly { font-size:0.62rem; font-family:var(--font-mono);
+      padding:0.1rem 0.4rem; border:1px solid; border-radius:999px; }
+    .tly b { font-weight:700; }
+    .tly-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
+    .tly-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
+    .tly-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
     .snav__t { font-size:0.6rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
     .ng__h { display:block; color:var(--text-soft); text-decoration:none;
@@ -229,6 +242,8 @@ const pill = (label: string, o: any) => o == null
     .vchip.v-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
     .vchip.v-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
     .vchip.v-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
+    .vchip.v-like::before, .vchip.v-maybe::before, .vchip.v-no::before {
+      content:'✓ '; font-weight:700; }
     .pill.g-bg { border-color:#3b6e3b; }
     .pill.o-bg { border-color:var(--gold-deep); }
     .pill.n-bg { border-color:#5a2e28; }
@@ -326,10 +341,11 @@ const pill = (label: string, o: any) => o == null
       var KEY='ow_votes_v1';
       var votes={}; try{ votes=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
       function paint(){
-        var cnt=0;
+        var cnt=0, total=0, t={like:0,maybe:0,no:0};
         document.querySelectorAll('.vote').forEach(function(v){
+          total++;
           var s=v.getAttribute('data-slug');
-          if(votes[s]) cnt++;
+          if(votes[s]){ cnt++; if(t[votes[s]]!=null) t[votes[s]]++; }
           v.querySelectorAll('button').forEach(function(b){
             b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
           });
@@ -339,6 +355,11 @@ const pill = (label: string, o: any) => o == null
           if(votes[s]) ch.classList.add('v-'+votes[s]);
         });
         var vc=document.getElementById('vc'); if(vc) vc.textContent=cnt;
+        ['like','maybe','no'].forEach(function(k){
+          var e=document.getElementById('t-'+k); if(e) e.textContent=t[k];
+        });
+        var ad=document.getElementById('alldone');
+        if(ad) ad.hidden=!(total>0 && cnt===total);
       }
       // scroll-spy: open the script group currently in view
       var ngs=[].slice.call(document.querySelectorAll('.ng'));
