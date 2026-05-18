@@ -92,9 +92,8 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       line-height:1.45; }
     #tip b { color:var(--gold); }
     #tip .ti { width:15px; height:15px; vertical-align:-3px; }
-    .yi { width:18px; height:18px; vertical-align:-4px; display:inline-block; }
-    .yt th .yi { width:15px; height:15px; vertical-align:-3px; }
-    .totals span { display:inline-flex; align-items:center; gap:0.3rem; }
+    :global(.yi) { width:18px; height:18px; vertical-align:-4px; display:inline-block; }
+    :global(.yt th .yi) { width:15px; height:15px; vertical-align:-1px; }
     #reset { position:absolute; left:8px; bottom:8px; z-index:8;
       background:rgba(12,13,16,0.85); color:var(--text-soft);
       border:1px solid var(--border-strong); border-radius:5px;
@@ -138,23 +137,33 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     .kv td:first-child { color:var(--text-soft); }
     .kv td:last-child { text-align:right; }
     .kv b { color:var(--text); }
-    .yt { width:100%; table-layout:fixed; }
-    .yt th, .yt td { text-align:right !important; }
-    .yt th:first-child, .yt td:first-child {
-      text-align:left !important; width:3rem; color:var(--text-dim); }
-    .yt th { font-size:0.6rem; color:var(--text-dim); text-transform:uppercase;
-      text-align:right; padding:0.18rem 0.4rem; border-bottom:1px solid var(--border-strong); }
-    .yt th:first-child { text-align:left; }
-    .yt td { text-align:right; }
-    .yt td.yc { cursor:crosshair; font-family:var(--font-mono); font-size:0.82em; }
-    .yt td.yc:hover { background:#16290f; color:#9fd07f; }
+    /* :global — tbody rows are built in JS, scoped rules wouldn't match */
+    :global(.yt) { width:100%; table-layout:fixed; }
+    :global(.yt th), :global(.yt td) { padding:0.18rem 0.55rem; }
+    /* numeric body cells right-aligned */
+    :global(.yt td) { text-align:right; font-family:var(--font-mono);
+      font-size:0.82em; }
+    /* yield-icon headers centred over their column */
+    :global(.yt th) { font-size:0.6rem; color:var(--text-dim);
+      text-transform:uppercase; text-align:center;
+      border-bottom:1px solid var(--border-strong); }
+    /* first column = bucket label, left-aligned */
+    :global(.yt th:first-child), :global(.yt td:first-child) {
+      text-align:left; width:3rem; color:var(--text-dim);
+      font-family:var(--font-ui); }
+    :global(.yt td.yc) { cursor:crosshair; }
+    :global(.yt td.yc:hover) { background:#16290f; color:#9fd07f; }
     .mono { font-family:var(--font-mono); font-size:0.86em; }
     .dim { color:var(--text-dim); }
     .good { color:#9fd07f; font-weight:700; }
     .bad { color:#d08070; font-weight:700; }
-    .totals { display:flex; flex-wrap:wrap; gap:1.2rem; font-size:1.05rem; }
-    .totals span { color:var(--text-soft); }
-    .totals b { color:var(--gold); font-size:1.25rem; }
+    /* :global — #totals is filled via innerHTML (JS) */
+    :global(.totals) { display:flex; flex-wrap:wrap; gap:1.6rem;
+      font-size:1.05rem; align-items:center; }
+    :global(.totals span) { display:inline-flex; align-items:center;
+      gap:0.45rem; color:var(--text-soft); }
+    :global(.totals b) { color:var(--gold); font-size:1.25rem;
+      font-variant-numeric:tabular-nums; }
   </style>
 
   <script is:inline define:vars={{ gid: g.id, base: baseUrl, resTax }}>
@@ -296,14 +305,18 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           for(var i=0;i<D.cs.length;i++){ if(!D.cs[i]||D.bnd[i])continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
-        if(capHi && D.capPath && D.capPath.length>1){
-          ctx.strokeStyle='#35e0e0'; ctx.lineWidth=Math.max(3,S/2);
-          ctx.lineJoin='round'; ctx.lineCap='round';
-          ctx.shadowColor='#35e0e0'; ctx.shadowBlur=S*1.2;
-          ctx.beginPath();
-          D.capPath.forEach(function(p,j){ var c=cen(p[0],p[1]);
-            j?ctx.lineTo(c[0],c[1]):ctx.moveTo(c[0],c[1]); });
-          ctx.stroke(); ctx.shadowBlur=0; }
+        if(capHi){
+          var lp=(D.capPath&&D.capPath.length>1)?D.capPath:null,
+              wp=(!lp&&D.capPathW&&D.capPathW.length>1)?D.capPathW:null,
+              pp=lp||wp;
+          if(pp){ ctx.strokeStyle=lp?'#35e0e0':'#ff3b30';
+            ctx.lineWidth=Math.max(3,S/2);
+            ctx.lineJoin='round'; ctx.lineCap='round';
+            ctx.shadowColor=ctx.strokeStyle; ctx.shadowBlur=S*1.2;
+            ctx.beginPath();
+            pp.forEach(function(p,j){ var c=cen(p[0],p[1]);
+              j?ctx.lineTo(c[0],c[1]):ctx.moveTo(c[0],c[1]); });
+            ctx.stroke(); ctx.shadowBlur=0; } }
         if(hi>=0){ var ce=cen(hi%W,(hi/W)|0);
           ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(2,S/3);
           hexp(ce[0],ce[1],S*0.98); ctx.stroke(); }
@@ -436,7 +449,9 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           +(isCap?'<br><b style="color:#ff2daa">★ CAPITAL</b>'+(
              (D.capPath&&D.capPath.length>1)
                ? ' <span style="color:#35e0e0">· land path '+(D.capPath.length-1)+' hex</span>'
-               : ' <span style="color:#ff5c3a">· no land path</span>'):'')
+               : (D.capPathW&&D.capPathW.length>1)
+                 ? ' <span style="color:#ff3b30">· no land path · water path '+(D.capPathW.length-1)+' hex</span>'
+                 : ' <span style="color:#ff5c3a">· no path</span>'):'')
           +(D.cs[i]?'<br>city site':'')+(D.bnd[i]?'<br><i>off-map</i>':'');
         tip.style.display='block';
         tip.style.left=(e.clientX-r.left+14)+'px';
