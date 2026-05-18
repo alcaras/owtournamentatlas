@@ -18,16 +18,17 @@ const thr = ['5','6','7','8','9','10','11','12'];
   <p class="back"><a href={`${baseUrl}recommended`}>← all recommended</a></p>
   <p class="lede">
     <b>{g.label}</b> · seed {g.seed}. <span class="mono">{g.setting}</span>.
-    Rivers (blue), game resource icons, out-of-bounds greyed; pink stars
-    = capitals, pink dots = city sites. <b>Click the map to open full
-    size.</b>
+    <b>Hover any tile</b> for terrain / height / vegetation / resource.
+    Pink stars = capitals, pink dots = city sites; blue = rivers; faded
+    grey = impassable / off-map. (<a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">static image ↗</a>)
   </p>
 
   <div class="grid">
     <figure class="mapfig">
-      <a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">
-        <img src={`${baseUrl}img/${g.img}`} alt={`${g.label} seed ${g.seed}`} />
-      </a>
+      <div id="mapwrap" style="position:relative;">
+        <canvas id="cv"></canvas>
+        <div id="tip"></div>
+      </div>
     </figure>
 
     <div class="stats">
@@ -88,6 +89,14 @@ const thr = ['5','6','7','8','9','10','11','12'];
     .mapfig { margin:0; }
     .mapfig img { width:100%; height:auto; display:block; border-radius:5px;
       border:1px solid var(--border-strong); background:#0b0c0f; cursor:zoom-in; }
+    #cv { width:100%; height:auto; display:block; border-radius:5px;
+      border:1px solid var(--border-strong); background:#0b0c0f; }
+    #tip { position:absolute; pointer-events:none; display:none; z-index:9;
+      background:rgba(12,13,16,0.96); border:1px solid var(--gold-deep);
+      border-radius:5px; padding:0.4rem 0.55rem; font-size:0.74rem;
+      color:var(--text); font-family:var(--font-ui); white-space:nowrap;
+      line-height:1.4; }
+    #tip b { color:var(--gold); }
     .stats h2, .rsec { font-size:1.05rem; color:var(--gold); margin:1rem 0 0.3rem; }
     .stats h2:first-child { margin-top:0; }
     .rsec { margin-top:1.6rem; }
@@ -112,4 +121,99 @@ const thr = ['5','6','7','8','9','10','11','12'];
     .chip.off { background:transparent; border-color:var(--border);
       color:var(--text-dim); opacity:0.55; }
   </style>
+
+  <script is:inline define:vars={{ gid: g.id, base: baseUrl }}>
+    (function(){
+      var TERR={TERRAIN_WATER:[38,71,110],TERRAIN_TEMPERATE:[104,138,74],
+        TERRAIN_LUSH:[74,110,56],TERRAIN_ARID:[170,148,95],
+        TERRAIN_SAND:[206,184,120],TERRAIN_MARSH:[96,110,80],
+        TERRAIN_TUNDRA:[200,205,210],TERRAIN_URBAN:[150,128,116]};
+      function tcol(name){ return TERR[ 'TERRAIN_'+name.toUpperCase().replace(/ /g,'_') ]
+        || TERR['TERRAIN_'+name] || [90,90,90]; }
+      var cv=document.getElementById('cv'), tip=document.getElementById('tip'),
+          ctx=cv.getContext('2d'), D=null, S=11, HW=Math.sqrt(3)*S,
+          VS=1.5*S, PAD=4, cx0;
+      function cen(x,y){ return [ x*HW + (y%2===0?HW/2:0) + HW/2 + PAD,
+                                  y*VS + S + PAD ]; }
+      function hexpath(cx,cy){ ctx.beginPath();
+        for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-90);
+          var px=cx+S*Math.cos(a), py=cy+S*Math.sin(a);
+          i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); }
+      function lum(c){ return 0.299*c[0]+0.587*c[1]+0.114*c[2]; }
+      fetch(base+'data/gen/'+gid+'.json').then(function(r){return r.json();})
+      .then(function(d){
+        D=d; var W=d.w,H=d.h;
+        cv.width = Math.ceil(W*HW + HW/2 + 2*PAD);
+        cv.height= Math.ceil((H-1)*VS + 2*S + 2*PAD);
+        ctx.fillStyle='#0b0c0f'; ctx.fillRect(0,0,cv.width,cv.height);
+        var Lt=d.L.terr, Lh=d.L.hgt, Lv=d.L.veg;
+        for(var i=0;i<W*H;i++){
+          var x=i%W, y=(i/W)|0, c=tcol(Lt[d.terr[i]]||''), h=(Lh[d.hgt[i]]||'').toUpperCase(), v=(Lv[d.veg[i]]||'').toUpperCase();
+          if(v.indexOf('JUNGLE')>=0) c=[c[0]-30,c[1]-6,c[2]-28];
+          else if(v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0) c=[c[0]-22,c[1]+2,c[2]-22];
+          else if(v.indexOf('SCRUB')>=0) c=[c[0]+16,c[1]+12,c[2]-6];
+          if(d.bnd[i]){ var g=lum(c)*0.42; c=[g,g,g]; }
+          else if(h.indexOf('MOUNTAIN')>=0||h.indexOf('VOLCANO')>=0){
+            var b=lum(c)*0.6+26;
+            c = h.indexOf('VOLCANO')>=0 ? [b+14,b-4,b-6] : [b,b,b+3];
+          } else if(h.indexOf('HILL')>=0){ c=[c[0]-14,c[1]-14,c[2]-10]; }
+          var ce=cen(x,y);
+          ctx.fillStyle='rgb('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+')';
+          hexpath(ce[0],ce[1]); ctx.fill();
+          if(!d.bnd[i] && d.cs[i]){ ctx.fillStyle='#ff2daa';
+            ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.42,0,7); ctx.fill(); }
+        }
+        // rivers
+        ctx.strokeStyle='#4696eb'; ctx.lineWidth=Math.max(2,S/4);
+        var DX_E=[0,1,1,1,0,-1], DX_O=[-1,0,1,0,-1,-1], DY=[1,1,0,-1,-1,0],
+            RB={1:5,2:4,4:3};   // RiverW->dir5, SW->4, SE->3
+        for(var i=0;i<W*H;i++){ if(!d.riv[i]||d.bnd[i]) continue;
+          var x=i%W,y=(i/W)|0, ce=cen(x,y);
+          for(var bit in RB){ if(!(d.riv[i]&bit))continue;
+            var di=RB[bit], ox=(y%2===0?DX_E:DX_O)[di],
+                nx=x+ox, ny=y+DY[di];
+            if(nx<0||ny<0||nx>=W||ny>=H) continue;
+            var nc=cen(nx,ny), mx=(ce[0]+nc[0])/2, my=(ce[1]+nc[1])/2,
+                dx=nc[0]-ce[0], dy=nc[1]-ce[1], L=Math.hypot(dx,dy)||1,
+                hh=S/Math.sqrt(3)*0.96;
+            ctx.beginPath();
+            ctx.moveTo(mx - (-dy/L)*hh, my - (dx/L)*hh);
+            ctx.lineTo(mx + (-dy/L)*hh, my + (dx/L)*hh); ctx.stroke(); }
+        }
+        // capitals
+        (d.caps||[]).forEach(function(p){ var ce=cen(p[0],p[1]), R=S*1.7;
+          ctx.fillStyle='#fff'; ctx.strokeStyle='#000'; ctx.lineWidth=2;
+          ctx.beginPath(); ctx.arc(ce[0],ce[1],R,0,7); ctx.fill(); ctx.stroke();
+          ctx.fillStyle='#ff2daa'; ctx.beginPath();
+          for(var k=0;k<10;k++){ var a=Math.PI/180*(-90+k*36),
+            rr=(k%2?R*0.36:R*0.82), px=ce[0]+rr*Math.cos(a), py=ce[1]+rr*Math.sin(a);
+            k?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); ctx.fill();
+        });
+      });
+      cv.addEventListener('mousemove',function(e){
+        if(!D) return; var rect=cv.getBoundingClientRect(),
+          sx=cv.width/rect.width, sy=cv.height/rect.height,
+          mx=(e.clientX-rect.left)*sx, my=(e.clientY-rect.top)*sy,
+          W=D.w,H=D.h, ry=Math.max(0,Math.min(H-1,Math.round((my-PAD-S)/VS))),
+          best=-1,bd=S*S*1.4;
+        for(var yy=ry-1; yy<=ry+1; yy++){ if(yy<0||yy>=H)continue;
+          for(var xx=0;xx<W;xx++){ var ce=cen(xx,yy),
+            dd=(ce[0]-mx)*(ce[0]-mx)+(ce[1]-my)*(ce[1]-my);
+            if(dd<bd){ bd=dd; best=yy*W+xx; } } }
+        if(best<0){ tip.style.display='none'; return; }
+        var i=best, x=i%W, y=(i/W)|0,
+          rn=D.res[i]>=0?D.L.res[D.res[i]]:null,
+          html='<b>('+x+','+y+')</b> '+(D.L.terr[D.terr[i]]||'?')
+            +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')
+            +' · '+(D.L.veg[D.veg[i]]||'—')
+            +(rn?'<br><b>'+rn+'</b>':'')
+            +(D.bnd[i]?'<br><i>off-map</i>':'')
+            +(D.cs[i]?'<br>city site':'');
+        tip.innerHTML=html; tip.style.display='block';
+        tip.style.left=(e.clientX-rect.left+14)+'px';
+        tip.style.top=(e.clientY-rect.top+12)+'px';
+      });
+      cv.addEventListener('mouseleave',function(){ tip.style.display='none'; });
+    })();
+  </script>
 </Base>
