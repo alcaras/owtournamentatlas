@@ -50,27 +50,29 @@ const pill = (label: string, o: any) => o == null
       <a href={`${baseUrl}calibration`}>{tour.count} real games →</a></span>
   </div>
 
-  <div class="bar">
-    <span class="bar__n"><b id="vis">{dist.configCount}</b> / {dist.configCount} configs · {dist.configs.reduce((a:number,c:any)=>a+c.n,0)} maps</span>
-    <label>City sites <input type="number" id="fsmin" placeholder="min"/> – <input type="number" id="fsmax" placeholder="max"/></label>
-    <label>Land hex <input type="number" id="flmin" placeholder="min"/> – <input type="number" id="flmax" placeholder="max"/></label>
-    <button id="fclr" class="btn">clear</button>
-    <button id="copyv" class="btn big">⬇ COPY VOTES</button>
-  </div>
+  <nav class="snav" id="snav">
+    <button id="copyv" class="snav__cv">⬇ COPY VOTES</button>
+    <div class="snav__c">voted <b id="vc">0</b> / {dist.configCount}</div>
+    <div class="snav__t">Map scripts</div>
+    {groups.map((g: string) => (
+      g === 'DOTA' ? (
+        <>
+          <a href={`#${gslug(g)}`}>{g}</a>
+          {[...new Set(byGroup['DOTA'].map((c: any) => c.variant))].map((v: any) => {
+            const first = byGroup['DOTA'].find((c: any) => c.variant === v);
+            return <a class="sub" href={`#cfg-${first.slug}`}>{v}</a>;
+          })}
+        </>
+      ) : <a href={`#${gslug(g)}`}>{g}</a>
+    ))}
+  </nav>
 
-  <div class="layout">
-    <nav class="snav">
-      <div class="snav__t">Map scripts</div>
-      {groups.map((g: string) => (
-        <a href={`#${gslug(g)}`}>{g}</a>
-      ))}
-    </nav>
-    <div class="main">
+  <div class="rmain">
     {groups.map((g: string) => (
     <section class="grp" id={gslug(g)}>
       <h2 class="grp__h">{g}</h2>
       {byGroup[g].map((c: any) => (
-        <div class="cfg" data-slug={c.slug} data-label={c.label}
+        <div class="cfg" id={`cfg-${c.slug}`} data-slug={c.slug} data-label={c.label}
              data-sites={c.dist.sites?.mean ?? ''}
              data-land={c.dist.land?.mean ?? ''}>
           <div class="cfg__hd">
@@ -117,10 +119,11 @@ const pill = (label: string, o: any) => o == null
                     <a class="gal__cell" href={`${baseUrl}gen/${id}`}>
                       <img src={`${baseUrl}img/${p}`} loading="lazy"
                            alt={`${c.group} sample`} />
+                      <div class={'cnbar ' + (gm.conn ? 'ok' : 'no')}>
+                        {gm.conn ? 'LAND-CONNECTED' : 'NO LAND CONNECTION'}</div>
                       <div class="cap">
-                        <span><i>sites</i><b>{gm.sites ?? '—'}</b></span>
-                        <span><i>land</i><b>{gm.land ?? '—'}</b></span>
-                        <span class={gm.conn ? 'ok' : 'no'}><i>conn</i><b>{gm.conn ? 'Y' : 'N'}</b></span>
+                        <span><i>city sites</i><b>{gm.sites ?? '—'}</b></span>
+                        <span><i>land hex</i><b>{gm.land ?? '—'}</b></span>
                       </div>
                     </a>
                   );
@@ -133,7 +136,6 @@ const pill = (label: string, o: any) => o == null
     </section>
     ))}
     </div>
-  </div>
 
   <p class="note">
     {dist.configCount} configs × {N} seeds. No pass/fail and no fixed
@@ -179,29 +181,43 @@ const pill = (label: string, o: any) => o == null
       border:1px solid var(--border-strong); border-radius:4px;
       padding:0.08rem 0.4rem; }
     .ch.tip { color:var(--gold-soft); border-color:var(--gold-deep); }
-    .layout { display:grid; grid-template-columns:160px 1fr; gap:1.4rem;
-      align-items:start; }
-    @media (max-width:760px){ .layout{ grid-template-columns:1fr; } }
-    .snav { position:sticky; top:0.6rem; display:flex; flex-direction:column;
-      gap:0.15rem; font-size:0.8rem; max-height:92vh; overflow:auto; }
-    @media (max-width:760px){ .snav{ position:static; flex-flow:row wrap; } }
-    .snav__t { font-size:0.62rem; letter-spacing:0.14em;
+    .rmain { width:100%; }
+    .snav { position:fixed; left:max(8px, calc((100vw - 1180px)/2 - 168px));
+      top:84px; width:160px; display:flex; flex-direction:column;
+      gap:0.12rem; font-size:0.78rem; max-height:calc(100vh - 100px);
+      overflow:auto; z-index:20; }
+    @media (max-width:1320px){ .snav{ left:8px; } }
+    @media (max-width:980px){ .snav{ position:static; width:auto;
+      flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
+    .snav__cv { background:#231f0d; color:var(--gold); cursor:pointer;
+      border:1px solid var(--gold-deep); border-radius:7px;
+      padding:0.5rem 0.6rem; font-weight:700; font-size:0.86rem;
+      margin-bottom:0.35rem; }
+    .snav__cv:hover { background:#2e2810; }
+    .snav__c { font-size:0.74rem; color:var(--text-soft);
+      margin-bottom:0.5rem; } .snav__c b { color:var(--gold); }
+    .snav__t { font-size:0.6rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
     .snav a { color:var(--text-soft); text-decoration:none;
-      padding:0.12rem 0.3rem; border-radius:4px; }
+      padding:0.1rem 0.3rem; border-radius:4px; }
+    .snav a.sub { padding-left:0.9rem; font-size:0.72rem;
+      color:var(--text-faint); }
     .snav a:hover { color:var(--gold); background:var(--bg-elev); }
     .pill.g-bg { border-color:#3b6e3b; }
     .pill.o-bg { border-color:var(--gold-deep); }
     .pill.n-bg { border-color:#5a2e28; }
-    .cap { display:grid; grid-template-columns:repeat(3,1fr);
-      background:#0e0f12; font-size:0.7rem; }
+    .cnbar { text-align:center; font-weight:700; font-size:0.74rem;
+      letter-spacing:0.06em; padding:0.28rem 0; }
+    .cnbar.ok { background:#1e4d18; color:#bfe89f; }
+    .cnbar.no { background:#46211b; color:#eaa091; }
+    .cap { display:grid; grid-template-columns:1fr 1fr;
+      background:#0e0f12; font-size:0.72rem; }
     .cap span { display:flex; flex-direction:column; align-items:center;
-      padding:0.2rem 0; border-right:1px solid var(--border); color:var(--text-soft); }
+      padding:0.22rem 0; border-right:1px solid var(--border); color:var(--text-soft); }
     .cap span:last-child { border-right:0; }
     .cap i { font-style:normal; font-size:0.58rem; color:var(--text-dim);
       text-transform:uppercase; letter-spacing:0.06em; }
-    .cap b { color:var(--text); font-size:0.84rem; }
-    .cap .ok b { color:#9fd07f; } .cap .no b { color:#d08070; }
+    .cap b { color:var(--text); font-size:0.92rem; }
     .cfg__body { margin-top:0.6rem; }
     .pills { display:flex; flex-wrap:wrap; gap:0.8rem; }
     .pill { flex:1 1 280px; background:#16181d;
@@ -281,12 +297,15 @@ const pill = (label: string, o: any) => o == null
       var KEY='ow_votes_v1';
       var votes={}; try{ votes=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
       function paint(){
+        var cnt=0;
         document.querySelectorAll('.vote').forEach(function(v){
           var s=v.getAttribute('data-slug');
+          if(votes[s]) cnt++;
           v.querySelectorAll('button').forEach(function(b){
             b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
           });
         });
+        var vc=document.getElementById('vc'); if(vc) vc.textContent=cnt;
       }
       document.querySelectorAll('.vote button').forEach(function(b){
         b.addEventListener('click',function(){
@@ -311,32 +330,6 @@ const pill = (label: string, o: any) => o == null
           var b=document.getElementById('copyv'); var o=b.textContent;
           b.textContent='✓ copied!'; setTimeout(function(){b.textContent=o;},1500);
         });
-      });
-      // filters
-      function num(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
-      function apply(){
-        var smin=num('fsmin'),smax=num('fsmax'),lmin=num('flmin'),lmax=num('flmax'),vis=0;
-        document.querySelectorAll('.cfg').forEach(function(c){
-          var s=parseFloat(c.getAttribute('data-sites'));
-          var l=parseFloat(c.getAttribute('data-land'));
-          var ok=true;
-          if(smin!=null&&!(s>=smin))ok=false;
-          if(smax!=null&&!(s<=smax))ok=false;
-          if(lmin!=null&&!(l>=lmin))ok=false;
-          if(lmax!=null&&!(l<=lmax))ok=false;
-          c.classList.toggle('hide',!ok); if(ok)vis++;
-        });
-        document.querySelectorAll('.grp').forEach(function(g){
-          g.style.display = g.querySelector('.cfg:not(.hide)')?'':'none';
-        });
-        document.getElementById('vis').textContent=vis;
-      }
-      ['fsmin','fsmax','flmin','flmax'].forEach(function(id){
-        document.getElementById(id).addEventListener('input',apply);
-      });
-      document.getElementById('fclr').addEventListener('click',function(){
-        ['fsmin','fsmax','flmin','flmax'].forEach(function(id){document.getElementById(id).value='';});
-        apply();
       });
     })();
   </script>
