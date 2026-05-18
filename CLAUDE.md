@@ -101,6 +101,25 @@ configs via direct URL — harmless, just unlinked from `/recommended`.)
   deterministic west-most valid city-site anchor + the game's exact
   symmetric transform. Verified east-west symmetric. (Don't call
   MirrorPlayerStarts — it threw IndexOutOfRange and aborted export.)
+- **Pool is connected-only by construction.** owmapgen never checks
+  anchor↔partner land connection and `--connected-starts` is a no-op
+  headless (spot-tested: byte-identical maps off/on). The sweep applies
+  `connected_starts.reselect_connected_starts()` — picks the west-most
+  city-site anchor whose *exact owmapgen symmetric partner* is land-
+  connected, using `parse_map`'s own `_odd_r_neighbors` + walkable rule
+  (selection oracle == measurement oracle → connPct 100, not hoped-for),
+  and rewrites `<PlayerStarts>` before parse/render/cache. Seeds with no
+  connected pair at any city site are genuinely split → dropped (no
+  sample line; incremental sweep tolerates absent (slug,seed)). Don't
+  reimplement that BFS in C# — drift would make connPct unverifiable.
+- **`connPct` is now ~100 everywhere; use `dropPct` as the split
+  signal.** `dropPct` (atlas-dist, from `build_dist`) = % of attempted
+  seeds genuinely split (no connected sym pair) — the split-proneness
+  metric that *replaces* the old as-dealt connPct. As-dealt pool is
+  recoverable from owmapgen-lab git (`f4185e9:data/samples/samples.jsonl`).
+  CAVEAT: `render_recs.py` (→ `recommendations.json`, `public/img/rec/`)
+  does NOT yet apply the gate, so the /recommended *previews* can still
+  show as-dealt (possibly split) placement — follow-up if it matters.
 - **`reachPct` / `split`:** BFS from `caps[0]` over walkable land
   (water + mountain/volcano + lake + boundary impassable). `split` =
   reachPct < 85. **Split is a separate signal from land-connected** —
