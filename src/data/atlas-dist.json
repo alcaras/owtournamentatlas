@@ -1,5 +1,5 @@
 {
- "configCount": 131,
+ "configCount": 132,
  "configs": [
   {
    "connPct": 100,
@@ -15082,97 +15082,97 @@
    "variant": ""
   },
   {
-   "connPct": 100,
+   "connPct": 89,
    "dist": {
     "crow": {
      "max": 74,
-     "mean": 63.8,
-     "med": 61,
-     "min": 58,
-     "n": 5,
+     "mean": 64.9,
+     "med": 64,
+     "min": 56,
+     "n": 9,
      "p10": 58,
-     "p90": 74,
-     "sd": 5.7
+     "p90": 73,
+     "sd": 6.4
     },
     "land": {
      "max": 82,
-     "mean": 72.8,
-     "med": 72,
+     "mean": 74.4,
+     "med": 75.0,
      "min": 62,
-     "n": 5,
-     "p10": 62,
-     "p90": 82,
-     "sd": 7.4
+     "n": 8,
+     "p10": 68,
+     "p90": 81,
+     "sd": 6.6
     },
     "oceanPct": {
-     "max": 58,
-     "mean": 57.0,
+     "max": 59,
+     "mean": 56.6,
      "med": 57,
-     "min": 56,
-     "n": 5,
+     "min": 52,
+     "n": 9,
      "p10": 56,
      "p90": 58,
-     "sd": 0.6
+     "sd": 1.8
     },
     "res": {
      "max": 109,
-     "mean": 97.2,
+     "mean": 98.3,
      "med": 99,
      "min": 80,
-     "n": 5,
-     "p10": 80,
-     "p90": 109,
-     "sd": 9.6
+     "n": 9,
+     "p10": 95,
+     "p90": 104,
+     "sd": 7.8
     },
     "scout": {
      "max": 41,
-     "mean": 31.8,
-     "med": 29,
+     "mean": 33.8,
+     "med": 34.0,
      "min": 27,
-     "n": 5,
-     "p10": 27,
-     "p90": 41,
-     "sd": 5.2
+     "n": 8,
+     "p10": 28,
+     "p90": 39,
+     "sd": 5.0
     },
     "sites": {
      "max": 20,
-     "mean": 19.0,
+     "mean": 18.6,
      "med": 19,
      "min": 17,
-     "n": 5,
+     "n": 9,
      "p10": 17,
      "p90": 20,
-     "sd": 1.1
+     "sd": 1.2
     },
     "slLand": {
      "max": 61,
-     "mean": 47.2,
-     "med": 43,
+     "mean": 50.1,
+     "med": 50.5,
      "min": 40,
-     "n": 5,
-     "p10": 40,
-     "p90": 61,
-     "sd": 7.7
+     "n": 8,
+     "p10": 42,
+     "p90": 58,
+     "sd": 7.4
     },
     "tribes": {
      "max": 5,
-     "mean": 3.4,
-     "med": 3,
+     "mean": 3.9,
+     "med": 4,
      "min": 2,
-     "n": 5,
-     "p10": 2,
+     "n": 9,
+     "p10": 3,
      "p90": 5,
      "sd": 1.0
     },
     "water": {
-     "max": 75,
-     "mean": 64.2,
-     "med": 62,
-     "min": 58,
-     "n": 5,
+     "max": 78,
+     "mean": 66.3,
+     "med": 64,
+     "min": 57,
+     "n": 9,
      "p10": 58,
-     "p90": 75,
-     "sd": 6.0
+     "p90": 77,
+     "sd": 7.8
     }
    },
    "group": "Wetlands",
@@ -15181,16 +15181,136 @@
     "atlas/wetlands-smallest-ultrawide-nosym/seed-2.png",
     "atlas/wetlands-smallest-ultrawide-nosym/seed-3.png",
     "atlas/wetlands-smallest-ultrawide-nosym/seed-4.png",
-    "atlas/wetlands-smallest-ultrawide-nosym/seed-5.png"
+    "atlas/wetlands-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/wetlands-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/wetlands-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/wetlands-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/wetlands-smallest-ultrawide-nosym/seed-9.png"
    ],
    "label": "Wetlands \u00b7 Duel/ultrawide/nosym",
-   "n": 5,
+   "n": 9,
    "oceanPct": 57,
-   "res": 97,
+   "res": 98,
    "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
    "slug": "wetlands-smallest-ultrawide-nosym",
    "tip": "",
-   "tribes": 3.4,
+   "tribes": 3.9,
+   "variant": ""
+  },
+  {
+   "connPct": 56,
+   "dist": {
+    "crow": {
+     "max": 82,
+     "mean": 73.8,
+     "med": 75,
+     "min": 65,
+     "n": 9,
+     "p10": 66,
+     "p90": 80,
+     "sd": 6.0
+    },
+    "land": {
+     "max": 80,
+     "mean": 77.0,
+     "med": 79,
+     "min": 68,
+     "n": 5,
+     "p10": 68,
+     "p90": 80,
+     "sd": 4.6
+    },
+    "oceanPct": {
+     "max": 60,
+     "mean": 56.8,
+     "med": 57,
+     "min": 52,
+     "n": 9,
+     "p10": 56,
+     "p90": 58,
+     "sd": 2.0
+    },
+    "res": {
+     "max": 108,
+     "mean": 96.4,
+     "med": 96,
+     "min": 88,
+     "n": 9,
+     "p10": 88,
+     "p90": 104,
+     "sd": 7.1
+    },
+    "scout": {
+     "max": 39,
+     "mean": 32.2,
+     "med": 34,
+     "min": 25,
+     "n": 5,
+     "p10": 25,
+     "p90": 39,
+     "sd": 5.3
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.8,
+     "med": 18,
+     "min": 14,
+     "n": 9,
+     "p10": 16,
+     "p90": 20,
+     "sd": 1.7
+    },
+    "slLand": {
+     "max": 59,
+     "mean": 48.2,
+     "med": 51,
+     "min": 37,
+     "n": 5,
+     "p10": 37,
+     "p90": 59,
+     "sd": 8.4
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.8,
+     "med": 4,
+     "min": 3,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 82,
+     "mean": 74.4,
+     "med": 76,
+     "min": 65,
+     "n": 9,
+     "p10": 66,
+     "p90": 81,
+     "sd": 6.2
+    }
+   },
+   "group": "Wetlands",
+   "imgs": [
+    "atlas/wetlands-smallest-ultrawide-sym/seed-1.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-2.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-3.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-4.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-5.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-6.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-7.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-8.png",
+    "atlas/wetlands-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "Wetlands \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 57,
+   "res": 96,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "wetlands-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.8,
    "variant": ""
   }
  ],
