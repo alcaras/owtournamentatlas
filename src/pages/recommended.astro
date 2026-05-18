@@ -35,15 +35,30 @@ const N = dist.configs[0]?.n ?? 0;
       <a href={`${baseUrl}calibration`}>{tour.count} real games →</a></span>
   </div>
 
+  <div class="bar">
+    <span class="bar__n"><b id="vis">{dist.configCount}</b> / {dist.configCount} configs · {dist.configs.reduce((a:number,c:any)=>a+c.n,0)} maps</span>
+    <label>City sites <input type="number" id="fsmin" placeholder="min"/> – <input type="number" id="fsmax" placeholder="max"/></label>
+    <label>Land hex <input type="number" id="flmin" placeholder="min"/> – <input type="number" id="flmax" placeholder="max"/></label>
+    <button id="fclr" class="btn">clear</button>
+    <button id="copyv" class="btn big">⬇ COPY VOTES</button>
+  </div>
+
   {groups.map((g: string) => (
     <section class="grp">
       <h2 class="grp__h">{g}</h2>
       {byGroup[g].map((c: any) => (
-        <div class="cfg">
+        <div class="cfg" data-slug={c.slug} data-label={c.label}
+             data-sites={c.dist.sites?.mean ?? ''}
+             data-land={c.dist.land?.mean ?? ''}>
           <div class="cfg__hd">
             <span class="cfg__name">{c.label}</span>
             <span class={'conn ' + connClass(c.connPct)}>
               {c.connPct}% land-connected
+            </span>
+            <span class="vote" data-slug={c.slug}>
+              <button data-v="like">I like</button>
+              <button data-v="maybe">maybe</button>
+              <button data-v="no">pls no</button>
             </span>
             <span class="cfg__set">{c.setting}{c.tip ? ` · ${c.tip}` : ''}</span>
           </div>
@@ -156,5 +171,96 @@ const N = dist.configs[0]?.n ?? 0;
       image-rendering:auto; }
     .note { font-size:0.8rem; color:var(--text-faint); line-height:1.5;
       max-width:84ch; margin-top:1.6rem; }
+    .bar { position:sticky; top:0; z-index:5; display:flex;
+      flex-wrap:wrap; align-items:center; gap:0.7rem 1rem;
+      background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:6px; padding:0.6rem 0.9rem; margin:0 0 1.4rem;
+      font-size:0.82rem; }
+    .bar__n { color:var(--text-soft); } .bar__n b { color:var(--gold); }
+    .bar label { color:var(--text-soft); }
+    .bar input { width:3.6rem; background:#0e0f12; color:var(--text);
+      border:1px solid var(--border-strong); border-radius:4px;
+      padding:0.15rem 0.3rem; font-size:0.82rem; }
+    .btn { background:#0e0f12; color:var(--text-soft); cursor:pointer;
+      border:1px solid var(--border-strong); border-radius:5px;
+      padding:0.25rem 0.6rem; font-size:0.78rem; }
+    .btn:hover { color:var(--gold); border-color:var(--gold-deep); }
+    .btn.big { margin-left:auto; font-weight:700; font-size:0.86rem;
+      padding:0.4rem 0.9rem; color:var(--gold); border-color:var(--gold-deep);
+      background:#231f0d; }
+    .vote { display:inline-flex; gap:0.25rem; }
+    .vote button { background:#0e0f12; color:var(--text-faint);
+      border:1px solid var(--border-strong); border-radius:999px;
+      padding:0.12rem 0.55rem; font-size:0.72rem; cursor:pointer; }
+    .vote button:hover { color:var(--text); }
+    .vote button.on[data-v="like"]  { background:#16290f; color:#9fd07f; border-color:#3b6e3b; }
+    .vote button.on[data-v="maybe"] { background:#231f0d; color:#e0c061; border-color:var(--gold-deep); }
+    .vote button.on[data-v="no"]    { background:#2a1512; color:#d08070; border-color:#5a2e28; }
+    .cfg.hide { display:none; }
   </style>
+
+  <script is:inline>
+    (function(){
+      var KEY='ow_votes_v1';
+      var votes={}; try{ votes=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+      function paint(){
+        document.querySelectorAll('.vote').forEach(function(v){
+          var s=v.getAttribute('data-slug');
+          v.querySelectorAll('button').forEach(function(b){
+            b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
+          });
+        });
+      }
+      document.querySelectorAll('.vote button').forEach(function(b){
+        b.addEventListener('click',function(){
+          var s=b.parentElement.getAttribute('data-slug');
+          var val=b.getAttribute('data-v');
+          if(votes[s]===val){ delete votes[s]; } else { votes[s]=val; }
+          localStorage.setItem(KEY,JSON.stringify(votes)); paint();
+        });
+      });
+      paint();
+      document.getElementById('copyv').addEventListener('click',function(){
+        var by={like:[],maybe:[],no:[]};
+        document.querySelectorAll('.cfg').forEach(function(c){
+          var s=c.getAttribute('data-slug'), l=c.getAttribute('data-label');
+          if(votes[s]) by[votes[s]].push(l);
+        });
+        var txt='OW map votes\\n'
+          +'\\n👍 LIKE ('+by.like.length+')\\n'+(by.like.join('\\n')||'—')
+          +'\\n\\n🤷 MAYBE ('+by.maybe.length+')\\n'+(by.maybe.join('\\n')||'—')
+          +'\\n\\n👎 PLS NO ('+by.no.length+')\\n'+(by.no.join('\\n')||'—');
+        navigator.clipboard.writeText(txt).then(function(){
+          var b=document.getElementById('copyv'); var o=b.textContent;
+          b.textContent='✓ copied!'; setTimeout(function(){b.textContent=o;},1500);
+        });
+      });
+      // filters
+      function num(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
+      function apply(){
+        var smin=num('fsmin'),smax=num('fsmax'),lmin=num('flmin'),lmax=num('flmax'),vis=0;
+        document.querySelectorAll('.cfg').forEach(function(c){
+          var s=parseFloat(c.getAttribute('data-sites'));
+          var l=parseFloat(c.getAttribute('data-land'));
+          var ok=true;
+          if(smin!=null&&!(s>=smin))ok=false;
+          if(smax!=null&&!(s<=smax))ok=false;
+          if(lmin!=null&&!(l>=lmin))ok=false;
+          if(lmax!=null&&!(l<=lmax))ok=false;
+          c.classList.toggle('hide',!ok); if(ok)vis++;
+        });
+        document.querySelectorAll('.grp').forEach(function(g){
+          g.style.display = g.querySelector('.cfg:not(.hide)')?'':'none';
+        });
+        document.getElementById('vis').textContent=vis;
+      }
+      ['fsmin','fsmax','flmin','flmax'].forEach(function(id){
+        document.getElementById(id).addEventListener('input',apply);
+      });
+      document.getElementById('fclr').addEventListener('click',function(){
+        ['fsmin','fsmax','flmin','flmax'].forEach(function(id){document.getElementById(id).value='';});
+        apply();
+      });
+    })();
+  </script>
 </Base>

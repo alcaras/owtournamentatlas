@@ -1,25 +1,33 @@
 ---
 import Base from '../../layouts/Base.astro';
-import gens from '../../data/gens.json';
+import data from '../../data/gens.json';
 const baseUrl = import.meta.env.BASE_URL;
 
 export function getStaticPaths() {
-  return (gens as any[]).map((g) => ({ params: { id: g.id }, props: { g } }));
+  const d = data as any;
+  return d.gens.map((g: any) => ({
+    params: { id: g.id }, props: { g, resTax: d.resTax } }));
 }
-const { g } = Astro.props as { g: any };
-const y8 = g.y8 || {};
+const { g, resTax } = Astro.props as { g: any; resTax: any };
+const have = (n: string): number => (g.resources || {})[n] || 0;
+const nice = (n: string) => n.replace(/_/g, ' ');
+const Y = g.yields || {};
+const thr = ['5','6','7','8','9','10','11','12'];
 ---
 <Base title={`Gen · ${g.label}`}>
   <p class="back"><a href={`${baseUrl}recommended`}>← all recommended</a></p>
   <p class="lede">
     <b>{g.label}</b> · seed {g.seed}. <span class="mono">{g.setting}</span>.
-    Pretty render — rivers (blue), game resource icons, out-of-bounds
-    greyed; pink stars = capitals, pink dots = city sites.
+    Rivers (blue), game resource icons, out-of-bounds greyed; pink stars
+    = capitals, pink dots = city sites. <b>Click the map to open full
+    size.</b>
   </p>
 
   <div class="grid">
     <figure class="mapfig">
-      <img src={`${baseUrl}img/${g.img}`} alt={`${g.label} seed ${g.seed}`} />
+      <a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">
+        <img src={`${baseUrl}img/${g.img}`} alt={`${g.label} seed ${g.seed}`} />
+      </a>
     </figure>
 
     <div class="stats">
@@ -31,25 +39,43 @@ const y8 = g.y8 || {};
         <tr><td>Land path</td><td><b>{g.land ?? '—'}</b></td></tr>
         <tr><td>Sea path</td><td>{g.water ?? '—'}</td></tr>
         <tr><td>Scout orders (move 3)</td><td><b>{g.scout ?? '—'}</b></td></tr>
-        <tr><td>Slinger — land</td><td>{g.slLand ?? '—'}</td></tr>
-        <tr><td>Slinger — sea</td><td>{g.slSea ?? '—'}</td></tr>
-        <tr><td>Slinger — Hatti</td><td>{g.slHatti ?? '—'}</td></tr>
+        <tr><td>Slinger — land / sea / Hatti</td><td>
+          {g.slLand ?? '—'} / {g.slSea ?? '—'} / {g.slHatti ?? '—'}</td></tr>
       </table>
       <h2>Map</h2>
       <table class="kv">
         <tr><td>City sites</td><td><b>{g.sites ?? '—'}</b></td></tr>
-        {g.tiles != null && <tr><td>Playable tiles</td><td>{g.tiles}</td></tr>}
+        <tr><td>Playable tiles</td><td>{g.tiles ?? '—'}</td></tr>
+        <tr><td>Land tiles</td><td><b>{g.landTiles ?? '—'}</b></td></tr>
         <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
         <tr><td>Tribes</td><td>{g.tribes ?? '—'}</td></tr>
         <tr><td>Resources</td><td>{g.res ?? '—'}</td></tr>
       </table>
-      <h2>8+ yield tiles</h2>
+      <h2>Yield tiles — best improvement ≥N &nbsp;<span class="rh">(Food·Iron·Stone·Wood)</span></h2>
       <table class="kv">
-        <tr><td>F·I·W·S</td><td class="mono">
-          {y8.food != null ? `${y8.food}·${y8.iron}·${y8.wood}·${y8.stone}` : '—'}</td></tr>
+        {thr.map(k => {
+          const y = Y[k];
+          return (
+            <tr><td>{k}+</td><td class="mono">
+              {y ? `${y.food}·${y.iron}·${y.stone}·${y.wood}` : '—'}</td></tr>
+          );
+        })}
       </table>
     </div>
   </div>
+
+  <h2 class="rsec">Resources <span class="rh">(grey = absent)</span></h2>
+  {(resTax as [string,string[]][]).map(([title, list]) => (
+    <div class="resgrp">
+      <div class="resgrp__t">{title}</div>
+      <div class="reschips">
+        {list.map((n) => {
+          const c = have(n);
+          return <span class={'chip' + (c ? '' : ' off')}>{nice(n)}{c ? <b> {c}</b> : null}</span>;
+        })}
+      </div>
+    </div>
+  ))}
 
   <style>
     .back { font-size:0.8rem; margin:0 0 0.4rem; }
@@ -61,9 +87,11 @@ const y8 = g.y8 || {};
     @media (max-width:880px){ .grid{ grid-template-columns:1fr; } }
     .mapfig { margin:0; }
     .mapfig img { width:100%; height:auto; display:block; border-radius:5px;
-      border:1px solid var(--border-strong); background:#0b0c0f; }
-    .stats h2 { font-size:1.05rem; color:var(--gold); margin:1rem 0 0.3rem; }
+      border:1px solid var(--border-strong); background:#0b0c0f; cursor:zoom-in; }
+    .stats h2, .rsec { font-size:1.05rem; color:var(--gold); margin:1rem 0 0.3rem; }
     .stats h2:first-child { margin-top:0; }
+    .rsec { margin-top:1.6rem; }
+    .rh { font-size:0.72rem; color:var(--text-faint); font-weight:400; }
     .kv { width:100%; border-collapse:collapse; font-size:0.86rem; }
     .kv td { padding:0.28rem 0.4rem; border-bottom:1px solid var(--border); }
     .kv td:first-child { color:var(--text-soft); }
@@ -72,5 +100,16 @@ const y8 = g.y8 || {};
     .mono { font-family:var(--font-mono); font-size:0.86em; }
     .good { color:#9fd07f; font-weight:700; }
     .bad { color:#d08070; font-weight:700; }
+    .resgrp { margin:0.3rem 0 0.6rem; }
+    .resgrp__t { font-size:0.68rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--text-dim);
+      font-family:var(--font-ui); margin-bottom:0.3rem; }
+    .reschips { display:flex; flex-wrap:wrap; gap:0.35rem; }
+    .chip { font-size:0.74rem; background:var(--bg-elev);
+      border:1px solid var(--gold-deep); border-radius:999px;
+      padding:0.1rem 0.5rem; color:var(--text); }
+    .chip b { color:var(--gold); }
+    .chip.off { background:transparent; border-color:var(--border);
+      color:var(--text-dim); opacity:0.55; }
   </style>
 </Base>

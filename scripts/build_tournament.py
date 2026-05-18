@@ -96,6 +96,8 @@ def analyze(zp: str) -> dict | None:
     y8 = pm.get("yield8", {})
     y9 = pm.get("yield9", {})
     y10 = pm.get("yield10", {})
+    y11 = pm.get("yield11", {})
+    y12 = pm.get("yield12", {})
     res = pm.get("resources", {})
 
     landok, waterok = set(), set()
@@ -147,6 +149,7 @@ def analyze(zp: str) -> dict | None:
         "size": r.attrib.get("MapSize", "").replace("MAPSIZE_", ""),
         "aspect": r.attrib.get("MapAspectRatio", "").replace("MAPASPECTRATIO_", ""),
         "tiles": pm.get("tiles"),
+        "landTiles": pm.get("landTiles"),
         "boundaryTiles": pm.get("boundaryTiles"),
         "citySites": cs,
         "tribeCount": len(tribes),
@@ -159,7 +162,7 @@ def analyze(zp: str) -> dict | None:
         "resources": {k.replace("RESOURCE_", "").title(): v
                       for k, v in sorted(res.items(), key=lambda x: -x[1])},
         "yield5": y5, "yield6": y6, "yield7": y7, "yield8": y8,
-        "yield9": y9, "yield10": y10,
+        "yield9": y9, "yield10": y10, "yield11": y11, "yield12": y12,
         "crow": hex_distance(A, B),
         "land": land,
         "landConnected": land is not None,
