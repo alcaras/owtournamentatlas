@@ -22,7 +22,14 @@ const abbr = (c: any) => {
 };
 
 // DOTA shown as its own heading per subtype (Jungle/Mountain/Water/Sand)
-const dg = (c: any) => c.group === 'DOTA' ? `DOTA · ${c.variant}` : c.group;
+const dg = (c: any) => {
+  if (c.group === 'DOTA') return `DOTA · ${c.variant}`;
+  if (c.group === 'Desert') {
+    const coast = (c.variant || '').split(' · ')[0];
+    return `Desert: ${coast === 'None' ? 'No' : coast} Coast`;
+  }
+  return c.group;
+};
 const byGroup: Record<string, any[]> = {};
 const groups: string[] = [];
 for (const c of dist.configs) {
