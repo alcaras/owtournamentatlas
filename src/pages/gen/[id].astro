@@ -21,6 +21,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
   </p>
 
   <div id="mapwrap"><canvas id="cv"></canvas><div id="tip"></div>
+    <button id="reset" type="button">⤾ reset view</button>
     <div id="zhint">scroll = zoom · drag = pan</div></div>
 
   <h2 class="sec">Resources <span class="rh">(hover a pill → highlight on map · grey = absent)</span></h2>
@@ -85,6 +86,12 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       color:var(--text); font-family:var(--font-ui); white-space:nowrap;
       line-height:1.45; }
     #tip b { color:var(--gold); }
+    #tip .ti { width:15px; height:15px; vertical-align:-3px; }
+    #reset { position:absolute; left:8px; bottom:8px; z-index:8;
+      background:rgba(12,13,16,0.85); color:var(--text-soft);
+      border:1px solid var(--border-strong); border-radius:5px;
+      padding:0.25rem 0.6rem; font-size:0.72rem; cursor:pointer; }
+    #reset:hover { color:var(--gold); border-color:var(--gold-deep); }
     #zhint { position:absolute; right:8px; bottom:6px; font-size:0.64rem;
       color:var(--text-faint); background:rgba(12,13,16,0.65);
       padding:0.1rem 0.45rem; border-radius:4px; pointer-events:none; }
@@ -190,21 +197,39 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           var jg=vg.indexOf('JUNGLE')>=0,
               fr=vg.indexOf('FOREST')>=0||vg.indexOf('TREE')>=0,
               sc=vg.indexOf('SCRUB')>=0||vg.indexOf('BRUSH')>=0;
-          if(jg||fr){ var nt=jg?3:2, tw=S*0.26, th=S*0.6,
-              gc=jg?'rgba(14,50,16,0.95)':'rgba(24,68,26,0.95)';
-            for(var tk=0;tk<nt;tk++){ var tx2=ce[0]+(tk-(nt-1)/2)*(tw*1.25),
-              ty2=ce[1]+S*0.22;
+          var onHill=h.indexOf('HILL')>=0;
+          if(jg||fr){ var nt=jg?3:2, tw=S*0.26, th=S*0.62,
+              gc=jg?'rgba(14,50,16,0.95)':'rgba(24,68,26,0.95)',
+              // sit trees up near the hill crest if on a hill
+              yb=ce[1]+(onHill?-S*0.12:S*0.24);
+            for(var tk=0;tk<nt;tk++){ var tx2=ce[0]+(tk-(nt-1)/2)*(tw*1.25);
               ctx.fillStyle='rgba(60,40,20,0.9)';
-              ctx.fillRect(tx2-tw*0.16,ty2-th*0.18,tw*0.32,th*0.34);
+              ctx.fillRect(tx2-tw*0.16,yb-th*0.18,tw*0.32,th*0.34);
               ctx.fillStyle=gc; ctx.beginPath();
-              ctx.moveTo(tx2,ty2-th); ctx.lineTo(tx2-tw,ty2);
-              ctx.lineTo(tx2+tw,ty2); ctx.closePath(); ctx.fill(); } }
-          else if(sc){ ctx.fillStyle='rgba(120,128,70,0.9)';
-            var dp=[[-0.32,0.16],[0.30,-0.04],[0.02,0.30]];
-            for(var dk=0;dk<3;dk++){ ctx.beginPath();
-              ctx.arc(ce[0]+dp[dk][0]*S,ce[1]+dp[dk][1]*S,S*0.12,0,7); ctx.fill(); } }
+              ctx.moveTo(tx2,yb-th); ctx.lineTo(tx2-tw,yb);
+              ctx.lineTo(tx2+tw,yb); ctx.closePath(); ctx.fill(); } }
+          else if(sc){ // tall grass — fanned blades, atop hill if hill
+            ctx.strokeStyle='rgba(150,158,86,0.92)';
+            ctx.lineWidth=Math.max(1,S/9); ctx.lineCap='round';
+            var gb=ce[1]+(onHill?S*0.04:S*0.34), gh=S*0.5;
+            for(var bk=-2;bk<=2;bk++){ var bx=ce[0]+bk*S*0.16;
+              ctx.beginPath(); ctx.moveTo(bx,gb);
+              ctx.lineTo(bx+bk*S*0.06,gb-gh*(0.7+Math.abs(bk)*0.06));
+              ctx.stroke(); } ctx.lineCap='butt'; }
+          if(vg.indexOf('MARSH')>=0||tn==='MARSH'){ // marsh — reeds+water
+            ctx.fillStyle='rgba(40,90,96,0.55)';
+            ctx.beginPath(); ctx.ellipse(ce[0],ce[1]+S*0.34,S*0.5,S*0.2,0,0,7); ctx.fill();
+            ctx.strokeStyle='rgba(70,120,90,0.95)';
+            ctx.lineWidth=Math.max(1,S/9); ctx.lineCap='round';
+            for(var rk=-1;rk<=1;rk++){ var rx=ce[0]+rk*S*0.24;
+              ctx.beginPath(); ctx.moveTo(rx,ce[1]+S*0.36);
+              ctx.lineTo(rx,ce[1]-S*0.18); ctx.stroke(); }
+            ctx.lineCap='butt'; }
+          if(D.res[i]>=0){ var im=icons[slug(D.L.res[D.res[i]])];
+            if(im&&im.complete&&im.naturalWidth){ var iz=S*1.5;
+              ctx.drawImage(im,ce[0]-iz/2,ce[1]-iz/2,iz,iz); } }
           if(D.cs[i]){ ctx.fillStyle='#ff2daa';
-            ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.36,0,7); ctx.fill(); }
+            ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.34,0,7); ctx.fill(); }
         }
         // rivers
         ctx.strokeStyle='#4696eb'; ctx.lineWidth=Math.max(2,S/4);
@@ -298,17 +323,27 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
          +'<span>Stone <b>'+(T.stone||0)+'</b></span>'
          +'<span>Wood <b>'+(T.wood||0)+'</b></span>';
         buildYields(); buildPanel();
-        // preload icons present
+        // preload icons; redraw once loaded so they appear on the map
+        var pend=0;
         Object.keys(d.rescnt||{}).forEach(function(nm){ var sg=slug(nm);
-          if(icons[sg])return; var im=new Image(); icons[sg]=im;
-          im.onload=function(){}; im.src=base+'img/icons/resources/'+sg+'.png'; });
+          if(icons[sg])return; var im=new Image(); icons[sg]=im; pend++;
+          im.onload=function(){ if(--pend<=0){ drawBase(); overlay(-1); } };
+          im.onerror=function(){ if(--pend<=0){ drawBase(); overlay(-1); } };
+          im.src=base+'img/icons/resources/'+sg+'.png'; });
         drawBase();
-        // fit width
+        fitView();
+      });
+      function fitView(){
         k = wrap.clientWidth / cv.width;
         var dh=cv.height*k;
         ty = dh < wrap.clientHeight ? (wrap.clientHeight-dh)/2 : 0;
         tx = 0; applyView();
-      });
+      }
+      (function(rb){
+        rb.addEventListener('mousedown',function(e){ e.stopPropagation(); });
+        rb.addEventListener('click',function(e){
+          e.stopPropagation(); if(D) fitView(); });
+      })(document.getElementById('reset'));
       // zoom
       wrap.addEventListener('wheel',function(e){ if(!D)return; e.preventDefault();
         var r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top,
@@ -339,12 +374,13 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           isCap=(D.caps||[]).some(function(p){return p[0]===x&&p[1]===y;}),
           f=(D.yf||[])[i]||0,ir=(D.yi||[])[i]||0,st=(D.ys||[])[i]||0,wd=(D.yw||[])[i]||0,
           yl=(f+ir+st+wd>0)?('<br>best F·I·S·W <b>'+(f/10)+'·'+(ir/10)+'·'+(st/10)+'·'+(wd/10)+'</b>'):'',
-          riv=(D.riv[i]||0)>0, fw=(D.fw||[])[i]===1;
+          riv=((D.rv||[])[i]===1)||(D.riv[i]||0)>0, fw=(D.fw||[])[i]===1,
+          rimg=rn?('<img class="ti" src="'+base+'img/icons/resources/'+slug(rn)+'.png" alt=""> '):'',
+          extra=[]; if(riv)extra.push('river'); if(fw)extra.push('freshwater');
         tip.innerHTML='<b>('+x+','+y+')</b> '+(D.L.terr[D.terr[i]]||'?')
           +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')+' · '+(D.L.veg[D.veg[i]]||'no veg')
-          +(rn?'<br><b>'+rn+'</b>':'')+yl
-          +'<br>'+(riv?'river on tile':'no river')+' · '
-          +(fw?'<b>freshwater</b>':'no freshwater')
+          +(rn?'<br>'+rimg+'<b>'+rn+'</b>':'')+yl
+          +(extra.length?'<br><b>'+extra.join(' · ')+'</b>':'')
           +(isCap?'<br><b style="color:#ff2daa">★ CAPITAL</b>':'')
           +(D.cs[i]?'<br>city site':'')+(D.bnd[i]?'<br><i>off-map</i>':'');
         tip.style.display='block';

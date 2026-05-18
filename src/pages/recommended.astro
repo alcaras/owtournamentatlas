@@ -1,8 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
 import dist from '../data/atlas-dist.json';
+import gensData from '../data/gens.json';
 import tour from '../data/tournament-games.json';
 const baseUrl = import.meta.env.BASE_URL;
+
+const genMap: Record<string, any> = {};
+for (const gn of (gensData as any).gens)
+  genMap[gn.id] = { sites: gn.sites, land: gn.land, conn: gn.conn };
+const idFromImg = (slug: string, p: string) => {
+  const m = p.match(/seed-(\d+)/); return `${slug}-s${m ? m[1] : 1}`;
+};
+const gslug = (s: string) => 'g-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 const byGroup: Record<string, any[]> = {};
 for (const c of dist.configs) (byGroup[c.group] ??= []).push(c);
@@ -49,41 +58,70 @@ const pill = (label: string, o: any) => o == null
     <button id="copyv" class="btn big">⬇ COPY VOTES</button>
   </div>
 
-  {groups.map((g: string) => (
-    <section class="grp">
+  <div class="layout">
+    <nav class="snav">
+      <div class="snav__t">Map scripts</div>
+      {groups.map((g: string) => (
+        <a href={`#${gslug(g)}`}>{g}</a>
+      ))}
+    </nav>
+    <div class="main">
+    {groups.map((g: string) => (
+    <section class="grp" id={gslug(g)}>
       <h2 class="grp__h">{g}</h2>
       {byGroup[g].map((c: any) => (
         <div class="cfg" data-slug={c.slug} data-label={c.label}
              data-sites={c.dist.sites?.mean ?? ''}
              data-land={c.dist.land?.mean ?? ''}>
           <div class="cfg__hd">
-            <span class="cfg__name">{c.label}</span>
-            <span class={'conn ' + connClass(c.connPct)}>
-              {c.connPct}% land-connected
+            <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
+            <span class="cfg__chips">
+              {c.setting.split(' · ').map((p: string) => (
+                <span class="ch">{p}</span>
+              ))}
+              {c.tip && <span class="ch tip">{c.tip}</span>}
             </span>
             <span class="vote" data-slug={c.slug}>
-              <button data-v="like">I like</button>
-              <button data-v="maybe">maybe</button>
-              <button data-v="no">pls no</button>
+              <button data-v="like">👍 like</button>
+              <button data-v="maybe">🤔 maybe</button>
+              <button data-v="no">👎 no</button>
             </span>
-            <span class="cfg__set">{c.setting}{c.tip ? ` · ${c.tip}` : ''}</span>
           </div>
           <div class="cfg__body">
             <div class="pills">
-              <Fragment set:html={pill('Land hex distance', c.dist.land)} />
-              <Fragment set:html={pill('City sites', c.dist.sites)} />
+              <div class={'pill conn-' + connClass(c.connPct)}>
+                <div class="pill__l">City sites</div>
+                <div class="pill__v"><b>{c.dist.sites?.mean ?? '—'}</b> <span class="pm">±{c.dist.sites?.sd ?? 0}</span></div>
+                <div class="pill__r">min {c.dist.sites?.min} · p10 {c.dist.sites?.p10} · <b>med {c.dist.sites?.med}</b> · p90 {c.dist.sites?.p90} · max {c.dist.sites?.max}</div>
+              </div>
+              <div class="pill">
+                <div class="pill__l">Land hex distance</div>
+                {c.dist.land ? (<>
+                  <div class="pill__v"><b>{c.dist.land.mean}</b> <span class="pm">±{c.dist.land.sd}</span></div>
+                  <div class="pill__r">min {c.dist.land.min} · p10 {c.dist.land.p10} · <b>med {c.dist.land.med}</b> · p90 {c.dist.land.p90} · max {c.dist.land.max}</div>
+                </>) : <div class="pill__v dash">—</div>}
+              </div>
+              <div class={'pill ' + connClass(c.connPct) + '-bg'}>
+                <div class="pill__l">Land connected</div>
+                <div class="pill__v"><b>{c.connPct}</b><span class="pm">%</span></div>
+                <div class="pill__r">of {c.n} maps</div>
+              </div>
             </div>
-            <div class="aux">n={c.n} · full breakdown on each map's detail page</div>
             <details class="gal" open>
-              <summary>{c.imgs.length} generated maps (click to collapse)</summary>
+              <summary>{c.imgs.length} generated maps</summary>
               <div class="gal__grid">
                 {c.imgs.map((p: string) => {
-                  const m = p.match(/seed-(\d+)/);
-                  const id = `${c.slug}-s${m ? m[1] : 1}`;
+                  const id = idFromImg(c.slug, p);
+                  const gm = genMap[id] || {};
                   return (
                     <a class="gal__cell" href={`${baseUrl}gen/${id}`}>
                       <img src={`${baseUrl}img/${p}`} loading="lazy"
-                           alt={`${c.label} seed ${m ? m[1] : ''}`} />
+                           alt={`${c.group} sample`} />
+                      <div class="cap">
+                        <span><i>sites</i><b>{gm.sites ?? '—'}</b></span>
+                        <span><i>land</i><b>{gm.land ?? '—'}</b></span>
+                        <span class={gm.conn ? 'ok' : 'no'}><i>conn</i><b>{gm.conn ? 'Y' : 'N'}</b></span>
+                      </div>
                     </a>
                   );
                 })}
@@ -93,7 +131,9 @@ const pill = (label: string, o: any) => o == null
         </div>
       ))}
     </section>
-  ))}
+    ))}
+    </div>
+  </div>
 
   <p class="note">
     {dist.configCount} configs × {N} seeds. No pass/fail and no fixed
@@ -133,8 +173,35 @@ const pill = (label: string, o: any) => o == null
     .conn.g { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
     .conn.o { color:#e0c061; border-color:var(--gold-deep); background:#231f0d; }
     .conn.n { color:#d08070; border-color:#5a2e28; background:#2a1512; }
-    .cfg__set { font-size:0.78rem; color:var(--text-faint);
-      font-family:var(--font-mono); margin-left:auto; }
+    .cfg__chips { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
+    .ch { font-size:0.66rem; font-family:var(--font-mono);
+      color:var(--text-soft); background:#0e0f12;
+      border:1px solid var(--border-strong); border-radius:4px;
+      padding:0.08rem 0.4rem; }
+    .ch.tip { color:var(--gold-soft); border-color:var(--gold-deep); }
+    .layout { display:grid; grid-template-columns:160px 1fr; gap:1.4rem;
+      align-items:start; }
+    @media (max-width:760px){ .layout{ grid-template-columns:1fr; } }
+    .snav { position:sticky; top:0.6rem; display:flex; flex-direction:column;
+      gap:0.15rem; font-size:0.8rem; max-height:92vh; overflow:auto; }
+    @media (max-width:760px){ .snav{ position:static; flex-flow:row wrap; } }
+    .snav__t { font-size:0.62rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
+    .snav a { color:var(--text-soft); text-decoration:none;
+      padding:0.12rem 0.3rem; border-radius:4px; }
+    .snav a:hover { color:var(--gold); background:var(--bg-elev); }
+    .pill.g-bg { border-color:#3b6e3b; }
+    .pill.o-bg { border-color:var(--gold-deep); }
+    .pill.n-bg { border-color:#5a2e28; }
+    .cap { display:grid; grid-template-columns:repeat(3,1fr);
+      background:#0e0f12; font-size:0.7rem; }
+    .cap span { display:flex; flex-direction:column; align-items:center;
+      padding:0.2rem 0; border-right:1px solid var(--border); color:var(--text-soft); }
+    .cap span:last-child { border-right:0; }
+    .cap i { font-style:normal; font-size:0.58rem; color:var(--text-dim);
+      text-transform:uppercase; letter-spacing:0.06em; }
+    .cap b { color:var(--text); font-size:0.84rem; }
+    .cap .ok b { color:#9fd07f; } .cap .no b { color:#d08070; }
     .cfg__body { margin-top:0.6rem; }
     .pills { display:flex; flex-wrap:wrap; gap:0.8rem; }
     .pill { flex:1 1 280px; background:#16181d;
@@ -142,9 +209,10 @@ const pill = (label: string, o: any) => o == null
       padding:0.6rem 0.9rem; }
     .pill__l { font-size:0.66rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); }
-    .pill__v { font-size:2rem; font-family:var(--font-display);
-      font-weight:700; color:var(--gold); line-height:1.15; }
-    .pill__v .pm { font-size:0.95rem; color:var(--text-faint);
+    .pill__v { font-size:2.9rem; font-family:var(--font-display);
+      font-weight:700; color:var(--gold); line-height:1.1;
+      margin:0.1rem 0 0.15rem; }
+    .pill__v .pm { font-size:1.05rem; color:var(--text-faint);
       font-family:var(--font-ui); font-weight:400; }
     .pill__v.dash { color:var(--text-dim); }
     .pill__r { font-size:0.74rem; color:var(--text-faint);
@@ -196,14 +264,15 @@ const pill = (label: string, o: any) => o == null
     .btn.big { margin-left:auto; font-weight:700; font-size:0.86rem;
       padding:0.4rem 0.9rem; color:var(--gold); border-color:var(--gold-deep);
       background:#231f0d; }
-    .vote { display:inline-flex; gap:0.25rem; }
-    .vote button { background:#0e0f12; color:var(--text-faint);
-      border:1px solid var(--border-strong); border-radius:999px;
-      padding:0.12rem 0.55rem; font-size:0.72rem; cursor:pointer; }
-    .vote button:hover { color:var(--text); }
-    .vote button.on[data-v="like"]  { background:#16290f; color:#9fd07f; border-color:#3b6e3b; }
-    .vote button.on[data-v="maybe"] { background:#231f0d; color:#e0c061; border-color:var(--gold-deep); }
-    .vote button.on[data-v="no"]    { background:#2a1512; color:#d08070; border-color:#5a2e28; }
+    .vote { display:inline-flex; gap:0.4rem; margin-left:auto; }
+    .vote button { background:#1b1d23; color:var(--text-soft);
+      border:1px solid var(--border-strong); border-radius:7px;
+      padding:0.34rem 0.8rem; font-size:0.85rem; font-weight:600;
+      cursor:pointer; transition:transform .06s; }
+    .vote button:hover { color:var(--text); transform:translateY(-1px); }
+    .vote button.on[data-v="like"]  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; box-shadow:0 0 0 1px #3b6e3b; }
+    .vote button.on[data-v="maybe"] { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); box-shadow:0 0 0 1px var(--gold-deep); }
+    .vote button.on[data-v="no"]    { background:#46211b; color:#eaa091; border-color:#5a2e28; box-shadow:0 0 0 1px #5a2e28; }
     .cfg.hide { display:none; }
   </style>
 
