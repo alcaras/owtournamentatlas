@@ -12,7 +12,13 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
 const have = (n: string): number => (g.resources || {})[n] || 0;
 const nice = (n: string) => n.replace(/_/g, ' ');
 const Y = g.yields || {};
-const thr = ['5','6','7','8','9','10','11','12'];
+// exact buckets: exactly 5..11, then 12+ (cum(N) - cum(N+1))
+const cum = (n: number, yk: string) => (Y[String(n)]?.[yk]) ?? 0;
+const yrows = [5,6,7,8,9,10,11,12].map(n => ({
+  lbl: n === 12 ? '12+' : String(n), lo: n*10,
+  hi: n === 12 ? null : (n+1)*10,
+  val: (yk: string) => n === 12 ? cum(12, yk) : cum(n, yk) - cum(n+1, yk),
+}));
 ---
 <Base title={`Gen · ${g.label}`}>
   <p class="back"><a href={`${baseUrl}recommended`}>← all recommended</a></p>
@@ -55,17 +61,17 @@ const thr = ['5','6','7','8','9','10','11','12'];
       </table>
     </div>
     <div class="col">
-      <h3>Yield tiles ≥N <span class="rh">(hover a cell → highlight)</span></h3>
+      <h3>Tiles by exact yield <span class="rh">(hover a cell → highlight)</span></h3>
       <table class="kv yt">
-        <tr><th>≥</th><th>Food</th><th>Iron</th><th>Stone</th><th>Wood</th></tr>
-        {thr.map(k => { const y=Y[k]||{}; const N=parseInt(k)*10;
-          return (
-          <tr><td>{k}+</td>
+        <tr><th>yld</th><th>Food</th><th>Iron</th><th>Stone</th><th>Wood</th></tr>
+        {yrows.map(rw => (
+          <tr><td>{rw.lbl}</td>
             {['food','iron','stone','wood'].map(yk => (
-              <td class="yc" data-y={yk} data-n={N}>{y[yk] ?? 0}</td>
+              <td class="yc" data-y={yk} data-lo={rw.lo}
+                  data-hi={rw.hi ?? ''}>{rw.val(yk)}</td>
             ))}
           </tr>
-        ); })}
+        ))}
       </table>
     </div>
   </div>
@@ -246,10 +252,11 @@ const thr = ['5','6','7','8','9','10','11','12'];
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.96); ctx.stroke(); }
           ctx.shadowBlur=0;
         }
-        if(yieldHi){ var A=D[yieldHi.arr]||[];
+        if(yieldHi){ var A=D[yieldHi.arr]||[], lo=yieldHi.lo, hi=yieldHi.hi;
           ctx.strokeStyle='#6fe06f'; ctx.lineWidth=Math.max(2,S/3);
           ctx.shadowColor='#6fe06f'; ctx.shadowBlur=S;
-          for(var i=0;i<A.length;i++){ if((A[i]||0)<yieldHi.n||D.bnd[i])continue;
+          for(var i=0;i<A.length;i++){ var v=A[i]||0;
+            if(D.bnd[i]||v<lo||(hi!=null&&v>=hi))continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.96); ctx.stroke(); }
           ctx.shadowBlur=0;
         }
@@ -303,10 +310,13 @@ const thr = ['5','6','7','8','9','10','11','12'];
         overlay(best);
         if(best<0){ tip.style.display='none'; return; }
         var i=best,x=i%W,y=(i/W)|0,rn=D.res[i]>=0?D.L.res[D.res[i]]:null,
-          isCap=(D.caps||[]).some(function(p){return p[0]===x&&p[1]===y;});
+          isCap=(D.caps||[]).some(function(p){return p[0]===x&&p[1]===y;}),
+          f=(D.yf||[])[i]||0,ir=(D.yi||[])[i]||0,st=(D.ys||[])[i]||0,wd=(D.yw||[])[i]||0,
+          yline=(f+ir+st+wd>0)?('<br>best F·I·S·W <b>'
+            +(f/10)+'·'+(ir/10)+'·'+(st/10)+'·'+(wd/10)+'</b>'):'';
         tip.innerHTML='<b>('+x+','+y+')</b> '+(D.L.terr[D.terr[i]]||'?')
           +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')+' · '+(D.L.veg[D.veg[i]]||'—')
-          +(rn?'<br><b>'+rn+'</b>':'')
+          +(rn?'<br><b>'+rn+'</b>'+yline:yline)
           +(isCap?'<br><b style="color:#ff2daa">★ CAPITAL</b>':'')
           +(D.bnd[i]?'<br><i>off-map</i>':'')
           +(D.cs[i]?'<br>city site':'');
@@ -321,8 +331,10 @@ const thr = ['5','6','7','8','9','10','11','12'];
       document.querySelectorAll('td.yc').forEach(function(td){
         td.addEventListener('mouseenter',function(){
           if(!D) return;
+          var hiA=td.getAttribute('data-hi');
           yieldHi={arr:YA[td.getAttribute('data-y')],
-                   n:parseInt(td.getAttribute('data-n'))};
+                   lo:parseInt(td.getAttribute('data-lo')),
+                   hi:hiA===''?null:parseInt(hiA)};
           overlay(-1);
         });
         td.addEventListener('mouseleave',function(){
