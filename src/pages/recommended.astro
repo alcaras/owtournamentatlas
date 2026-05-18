@@ -12,6 +12,13 @@ const idFromImg = (slug: string, p: string) => {
   const m = p.match(/seed-(\d+)/); return `${slug}-s${m ? m[1] : 1}`;
 };
 const gslug = (s: string) => 'g-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const abbr = (c: any) => {
+  const p = (c.setting || '').split(' · ');
+  const sz = p[0] === 'Duel' ? 'D' : 'T';
+  const asp = p[1] === 'square' ? 'sq' : p[1] === 'wide' ? 'w' : 'uw';
+  const sym = (p[2] || '').includes('on') ? 's' : 'n';
+  return (c.variant ? c.variant + ' ' : '') + `${sz}·${asp}·${sym}`;
+};
 
 const byGroup: Record<string, any[]> = {};
 for (const c of dist.configs) (byGroup[c.group] ??= []).push(c);
@@ -55,15 +62,15 @@ const pill = (label: string, o: any) => o == null
     <div class="snav__c">voted <b id="vc">0</b> / {dist.configCount}</div>
     <div class="snav__t">Map scripts</div>
     {groups.map((g: string) => (
-      g === 'DOTA' ? (
-        <>
-          <a href={`#${gslug(g)}`}>{g}</a>
-          {[...new Set(byGroup['DOTA'].map((c: any) => c.variant))].map((v: any) => {
-            const first = byGroup['DOTA'].find((c: any) => c.variant === v);
-            return <a class="sub" href={`#cfg-${first.slug}`}>{v}</a>;
-          })}
-        </>
-      ) : <a href={`#${gslug(g)}`}>{g}</a>
+      <div class="ng" data-g={gslug(g)}>
+        <a class="ng__h" href={`#${gslug(g)}`}>{g}</a>
+        <div class="ng__chips">
+          {byGroup[g].map((c: any) => (
+            <a class="vchip" data-slug={c.slug} href={`#cfg-${c.slug}`}
+               title={c.label}>{abbr(c)}</a>
+          ))}
+        </div>
+      </div>
     ))}
   </nav>
 
@@ -116,7 +123,7 @@ const pill = (label: string, o: any) => o == null
                   const id = idFromImg(c.slug, p);
                   const gm = genMap[id] || {};
                   return (
-                    <a class="gal__cell" href={`${baseUrl}gen/${id}`}>
+                    <a class="gal__cell" href={`${baseUrl}gen/${id}`} target="_blank" rel="noopener">
                       <img src={`${baseUrl}img/${p}`} loading="lazy"
                            alt={`${c.group} sample`} />
                       <div class={'cnbar ' + (gm.conn ? 'ok' : 'no')}>
@@ -198,11 +205,21 @@ const pill = (label: string, o: any) => o == null
       margin-bottom:0.5rem; } .snav__c b { color:var(--gold); }
     .snav__t { font-size:0.6rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
-    .snav a { color:var(--text-soft); text-decoration:none;
-      padding:0.1rem 0.3rem; border-radius:4px; }
-    .snav a.sub { padding-left:0.9rem; font-size:0.72rem;
-      color:var(--text-faint); }
-    .snav a:hover { color:var(--gold); background:var(--bg-elev); }
+    .ng__h { display:block; color:var(--text-soft); text-decoration:none;
+      padding:0.12rem 0.3rem; border-radius:4px; font-size:0.78rem; }
+    .ng__h:hover { color:var(--gold); background:var(--bg-elev); }
+    .ng.on .ng__h { color:var(--gold); font-weight:700; }
+    .ng__chips { display:none; flex-wrap:wrap; gap:0.18rem;
+      padding:0.2rem 0 0.35rem 0.4rem; }
+    .ng.on .ng__chips { display:flex; }
+    .vchip { font-size:0.62rem; font-family:var(--font-mono);
+      color:var(--text-faint); background:#16181d;
+      border:1px solid var(--border); border-radius:4px;
+      padding:0.05rem 0.3rem; text-decoration:none; }
+    .vchip:hover { color:var(--gold); border-color:var(--gold-deep); }
+    .vchip.v-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
+    .vchip.v-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
+    .vchip.v-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
     .pill.g-bg { border-color:#3b6e3b; }
     .pill.o-bg { border-color:var(--gold-deep); }
     .pill.n-bg { border-color:#5a2e28; }
@@ -305,8 +322,27 @@ const pill = (label: string, o: any) => o == null
             b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
           });
         });
+        document.querySelectorAll('.vchip').forEach(function(ch){
+          var s=ch.getAttribute('data-slug'); ch.classList.remove('v-like','v-maybe','v-no');
+          if(votes[s]) ch.classList.add('v-'+votes[s]);
+        });
         var vc=document.getElementById('vc'); if(vc) vc.textContent=cnt;
       }
+      // scroll-spy: open the script group currently in view
+      var ngs=[].slice.call(document.querySelectorAll('.ng'));
+      function spy(){
+        var best=null, bt=-1e9;
+        ngs.forEach(function(ng){
+          var sec=document.getElementById(ng.getAttribute('data-g'));
+          if(!sec)return; var t=sec.getBoundingClientRect().top-90;
+          if(t<=0 && t>bt){ bt=t; best=ng; }
+        });
+        if(!best && ngs.length) best=ngs[0];
+        ngs.forEach(function(ng){ ng.classList.toggle('on', ng===best); });
+      }
+      window.addEventListener('scroll',function(){
+        window.requestAnimationFrame(spy); },{passive:true});
+      spy();
       document.querySelectorAll('.vote button').forEach(function(b){
         b.addEventListener('click',function(){
           var s=b.parentElement.getAttribute('data-slug');

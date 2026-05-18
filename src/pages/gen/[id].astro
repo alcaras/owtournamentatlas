@@ -45,7 +45,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     <div class="col">
       <h3>Map</h3>
       <table class="kv">
-        <tr><td>City sites</td><td><b>{g.sites ?? '—'}</b></td></tr>
+        <tr id="csrow" style="cursor:crosshair"><td>City sites <span class="rh">(hover)</span></td><td><b>{g.sites ?? '—'}</b></td></tr>
         <tr><td>Playable tiles</td><td>{g.tiles ?? '—'}</td></tr>
         <tr><td>Land tiles</td><td>{g.landTiles ?? '—'}</td></tr>
         <tr><td>Freshwater tiles</td><td id="s_fw">—</td></tr>
@@ -133,6 +133,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     .kv td:first-child { color:var(--text-soft); }
     .kv td:last-child { text-align:right; }
     .kv b { color:var(--text); }
+    .yt { width:100%; table-layout:fixed; }
+    .yt th, .yt td { text-align:right !important; }
+    .yt th:first-child, .yt td:first-child {
+      text-align:left !important; width:3rem; color:var(--text-dim); }
     .yt th { font-size:0.6rem; color:var(--text-dim); text-transform:uppercase;
       text-align:right; padding:0.18rem 0.4rem; border-bottom:1px solid var(--border-strong); }
     .yt th:first-child { text-align:left; }
@@ -160,7 +164,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       var wrap=document.getElementById('mapwrap'), cv=document.getElementById('cv'),
           tip=document.getElementById('tip'), ctx=cv.getContext('2d'),
           S=11, HW=Math.sqrt(3)*S, VS=1.5*S, PAD=4, D=null, baseImg=null,
-          icons={}, activeRes=null, pinRes=null, yieldHi=null,
+          icons={}, activeRes=null, pinRes=null, yieldHi=null, csHi=false,
           k=1, tx=0, ty=0;
       function cen(x,y){ return [x*HW+(y%2===0?HW/2:0)+HW/2+PAD, y*VS+S+PAD]; }
       function hexp(cx,cy,r){ ctx.beginPath();
@@ -275,6 +279,12 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
             if(D.bnd[i]||v<lo||(hh!=null&&v>=hh))continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
+        if(csHi || (hi>=0 && D.cs[hi])){
+          ctx.strokeStyle='#ff2daa'; ctx.lineWidth=Math.max(2,S/3);
+          ctx.shadowColor='#ff2daa'; ctx.shadowBlur=S;
+          for(var i=0;i<D.cs.length;i++){ if(!D.cs[i]||D.bnd[i])continue;
+            var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
+          ctx.shadowBlur=0; }
         if(hi>=0){ var ce=cen(hi%W,(hi/W)|0);
           ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(2,S/3);
           hexp(ce[0],ce[1],S*0.98); ctx.stroke(); }
@@ -352,6 +362,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         rb.addEventListener('click',function(e){
           e.stopPropagation(); if(D) fitView(); });
       })(document.getElementById('reset'));
+      (function(cr){ if(!cr)return;
+        cr.addEventListener('mouseenter',function(){ if(D){csHi=true;overlay(-1);} });
+        cr.addEventListener('mouseleave',function(){ csHi=false; if(D)overlay(-1); });
+      })(document.getElementById('csrow'));
       // zoom
       wrap.addEventListener('wheel',function(e){ if(!D)return; e.preventDefault();
         var r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top,
