@@ -365,16 +365,30 @@ const pill = (label: string, o: any) => o == null
       });
       paint();
       document.getElementById('copyv').addEventListener('click',function(){
-        var by={like:[],maybe:[],no:[]};
+        var who=localStorage.getItem('ow_voter')||'';
+        who=(window.prompt('Your name (for the votes header):',who)||'').trim();
+        if(who) localStorage.setItem('ow_voter',who);
+        var rank={like:0,maybe:1,no:2};
+        var rows=[];
         document.querySelectorAll('.cfg').forEach(function(c){
           var s=c.getAttribute('data-slug'), l=c.getAttribute('data-label');
-          if(votes[s]) by[votes[s]].push(l);
+          var v=votes[s];
+          if(v) rows.push({v:v,s:s,l:l});
         });
-        var txt='OW map votes\\n'
-          +'\\n👍 LIKE ('+by.like.length+')\\n'+(by.like.join('\\n')||'—')
-          +'\\n\\n🤷 MAYBE ('+by.maybe.length+')\\n'+(by.maybe.join('\\n')||'—')
-          +'\\n\\n👎 PLS NO ('+by.no.length+')\\n'+(by.no.join('\\n')||'—');
-        navigator.clipboard.writeText(txt).then(function(){
+        rows.sort(function(a,b){
+          return (rank[a.v]-rank[b.v]) || a.s.localeCompare(b.s); });
+        // Machine-parseable block. One record per line:
+        //   vote | slug | label   (pipe absent from slugs & labels)
+        // Wrapped in OW-VOTES v2 … OW-VOTES END so 6 pasted blocks
+        // concatenate unambiguously; slug is the stable join key.
+        var t={like:0,maybe:0,no:0};
+        rows.forEach(function(r){ t[r.v]++; });
+        var lines=['OW-VOTES v2','voter: '+(who||'?'),
+          'n: '+rows.length,
+          'tally: like='+t.like+' maybe='+t.maybe+' no='+t.no];
+        rows.forEach(function(r){ lines.push(r.v+' | '+r.s+' | '+r.l); });
+        lines.push('OW-VOTES END');
+        navigator.clipboard.writeText(lines.join('\n')).then(function(){
           var b=document.getElementById('copyv'); var o=b.textContent;
           b.textContent='✓ copied!'; setTimeout(function(){b.textContent=o;},1500);
         });
