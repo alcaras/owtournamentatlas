@@ -39,31 +39,43 @@ const thr = ['5','6','7','8','9','10','11','12'];
         <tr><td>Crow (hex)</td><td><b>{g.crow ?? '—'}</b></td></tr>
         <tr><td>Land path</td><td><b>{g.land ?? '—'}</b></td></tr>
         <tr><td>Sea path</td><td>{g.water ?? '—'}</td></tr>
-        <tr><td>Scout orders (move 3)</td><td><b>{g.scout ?? '—'}</b></td></tr>
-        <tr><td>Slinger land/sea/Hatti</td><td>
-          {g.slLand ?? '—'} / {g.slSea ?? '—'} / {g.slHatti ?? '—'}</td></tr>
+        <tr><td>Scout orders</td><td><b>{g.scout ?? '—'}</b></td></tr>
+        <tr><td>Slinger L/S/Hatti</td><td>
+          {g.slLand ?? '—'}/{g.slSea ?? '—'}/{g.slHatti ?? '—'}</td></tr>
       </table>
+    </div>
+    <div class="col">
       <h3>Map</h3>
       <table class="kv">
         <tr><td>City sites</td><td><b>{g.sites ?? '—'}</b></td></tr>
         <tr><td>Playable tiles</td><td>{g.tiles ?? '—'}</td></tr>
         <tr><td>Land tiles</td><td><b>{g.landTiles ?? '—'}</b></td></tr>
         <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
-        <tr><td>Tribes / Resources</td><td>{g.tribes ?? '—'} / {g.res ?? '—'}</td></tr>
+        <tr><td>Tribes / Res</td><td>{g.tribes ?? '—'} / {g.res ?? '—'}</td></tr>
       </table>
     </div>
     <div class="col">
-      <h3>Yield tiles ≥N <span class="rh">(Food·Iron·Stone·Wood)</span></h3>
-      <table class="kv">
-        {thr.map(k => { const y=Y[k]; return (
-          <tr><td>{k}+</td><td class="mono">
-            {y ? `${y.food}·${y.iron}·${y.stone}·${y.wood}` : '—'}</td></tr>
+      <h3>Yield tiles ≥N <span class="rh">(hover a cell → highlight)</span></h3>
+      <table class="kv yt">
+        <tr><th>≥</th><th>Food</th><th>Iron</th><th>Stone</th><th>Wood</th></tr>
+        {thr.map(k => { const y=Y[k]||{}; const N=parseInt(k)*10;
+          return (
+          <tr><td>{k}+</td>
+            {['food','iron','stone','wood'].map(yk => (
+              <td class="yc" data-y={yk} data-n={N}>{y[yk] ?? 0}</td>
+            ))}
+          </tr>
         ); })}
       </table>
     </div>
   </div>
 
-  <h2 class="sec">Resources by improvement <span class="rh">(grey = absent)</span></h2>
+  <h2 class="sec">What resources can this map make?</h2>
+  <p class="expl">Every Old World resource, grouped by the improvement
+    you'd build to work it (Farm, Pasture, Camp, Grove, Nets, Mine,
+    Quarry, Lumbermill). <b>Bright = present on this map</b> (with its
+    count); <span class="dim">grey = not on this map</span> — so you can
+    see at a glance what's available vs missing.</p>
   {(resTax as [string,string[]][]).map(([title, list]) => (
     <div class="resgrp">
       <div class="resgrp__t">{title}</div>
@@ -92,17 +104,32 @@ const thr = ['5','6','7','8','9','10','11','12'];
     .sec { font-size:1.15rem; color:var(--gold); border-bottom:1px solid
       var(--gold-deep); padding-bottom:0.25rem; margin:1.5rem 0 0.6rem; }
     .rh { font-size:0.72rem; color:var(--text-faint); font-weight:400; }
-    .respanel { display:flex; flex-wrap:wrap; gap:0.4rem; }
-    .rchip { display:flex; align-items:center; gap:0.3rem; cursor:pointer;
-      background:var(--bg-elev); border:1px solid var(--border-strong);
-      border-radius:999px; padding:0.18rem 0.6rem 0.18rem 0.3rem;
-      font-size:0.8rem; color:var(--text); user-select:none; }
-    .rchip img { width:22px; height:22px; display:block; }
-    .rchip b { color:var(--gold); }
+    .respanel { display:flex; flex-wrap:wrap; gap:0.3rem; }
+    .rchip { display:inline-flex; align-items:center; gap:0.25rem;
+      cursor:pointer; background:var(--bg-elev);
+      border:1px solid var(--gold-deep); border-radius:999px;
+      padding:0.08rem 0.5rem 0.08rem 0.28rem; font-size:0.74rem;
+      color:var(--text); user-select:none; line-height:1.4; }
+    .rchip img { width:14px; height:14px; display:block; }
+    .rchip b { color:var(--gold); font-size:0.72rem; }
     .rchip:hover, .rchip.pin { border-color:var(--gold);
-      background:#231f0d; }
-    .stats { display:flex; flex-wrap:wrap; gap:1.6rem; }
-    .col { min-width:260px; }
+      background:#231f0d; color:var(--gold); }
+    .expl { font-size:0.84rem; color:var(--text-soft); line-height:1.5;
+      max-width:88ch; margin:0.2rem 0 0.7rem; }
+    .expl b { color:#9fd07f; } .expl .dim, .dim { color:var(--text-dim); }
+    .stats { display:grid; gap:1.4rem;
+      grid-template-columns:repeat(3,minmax(0,1fr)); }
+    @media (max-width:820px){ .stats{ grid-template-columns:1fr 1fr; } }
+    @media (max-width:560px){ .stats{ grid-template-columns:1fr; } }
+    .col { min-width:0; }
+    .yt th { font-size:0.62rem; letter-spacing:0.05em; color:var(--text-dim);
+      text-transform:uppercase; text-align:right; font-weight:600;
+      padding:0.2rem 0.4rem; border-bottom:1px solid var(--border-strong); }
+    .yt th:first-child { text-align:left; }
+    .yt td { text-align:right; }
+    .yt td.yc { cursor:crosshair; font-family:var(--font-mono);
+      font-size:0.82em; }
+    .yt td.yc:hover { background:#231f0d; color:var(--gold); }
     .stats h3 { font-size:0.98rem; color:var(--text); margin:0.6rem 0 0.25rem; }
     .col:first-child h3:first-child { margin-top:0; }
     .kv { width:100%; border-collapse:collapse; font-size:0.86rem; }
@@ -148,19 +175,34 @@ const thr = ['5','6','7','8','9','10','11','12'];
         var W=D.w,H=D.h,Lt=D.L.terr,Lh=D.L.hgt,Lv=D.L.veg;
         ctx.fillStyle='#0b0c0f'; ctx.fillRect(0,0,cv.width,cv.height);
         for(var i=0;i<W*H;i++){ var x=i%W,y=(i/W)|0,
-          c=tcol(Lt[D.terr[i]]||''), h=(Lh[D.hgt[i]]||'').toUpperCase(),
-          v=(Lv[D.veg[i]]||'').toUpperCase();
-          if(v.indexOf('JUNGLE')>=0)c=[c[0]-30,c[1]-6,c[2]-28];
-          else if(v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0)c=[c[0]-22,c[1]+2,c[2]-22];
-          else if(v.indexOf('SCRUB')>=0)c=[c[0]+16,c[1]+12,c[2]-6];
+          tn=(Lt[D.terr[i]]||'').toUpperCase(),
+          h=(Lh[D.hgt[i]]||'').toUpperCase(),
+          v=(Lv[D.veg[i]]||'').toUpperCase(), c, isWater=false;
+          if(tn==='WATER'||h.indexOf('OCEAN')>=0||h.indexOf('COAST')>=0||h.indexOf('LAKE')>=0){
+            isWater=true;
+            c = h.indexOf('LAKE')>=0 ? [40,118,124]      // lake — teal
+              : h.indexOf('COAST')>=0 ? [70,120,168]     // coast — light
+              : [22,46,82];                              // ocean — deep
+          } else {
+            c=tcol(tn);
+            if(v.indexOf('JUNGLE')>=0)c=[c[0]-30,c[1]-6,c[2]-28];
+            else if(v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0)c=[c[0]-22,c[1]+2,c[2]-22];
+            else if(v.indexOf('SCRUB')>=0)c=[c[0]+16,c[1]+12,c[2]-6];
+          }
           if(D.bnd[i]){var g=lum(c)*0.42;c=[g,g,g];}
           else if(h.indexOf('MOUNTAIN')>=0||h.indexOf('VOLCANO')>=0){
             var b=lum(c)*0.6+26;
             c=h.indexOf('VOLCANO')>=0?[b+14,b-4,b-6]:[b,b,b+3];
-          } else if(h.indexOf('HILL')>=0)c=[c[0]-14,c[1]-14,c[2]-10];
+          } else if(h.indexOf('HILL')>=0)c=[c[0]-16,c[1]-16,c[2]-10];
           var ce=cen(x,y);
           ctx.fillStyle='rgb('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+')';
           hexp(ce[0],ce[1],S); ctx.fill();
+          if(!D.bnd[i]&&!isWater&&h.indexOf('HILL')>=0){ // hill bump
+            ctx.fillStyle='rgba(0,0,0,0.34)'; var bs=S*0.3;
+            ctx.beginPath();
+            ctx.moveTo(ce[0]-bs,ce[1]+bs*0.7);
+            ctx.lineTo(ce[0],ce[1]-bs*0.6);
+            ctx.lineTo(ce[0]+bs,ce[1]+bs*0.7); ctx.closePath(); ctx.fill(); }
           if(!D.bnd[i]&&D.cs[i]){ ctx.fillStyle='#ff2daa';
             ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.4,0,7); ctx.fill(); }
         }
@@ -193,6 +235,7 @@ const thr = ['5','6','7','8','9','10','11','12'];
         });
         baseImg=ctx.getImageData(0,0,cv.width,cv.height);
       }
+      var yieldHi=null;   // {arr:'yf'|'yi'|'ys'|'yw', n:int}
       function overlay(hoverIdx){
         if(baseImg) ctx.putImageData(baseImg,0,0);
         var W=D.w, res=pinRes||activeRes;
@@ -200,6 +243,13 @@ const thr = ['5','6','7','8','9','10','11','12'];
           ctx.shadowColor='#ffe24a'; ctx.shadowBlur=S;
           for(var i=0;i<D.terr.length;i++){ if(D.res[i]<0)continue;
             if(slug(D.L.res[D.res[i]])!==res)continue;
+            var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.96); ctx.stroke(); }
+          ctx.shadowBlur=0;
+        }
+        if(yieldHi){ var A=D[yieldHi.arr]||[];
+          ctx.strokeStyle='#6fe06f'; ctx.lineWidth=Math.max(2,S/3);
+          ctx.shadowColor='#6fe06f'; ctx.shadowBlur=S;
+          for(var i=0;i<A.length;i++){ if((A[i]||0)<yieldHi.n||D.bnd[i])continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.96); ctx.stroke(); }
           ctx.shadowBlur=0;
         }
@@ -264,6 +314,19 @@ const thr = ['5','6','7','8','9','10','11','12'];
       });
       cv.addEventListener('mouseleave',function(){
         tip.style.display='none'; overlay(-1); });
+      // yield-cell hover → highlight matching tiles
+      var YA={food:'yf',iron:'yi',stone:'ys',wood:'yw'};
+      document.querySelectorAll('td.yc').forEach(function(td){
+        td.addEventListener('mouseenter',function(){
+          if(!D) return;
+          yieldHi={arr:YA[td.getAttribute('data-y')],
+                   n:parseInt(td.getAttribute('data-n'))};
+          overlay(-1);
+        });
+        td.addEventListener('mouseleave',function(){
+          yieldHi=null; if(D) overlay(-1);
+        });
+      });
     })();
   </script>
 </Base>

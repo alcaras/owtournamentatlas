@@ -1,5 +1,5 @@
 {
- "configCount": 24,
+ "configCount": 76,
  "configs": [
   {
    "connPct": 100,
@@ -2670,17 +2670,17 @@
    "variant": "Irreg Low"
   },
   {
-   "connPct": 50,
+   "connPct": 44,
    "dist": {
     "crow": {
      "max": 83,
-     "mean": 78.1,
-     "med": 79.0,
+     "mean": 77.6,
+     "med": 79,
      "min": 71,
-     "n": 8,
+     "n": 9,
      "p10": 73,
      "p90": 83,
-     "sd": 4.3
+     "sd": 4.4
     },
     "land": {
      "max": 94,
@@ -2694,23 +2694,23 @@
     },
     "oceanPct": {
      "max": 54,
-     "mean": 48.9,
-     "med": 49.5,
+     "mean": 49.2,
+     "med": 50,
      "min": 42,
-     "n": 8,
+     "n": 9,
      "p10": 46,
      "p90": 53,
      "sd": 3.6
     },
     "res": {
      "max": 136,
-     "mean": 120.5,
-     "med": 116.0,
-     "min": 108,
-     "n": 8,
-     "p10": 112,
+     "mean": 118.9,
+     "med": 114,
+     "min": 106,
+     "n": 9,
+     "p10": 108,
      "p90": 136,
-     "sd": 10.2
+     "sd": 10.6
     },
     "scout": {
      "max": 37,
@@ -2724,10 +2724,10 @@
     },
     "sites": {
      "max": 28,
-     "mean": 23.8,
-     "med": 22.0,
+     "mean": 23.6,
+     "med": 22,
      "min": 22,
-     "n": 8,
+     "n": 9,
      "p10": 22,
      "p90": 28,
      "sd": 2.5
@@ -2744,23 +2744,23 @@
     },
     "tribes": {
      "max": 6,
-     "mean": 4.1,
-     "med": 4.0,
+     "mean": 3.9,
+     "med": 3,
      "min": 2,
-     "n": 8,
-     "p10": 3,
+     "n": 9,
+     "p10": 2,
      "p90": 6,
      "sd": 1.5
     },
     "water": {
      "max": 83,
-     "mean": 78.1,
-     "med": 79.0,
+     "mean": 77.8,
+     "med": 79,
      "min": 71,
-     "n": 8,
+     "n": 9,
      "p10": 73,
      "p90": 83,
-     "sd": 4.3
+     "sd": 4.2
     }
    },
    "group": "Donut",
@@ -2772,23 +2772,6058 @@
     "atlas/donut-irreg-low-tiny-ultrawide-sym/seed-5.png",
     "atlas/donut-irreg-low-tiny-ultrawide-sym/seed-6.png",
     "atlas/donut-irreg-low-tiny-ultrawide-sym/seed-7.png",
-    "atlas/donut-irreg-low-tiny-ultrawide-sym/seed-8.png"
+    "atlas/donut-irreg-low-tiny-ultrawide-sym/seed-8.png",
+    "atlas/donut-irreg-low-tiny-ultrawide-sym/seed-9.png"
    ],
    "label": "Donut \u00b7 Irreg Low \u00b7 Tiny/ultrawide/sym",
-   "n": 8,
+   "n": 9,
    "oceanPct": 49,
-   "res": 120,
+   "res": 119,
    "setting": "Tiny \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
    "slug": "donut-irreg-low-tiny-ultrawide-sym",
    "tip": "",
-   "tribes": 4.1,
+   "tribes": 3.9,
    "variant": "Irreg Low"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 41,
+     "mean": 37.2,
+     "med": 38,
+     "min": 32,
+     "n": 9,
+     "p10": 34,
+     "p90": 40,
+     "sd": 2.7
+    },
+    "land": {
+     "max": 47,
+     "mean": 38.5,
+     "med": 38.5,
+     "min": 32,
+     "n": 8,
+     "p10": 34,
+     "p90": 41,
+     "sd": 4.3
+    },
+    "oceanPct": {
+     "max": 73,
+     "mean": 51.3,
+     "med": 51,
+     "min": 38,
+     "n": 9,
+     "p10": 45,
+     "p90": 55,
+     "sd": 9.2
+    },
+    "res": {
+     "max": 110,
+     "mean": 91.9,
+     "med": 92,
+     "min": 77,
+     "n": 9,
+     "p10": 85,
+     "p90": 101,
+     "sd": 9.2
+    },
+    "scout": {
+     "max": 18,
+     "mean": 13.8,
+     "med": 13.5,
+     "min": 9,
+     "n": 8,
+     "p10": 13,
+     "p90": 16,
+     "sd": 2.4
+    },
+    "sites": {
+     "max": 23,
+     "mean": 18.4,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 16,
+     "p90": 21,
+     "sd": 2.2
+    },
+    "slLand": {
+     "max": 26,
+     "mean": 20.4,
+     "med": 20.0,
+     "min": 14,
+     "n": 8,
+     "p10": 19,
+     "p90": 24,
+     "sd": 3.3
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 3.3,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 5,
+     "sd": 1.3
+    },
+    "water": {
+     "max": 41,
+     "mean": 37.7,
+     "med": 39,
+     "min": 32,
+     "n": 9,
+     "p10": 34,
+     "p90": 40,
+     "sd": 2.9
+    }
+   },
+   "group": "Archipelago",
+   "imgs": [
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-1.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-2.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-3.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-4.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-5.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-6.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-7.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-8.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "Archipelago \u00b7 Land Lg \u00b7 Water Sm \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 51,
+   "res": 92,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "archipelago-land-lg-water-sm-smallest-square-nosym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Land Lg \u00b7 Water Sm"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 57,
+     "mean": 47.6,
+     "med": 49,
+     "min": 40,
+     "n": 9,
+     "p10": 40,
+     "p90": 53,
+     "sd": 5.4
+    },
+    "land": {
+     "max": 57,
+     "mean": 48.1,
+     "med": 48.0,
+     "min": 40,
+     "n": 8,
+     "p10": 43,
+     "p90": 53,
+     "sd": 5.1
+    },
+    "oceanPct": {
+     "max": 74,
+     "mean": 52.3,
+     "med": 52,
+     "min": 39,
+     "n": 9,
+     "p10": 46,
+     "p90": 56,
+     "sd": 9.2
+    },
+    "res": {
+     "max": 110,
+     "mean": 92.4,
+     "med": 100,
+     "min": 66,
+     "n": 9,
+     "p10": 76,
+     "p90": 108,
+     "sd": 14.5
+    },
+    "scout": {
+     "max": 23,
+     "mean": 16.8,
+     "med": 16.5,
+     "min": 12,
+     "n": 8,
+     "p10": 15,
+     "p90": 18,
+     "sd": 3.0
+    },
+    "sites": {
+     "max": 22,
+     "mean": 17.8,
+     "med": 18,
+     "min": 14,
+     "n": 9,
+     "p10": 16,
+     "p90": 20,
+     "sd": 2.2
+    },
+    "slLand": {
+     "max": 34,
+     "mean": 24.9,
+     "med": 25.0,
+     "min": 18,
+     "n": 8,
+     "p10": 22,
+     "p90": 27,
+     "sd": 4.4
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.3,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 5,
+     "sd": 1.2
+    },
+    "water": {
+     "max": 57,
+     "mean": 47.6,
+     "med": 49,
+     "min": 40,
+     "n": 9,
+     "p10": 40,
+     "p90": 53,
+     "sd": 5.4
+    }
+   },
+   "group": "Archipelago",
+   "imgs": [
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-1.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-2.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-3.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-4.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-5.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-6.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-7.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-8.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Archipelago \u00b7 Land Lg \u00b7 Water Sm \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 52,
+   "res": 92,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "archipelago-land-lg-water-sm-smallest-square-sym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Land Lg \u00b7 Water Sm"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 56,
+     "mean": 49.4,
+     "med": 50,
+     "min": 41,
+     "n": 9,
+     "p10": 42,
+     "p90": 54,
+     "sd": 4.8
+    },
+    "land": {
+     "max": 63,
+     "mean": 53.9,
+     "med": 55,
+     "min": 42,
+     "n": 9,
+     "p10": 45,
+     "p90": 62,
+     "sd": 6.5
+    },
+    "oceanPct": {
+     "max": 70,
+     "mean": 50.3,
+     "med": 49,
+     "min": 39,
+     "n": 9,
+     "p10": 40,
+     "p90": 56,
+     "sd": 8.9
+    },
+    "res": {
+     "max": 109,
+     "mean": 93.7,
+     "med": 100,
+     "min": 53,
+     "n": 9,
+     "p10": 83,
+     "p90": 108,
+     "sd": 16.4
+    },
+    "scout": {
+     "max": 27,
+     "mean": 19.7,
+     "med": 20,
+     "min": 13,
+     "n": 9,
+     "p10": 16,
+     "p90": 25,
+     "sd": 4.0
+    },
+    "sites": {
+     "max": 25,
+     "mean": 20.0,
+     "med": 20,
+     "min": 13,
+     "n": 9,
+     "p10": 17,
+     "p90": 23,
+     "sd": 3.4
+    },
+    "slLand": {
+     "max": 41,
+     "mean": 29.4,
+     "med": 29,
+     "min": 20,
+     "n": 9,
+     "p10": 23,
+     "p90": 38,
+     "sd": 6.2
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.0,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 1.2
+    },
+    "water": {
+     "max": 62,
+     "mean": 51.2,
+     "med": 53,
+     "min": 41,
+     "n": 9,
+     "p10": 42,
+     "p90": 55,
+     "sd": 6.1
+    }
+   },
+   "group": "Archipelago",
+   "imgs": [
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-1.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-2.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-3.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-4.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-5.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-6.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-7.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-8.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "Archipelago \u00b7 Land Lg \u00b7 Water Sm \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 50,
+   "res": 94,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "archipelago-land-lg-water-sm-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 4.0,
+   "variant": "Land Lg \u00b7 Water Sm"
+  },
+  {
+   "connPct": 78,
+   "dist": {
+    "crow": {
+     "max": 65,
+     "mean": 55.7,
+     "med": 55,
+     "min": 44,
+     "n": 9,
+     "p10": 52,
+     "p90": 61,
+     "sd": 5.7
+    },
+    "land": {
+     "max": 65,
+     "mean": 58.6,
+     "med": 59,
+     "min": 52,
+     "n": 7,
+     "p10": 52,
+     "p90": 63,
+     "sd": 4.6
+    },
+    "oceanPct": {
+     "max": 71,
+     "mean": 51.0,
+     "med": 50,
+     "min": 40,
+     "n": 9,
+     "p10": 40,
+     "p90": 57,
+     "sd": 9.0
+    },
+    "res": {
+     "max": 120,
+     "mean": 91.1,
+     "med": 94,
+     "min": 64,
+     "n": 9,
+     "p10": 70,
+     "p90": 102,
+     "sd": 16.3
+    },
+    "scout": {
+     "max": 24,
+     "mean": 20.7,
+     "med": 20,
+     "min": 17,
+     "n": 7,
+     "p10": 20,
+     "p90": 24,
+     "sd": 2.3
+    },
+    "sites": {
+     "max": 24,
+     "mean": 18.4,
+     "med": 18,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 22,
+     "sd": 3.7
+    },
+    "slLand": {
+     "max": 36,
+     "mean": 30.7,
+     "med": 29,
+     "min": 26,
+     "n": 7,
+     "p10": 29,
+     "p90": 36,
+     "sd": 3.5
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 3.8,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 5,
+     "sd": 1.3
+    },
+    "water": {
+     "max": 65,
+     "mean": 57.2,
+     "med": 59,
+     "min": 44,
+     "n": 9,
+     "p10": 52,
+     "p90": 62,
+     "sd": 6.0
+    }
+   },
+   "group": "Archipelago",
+   "imgs": [
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-1.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-2.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-3.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-4.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-5.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-6.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-7.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-8.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-wide-sym/seed-9.png"
+   ],
+   "label": "Archipelago \u00b7 Land Lg \u00b7 Water Sm \u00b7 Duel/wide/sym",
+   "n": 9,
+   "oceanPct": 51,
+   "res": 91,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "archipelago-land-lg-water-sm-smallest-wide-sym",
+   "tip": "",
+   "tribes": 3.8,
+   "variant": "Land Lg \u00b7 Water Sm"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 71,
+     "mean": 62.7,
+     "med": 62,
+     "min": 54,
+     "n": 9,
+     "p10": 55,
+     "p90": 71,
+     "sd": 5.8
+    },
+    "land": {
+     "max": 77,
+     "mean": 67.1,
+     "med": 68.0,
+     "min": 54,
+     "n": 8,
+     "p10": 59,
+     "p90": 77,
+     "sd": 8.2
+    },
+    "oceanPct": {
+     "max": 64,
+     "mean": 53.7,
+     "med": 52,
+     "min": 40,
+     "n": 9,
+     "p10": 50,
+     "p90": 60,
+     "sd": 6.7
+    },
+    "res": {
+     "max": 106,
+     "mean": 88.7,
+     "med": 85,
+     "min": 75,
+     "n": 9,
+     "p10": 82,
+     "p90": 104,
+     "sd": 9.6
+    },
+    "scout": {
+     "max": 32,
+     "mean": 25.1,
+     "med": 24.5,
+     "min": 20,
+     "n": 8,
+     "p10": 23,
+     "p90": 28,
+     "sd": 3.4
+    },
+    "sites": {
+     "max": 20,
+     "mean": 18.2,
+     "med": 18,
+     "min": 15,
+     "n": 9,
+     "p10": 17,
+     "p90": 20,
+     "sd": 1.5
+    },
+    "slLand": {
+     "max": 48,
+     "mean": 37.6,
+     "med": 36.5,
+     "min": 29,
+     "n": 8,
+     "p10": 35,
+     "p90": 42,
+     "sd": 5.2
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.3,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 5,
+     "sd": 1.2
+    },
+    "water": {
+     "max": 74,
+     "mean": 64.7,
+     "med": 66,
+     "min": 54,
+     "n": 9,
+     "p10": 57,
+     "p90": 72,
+     "sd": 6.4
+    }
+   },
+   "group": "Archipelago",
+   "imgs": [
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-1.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-2.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-3.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-4.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "Archipelago \u00b7 Land Lg \u00b7 Water Sm \u00b7 Duel/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 54,
+   "res": 89,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "archipelago-land-lg-water-sm-smallest-ultrawide-nosym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Land Lg \u00b7 Water Sm"
+  },
+  {
+   "connPct": 56,
+   "dist": {
+    "crow": {
+     "max": 82,
+     "mean": 68.3,
+     "med": 66,
+     "min": 56,
+     "n": 9,
+     "p10": 61,
+     "p90": 75,
+     "sd": 7.7
+    },
+    "land": {
+     "max": 82,
+     "mean": 72.0,
+     "med": 74,
+     "min": 64,
+     "n": 5,
+     "p10": 64,
+     "p90": 82,
+     "sd": 6.7
+    },
+    "oceanPct": {
+     "max": 65,
+     "mean": 54.1,
+     "med": 52,
+     "min": 41,
+     "n": 9,
+     "p10": 50,
+     "p90": 60,
+     "sd": 6.7
+    },
+    "res": {
+     "max": 116,
+     "mean": 98.0,
+     "med": 98,
+     "min": 80,
+     "n": 9,
+     "p10": 90,
+     "p90": 106,
+     "sd": 9.9
+    },
+    "scout": {
+     "max": 28,
+     "mean": 25.8,
+     "med": 27,
+     "min": 23,
+     "n": 5,
+     "p10": 23,
+     "p90": 28,
+     "sd": 1.9
+    },
+    "sites": {
+     "max": 22,
+     "mean": 18.9,
+     "med": 18,
+     "min": 18,
+     "n": 9,
+     "p10": 18,
+     "p90": 22,
+     "sd": 1.7
+    },
+    "slLand": {
+     "max": 42,
+     "mean": 38.6,
+     "med": 40,
+     "min": 34,
+     "n": 5,
+     "p10": 34,
+     "p90": 42,
+     "sd": 3.1
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.1,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 5,
+     "sd": 1.1
+    },
+    "water": {
+     "max": 82,
+     "mean": 70.9,
+     "med": 72,
+     "min": 58,
+     "n": 9,
+     "p10": 63,
+     "p90": 79,
+     "sd": 7.4
+    }
+   },
+   "group": "Archipelago",
+   "imgs": [
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-1.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-2.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-3.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-4.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-5.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-6.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-7.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-8.png",
+    "atlas/archipelago-land-lg-water-sm-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "Archipelago \u00b7 Land Lg \u00b7 Water Sm \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 54,
+   "res": 98,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "archipelago-land-lg-water-sm-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.1,
+   "variant": "Land Lg \u00b7 Water Sm"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 50,
+     "mean": 48.9,
+     "med": 49,
+     "min": 48,
+     "n": 9,
+     "p10": 48,
+     "p90": 49,
+     "sd": 0.6
+    },
+    "land": {
+     "max": 61,
+     "mean": 55.4,
+     "med": 56,
+     "min": 50,
+     "n": 9,
+     "p10": 51,
+     "p90": 60,
+     "sd": 3.9
+    },
+    "oceanPct": {
+     "max": 17,
+     "mean": 14.0,
+     "med": 13,
+     "min": 12,
+     "n": 9,
+     "p10": 13,
+     "p90": 15,
+     "sd": 1.5
+    },
+    "res": {
+     "max": 137,
+     "mean": 125.2,
+     "med": 125,
+     "min": 110,
+     "n": 9,
+     "p10": 119,
+     "p90": 134,
+     "sd": 7.7
+    },
+    "scout": {
+     "max": 28,
+     "mean": 22.2,
+     "med": 21,
+     "min": 19,
+     "n": 9,
+     "p10": 19,
+     "p90": 24,
+     "sd": 2.7
+    },
+    "sites": {
+     "max": 29,
+     "mean": 26.6,
+     "med": 27,
+     "min": 24,
+     "n": 9,
+     "p10": 24,
+     "p90": 29,
+     "sd": 1.8
+    },
+    "slLand": {
+     "max": 42,
+     "mean": 33.2,
+     "med": 32,
+     "min": 28,
+     "n": 9,
+     "p10": 29,
+     "p90": 36,
+     "sd": 4.1
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 3.8,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 6,
+     "sd": 1.6
+    },
+    "water": {
+     "max": 56,
+     "mean": 51.3,
+     "med": 51,
+     "min": 48,
+     "n": 9,
+     "p10": 49,
+     "p90": 54,
+     "sd": 2.4
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-1.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-2.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-3.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-4.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-5.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-6.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-7.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-8.png",
+    "atlas/arid-plateau-large-seas-tiny-square-nosym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Large Seas \u00b7 Tiny/square/nosym",
+   "n": 9,
+   "oceanPct": 14,
+   "res": 125,
+   "setting": "Tiny \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "arid-plateau-large-seas-tiny-square-nosym",
+   "tip": "",
+   "tribes": 3.8,
+   "variant": "Large Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 68,
+     "mean": 60.4,
+     "med": 60,
+     "min": 51,
+     "n": 9,
+     "p10": 56,
+     "p90": 67,
+     "sd": 5.1
+    },
+    "land": {
+     "max": 105,
+     "mean": 70.6,
+     "med": 68,
+     "min": 59,
+     "n": 9,
+     "p10": 63,
+     "p90": 69,
+     "sd": 12.6
+    },
+    "oceanPct": {
+     "max": 16,
+     "mean": 13.6,
+     "med": 14,
+     "min": 11,
+     "n": 9,
+     "p10": 11,
+     "p90": 16,
+     "sd": 1.8
+    },
+    "res": {
+     "max": 184,
+     "mean": 136.2,
+     "med": 136,
+     "min": 92,
+     "n": 9,
+     "p10": 110,
+     "p90": 176,
+     "sd": 29.1
+    },
+    "scout": {
+     "max": 44,
+     "mean": 27.0,
+     "med": 26,
+     "min": 21,
+     "n": 9,
+     "p10": 22,
+     "p90": 29,
+     "sd": 6.4
+    },
+    "sites": {
+     "max": 34,
+     "mean": 27.3,
+     "med": 28,
+     "min": 18,
+     "n": 9,
+     "p10": 22,
+     "p90": 32,
+     "sd": 5.2
+    },
+    "slLand": {
+     "max": 66,
+     "mean": 40.3,
+     "med": 38,
+     "min": 32,
+     "n": 9,
+     "p10": 33,
+     "p90": 44,
+     "sd": 9.7
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.7,
+     "med": 5,
+     "min": 3,
+     "n": 9,
+     "p10": 3,
+     "p90": 6,
+     "sd": 1.2
+    },
+    "water": {
+     "max": 68,
+     "mean": 60.8,
+     "med": 60,
+     "min": 51,
+     "n": 9,
+     "p10": 57,
+     "p90": 67,
+     "sd": 4.9
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-1.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-2.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-3.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-4.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-5.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-6.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-7.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-8.png",
+    "atlas/arid-plateau-large-seas-tiny-square-sym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Large Seas \u00b7 Tiny/square/sym",
+   "n": 9,
+   "oceanPct": 14,
+   "res": 136,
+   "setting": "Tiny \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "arid-plateau-large-seas-tiny-square-sym",
+   "tip": "",
+   "tribes": 4.7,
+   "variant": "Large Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 66,
+     "mean": 65.2,
+     "med": 66,
+     "min": 63,
+     "n": 9,
+     "p10": 64,
+     "p90": 66,
+     "sd": 1.0
+    },
+    "land": {
+     "max": 72,
+     "mean": 68.1,
+     "med": 68,
+     "min": 65,
+     "n": 9,
+     "p10": 66,
+     "p90": 70,
+     "sd": 2.1
+    },
+    "oceanPct": {
+     "max": 17,
+     "mean": 13.8,
+     "med": 13,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 15,
+     "sd": 1.5
+    },
+    "res": {
+     "max": 157,
+     "mean": 135.6,
+     "med": 136,
+     "min": 116,
+     "n": 9,
+     "p10": 123,
+     "p90": 152,
+     "sd": 12.7
+    },
+    "scout": {
+     "max": 30,
+     "mean": 26.1,
+     "med": 26,
+     "min": 21,
+     "n": 9,
+     "p10": 24,
+     "p90": 29,
+     "sd": 2.9
+    },
+    "sites": {
+     "max": 32,
+     "mean": 28.4,
+     "med": 28,
+     "min": 26,
+     "n": 9,
+     "p10": 27,
+     "p90": 29,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 45,
+     "mean": 39.0,
+     "med": 38,
+     "min": 31,
+     "n": 9,
+     "p10": 35,
+     "p90": 44,
+     "sd": 4.6
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.8,
+     "med": 5,
+     "min": 3,
+     "n": 9,
+     "p10": 4,
+     "p90": 6,
+     "sd": 1.0
+    },
+    "water": {
+     "max": 71,
+     "mean": 66.6,
+     "med": 66,
+     "min": 65,
+     "n": 9,
+     "p10": 65,
+     "p90": 69,
+     "sd": 1.9
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-1.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-2.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-3.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-4.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-5.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-6.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-7.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-8.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-nosym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Large Seas \u00b7 Tiny/wide/nosym",
+   "n": 9,
+   "oceanPct": 14,
+   "res": 136,
+   "setting": "Tiny \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "arid-plateau-large-seas-tiny-wide-nosym",
+   "tip": "",
+   "tribes": 4.8,
+   "variant": "Large Seas"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 83,
+     "mean": 74.6,
+     "med": 75,
+     "min": 67,
+     "n": 9,
+     "p10": 71,
+     "p90": 77,
+     "sd": 4.1
+    },
+    "land": {
+     "max": 89,
+     "mean": 78.9,
+     "med": 76.0,
+     "min": 73,
+     "n": 8,
+     "p10": 75,
+     "p90": 84,
+     "sd": 5.3
+    },
+    "oceanPct": {
+     "max": 16,
+     "mean": 13.4,
+     "med": 14,
+     "min": 11,
+     "n": 9,
+     "p10": 11,
+     "p90": 15,
+     "sd": 1.7
+    },
+    "res": {
+     "max": 178,
+     "mean": 140.7,
+     "med": 144,
+     "min": 108,
+     "n": 9,
+     "p10": 112,
+     "p90": 170,
+     "sd": 26.6
+    },
+    "scout": {
+     "max": 37,
+     "mean": 30.5,
+     "med": 30.0,
+     "min": 24,
+     "n": 8,
+     "p10": 26,
+     "p90": 37,
+     "sd": 4.4
+    },
+    "sites": {
+     "max": 34,
+     "mean": 29.1,
+     "med": 32,
+     "min": 22,
+     "n": 9,
+     "p10": 22,
+     "p90": 34,
+     "sd": 5.2
+    },
+    "slLand": {
+     "max": 56,
+     "mean": 45.5,
+     "med": 45.0,
+     "min": 36,
+     "n": 8,
+     "p10": 38,
+     "p90": 55,
+     "sd": 6.7
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.1,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 1.2
+    },
+    "water": {
+     "max": 85,
+     "mean": 75.4,
+     "med": 75,
+     "min": 67,
+     "n": 9,
+     "p10": 71,
+     "p90": 83,
+     "sd": 5.2
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-1.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-2.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-3.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-4.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-5.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-6.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-7.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-8.png",
+    "atlas/arid-plateau-large-seas-tiny-wide-sym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Large Seas \u00b7 Tiny/wide/sym",
+   "n": 9,
+   "oceanPct": 13,
+   "res": 141,
+   "setting": "Tiny \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "arid-plateau-large-seas-tiny-wide-sym",
+   "tip": "",
+   "tribes": 4.1,
+   "variant": "Large Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 84,
+     "mean": 81.2,
+     "med": 81,
+     "min": 78,
+     "n": 9,
+     "p10": 79,
+     "p90": 83,
+     "sd": 1.9
+    },
+    "land": {
+     "max": 94,
+     "mean": 86.3,
+     "med": 85,
+     "min": 79,
+     "n": 9,
+     "p10": 83,
+     "p90": 90,
+     "sd": 4.3
+    },
+    "oceanPct": {
+     "max": 17,
+     "mean": 13.0,
+     "med": 12,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 14,
+     "sd": 1.6
+    },
+    "res": {
+     "max": 134,
+     "mean": 122.8,
+     "med": 123,
+     "min": 106,
+     "n": 9,
+     "p10": 115,
+     "p90": 128,
+     "sd": 7.7
+    },
+    "scout": {
+     "max": 36,
+     "mean": 31.1,
+     "med": 31,
+     "min": 27,
+     "n": 9,
+     "p10": 28,
+     "p90": 33,
+     "sd": 2.5
+    },
+    "sites": {
+     "max": 31,
+     "mean": 26.3,
+     "med": 26,
+     "min": 23,
+     "n": 9,
+     "p10": 25,
+     "p90": 27,
+     "sd": 2.0
+    },
+    "slLand": {
+     "max": 53,
+     "mean": 46.4,
+     "med": 46,
+     "min": 41,
+     "n": 9,
+     "p10": 42,
+     "p90": 50,
+     "sd": 3.5
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.3,
+     "med": 4,
+     "min": 3,
+     "n": 9,
+     "p10": 4,
+     "p90": 5,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 87,
+     "mean": 82.2,
+     "med": 82,
+     "min": 78,
+     "n": 9,
+     "p10": 79,
+     "p90": 85,
+     "sd": 2.7
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-1.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-2.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-3.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-4.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-5.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-6.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-7.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-8.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Large Seas \u00b7 Tiny/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 13,
+   "res": 123,
+   "setting": "Tiny \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "arid-plateau-large-seas-tiny-ultrawide-nosym",
+   "tip": "",
+   "tribes": 4.3,
+   "variant": "Large Seas"
+  },
+  {
+   "connPct": 67,
+   "dist": {
+    "crow": {
+     "max": 93,
+     "mean": 86.8,
+     "med": 86,
+     "min": 82,
+     "n": 9,
+     "p10": 83,
+     "p90": 91,
+     "sd": 3.6
+    },
+    "land": {
+     "max": 95,
+     "mean": 90.8,
+     "med": 91.0,
+     "min": 86,
+     "n": 6,
+     "p10": 86,
+     "p90": 93,
+     "sd": 2.9
+    },
+    "oceanPct": {
+     "max": 16,
+     "mean": 12.9,
+     "med": 13,
+     "min": 11,
+     "n": 9,
+     "p10": 11,
+     "p90": 15,
+     "sd": 1.6
+    },
+    "res": {
+     "max": 172,
+     "mean": 132.2,
+     "med": 132,
+     "min": 98,
+     "n": 9,
+     "p10": 104,
+     "p90": 156,
+     "sd": 23.1
+    },
+    "scout": {
+     "max": 39,
+     "mean": 36.5,
+     "med": 38.0,
+     "min": 33,
+     "n": 6,
+     "p10": 33,
+     "p90": 38,
+     "sd": 2.5
+    },
+    "sites": {
+     "max": 34,
+     "mean": 26.7,
+     "med": 26,
+     "min": 20,
+     "n": 9,
+     "p10": 22,
+     "p90": 32,
+     "sd": 4.5
+    },
+    "slLand": {
+     "max": 58,
+     "mean": 54.5,
+     "med": 56.5,
+     "min": 49,
+     "n": 6,
+     "p10": 49,
+     "p90": 57,
+     "sd": 3.6
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 3.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 1.3
+    },
+    "water": {
+     "max": 93,
+     "mean": 89.0,
+     "med": 90,
+     "min": 82,
+     "n": 9,
+     "p10": 85,
+     "p90": 92,
+     "sd": 3.3
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-1.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-2.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-3.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-4.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-5.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-6.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-7.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-8.png",
+    "atlas/arid-plateau-large-seas-tiny-ultrawide-sym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Large Seas \u00b7 Tiny/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 13,
+   "res": 132,
+   "setting": "Tiny \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "arid-plateau-large-seas-tiny-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.9,
+   "variant": "Large Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 38,
+     "mean": 36.2,
+     "med": 36,
+     "min": 34,
+     "n": 9,
+     "p10": 34,
+     "p90": 38,
+     "sd": 1.4
+    },
+    "land": {
+     "max": 64,
+     "mean": 42.7,
+     "med": 39,
+     "min": 36,
+     "n": 9,
+     "p10": 36,
+     "p90": 46,
+     "sd": 8.2
+    },
+    "oceanPct": {
+     "max": 16,
+     "mean": 13.8,
+     "med": 14,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 15,
+     "sd": 1.7
+    },
+    "res": {
+     "max": 95,
+     "mean": 80.1,
+     "med": 81,
+     "min": 58,
+     "n": 9,
+     "p10": 65,
+     "p90": 94,
+     "sd": 12.7
+    },
+    "scout": {
+     "max": 26,
+     "mean": 19.0,
+     "med": 17,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 24,
+     "sd": 5.2
+    },
+    "sites": {
+     "max": 18,
+     "mean": 16.1,
+     "med": 16,
+     "min": 14,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.4
+    },
+    "slLand": {
+     "max": 39,
+     "mean": 28.2,
+     "med": 25,
+     "min": 18,
+     "n": 9,
+     "p10": 18,
+     "p90": 36,
+     "sd": 7.6
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 43,
+     "mean": 38.1,
+     "med": 38,
+     "min": 34,
+     "n": 9,
+     "p10": 36,
+     "p90": 41,
+     "sd": 2.6
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-1.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-2.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-3.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-4.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-5.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-6.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-7.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-8.png",
+    "atlas/arid-plateau-small-seas-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Small Seas \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 14,
+   "res": 80,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "arid-plateau-small-seas-smallest-square-nosym",
+   "tip": "",
+   "tribes": 2.9,
+   "variant": "Small Seas"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 50,
+     "mean": 43.2,
+     "med": 43,
+     "min": 37,
+     "n": 9,
+     "p10": 39,
+     "p90": 48,
+     "sd": 4.6
+    },
+    "land": {
+     "max": 105,
+     "mean": 54.4,
+     "med": 47.0,
+     "min": 44,
+     "n": 8,
+     "p10": 46,
+     "p90": 51,
+     "sd": 19.2
+    },
+    "oceanPct": {
+     "max": 15,
+     "mean": 13.1,
+     "med": 13,
+     "min": 9,
+     "n": 9,
+     "p10": 12,
+     "p90": 15,
+     "sd": 1.9
+    },
+    "res": {
+     "max": 118,
+     "mean": 93.3,
+     "med": 100,
+     "min": 62,
+     "n": 9,
+     "p10": 72,
+     "p90": 106,
+     "sd": 17.1
+    },
+    "scout": {
+     "max": 41,
+     "mean": 23.5,
+     "med": 21.5,
+     "min": 17,
+     "n": 8,
+     "p10": 17,
+     "p90": 26,
+     "sd": 7.3
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.6,
+     "med": 20,
+     "min": 14,
+     "n": 9,
+     "p10": 14,
+     "p90": 20,
+     "sd": 2.8
+    },
+    "slLand": {
+     "max": 61,
+     "mean": 35.0,
+     "med": 32.5,
+     "min": 25,
+     "n": 8,
+     "p10": 25,
+     "p90": 39,
+     "sd": 10.9
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.0,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 1.1
+    },
+    "water": {
+     "max": 50,
+     "mean": 44.0,
+     "med": 47,
+     "min": 37,
+     "n": 9,
+     "p10": 39,
+     "p90": 48,
+     "sd": 4.5
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-1.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-2.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-3.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-4.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-5.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-6.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-7.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-8.png",
+    "atlas/arid-plateau-small-seas-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Small Seas \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 13,
+   "res": 93,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "arid-plateau-small-seas-smallest-square-sym",
+   "tip": "",
+   "tribes": 4.0,
+   "variant": "Small Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 50,
+     "mean": 47.2,
+     "med": 47,
+     "min": 45,
+     "n": 9,
+     "p10": 45,
+     "p90": 48,
+     "sd": 1.5
+    },
+    "land": {
+     "max": 56,
+     "mean": 50.8,
+     "med": 50,
+     "min": 47,
+     "n": 9,
+     "p10": 47,
+     "p90": 56,
+     "sd": 3.4
+    },
+    "oceanPct": {
+     "max": 16,
+     "mean": 13.1,
+     "med": 13,
+     "min": 10,
+     "n": 9,
+     "p10": 11,
+     "p90": 14,
+     "sd": 1.7
+    },
+    "res": {
+     "max": 83,
+     "mean": 73.8,
+     "med": 76,
+     "min": 56,
+     "n": 9,
+     "p10": 68,
+     "p90": 80,
+     "sd": 7.6
+    },
+    "scout": {
+     "max": 26,
+     "mean": 20.3,
+     "med": 21,
+     "min": 16,
+     "n": 9,
+     "p10": 16,
+     "p90": 25,
+     "sd": 3.9
+    },
+    "sites": {
+     "max": 19,
+     "mean": 15.7,
+     "med": 15,
+     "min": 13,
+     "n": 9,
+     "p10": 13,
+     "p90": 18,
+     "sd": 2.1
+    },
+    "slLand": {
+     "max": 38,
+     "mean": 29.9,
+     "med": 32,
+     "min": 23,
+     "n": 9,
+     "p10": 23,
+     "p90": 37,
+     "sd": 6.0
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.0,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 1.1
+    },
+    "water": {
+     "max": 50,
+     "mean": 47.8,
+     "med": 47,
+     "min": 46,
+     "n": 9,
+     "p10": 47,
+     "p90": 50,
+     "sd": 1.3
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-1.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-2.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-3.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-4.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-5.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-6.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-7.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-8.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Small Seas \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 13,
+   "res": 74,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "arid-plateau-small-seas-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 3.0,
+   "variant": "Small Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 60,
+     "mean": 53.7,
+     "med": 54,
+     "min": 46,
+     "n": 9,
+     "p10": 50,
+     "p90": 58,
+     "sd": 4.2
+    },
+    "land": {
+     "max": 71,
+     "mean": 59.3,
+     "med": 60,
+     "min": 49,
+     "n": 9,
+     "p10": 54,
+     "p90": 63,
+     "sd": 5.9
+    },
+    "oceanPct": {
+     "max": 15,
+     "mean": 13.0,
+     "med": 13,
+     "min": 9,
+     "n": 9,
+     "p10": 12,
+     "p90": 15,
+     "sd": 1.8
+    },
+    "res": {
+     "max": 90,
+     "mean": 75.8,
+     "med": 78,
+     "min": 62,
+     "n": 9,
+     "p10": 62,
+     "p90": 88,
+     "sd": 10.2
+    },
+    "scout": {
+     "max": 33,
+     "mean": 25.2,
+     "med": 26,
+     "min": 18,
+     "n": 9,
+     "p10": 20,
+     "p90": 28,
+     "sd": 4.3
+    },
+    "sites": {
+     "max": 20,
+     "mean": 15.8,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 2.4
+    },
+    "slLand": {
+     "max": 49,
+     "mean": 37.3,
+     "med": 39,
+     "min": 27,
+     "n": 9,
+     "p10": 29,
+     "p90": 41,
+     "sd": 6.5
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.6,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 61,
+     "mean": 54.8,
+     "med": 54,
+     "min": 49,
+     "n": 9,
+     "p10": 50,
+     "p90": 60,
+     "sd": 4.2
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-1.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-2.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-3.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-4.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-5.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-6.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-7.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-8.png",
+    "atlas/arid-plateau-small-seas-smallest-wide-sym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Small Seas \u00b7 Duel/wide/sym",
+   "n": 9,
+   "oceanPct": 13,
+   "res": 76,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "arid-plateau-small-seas-smallest-wide-sym",
+   "tip": "",
+   "tribes": 3.6,
+   "variant": "Small Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 64,
+     "mean": 60.9,
+     "med": 61,
+     "min": 58,
+     "n": 9,
+     "p10": 59,
+     "p90": 63,
+     "sd": 1.9
+    },
+    "land": {
+     "max": 75,
+     "mean": 64.7,
+     "med": 63,
+     "min": 60,
+     "n": 9,
+     "p10": 61,
+     "p90": 70,
+     "sd": 4.6
+    },
+    "oceanPct": {
+     "max": 15,
+     "mean": 12.4,
+     "med": 12,
+     "min": 9,
+     "n": 9,
+     "p10": 11,
+     "p90": 15,
+     "sd": 1.8
+    },
+    "res": {
+     "max": 91,
+     "mean": 82.2,
+     "med": 85,
+     "min": 70,
+     "n": 9,
+     "p10": 74,
+     "p90": 91,
+     "sd": 7.2
+    },
+    "scout": {
+     "max": 32,
+     "mean": 25.9,
+     "med": 25,
+     "min": 22,
+     "n": 9,
+     "p10": 23,
+     "p90": 28,
+     "sd": 3.1
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.9,
+     "med": 17,
+     "min": 17,
+     "n": 9,
+     "p10": 17,
+     "p90": 19,
+     "sd": 1.1
+    },
+    "slLand": {
+     "max": 48,
+     "mean": 38.8,
+     "med": 37,
+     "min": 33,
+     "n": 9,
+     "p10": 34,
+     "p90": 42,
+     "sd": 4.7
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.6,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 69,
+     "mean": 62.7,
+     "med": 61,
+     "min": 58,
+     "n": 9,
+     "p10": 61,
+     "p90": 65,
+     "sd": 3.1
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-1.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-2.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-3.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-4.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Small Seas \u00b7 Duel/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 12,
+   "res": 82,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "arid-plateau-small-seas-smallest-ultrawide-nosym",
+   "tip": "",
+   "tribes": 2.6,
+   "variant": "Small Seas"
+  },
+  {
+   "connPct": 78,
+   "dist": {
+    "crow": {
+     "max": 72,
+     "mean": 67.3,
+     "med": 67,
+     "min": 62,
+     "n": 9,
+     "p10": 65,
+     "p90": 71,
+     "sd": 3.2
+    },
+    "land": {
+     "max": 76,
+     "mean": 71.3,
+     "med": 71,
+     "min": 66,
+     "n": 7,
+     "p10": 69,
+     "p90": 74,
+     "sd": 3.1
+    },
+    "oceanPct": {
+     "max": 14,
+     "mean": 11.9,
+     "med": 12,
+     "min": 8,
+     "n": 9,
+     "p10": 11,
+     "p90": 14,
+     "sd": 1.7
+    },
+    "res": {
+     "max": 122,
+     "mean": 88.7,
+     "med": 84,
+     "min": 74,
+     "n": 9,
+     "p10": 76,
+     "p90": 98,
+     "sd": 13.9
+    },
+    "scout": {
+     "max": 34,
+     "mean": 30.4,
+     "med": 31,
+     "min": 24,
+     "n": 7,
+     "p10": 29,
+     "p90": 33,
+     "sd": 3.1
+    },
+    "sites": {
+     "max": 22,
+     "mean": 17.6,
+     "med": 18,
+     "min": 14,
+     "n": 9,
+     "p10": 14,
+     "p90": 22,
+     "sd": 3.1
+    },
+    "slLand": {
+     "max": 51,
+     "mean": 45.3,
+     "med": 46,
+     "min": 36,
+     "n": 7,
+     "p10": 43,
+     "p90": 49,
+     "sd": 4.5
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.0,
+     "med": 4,
+     "min": 3,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 72,
+     "mean": 68.4,
+     "med": 69,
+     "min": 65,
+     "n": 9,
+     "p10": 66,
+     "p90": 71,
+     "sd": 2.2
+    }
+   },
+   "group": "Arid Plateau",
+   "imgs": [
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-1.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-2.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-3.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-4.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-5.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-6.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-7.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-8.png",
+    "atlas/arid-plateau-small-seas-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "Arid Plateau \u00b7 Small Seas \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 12,
+   "res": 89,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "arid-plateau-small-seas-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 4.0,
+   "variant": "Small Seas"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 36,
+     "mean": 35.6,
+     "med": 36,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 36,
+     "sd": 0.7
+    },
+    "land": {
+     "max": 44,
+     "mean": 38.3,
+     "med": 38,
+     "min": 35,
+     "n": 9,
+     "p10": 36,
+     "p90": 40,
+     "sd": 2.6
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 78,
+     "mean": 64.2,
+     "med": 64,
+     "min": 50,
+     "n": 9,
+     "p10": 56,
+     "p90": 76,
+     "sd": 8.9
+    },
+    "scout": {
+     "max": 21,
+     "mean": 16.4,
+     "med": 16,
+     "min": 15,
+     "n": 9,
+     "p10": 15,
+     "p90": 19,
+     "sd": 2.0
+    },
+    "sites": {
+     "max": 16,
+     "mean": 14.4,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 16,
+     "sd": 1.3
+    },
+    "slLand": {
+     "max": 31,
+     "mean": 24.4,
+     "med": 23,
+     "min": 22,
+     "n": 9,
+     "p10": 22,
+     "p90": 29,
+     "sd": 3.1
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.6,
+     "med": 4,
+     "min": 3,
+     "n": 9,
+     "p10": 3,
+     "p90": 4,
+     "sd": 0.5
+    },
+    "water": {
+     "max": 40,
+     "mean": 36.9,
+     "med": 37,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 39,
+     "sd": 1.8
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-jungle-smallest-square-nosym/seed-1.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-2.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-3.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-4.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-5.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-6.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-7.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-8.png",
+    "atlas/dota-jungle-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Jungle \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 64,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-jungle-smallest-square-nosym",
+   "tip": "",
+   "tribes": 3.6,
+   "variant": "Jungle"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 52,
+     "mean": 45.9,
+     "med": 47,
+     "min": 35,
+     "n": 9,
+     "p10": 40,
+     "p90": 52,
+     "sd": 5.8
+    },
+    "land": {
+     "max": 52,
+     "mean": 45.9,
+     "med": 47,
+     "min": 35,
+     "n": 9,
+     "p10": 40,
+     "p90": 52,
+     "sd": 5.8
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 78,
+     "mean": 64.2,
+     "med": 64,
+     "min": 50,
+     "n": 9,
+     "p10": 56,
+     "p90": 76,
+     "sd": 8.9
+    },
+    "scout": {
+     "max": 22,
+     "mean": 17.4,
+     "med": 17,
+     "min": 15,
+     "n": 9,
+     "p10": 15,
+     "p90": 19,
+     "sd": 2.1
+    },
+    "sites": {
+     "max": 16,
+     "mean": 14.4,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 16,
+     "sd": 1.3
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 26.1,
+     "med": 26,
+     "min": 22,
+     "n": 9,
+     "p10": 22,
+     "p90": 29,
+     "sd": 3.3
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.6,
+     "med": 4,
+     "min": 3,
+     "n": 9,
+     "p10": 3,
+     "p90": 4,
+     "sd": 0.5
+    },
+    "water": {
+     "max": 52,
+     "mean": 45.9,
+     "med": 47,
+     "min": 35,
+     "n": 9,
+     "p10": 40,
+     "p90": 52,
+     "sd": 5.8
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-jungle-smallest-square-sym/seed-1.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-2.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-3.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-4.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-5.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-6.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-7.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-8.png",
+    "atlas/dota-jungle-smallest-square-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Jungle \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 64,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-jungle-smallest-square-sym",
+   "tip": "",
+   "tribes": 3.6,
+   "variant": "Jungle"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 50,
+     "mean": 47.7,
+     "med": 48,
+     "min": 44,
+     "n": 9,
+     "p10": 47,
+     "p90": 49,
+     "sd": 1.6
+    },
+    "land": {
+     "max": 54,
+     "mean": 49.9,
+     "med": 50,
+     "min": 44,
+     "n": 9,
+     "p10": 47,
+     "p90": 54,
+     "sd": 3.0
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.2,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.4
+    },
+    "res": {
+     "max": 78,
+     "mean": 69.6,
+     "med": 66,
+     "min": 64,
+     "n": 9,
+     "p10": 64,
+     "p90": 76,
+     "sd": 5.5
+    },
+    "scout": {
+     "max": 22,
+     "mean": 20.4,
+     "med": 21,
+     "min": 18,
+     "n": 9,
+     "p10": 18,
+     "p90": 22,
+     "sd": 1.6
+    },
+    "sites": {
+     "max": 18,
+     "mean": 16.4,
+     "med": 16,
+     "min": 14,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 30.6,
+     "med": 31,
+     "min": 27,
+     "n": 9,
+     "p10": 27,
+     "p90": 33,
+     "sd": 2.2
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.2,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 51,
+     "mean": 48.7,
+     "med": 49,
+     "min": 44,
+     "n": 9,
+     "p10": 47,
+     "p90": 51,
+     "sd": 2.1
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-jungle-smallest-wide-nosym/seed-1.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-2.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-3.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-4.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-5.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-6.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-7.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-8.png",
+    "atlas/dota-jungle-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Jungle \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 70,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-jungle-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 3.2,
+   "variant": "Jungle"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 59,
+     "mean": 55.8,
+     "med": 58,
+     "min": 52,
+     "n": 9,
+     "p10": 52,
+     "p90": 58,
+     "sd": 2.8
+    },
+    "land": {
+     "max": 60,
+     "mean": 56.3,
+     "med": 58,
+     "min": 53,
+     "n": 9,
+     "p10": 53,
+     "p90": 59,
+     "sd": 2.6
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.2,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.4
+    },
+    "res": {
+     "max": 78,
+     "mean": 69.6,
+     "med": 66,
+     "min": 64,
+     "n": 9,
+     "p10": 64,
+     "p90": 76,
+     "sd": 5.5
+    },
+    "scout": {
+     "max": 23,
+     "mean": 20.2,
+     "med": 20,
+     "min": 14,
+     "n": 9,
+     "p10": 17,
+     "p90": 23,
+     "sd": 2.9
+    },
+    "sites": {
+     "max": 18,
+     "mean": 16.4,
+     "med": 16,
+     "min": 14,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 34,
+     "mean": 29.9,
+     "med": 30,
+     "min": 21,
+     "n": 9,
+     "p10": 25,
+     "p90": 34,
+     "sd": 4.2
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.2,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 60,
+     "mean": 56.0,
+     "med": 58,
+     "min": 52,
+     "n": 9,
+     "p10": 52,
+     "p90": 59,
+     "sd": 3.0
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-jungle-smallest-wide-sym/seed-1.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-2.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-3.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-4.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-5.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-6.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-7.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-8.png",
+    "atlas/dota-jungle-smallest-wide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Jungle \u00b7 Duel/wide/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 70,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-jungle-smallest-wide-sym",
+   "tip": "",
+   "tribes": 3.2,
+   "variant": "Jungle"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 62,
+     "mean": 61.7,
+     "med": 62,
+     "min": 60,
+     "n": 9,
+     "p10": 61,
+     "p90": 62,
+     "sd": 0.7
+    },
+    "land": {
+     "max": 65,
+     "mean": 64.3,
+     "med": 65,
+     "min": 63,
+     "n": 9,
+     "p10": 63,
+     "p90": 65,
+     "sd": 0.8
+    },
+    "oceanPct": {
+     "max": 4,
+     "mean": 2.3,
+     "med": 3,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 102,
+     "mean": 78.9,
+     "med": 74,
+     "min": 70,
+     "n": 9,
+     "p10": 72,
+     "p90": 82,
+     "sd": 9.1
+    },
+    "scout": {
+     "max": 27,
+     "mean": 25.0,
+     "med": 25,
+     "min": 24,
+     "n": 9,
+     "p10": 24,
+     "p90": 26,
+     "sd": 1.1
+    },
+    "sites": {
+     "max": 24,
+     "mean": 19.1,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 18,
+     "p90": 20,
+     "sd": 2.1
+    },
+    "slLand": {
+     "max": 40,
+     "mean": 37.1,
+     "med": 37,
+     "min": 35,
+     "n": 9,
+     "p10": 36,
+     "p90": 38,
+     "sd": 1.4
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.0,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 65,
+     "mean": 62.4,
+     "med": 62,
+     "min": 60,
+     "n": 9,
+     "p10": 61,
+     "p90": 64,
+     "sd": 1.4
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-1.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-2.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-3.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-4.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/dota-jungle-smallest-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Jungle \u00b7 Duel/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 2,
+   "res": 79,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-jungle-smallest-ultrawide-nosym",
+   "tip": "",
+   "tribes": 3.0,
+   "variant": "Jungle"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 70,
+     "mean": 68.0,
+     "med": 69,
+     "min": 64,
+     "n": 9,
+     "p10": 65,
+     "p90": 70,
+     "sd": 2.1
+    },
+    "land": {
+     "max": 70,
+     "mean": 68.2,
+     "med": 69,
+     "min": 65,
+     "n": 9,
+     "p10": 66,
+     "p90": 70,
+     "sd": 1.7
+    },
+    "oceanPct": {
+     "max": 4,
+     "mean": 2.3,
+     "med": 3,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 102,
+     "mean": 78.9,
+     "med": 74,
+     "min": 70,
+     "n": 9,
+     "p10": 72,
+     "p90": 82,
+     "sd": 9.1
+    },
+    "scout": {
+     "max": 27,
+     "mean": 25.7,
+     "med": 26,
+     "min": 24,
+     "n": 9,
+     "p10": 25,
+     "p90": 26,
+     "sd": 0.8
+    },
+    "sites": {
+     "max": 24,
+     "mean": 19.1,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 18,
+     "p90": 20,
+     "sd": 2.1
+    },
+    "slLand": {
+     "max": 40,
+     "mean": 38.1,
+     "med": 38,
+     "min": 36,
+     "n": 9,
+     "p10": 37,
+     "p90": 39,
+     "sd": 1.2
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.0,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 70,
+     "mean": 68.0,
+     "med": 69,
+     "min": 64,
+     "n": 9,
+     "p10": 65,
+     "p90": 70,
+     "sd": 2.1
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-1.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-2.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-3.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-4.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-5.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-6.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-7.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-8.png",
+    "atlas/dota-jungle-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Jungle \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 2,
+   "res": 79,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-jungle-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.0,
+   "variant": "Jungle"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 37,
+     "mean": 35.7,
+     "med": 36,
+     "min": 32,
+     "n": 9,
+     "p10": 36,
+     "p90": 36,
+     "sd": 1.3
+    },
+    "land": {
+     "max": 46,
+     "mean": 39.8,
+     "med": 39.0,
+     "min": 36,
+     "n": 8,
+     "p10": 37,
+     "p90": 42,
+     "sd": 2.9
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 76,
+     "mean": 64.9,
+     "med": 66,
+     "min": 54,
+     "n": 9,
+     "p10": 58,
+     "p90": 76,
+     "sd": 7.5
+    },
+    "scout": {
+     "max": 19,
+     "mean": 15.8,
+     "med": 15.5,
+     "min": 13,
+     "n": 8,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.9
+    },
+    "sites": {
+     "max": 16,
+     "mean": 13.3,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 14,
+     "sd": 1.3
+    },
+    "slLand": {
+     "max": 28,
+     "mean": 23.2,
+     "med": 23.0,
+     "min": 19,
+     "n": 8,
+     "p10": 21,
+     "p90": 26,
+     "sd": 2.6
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.6,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 45,
+     "mean": 38.6,
+     "med": 37.5,
+     "min": 36,
+     "n": 8,
+     "p10": 36,
+     "p90": 42,
+     "sd": 3.1
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-smallest-square-nosym/seed-1.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-2.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-3.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-4.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-5.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-6.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-7.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-8.png",
+    "atlas/dota-mountain-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 65,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-mountain-smallest-square-nosym",
+   "tip": "",
+   "tribes": 2.6,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 52,
+     "mean": 49.2,
+     "med": 51,
+     "min": 43,
+     "n": 9,
+     "p10": 44,
+     "p90": 52,
+     "sd": 3.3
+    },
+    "land": {
+     "max": 52,
+     "mean": 49.2,
+     "med": 51,
+     "min": 43,
+     "n": 9,
+     "p10": 44,
+     "p90": 52,
+     "sd": 3.3
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 76,
+     "mean": 64.9,
+     "med": 66,
+     "min": 54,
+     "n": 9,
+     "p10": 58,
+     "p90": 76,
+     "sd": 7.5
+    },
+    "scout": {
+     "max": 22,
+     "mean": 18.4,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 17,
+     "p90": 20,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 16,
+     "mean": 13.3,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 14,
+     "sd": 1.3
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 27.4,
+     "med": 27,
+     "min": 23,
+     "n": 9,
+     "p10": 25,
+     "p90": 30,
+     "sd": 2.8
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.6,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 52,
+     "mean": 49.2,
+     "med": 51,
+     "min": 43,
+     "n": 9,
+     "p10": 44,
+     "p90": 52,
+     "sd": 3.3
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-smallest-square-sym/seed-1.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-2.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-3.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-4.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-5.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-6.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-7.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-8.png",
+    "atlas/dota-mountain-smallest-square-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 65,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-mountain-smallest-square-sym",
+   "tip": "",
+   "tribes": 2.6,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 78,
+   "dist": {
+    "crow": {
+     "max": 48,
+     "mean": 46.7,
+     "med": 48,
+     "min": 42,
+     "n": 9,
+     "p10": 43,
+     "p90": 48,
+     "sd": 2.3
+    },
+    "land": {
+     "max": 57,
+     "mean": 52.1,
+     "med": 54,
+     "min": 47,
+     "n": 7,
+     "p10": 49,
+     "p90": 54,
+     "sd": 3.3
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.2,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.4
+    },
+    "res": {
+     "max": 72,
+     "mean": 64.7,
+     "med": 64,
+     "min": 56,
+     "n": 9,
+     "p10": 58,
+     "p90": 72,
+     "sd": 5.7
+    },
+    "scout": {
+     "max": 22,
+     "mean": 19.4,
+     "med": 19,
+     "min": 17,
+     "n": 7,
+     "p10": 18,
+     "p90": 22,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 18,
+     "mean": 13.8,
+     "med": 14,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 2.4
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 28.9,
+     "med": 29,
+     "min": 25,
+     "n": 7,
+     "p10": 26,
+     "p90": 32,
+     "sd": 2.8
+    },
+    "tribes": {
+     "max": 3,
+     "mean": 2.4,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.5
+    },
+    "water": {
+     "max": 57,
+     "mean": 52.0,
+     "med": 54,
+     "min": 47,
+     "n": 7,
+     "p10": 49,
+     "p90": 54,
+     "sd": 3.4
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-smallest-wide-nosym/seed-1.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-2.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-3.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-4.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-5.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-6.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-7.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-8.png",
+    "atlas/dota-mountain-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 65,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-mountain-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 2.4,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 59,
+     "mean": 53.9,
+     "med": 53,
+     "min": 49,
+     "n": 9,
+     "p10": 50,
+     "p90": 58,
+     "sd": 3.7
+    },
+    "land": {
+     "max": 59,
+     "mean": 54.7,
+     "med": 56,
+     "min": 50,
+     "n": 9,
+     "p10": 51,
+     "p90": 58,
+     "sd": 3.3
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.2,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.4
+    },
+    "res": {
+     "max": 72,
+     "mean": 64.7,
+     "med": 64,
+     "min": 56,
+     "n": 9,
+     "p10": 58,
+     "p90": 72,
+     "sd": 5.7
+    },
+    "scout": {
+     "max": 25,
+     "mean": 21.0,
+     "med": 20,
+     "min": 18,
+     "n": 9,
+     "p10": 19,
+     "p90": 24,
+     "sd": 2.3
+    },
+    "sites": {
+     "max": 18,
+     "mean": 13.8,
+     "med": 14,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 2.4
+    },
+    "slLand": {
+     "max": 37,
+     "mean": 31.0,
+     "med": 30,
+     "min": 27,
+     "n": 9,
+     "p10": 28,
+     "p90": 35,
+     "sd": 3.3
+    },
+    "tribes": {
+     "max": 3,
+     "mean": 2.4,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.5
+    },
+    "water": {
+     "max": 59,
+     "mean": 54.7,
+     "med": 56,
+     "min": 50,
+     "n": 9,
+     "p10": 51,
+     "p90": 58,
+     "sd": 3.3
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-smallest-wide-sym/seed-1.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-2.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-3.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-4.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-5.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-6.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-7.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-8.png",
+    "atlas/dota-mountain-smallest-wide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Duel/wide/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 65,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-mountain-smallest-wide-sym",
+   "tip": "",
+   "tribes": 2.4,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 64,
+     "mean": 61.6,
+     "med": 62,
+     "min": 57,
+     "n": 9,
+     "p10": 59,
+     "p90": 64,
+     "sd": 2.2
+    },
+    "land": {
+     "max": 72,
+     "mean": 65.1,
+     "med": 64,
+     "min": 60,
+     "n": 9,
+     "p10": 63,
+     "p90": 67,
+     "sd": 3.1
+    },
+    "oceanPct": {
+     "max": 4,
+     "mean": 2.3,
+     "med": 3,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 88,
+     "mean": 74.9,
+     "med": 76,
+     "min": 56,
+     "n": 9,
+     "p10": 60,
+     "p90": 86,
+     "sd": 10.9
+    },
+    "scout": {
+     "max": 28,
+     "mean": 24.4,
+     "med": 24,
+     "min": 21,
+     "n": 9,
+     "p10": 23,
+     "p90": 26,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 18,
+     "mean": 15.6,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.8
+    },
+    "slLand": {
+     "max": 42,
+     "mean": 36.3,
+     "med": 36,
+     "min": 31,
+     "n": 9,
+     "p10": 35,
+     "p90": 39,
+     "sd": 2.9
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.2,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 71,
+     "mean": 64.6,
+     "med": 64,
+     "min": 60,
+     "n": 9,
+     "p10": 63,
+     "p90": 66,
+     "sd": 2.8
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-1.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-2.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-3.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-4.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/dota-mountain-smallest-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Duel/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 2,
+   "res": 75,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-mountain-smallest-ultrawide-nosym",
+   "tip": "",
+   "tribes": 3.2,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 72,
+     "mean": 67.7,
+     "med": 69,
+     "min": 63,
+     "n": 9,
+     "p10": 63,
+     "p90": 71,
+     "sd": 3.3
+    },
+    "land": {
+     "max": 74,
+     "mean": 69.3,
+     "med": 69,
+     "min": 64,
+     "n": 9,
+     "p10": 65,
+     "p90": 73,
+     "sd": 3.1
+    },
+    "oceanPct": {
+     "max": 4,
+     "mean": 2.3,
+     "med": 3,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 88,
+     "mean": 74.9,
+     "med": 76,
+     "min": 56,
+     "n": 9,
+     "p10": 60,
+     "p90": 86,
+     "sd": 10.9
+    },
+    "scout": {
+     "max": 28,
+     "mean": 24.6,
+     "med": 24,
+     "min": 22,
+     "n": 9,
+     "p10": 23,
+     "p90": 26,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 18,
+     "mean": 15.6,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.8
+    },
+    "slLand": {
+     "max": 42,
+     "mean": 36.9,
+     "med": 36,
+     "min": 33,
+     "n": 9,
+     "p10": 35,
+     "p90": 39,
+     "sd": 2.6
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.2,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 72,
+     "mean": 68.6,
+     "med": 69,
+     "min": 63,
+     "n": 9,
+     "p10": 64,
+     "p90": 71,
+     "sd": 2.9
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-1.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-2.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-3.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-4.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-5.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-6.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-7.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-8.png",
+    "atlas/dota-mountain-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 2,
+   "res": 75,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-mountain-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.2,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 56,
+   "dist": {
+    "crow": {
+     "max": 49,
+     "mean": 48.0,
+     "med": 48,
+     "min": 46,
+     "n": 9,
+     "p10": 48,
+     "p90": 49,
+     "sd": 0.8
+    },
+    "land": {
+     "max": 64,
+     "mean": 55.2,
+     "med": 53,
+     "min": 52,
+     "n": 5,
+     "p10": 52,
+     "p90": 64,
+     "sd": 4.4
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.3,
+     "med": 2,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 2,
+     "sd": 1.1
+    },
+    "res": {
+     "max": 110,
+     "mean": 98.2,
+     "med": 100,
+     "min": 86,
+     "n": 9,
+     "p10": 88,
+     "p90": 108,
+     "sd": 7.8
+    },
+    "scout": {
+     "max": 23,
+     "mean": 21.8,
+     "med": 22,
+     "min": 21,
+     "n": 5,
+     "p10": 21,
+     "p90": 23,
+     "sd": 0.7
+    },
+    "sites": {
+     "max": 24,
+     "mean": 22.0,
+     "med": 22,
+     "min": 18,
+     "n": 9,
+     "p10": 20,
+     "p90": 24,
+     "sd": 1.9
+    },
+    "slLand": {
+     "max": 34,
+     "mean": 32.2,
+     "med": 32,
+     "min": 31,
+     "n": 5,
+     "p10": 31,
+     "p90": 34,
+     "sd": 1.2
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.2,
+     "med": 5,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 6,
+     "sd": 1.7
+    },
+    "water": {
+     "max": 61,
+     "mean": 53.5,
+     "med": 52.0,
+     "min": 51,
+     "n": 6,
+     "p10": 51,
+     "p90": 53,
+     "sd": 3.4
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-tiny-square-nosym/seed-1.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-2.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-3.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-4.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-5.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-6.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-7.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-8.png",
+    "atlas/dota-mountain-tiny-square-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Tiny/square/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 98,
+   "setting": "Tiny \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-mountain-tiny-square-nosym",
+   "tip": "",
+   "tribes": 4.2,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 71,
+     "mean": 66.7,
+     "med": 70,
+     "min": 52,
+     "n": 9,
+     "p10": 60,
+     "p90": 71,
+     "sd": 6.4
+    },
+    "land": {
+     "max": 71,
+     "mean": 67.6,
+     "med": 70,
+     "min": 60,
+     "n": 9,
+     "p10": 60,
+     "p90": 71,
+     "sd": 4.5
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.3,
+     "med": 2,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 2,
+     "sd": 1.1
+    },
+    "res": {
+     "max": 110,
+     "mean": 98.2,
+     "med": 100,
+     "min": 86,
+     "n": 9,
+     "p10": 88,
+     "p90": 108,
+     "sd": 7.8
+    },
+    "scout": {
+     "max": 28,
+     "mean": 24.2,
+     "med": 25,
+     "min": 21,
+     "n": 9,
+     "p10": 21,
+     "p90": 26,
+     "sd": 2.1
+    },
+    "sites": {
+     "max": 24,
+     "mean": 22.0,
+     "med": 22,
+     "min": 18,
+     "n": 9,
+     "p10": 20,
+     "p90": 24,
+     "sd": 1.9
+    },
+    "slLand": {
+     "max": 42,
+     "mean": 36.2,
+     "med": 37,
+     "min": 31,
+     "n": 9,
+     "p10": 31,
+     "p90": 39,
+     "sd": 3.5
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.2,
+     "med": 5,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 6,
+     "sd": 1.7
+    },
+    "water": {
+     "max": 71,
+     "mean": 66.9,
+     "med": 70,
+     "min": 54,
+     "n": 9,
+     "p10": 60,
+     "p90": 71,
+     "sd": 5.9
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-tiny-square-sym/seed-1.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-2.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-3.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-4.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-5.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-6.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-7.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-8.png",
+    "atlas/dota-mountain-tiny-square-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Tiny/square/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 98,
+   "setting": "Tiny \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-mountain-tiny-square-sym",
+   "tip": "",
+   "tribes": 4.2,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 66,
+     "mean": 64.4,
+     "med": 65,
+     "min": 61,
+     "n": 9,
+     "p10": 63,
+     "p90": 66,
+     "sd": 1.6
+    },
+    "land": {
+     "max": 77,
+     "mean": 72.0,
+     "med": 74.0,
+     "min": 62,
+     "n": 8,
+     "p10": 66,
+     "p90": 76,
+     "sd": 4.9
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 2,
+     "sd": 1.1
+    },
+    "res": {
+     "max": 136,
+     "mean": 116.0,
+     "med": 116,
+     "min": 94,
+     "n": 9,
+     "p10": 106,
+     "p90": 130,
+     "sd": 11.7
+    },
+    "scout": {
+     "max": 29,
+     "mean": 25.8,
+     "med": 25.5,
+     "min": 23,
+     "n": 8,
+     "p10": 24,
+     "p90": 28,
+     "sd": 2.0
+    },
+    "sites": {
+     "max": 28,
+     "mean": 25.6,
+     "med": 26,
+     "min": 22,
+     "n": 9,
+     "p10": 24,
+     "p90": 26,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 43,
+     "mean": 38.4,
+     "med": 37.5,
+     "min": 35,
+     "n": 8,
+     "p10": 36,
+     "p90": 42,
+     "sd": 2.8
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.8,
+     "med": 5,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 6,
+     "sd": 1.4
+    },
+    "water": {
+     "max": 77,
+     "mean": 71.9,
+     "med": 74.0,
+     "min": 62,
+     "n": 8,
+     "p10": 65,
+     "p90": 76,
+     "sd": 5.0
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-tiny-wide-nosym/seed-1.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-2.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-3.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-4.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-5.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-6.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-7.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-8.png",
+    "atlas/dota-mountain-tiny-wide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Tiny/wide/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 116,
+   "setting": "Tiny \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-mountain-tiny-wide-nosym",
+   "tip": "",
+   "tribes": 4.8,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 80,
+     "mean": 74.3,
+     "med": 75,
+     "min": 65,
+     "n": 9,
+     "p10": 69,
+     "p90": 80,
+     "sd": 5.1
+    },
+    "land": {
+     "max": 80,
+     "mean": 78.2,
+     "med": 79,
+     "min": 73,
+     "n": 9,
+     "p10": 77,
+     "p90": 80,
+     "sd": 2.1
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 2,
+     "sd": 1.1
+    },
+    "res": {
+     "max": 136,
+     "mean": 116.0,
+     "med": 116,
+     "min": 94,
+     "n": 9,
+     "p10": 106,
+     "p90": 130,
+     "sd": 11.7
+    },
+    "scout": {
+     "max": 30,
+     "mean": 25.3,
+     "med": 26,
+     "min": 20,
+     "n": 9,
+     "p10": 21,
+     "p90": 29,
+     "sd": 3.4
+    },
+    "sites": {
+     "max": 28,
+     "mean": 25.6,
+     "med": 26,
+     "min": 22,
+     "n": 9,
+     "p10": 24,
+     "p90": 26,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 44,
+     "mean": 37.9,
+     "med": 39,
+     "min": 30,
+     "n": 9,
+     "p10": 32,
+     "p90": 43,
+     "sd": 4.9
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 4.8,
+     "med": 5,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 6,
+     "sd": 1.4
+    },
+    "water": {
+     "max": 80,
+     "mean": 77.8,
+     "med": 78,
+     "min": 73,
+     "n": 9,
+     "p10": 75,
+     "p90": 80,
+     "sd": 2.3
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-tiny-wide-sym/seed-1.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-2.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-3.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-4.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-5.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-6.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-7.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-8.png",
+    "atlas/dota-mountain-tiny-wide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Tiny/wide/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 116,
+   "setting": "Tiny \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-mountain-tiny-wide-sym",
+   "tip": "",
+   "tribes": 4.8,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 84,
+     "mean": 82.2,
+     "med": 82,
+     "min": 81,
+     "n": 9,
+     "p10": 82,
+     "p90": 83,
+     "sd": 0.8
+    },
+    "land": {
+     "max": 93,
+     "mean": 86.9,
+     "med": 85,
+     "min": 84,
+     "n": 9,
+     "p10": 84,
+     "p90": 92,
+     "sd": 3.5
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.3,
+     "med": 2,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.2
+    },
+    "res": {
+     "max": 132,
+     "mean": 124.2,
+     "med": 126,
+     "min": 116,
+     "n": 9,
+     "p10": 118,
+     "p90": 130,
+     "sd": 5.0
+    },
+    "scout": {
+     "max": 37,
+     "mean": 31.2,
+     "med": 31,
+     "min": 27,
+     "n": 9,
+     "p10": 30,
+     "p90": 33,
+     "sd": 2.6
+    },
+    "sites": {
+     "max": 32,
+     "mean": 28.7,
+     "med": 28,
+     "min": 26,
+     "n": 9,
+     "p10": 26,
+     "p90": 32,
+     "sd": 2.1
+    },
+    "slLand": {
+     "max": 55,
+     "mean": 46.7,
+     "med": 46,
+     "min": 40,
+     "n": 9,
+     "p10": 44,
+     "p90": 50,
+     "sd": 3.9
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 5.2,
+     "med": 6,
+     "min": 3,
+     "n": 9,
+     "p10": 4,
+     "p90": 6,
+     "sd": 1.0
+    },
+    "water": {
+     "max": 93,
+     "mean": 86.2,
+     "med": 84,
+     "min": 82,
+     "n": 9,
+     "p10": 83,
+     "p90": 92,
+     "sd": 3.9
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-1.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-2.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-3.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-4.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-5.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-6.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-7.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-8.png",
+    "atlas/dota-mountain-tiny-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Tiny/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 124,
+   "setting": "Tiny \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-mountain-tiny-ultrawide-nosym",
+   "tip": "",
+   "tribes": 5.2,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 96,
+     "mean": 93.2,
+     "med": 94,
+     "min": 88,
+     "n": 9,
+     "p10": 93,
+     "p90": 94,
+     "sd": 2.0
+    },
+    "land": {
+     "max": 96,
+     "mean": 94.0,
+     "med": 94,
+     "min": 93,
+     "n": 9,
+     "p10": 93,
+     "p90": 95,
+     "sd": 0.9
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.3,
+     "med": 2,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.2
+    },
+    "res": {
+     "max": 132,
+     "mean": 124.2,
+     "med": 126,
+     "min": 116,
+     "n": 9,
+     "p10": 118,
+     "p90": 130,
+     "sd": 5.0
+    },
+    "scout": {
+     "max": 38,
+     "mean": 31.2,
+     "med": 31,
+     "min": 27,
+     "n": 9,
+     "p10": 28,
+     "p90": 34,
+     "sd": 3.2
+    },
+    "sites": {
+     "max": 32,
+     "mean": 28.7,
+     "med": 28,
+     "min": 26,
+     "n": 9,
+     "p10": 26,
+     "p90": 32,
+     "sd": 2.1
+    },
+    "slLand": {
+     "max": 57,
+     "mean": 46.8,
+     "med": 46,
+     "min": 41,
+     "n": 9,
+     "p10": 42,
+     "p90": 51,
+     "sd": 4.7
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 5.2,
+     "med": 6,
+     "min": 3,
+     "n": 9,
+     "p10": 4,
+     "p90": 6,
+     "sd": 1.0
+    },
+    "water": {
+     "max": 96,
+     "mean": 93.9,
+     "med": 94,
+     "min": 93,
+     "n": 9,
+     "p10": 93,
+     "p90": 94,
+     "sd": 0.9
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-1.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-2.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-3.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-4.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-5.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-6.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-7.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-8.png",
+    "atlas/dota-mountain-tiny-ultrawide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Mountain \u00b7 Tiny/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 124,
+   "setting": "Tiny \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-mountain-tiny-ultrawide-sym",
+   "tip": "",
+   "tribes": 5.2,
+   "variant": "Mountain"
+  },
+  {
+   "connPct": 67,
+   "dist": {
+    "crow": {
+     "max": 38,
+     "mean": 35.3,
+     "med": 36,
+     "min": 33,
+     "n": 9,
+     "p10": 34,
+     "p90": 36,
+     "sd": 1.4
+    },
+    "land": {
+     "max": 45,
+     "mean": 41.7,
+     "med": 41.5,
+     "min": 38,
+     "n": 6,
+     "p10": 38,
+     "p90": 43,
+     "sd": 2.1
+    },
+    "oceanPct": {
+     "max": 42,
+     "mean": 40.4,
+     "med": 41,
+     "min": 38,
+     "n": 9,
+     "p10": 38,
+     "p90": 42,
+     "sd": 1.5
+    },
+    "res": {
+     "max": 86,
+     "mean": 75.8,
+     "med": 80,
+     "min": 64,
+     "n": 9,
+     "p10": 68,
+     "p90": 84,
+     "sd": 7.7
+    },
+    "scout": {
+     "max": 20,
+     "mean": 16.7,
+     "med": 16.0,
+     "min": 15,
+     "n": 6,
+     "p10": 15,
+     "p90": 18,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 18,
+     "mean": 14.7,
+     "med": 16,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 2.3
+    },
+    "slLand": {
+     "max": 30,
+     "mean": 24.5,
+     "med": 23.5,
+     "min": 22,
+     "n": 6,
+     "p10": 22,
+     "p90": 26,
+     "sd": 2.8
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 38,
+     "mean": 35.8,
+     "med": 36,
+     "min": 33,
+     "n": 9,
+     "p10": 34,
+     "p90": 37,
+     "sd": 1.5
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-water-smallest-square-nosym/seed-1.png",
+    "atlas/dota-water-smallest-square-nosym/seed-2.png",
+    "atlas/dota-water-smallest-square-nosym/seed-3.png",
+    "atlas/dota-water-smallest-square-nosym/seed-4.png",
+    "atlas/dota-water-smallest-square-nosym/seed-5.png",
+    "atlas/dota-water-smallest-square-nosym/seed-6.png",
+    "atlas/dota-water-smallest-square-nosym/seed-7.png",
+    "atlas/dota-water-smallest-square-nosym/seed-8.png",
+    "atlas/dota-water-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Water \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 40,
+   "res": 76,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-water-smallest-square-nosym",
+   "tip": "",
+   "tribes": 2.9,
+   "variant": "Water"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 52,
+     "mean": 44.7,
+     "med": 46,
+     "min": 34,
+     "n": 9,
+     "p10": 36,
+     "p90": 51,
+     "sd": 6.4
+    },
+    "land": {
+     "max": 54,
+     "mean": 48.4,
+     "med": 50,
+     "min": 40,
+     "n": 9,
+     "p10": 45,
+     "p90": 52,
+     "sd": 4.1
+    },
+    "oceanPct": {
+     "max": 42,
+     "mean": 40.4,
+     "med": 41,
+     "min": 38,
+     "n": 9,
+     "p10": 38,
+     "p90": 42,
+     "sd": 1.5
+    },
+    "res": {
+     "max": 86,
+     "mean": 75.8,
+     "med": 80,
+     "min": 64,
+     "n": 9,
+     "p10": 68,
+     "p90": 84,
+     "sd": 7.7
+    },
+    "scout": {
+     "max": 21,
+     "mean": 18.6,
+     "med": 18,
+     "min": 15,
+     "n": 9,
+     "p10": 16,
+     "p90": 21,
+     "sd": 2.0
+    },
+    "sites": {
+     "max": 18,
+     "mean": 14.7,
+     "med": 16,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 2.3
+    },
+    "slLand": {
+     "max": 32,
+     "mean": 27.8,
+     "med": 27,
+     "min": 23,
+     "n": 9,
+     "p10": 23,
+     "p90": 31,
+     "sd": 3.1
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 52,
+     "mean": 44.8,
+     "med": 46,
+     "min": 34,
+     "n": 9,
+     "p10": 37,
+     "p90": 51,
+     "sd": 6.2
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-water-smallest-square-sym/seed-1.png",
+    "atlas/dota-water-smallest-square-sym/seed-2.png",
+    "atlas/dota-water-smallest-square-sym/seed-3.png",
+    "atlas/dota-water-smallest-square-sym/seed-4.png",
+    "atlas/dota-water-smallest-square-sym/seed-5.png",
+    "atlas/dota-water-smallest-square-sym/seed-6.png",
+    "atlas/dota-water-smallest-square-sym/seed-7.png",
+    "atlas/dota-water-smallest-square-sym/seed-8.png",
+    "atlas/dota-water-smallest-square-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Water \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 40,
+   "res": 76,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-water-smallest-square-sym",
+   "tip": "",
+   "tribes": 2.9,
+   "variant": "Water"
+  },
+  {
+   "connPct": 78,
+   "dist": {
+    "crow": {
+     "max": 50,
+     "mean": 47.9,
+     "med": 48,
+     "min": 44,
+     "n": 9,
+     "p10": 46,
+     "p90": 50,
+     "sd": 1.8
+    },
+    "land": {
+     "max": 57,
+     "mean": 54.7,
+     "med": 56,
+     "min": 50,
+     "n": 7,
+     "p10": 53,
+     "p90": 57,
+     "sd": 2.4
+    },
+    "oceanPct": {
+     "max": 39,
+     "mean": 35.8,
+     "med": 36,
+     "min": 33,
+     "n": 9,
+     "p10": 34,
+     "p90": 37,
+     "sd": 1.7
+    },
+    "res": {
+     "max": 90,
+     "mean": 79.8,
+     "med": 80,
+     "min": 66,
+     "n": 9,
+     "p10": 70,
+     "p90": 90,
+     "sd": 7.5
+    },
+    "scout": {
+     "max": 23,
+     "mean": 20.1,
+     "med": 19,
+     "min": 18,
+     "n": 7,
+     "p10": 19,
+     "p90": 22,
+     "sd": 1.7
+    },
+    "sites": {
+     "max": 20,
+     "mean": 16.0,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 20,
+     "sd": 2.8
+    },
+    "slLand": {
+     "max": 35,
+     "mean": 29.9,
+     "med": 28,
+     "min": 27,
+     "n": 7,
+     "p10": 28,
+     "p90": 32,
+     "sd": 2.7
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.3,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 1.1
+    },
+    "water": {
+     "max": 52,
+     "mean": 49.1,
+     "med": 49,
+     "min": 46,
+     "n": 9,
+     "p10": 46,
+     "p90": 52,
+     "sd": 2.2
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-water-smallest-wide-nosym/seed-1.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-2.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-3.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-4.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-5.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-6.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-7.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-8.png",
+    "atlas/dota-water-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Water \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 36,
+   "res": 80,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-water-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Water"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 58,
+     "mean": 53.9,
+     "med": 54,
+     "min": 49,
+     "n": 9,
+     "p10": 51,
+     "p90": 56,
+     "sd": 2.6
+    },
+    "land": {
+     "max": 62,
+     "mean": 55.8,
+     "med": 55,
+     "min": 51,
+     "n": 9,
+     "p10": 52,
+     "p90": 60,
+     "sd": 3.4
+    },
+    "oceanPct": {
+     "max": 39,
+     "mean": 35.8,
+     "med": 36,
+     "min": 33,
+     "n": 9,
+     "p10": 34,
+     "p90": 37,
+     "sd": 1.7
+    },
+    "res": {
+     "max": 90,
+     "mean": 79.8,
+     "med": 80,
+     "min": 66,
+     "n": 9,
+     "p10": 70,
+     "p90": 90,
+     "sd": 7.5
+    },
+    "scout": {
+     "max": 23,
+     "mean": 21.1,
+     "med": 21,
+     "min": 19,
+     "n": 9,
+     "p10": 19,
+     "p90": 23,
+     "sd": 1.4
+    },
+    "sites": {
+     "max": 20,
+     "mean": 16.0,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 20,
+     "sd": 2.8
+    },
+    "slLand": {
+     "max": 35,
+     "mean": 31.8,
+     "med": 32,
+     "min": 29,
+     "n": 9,
+     "p10": 29,
+     "p90": 34,
+     "sd": 2.0
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.3,
+     "med": 4,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 1.1
+    },
+    "water": {
+     "max": 58,
+     "mean": 54.0,
+     "med": 54,
+     "min": 50,
+     "n": 9,
+     "p10": 51,
+     "p90": 56,
+     "sd": 2.4
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-water-smallest-wide-sym/seed-1.png",
+    "atlas/dota-water-smallest-wide-sym/seed-2.png",
+    "atlas/dota-water-smallest-wide-sym/seed-3.png",
+    "atlas/dota-water-smallest-wide-sym/seed-4.png",
+    "atlas/dota-water-smallest-wide-sym/seed-5.png",
+    "atlas/dota-water-smallest-wide-sym/seed-6.png",
+    "atlas/dota-water-smallest-wide-sym/seed-7.png",
+    "atlas/dota-water-smallest-wide-sym/seed-8.png",
+    "atlas/dota-water-smallest-wide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Water \u00b7 Duel/wide/sym",
+   "n": 9,
+   "oceanPct": 36,
+   "res": 80,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-water-smallest-wide-sym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Water"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 63,
+     "mean": 61.8,
+     "med": 62,
+     "min": 61,
+     "n": 9,
+     "p10": 61,
+     "p90": 62,
+     "sd": 0.6
+    },
+    "land": {
+     "max": 70,
+     "mean": 65.0,
+     "med": 64,
+     "min": 63,
+     "n": 9,
+     "p10": 63,
+     "p90": 68,
+     "sd": 2.3
+    },
+    "oceanPct": {
+     "max": 30,
+     "mean": 27.3,
+     "med": 28,
+     "min": 24,
+     "n": 9,
+     "p10": 25,
+     "p90": 29,
+     "sd": 1.9
+    },
+    "res": {
+     "max": 100,
+     "mean": 83.6,
+     "med": 82,
+     "min": 74,
+     "n": 9,
+     "p10": 76,
+     "p90": 90,
+     "sd": 7.5
+    },
+    "scout": {
+     "max": 28,
+     "mean": 25.1,
+     "med": 26,
+     "min": 23,
+     "n": 9,
+     "p10": 23,
+     "p90": 26,
+     "sd": 1.6
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.8,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 16,
+     "p90": 18,
+     "sd": 1.1
+    },
+    "slLand": {
+     "max": 41,
+     "mean": 37.4,
+     "med": 38,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 39,
+     "sd": 2.2
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.3,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 64,
+     "mean": 62.8,
+     "med": 63,
+     "min": 62,
+     "n": 9,
+     "p10": 62,
+     "p90": 63,
+     "sd": 0.6
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-1.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-2.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-3.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-4.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/dota-water-smallest-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Water \u00b7 Duel/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 27,
+   "res": 84,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-water-smallest-ultrawide-nosym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Water"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 71,
+     "mean": 69.2,
+     "med": 69,
+     "min": 67,
+     "n": 9,
+     "p10": 68,
+     "p90": 70,
+     "sd": 1.1
+    },
+    "land": {
+     "max": 73,
+     "mean": 69.7,
+     "med": 70,
+     "min": 67,
+     "n": 9,
+     "p10": 69,
+     "p90": 70,
+     "sd": 1.5
+    },
+    "oceanPct": {
+     "max": 30,
+     "mean": 27.3,
+     "med": 28,
+     "min": 24,
+     "n": 9,
+     "p10": 25,
+     "p90": 29,
+     "sd": 1.9
+    },
+    "res": {
+     "max": 100,
+     "mean": 83.6,
+     "med": 82,
+     "min": 74,
+     "n": 9,
+     "p10": 76,
+     "p90": 90,
+     "sd": 7.5
+    },
+    "scout": {
+     "max": 28,
+     "mean": 25.7,
+     "med": 26,
+     "min": 23,
+     "n": 9,
+     "p10": 23,
+     "p90": 27,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.8,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 16,
+     "p90": 18,
+     "sd": 1.1
+    },
+    "slLand": {
+     "max": 41,
+     "mean": 38.2,
+     "med": 39,
+     "min": 34,
+     "n": 9,
+     "p10": 34,
+     "p90": 41,
+     "sd": 2.7
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 3.3,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 71,
+     "mean": 69.2,
+     "med": 69,
+     "min": 67,
+     "n": 9,
+     "p10": 68,
+     "p90": 70,
+     "sd": 1.1
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-water-smallest-ultrawide-sym/seed-1.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-2.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-3.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-4.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-5.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-6.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-7.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-8.png",
+    "atlas/dota-water-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Water \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 27,
+   "res": 84,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-water-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.3,
+   "variant": "Water"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 36,
+     "mean": 35.1,
+     "med": 35,
+     "min": 34,
+     "n": 9,
+     "p10": 34,
+     "p90": 36,
+     "sd": 0.9
+    },
+    "land": {
+     "max": 40,
+     "mean": 37.1,
+     "med": 37,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 39,
+     "sd": 1.9
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 80,
+     "mean": 70.0,
+     "med": 74,
+     "min": 58,
+     "n": 9,
+     "p10": 60,
+     "p90": 78,
+     "sd": 7.4
+    },
+    "scout": {
+     "max": 21,
+     "mean": 16.3,
+     "med": 16,
+     "min": 15,
+     "n": 9,
+     "p10": 15,
+     "p90": 17,
+     "sd": 1.8
+    },
+    "sites": {
+     "max": 16,
+     "mean": 14.0,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 31,
+     "mean": 24.0,
+     "med": 23,
+     "min": 22,
+     "n": 9,
+     "p10": 22,
+     "p90": 25,
+     "sd": 2.7
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 37,
+     "mean": 35.7,
+     "med": 36,
+     "min": 34,
+     "n": 9,
+     "p10": 34,
+     "p90": 37,
+     "sd": 1.2
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-sand-smallest-square-nosym/seed-1.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-2.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-3.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-4.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-5.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-6.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-7.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-8.png",
+    "atlas/dota-sand-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Sand \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 70,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-sand-smallest-square-nosym",
+   "tip": "",
+   "tribes": 2.9,
+   "variant": "Sand"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 52,
+     "mean": 44.4,
+     "med": 44,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 52,
+     "sd": 6.9
+    },
+    "land": {
+     "max": 52,
+     "mean": 44.4,
+     "med": 44,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 52,
+     "sd": 6.9
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 0.9,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 80,
+     "mean": 70.0,
+     "med": 74,
+     "min": 58,
+     "n": 9,
+     "p10": 60,
+     "p90": 78,
+     "sd": 7.4
+    },
+    "scout": {
+     "max": 22,
+     "mean": 17.0,
+     "med": 17,
+     "min": 14,
+     "n": 9,
+     "p10": 14,
+     "p90": 19,
+     "sd": 2.6
+    },
+    "sites": {
+     "max": 16,
+     "mean": 14.0,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 25.2,
+     "med": 25,
+     "min": 21,
+     "n": 9,
+     "p10": 21,
+     "p90": 28,
+     "sd": 3.9
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 52,
+     "mean": 44.4,
+     "med": 44,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 52,
+     "sd": 6.9
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-sand-smallest-square-sym/seed-1.png",
+    "atlas/dota-sand-smallest-square-sym/seed-2.png",
+    "atlas/dota-sand-smallest-square-sym/seed-3.png",
+    "atlas/dota-sand-smallest-square-sym/seed-4.png",
+    "atlas/dota-sand-smallest-square-sym/seed-5.png",
+    "atlas/dota-sand-smallest-square-sym/seed-6.png",
+    "atlas/dota-sand-smallest-square-sym/seed-7.png",
+    "atlas/dota-sand-smallest-square-sym/seed-8.png",
+    "atlas/dota-sand-smallest-square-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Sand \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 70,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-sand-smallest-square-sym",
+   "tip": "",
+   "tribes": 2.9,
+   "variant": "Sand"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 50,
+     "mean": 47.8,
+     "med": 48,
+     "min": 42,
+     "n": 9,
+     "p10": 48,
+     "p90": 49,
+     "sd": 2.1
+    },
+    "land": {
+     "max": 54,
+     "mean": 50.3,
+     "med": 50,
+     "min": 44,
+     "n": 9,
+     "p10": 48,
+     "p90": 54,
+     "sd": 3.0
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.2,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.4
+    },
+    "res": {
+     "max": 82,
+     "mean": 68.7,
+     "med": 70,
+     "min": 54,
+     "n": 9,
+     "p10": 60,
+     "p90": 74,
+     "sd": 7.6
+    },
+    "scout": {
+     "max": 22,
+     "mean": 20.4,
+     "med": 21,
+     "min": 18,
+     "n": 9,
+     "p10": 19,
+     "p90": 22,
+     "sd": 1.3
+    },
+    "sites": {
+     "max": 18,
+     "mean": 16.0,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.9
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 30.7,
+     "med": 32,
+     "min": 27,
+     "n": 9,
+     "p10": 28,
+     "p90": 32,
+     "sd": 1.9
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.8,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 51,
+     "mean": 48.8,
+     "med": 49,
+     "min": 43,
+     "n": 9,
+     "p10": 48,
+     "p90": 51,
+     "sd": 2.3
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-sand-smallest-wide-nosym/seed-1.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-2.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-3.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-4.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-5.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-6.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-7.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-8.png",
+    "atlas/dota-sand-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Sand \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 69,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-sand-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 2.8,
+   "variant": "Sand"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 59,
+     "mean": 55.7,
+     "med": 58,
+     "min": 52,
+     "n": 9,
+     "p10": 52,
+     "p90": 59,
+     "sd": 3.1
+    },
+    "land": {
+     "max": 60,
+     "mean": 56.0,
+     "med": 58,
+     "min": 52,
+     "n": 9,
+     "p10": 52,
+     "p90": 59,
+     "sd": 3.2
+    },
+    "oceanPct": {
+     "max": 3,
+     "mean": 1.2,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.4
+    },
+    "res": {
+     "max": 82,
+     "mean": 68.7,
+     "med": 70,
+     "min": 54,
+     "n": 9,
+     "p10": 60,
+     "p90": 74,
+     "sd": 7.6
+    },
+    "scout": {
+     "max": 22,
+     "mean": 19.6,
+     "med": 20,
+     "min": 14,
+     "n": 9,
+     "p10": 17,
+     "p90": 22,
+     "sd": 2.5
+    },
+    "sites": {
+     "max": 18,
+     "mean": 16.0,
+     "med": 16,
+     "min": 12,
+     "n": 9,
+     "p10": 14,
+     "p90": 18,
+     "sd": 1.9
+    },
+    "slLand": {
+     "max": 33,
+     "mean": 29.2,
+     "med": 30,
+     "min": 20,
+     "n": 9,
+     "p10": 25,
+     "p90": 33,
+     "sd": 4.1
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.8,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 60,
+     "mean": 55.9,
+     "med": 58,
+     "min": 52,
+     "n": 9,
+     "p10": 52,
+     "p90": 59,
+     "sd": 3.3
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-sand-smallest-wide-sym/seed-1.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-2.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-3.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-4.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-5.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-6.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-7.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-8.png",
+    "atlas/dota-sand-smallest-wide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Sand \u00b7 Duel/wide/sym",
+   "n": 9,
+   "oceanPct": 1,
+   "res": 69,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-sand-smallest-wide-sym",
+   "tip": "",
+   "tribes": 2.8,
+   "variant": "Sand"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 62,
+     "mean": 61.6,
+     "med": 62,
+     "min": 60,
+     "n": 9,
+     "p10": 61,
+     "p90": 62,
+     "sd": 0.7
+    },
+    "land": {
+     "max": 65,
+     "mean": 64.1,
+     "med": 64,
+     "min": 63,
+     "n": 9,
+     "p10": 63,
+     "p90": 65,
+     "sd": 0.9
+    },
+    "oceanPct": {
+     "max": 4,
+     "mean": 2.3,
+     "med": 3,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 96,
+     "mean": 78.4,
+     "med": 78,
+     "min": 64,
+     "n": 9,
+     "p10": 68,
+     "p90": 92,
+     "sd": 10.0
+    },
+    "scout": {
+     "max": 26,
+     "mean": 24.8,
+     "med": 25,
+     "min": 24,
+     "n": 9,
+     "p10": 24,
+     "p90": 25,
+     "sd": 0.6
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.3,
+     "med": 18,
+     "min": 14,
+     "n": 9,
+     "p10": 16,
+     "p90": 18,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 38,
+     "mean": 37.0,
+     "med": 37,
+     "min": 36,
+     "n": 9,
+     "p10": 36,
+     "p90": 38,
+     "sd": 0.8
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.0,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 64,
+     "mean": 62.3,
+     "med": 62,
+     "min": 60,
+     "n": 9,
+     "p10": 61,
+     "p90": 64,
+     "sd": 1.2
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-1.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-2.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-3.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-4.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-5.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-6.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-7.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-8.png",
+    "atlas/dota-sand-smallest-ultrawide-nosym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Sand \u00b7 Duel/ultrawide/nosym",
+   "n": 9,
+   "oceanPct": 2,
+   "res": 78,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "dota-sand-smallest-ultrawide-nosym",
+   "tip": "",
+   "tribes": 3.0,
+   "variant": "Sand"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 70,
+     "mean": 68.3,
+     "med": 69,
+     "min": 64,
+     "n": 9,
+     "p10": 67,
+     "p90": 70,
+     "sd": 1.8
+    },
+    "land": {
+     "max": 70,
+     "mean": 68.4,
+     "med": 69,
+     "min": 65,
+     "n": 9,
+     "p10": 67,
+     "p90": 70,
+     "sd": 1.6
+    },
+    "oceanPct": {
+     "max": 4,
+     "mean": 2.3,
+     "med": 3,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 3,
+     "sd": 1.3
+    },
+    "res": {
+     "max": 96,
+     "mean": 78.4,
+     "med": 78,
+     "min": 64,
+     "n": 9,
+     "p10": 68,
+     "p90": 92,
+     "sd": 10.0
+    },
+    "scout": {
+     "max": 27,
+     "mean": 25.4,
+     "med": 26,
+     "min": 24,
+     "n": 9,
+     "p10": 24,
+     "p90": 26,
+     "sd": 1.0
+    },
+    "sites": {
+     "max": 20,
+     "mean": 17.3,
+     "med": 18,
+     "min": 14,
+     "n": 9,
+     "p10": 16,
+     "p90": 18,
+     "sd": 1.6
+    },
+    "slLand": {
+     "max": 40,
+     "mean": 37.8,
+     "med": 38,
+     "min": 35,
+     "n": 9,
+     "p10": 35,
+     "p90": 39,
+     "sd": 1.7
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.0,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 70,
+     "mean": 68.3,
+     "med": 69,
+     "min": 64,
+     "n": 9,
+     "p10": 67,
+     "p90": 70,
+     "sd": 1.8
+    }
+   },
+   "group": "DOTA",
+   "imgs": [
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-1.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-2.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-3.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-4.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-5.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-6.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-7.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-8.png",
+    "atlas/dota-sand-smallest-ultrawide-sym/seed-9.png"
+   ],
+   "label": "DOTA \u00b7 Sand \u00b7 Duel/ultrawide/sym",
+   "n": 9,
+   "oceanPct": 2,
+   "res": 78,
+   "setting": "Duel \u00b7 ultrawide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "dota-sand-smallest-ultrawide-sym",
+   "tip": "",
+   "tribes": 3.0,
+   "variant": "Sand"
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 37,
+     "mean": 35.1,
+     "med": 35,
+     "min": 32,
+     "n": 9,
+     "p10": 33,
+     "p90": 37,
+     "sd": 1.7
+    },
+    "land": {
+     "max": 50,
+     "mean": 39.7,
+     "med": 40,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 42,
+     "sd": 4.4
+    },
+    "oceanPct": {
+     "max": 41,
+     "mean": 37.2,
+     "med": 38,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 40,
+     "sd": 2.2
+    },
+    "res": {
+     "max": 80,
+     "mean": 67.7,
+     "med": 66,
+     "min": 58,
+     "n": 9,
+     "p10": 62,
+     "p90": 74,
+     "sd": 6.2
+    },
+    "scout": {
+     "max": 28,
+     "mean": 19.0,
+     "med": 18,
+     "min": 12,
+     "n": 9,
+     "p10": 15,
+     "p90": 25,
+     "sd": 4.9
+    },
+    "sites": {
+     "max": 16,
+     "mean": 12.6,
+     "med": 13,
+     "min": 7,
+     "n": 9,
+     "p10": 11,
+     "p90": 15,
+     "sd": 2.5
+    },
+    "slLand": {
+     "max": 42,
+     "mean": 28.2,
+     "med": 26,
+     "min": 17,
+     "n": 9,
+     "p10": 23,
+     "p90": 37,
+     "sd": 7.4
+    },
+    "tribes": {
+     "max": 5,
+     "mean": 2.6,
+     "med": 2,
+     "min": 1,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 1.1
+    },
+    "water": {
+     "max": 41,
+     "mean": 37.9,
+     "med": 39,
+     "min": 32,
+     "n": 9,
+     "p10": 34,
+     "p90": 40,
+     "sd": 3.0
+    }
+   },
+   "group": "Hardwood Forest",
+   "imgs": [
+    "atlas/hardwood-forest-smallest-square-nosym/seed-1.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-2.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-3.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-4.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-5.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-6.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-7.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-8.png",
+    "atlas/hardwood-forest-smallest-square-nosym/seed-9.png"
+   ],
+   "label": "Hardwood Forest \u00b7 Duel/square/nosym",
+   "n": 9,
+   "oceanPct": 37,
+   "res": 68,
+   "setting": "Duel \u00b7 square \u00b7 point-sym off \u00b7 mirror",
+   "slug": "hardwood-forest-smallest-square-nosym",
+   "tip": "",
+   "tribes": 2.6,
+   "variant": ""
+  },
+  {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 46,
+     "mean": 42.2,
+     "med": 43,
+     "min": 32,
+     "n": 9,
+     "p10": 40,
+     "p90": 45,
+     "sd": 4.0
+    },
+    "land": {
+     "max": 52,
+     "mean": 43.6,
+     "med": 43.0,
+     "min": 38,
+     "n": 8,
+     "p10": 40,
+     "p90": 46,
+     "sd": 4.0
+    },
+    "oceanPct": {
+     "max": 42,
+     "mean": 37.7,
+     "med": 38,
+     "min": 35,
+     "n": 9,
+     "p10": 35,
+     "p90": 40,
+     "sd": 2.3
+    },
+    "res": {
+     "max": 98,
+     "mean": 69.6,
+     "med": 66,
+     "min": 58,
+     "n": 9,
+     "p10": 64,
+     "p90": 72,
+     "sd": 10.8
+    },
+    "scout": {
+     "max": 26,
+     "mean": 19.0,
+     "med": 19.0,
+     "min": 13,
+     "n": 8,
+     "p10": 15,
+     "p90": 22,
+     "sd": 3.9
+    },
+    "sites": {
+     "max": 16,
+     "mean": 12.9,
+     "med": 14,
+     "min": 8,
+     "n": 9,
+     "p10": 10,
+     "p90": 16,
+     "sd": 2.5
+    },
+    "slLand": {
+     "max": 38,
+     "mean": 28.4,
+     "med": 28.0,
+     "min": 20,
+     "n": 8,
+     "p10": 23,
+     "p90": 33,
+     "sd": 5.5
+    },
+    "tribes": {
+     "max": 3,
+     "mean": 2.3,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.5
+    },
+    "water": {
+     "max": 50,
+     "mean": 44.0,
+     "med": 43,
+     "min": 38,
+     "n": 9,
+     "p10": 40,
+     "p90": 49,
+     "sd": 3.7
+    }
+   },
+   "group": "Hardwood Forest",
+   "imgs": [
+    "atlas/hardwood-forest-smallest-square-sym/seed-1.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-2.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-3.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-4.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-5.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-6.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-7.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-8.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Hardwood Forest \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 38,
+   "res": 70,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "hardwood-forest-smallest-square-sym",
+   "tip": "",
+   "tribes": 2.3,
+   "variant": ""
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 48,
+     "mean": 41.2,
+     "med": 40,
+     "min": 35,
+     "n": 9,
+     "p10": 36,
+     "p90": 46,
+     "sd": 4.6
+    },
+    "land": {
+     "max": 48,
+     "mean": 42.7,
+     "med": 44,
+     "min": 35,
+     "n": 9,
+     "p10": 37,
+     "p90": 47,
+     "sd": 4.2
+    },
+    "oceanPct": {
+     "max": 42,
+     "mean": 38.8,
+     "med": 39,
+     "min": 35,
+     "n": 9,
+     "p10": 36,
+     "p90": 41,
+     "sd": 2.1
+    },
+    "res": {
+     "max": 101,
+     "mean": 68.4,
+     "med": 65,
+     "min": 51,
+     "n": 9,
+     "p10": 60,
+     "p90": 74,
+     "sd": 13.3
+    },
+    "scout": {
+     "max": 20,
+     "mean": 17.4,
+     "med": 17,
+     "min": 13,
+     "n": 9,
+     "p10": 16,
+     "p90": 20,
+     "sd": 2.3
+    },
+    "sites": {
+     "max": 18,
+     "mean": 13.2,
+     "med": 13,
+     "min": 11,
+     "n": 9,
+     "p10": 11,
+     "p90": 15,
+     "sd": 2.2
+    },
+    "slLand": {
+     "max": 29,
+     "mean": 25.8,
+     "med": 25,
+     "min": 20,
+     "n": 9,
+     "p10": 23,
+     "p90": 29,
+     "sd": 3.2
+    },
+    "tribes": {
+     "max": 3,
+     "mean": 2.8,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.4
+    },
+    "water": {
+     "max": 48,
+     "mean": 42.3,
+     "med": 44,
+     "min": 35,
+     "n": 9,
+     "p10": 37,
+     "p90": 47,
+     "sd": 4.3
+    }
+   },
+   "group": "Hardwood Forest",
+   "imgs": [
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-1.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-2.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-3.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-4.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-5.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-6.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-7.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-8.png",
+    "atlas/hardwood-forest-smallest-wide-nosym/seed-9.png"
+   ],
+   "label": "Hardwood Forest \u00b7 Duel/wide/nosym",
+   "n": 9,
+   "oceanPct": 39,
+   "res": 68,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym off \u00b7 mirror",
+   "slug": "hardwood-forest-smallest-wide-nosym",
+   "tip": "",
+   "tribes": 2.8,
+   "variant": ""
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 56,
+     "mean": 52.4,
+     "med": 53,
+     "min": 46,
+     "n": 7,
+     "p10": 49,
+     "p90": 56,
+     "sd": 3.5
+    },
+    "land": {
+     "max": 56,
+     "mean": 53.4,
+     "med": 53,
+     "min": 49,
+     "n": 7,
+     "p10": 52,
+     "p90": 56,
+     "sd": 2.3
+    },
+    "oceanPct": {
+     "max": 42,
+     "mean": 39.1,
+     "med": 39,
+     "min": 36,
+     "n": 7,
+     "p10": 37,
+     "p90": 41,
+     "sd": 2.0
+    },
+    "res": {
+     "max": 80,
+     "mean": 65.7,
+     "med": 64,
+     "min": 58,
+     "n": 7,
+     "p10": 60,
+     "p90": 72,
+     "sd": 7.1
+    },
+    "scout": {
+     "max": 24,
+     "mean": 20.9,
+     "med": 21,
+     "min": 16,
+     "n": 7,
+     "p10": 19,
+     "p90": 24,
+     "sd": 2.6
+    },
+    "sites": {
+     "max": 16,
+     "mean": 13.4,
+     "med": 14,
+     "min": 10,
+     "n": 7,
+     "p10": 12,
+     "p90": 14,
+     "sd": 1.8
+    },
+    "slLand": {
+     "max": 36,
+     "mean": 30.9,
+     "med": 31,
+     "min": 24,
+     "n": 7,
+     "p10": 28,
+     "p90": 35,
+     "sd": 3.8
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.7,
+     "med": 3,
+     "min": 2,
+     "n": 7,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.7
+    },
+    "water": {
+     "max": 56,
+     "mean": 53.4,
+     "med": 53,
+     "min": 49,
+     "n": 7,
+     "p10": 52,
+     "p90": 56,
+     "sd": 2.3
+    }
+   },
+   "group": "Hardwood Forest",
+   "imgs": [
+    "atlas/hardwood-forest-smallest-wide-sym/seed-1.png",
+    "atlas/hardwood-forest-smallest-wide-sym/seed-2.png",
+    "atlas/hardwood-forest-smallest-wide-sym/seed-3.png",
+    "atlas/hardwood-forest-smallest-wide-sym/seed-4.png",
+    "atlas/hardwood-forest-smallest-wide-sym/seed-5.png",
+    "atlas/hardwood-forest-smallest-wide-sym/seed-6.png",
+    "atlas/hardwood-forest-smallest-wide-sym/seed-7.png"
+   ],
+   "label": "Hardwood Forest \u00b7 Duel/wide/sym",
+   "n": 7,
+   "oceanPct": 39,
+   "res": 66,
+   "setting": "Duel \u00b7 wide \u00b7 point-sym on \u00b7 mirror",
+   "slug": "hardwood-forest-smallest-wide-sym",
+   "tip": "",
+   "tribes": 2.7,
+   "variant": ""
   }
  ],
  "groups": [
   "Continent",
   "Coastal Rain Basin",
-  "Donut"
+  "Donut",
+  "Archipelago",
+  "Arid Plateau",
+  "DOTA",
+  "Hardwood Forest"
  ],
  "stamp": "1779064826"
 }
