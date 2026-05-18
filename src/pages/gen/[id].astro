@@ -108,21 +108,25 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     .rh { font-size:0.72rem; color:var(--text-faint); font-weight:400; }
     .expl { font-size:0.82rem; color:var(--text-soft); line-height:1.5;
       max-width:88ch; margin:0 0 0.6rem; }
-    #respanel .rg { margin:0.25rem 0 0.55rem; }
-    #respanel .rg__t { font-size:0.64rem; letter-spacing:0.12em;
+    /* :global — these nodes are built in JS (buildPanel), so Astro's
+       scoped data-attr is absent and a plain scoped rule won't match. */
+    :global(#respanel .rg) { margin:0.25rem 0 0.55rem; }
+    :global(#respanel .rg__t) { font-size:0.64rem; letter-spacing:0.12em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.25rem; }
-    #respanel .row { display:flex; flex-wrap:wrap; gap:0.3rem; }
-    .rchip { display:inline-flex; align-items:center; gap:0.25rem;
-      background:var(--bg-elev); border:1px solid var(--gold-deep);
+    :global(#respanel .row) { display:flex; flex-wrap:wrap; gap:0.3rem; }
+    :global(#respanel .rchip) { display:inline-flex; align-items:center;
+      gap:0.25rem; background:var(--bg-elev);
+      border:1px solid var(--gold-deep);
       border-radius:999px; padding:0.06rem 0.5rem 0.06rem 0.28rem;
       font-size:0.73rem; color:var(--text); line-height:1.4; }
-    .rchip img { width:14px; height:14px; display:block; }
-    .rchip b { color:var(--gold); }
-    .rchip.has { cursor:pointer; }
-    .rchip.has:hover, .rchip.pin { border-color:var(--gold);
+    :global(#respanel .rchip img) { width:14px; height:14px; display:block; }
+    :global(#respanel .rchip b) { color:var(--gold); }
+    :global(#respanel .rchip.has) { cursor:pointer; }
+    :global(#respanel .rchip.has:hover),
+    :global(#respanel .rchip.pin) { border-color:var(--gold);
       background:#231f0d; color:var(--gold); }
-    .rchip.off { background:transparent; border-color:var(--border);
-      color:var(--text-dim); opacity:0.5; }
+    :global(#respanel .rchip.off) { background:transparent;
+      border-color:var(--border); color:var(--text-dim); opacity:0.5; }
     .stats { display:grid; gap:1.4rem;
       grid-template-columns:repeat(3,minmax(0,1fr)); }
     @media (max-width:820px){ .stats{ grid-template-columns:1fr 1fr; } }
@@ -414,6 +418,8 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
             if(dd<bd){bd=dd;best=yy*W+xx;} } }
         var bx=best>=0?best%W:-1, byy=best>=0?(best/W|0):-1;
         capHi=best>=0&&(D.caps||[]).some(function(p){return p[0]===bx&&p[1]===byy;});
+        if(!pinRes){ activeRes=(best>=0&&D.res[best]>=0)
+            ? slug(D.L.res[D.res[best]]) : null; }
         overlay(best);
         if(best<0){ tip.style.display='none'; return; }
         var i=best,x=i%W,y=(i/W)|0,rn=D.res[i]>=0?D.L.res[D.res[i]]:null,
@@ -437,7 +443,8 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         tip.style.top=(e.clientY-r.top+12)+'px';
       });
       wrap.addEventListener('mouseleave',function(){
-        tip.style.display='none'; capHi=false; if(D)overlay(-1); });
+        tip.style.display='none'; capHi=false;
+        if(!pinRes)activeRes=null; if(D)overlay(-1); });
     })();
   </script>
 </Base>
