@@ -48,6 +48,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         <tr id="csrow" style="cursor:crosshair"><td>City sites <span class="rh">(hover)</span></td><td><b>{g.sites ?? '—'}</b></td></tr>
         <tr><td>Playable tiles</td><td>{g.tiles ?? '—'}</td></tr>
         <tr><td>Land tiles</td><td>{g.landTiles ?? '—'}</td></tr>
+        <tr id="reachrow" style="cursor:crosshair"><td>Cap-reachable land <span class="rh">(hover)</span></td><td><b id="s_reach">—</b></td></tr>
         <tr><td>Freshwater tiles</td><td id="s_fw">—</td></tr>
         <tr><td>River tiles</td><td id="s_riv">—</td></tr>
         <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
@@ -164,7 +165,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       var wrap=document.getElementById('mapwrap'), cv=document.getElementById('cv'),
           tip=document.getElementById('tip'), ctx=cv.getContext('2d'),
           S=11, HW=Math.sqrt(3)*S, VS=1.5*S, PAD=4, D=null, baseImg=null,
-          icons={}, activeRes=null, pinRes=null, yieldHi=null, csHi=false,
+          icons={}, activeRes=null, pinRes=null, yieldHi=null, csHi=false, unHi=false,
           k=1, tx=0, ty=0;
       function cen(x,y){ return [x*HW+(y%2===0?HW/2:0)+HW/2+PAD, y*VS+S+PAD]; }
       function hexp(cx,cy,r){ ctx.beginPath();
@@ -279,6 +280,12 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
             if(D.bnd[i]||v<lo||(hh!=null&&v>=hh))continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
+        if(unHi && D.un){
+          ctx.strokeStyle='#ff5c3a'; ctx.lineWidth=Math.max(2,S/3);
+          ctx.shadowColor='#ff5c3a'; ctx.shadowBlur=S;
+          for(var i=0;i<D.un.length;i++){ if(!D.un[i])continue;
+            var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
+          ctx.shadowBlur=0; }
         if(csHi || (hi>=0 && D.cs[hi])){
           ctx.strokeStyle='#ff2daa'; ctx.lineWidth=Math.max(2,S/3);
           ctx.shadowColor='#ff2daa'; ctx.shadowBlur=S;
@@ -333,6 +340,9 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         cv.height=Math.ceil((d.h-1)*VS+2*S+2*PAD);
         document.getElementById('s_fw').textContent=d.fwTiles!=null?d.fwTiles:'—';
         document.getElementById('s_riv').textContent=d.rivTiles!=null?d.rivTiles:'—';
+        var sr=document.getElementById('s_reach');
+        if(sr&&d.reachPct!=null){ sr.innerHTML=d.reachPct+'%'
+          +(d.split?' <span style="color:#ff5c3a">⚠ SPLIT</span>':''); }
         var T=d.totals||{};
         function yi(n){ return '<img class="yi" src="'+base+'img/icons/yields/'+n+'.png" alt="'+n+'">'; }
         document.getElementById('totals').innerHTML=
@@ -366,6 +376,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         cr.addEventListener('mouseenter',function(){ if(D){csHi=true;overlay(-1);} });
         cr.addEventListener('mouseleave',function(){ csHi=false; if(D)overlay(-1); });
       })(document.getElementById('csrow'));
+      (function(rr){ if(!rr)return;
+        rr.addEventListener('mouseenter',function(){ if(D){unHi=true;overlay(-1);} });
+        rr.addEventListener('mouseleave',function(){ unHi=false; if(D)overlay(-1); });
+      })(document.getElementById('reachrow'));
       // zoom
       wrap.addEventListener('wheel',function(e){ if(!D)return; e.preventDefault();
         var r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top,
