@@ -38,8 +38,11 @@ for (const c of dist.configs) {
   byGroup[k].push(c);
 }
 
-// no pass / no bands — just the distribution. connected% is the one gate.
+// no pass / no bands — just the distribution. Pool is land-connected by
+// construction (connPct ~100); the live signal is dropPct = % of seeds
+// genuinely split (no connected symmetric pair), so lower is better.
 const connClass = (p: number) => p >= 95 ? 'g' : p >= 75 ? 'o' : 'n';
+const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
 const D = (o: any) => o == null ? '<td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>'
   : `<td><b>${o.mean}</b> <span class="sd">±${o.sd}</span></td>`
   + `<td>${o.med}</td>`
@@ -59,9 +62,12 @@ const pill = (label: string, o: any) => o == null
     the full distribution, not a pass/fail. We don't screen or reject
     maps; these numbers tell you what you'll typically get and how wide
     the spread is. <b>p10–p90</b> is the typical range (9 in 10 maps);
-    <b>min–max</b> is the worst observed. The only hard gate is
-    <b>land-connected %</b> — the one true reroll trigger. Distances use
-    the corrected even-r model with symmetric capitals.
+    <b>min–max</b> is the worst observed. Every map shown is
+    <b>land-connected by construction</b> (capitals reselected to a
+    connected symmetric pair); <b>split-dropped %</b> is how often a
+    seed had no connected pair at all and was discarded — the
+    split-proneness of the script. Distances use the corrected even-r
+    model with symmetric capitals.
   </p>
 
   <div class="legend">
@@ -129,10 +135,10 @@ const pill = (label: string, o: any) => o == null
                   <div class="pill__r">min {c.dist.land.min} · p10 {c.dist.land.p10} · <b>med {c.dist.land.med}</b> · p90 {c.dist.land.p90} · max {c.dist.land.max}</div>
                 </>) : <div class="pill__v dash">—</div>}
               </div>
-              <div class={'pill ' + connClass(c.connPct) + '-bg'}>
-                <div class="pill__l">Land connected</div>
-                <div class="pill__v"><b>{c.connPct}</b><span class="pm">%</span></div>
-                <div class="pill__r">of {c.n} maps{c.splitPct ? ` · ${c.splitPct}% split` : ''}{c.reachMean != null ? ` · ${c.reachMean}% reachable` : ''}</div>
+              <div class={'pill ' + dropClass(c.dropPct) + '-bg'}>
+                <div class="pill__l">Split-dropped</div>
+                <div class="pill__v"><b>{c.dropPct ?? 0}</b><span class="pm">%</span></div>
+                <div class="pill__r">{c.n} connected maps kept · {c.connPct}% land-connected by construction{c.reachMean != null ? ` · ${c.reachMean}% reachable` : ''}</div>
               </div>
             </div>
             <details class="gal" open>

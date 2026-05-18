@@ -151,20 +151,17 @@
       "tip": "best of the open scripts",
       "critPct": 0,
       "okPct": 0,
-      "n": 10,
+      "n": 7,
       "sites": "18 [16\u201320]",
       "crow": "65",
       "land": "70 [66\u201374]",
-      "landConnPct": 70,
+      "landConnPct": 100,
       "previews": [
         "rec/inland-sea/seed-1.png",
         "rec/inland-sea/seed-2.png",
         "rec/inland-sea/seed-3.png",
-        "rec/inland-sea/seed-4.png",
-        "rec/inland-sea/seed-5.png",
         "rec/inland-sea/seed-6.png",
         "rec/inland-sea/seed-7.png",
-        "rec/inland-sea/seed-8.png",
         "rec/inland-sea/seed-9.png",
         "rec/inland-sea/seed-10.png"
       ]
@@ -178,12 +175,12 @@
       ],
       "tip": "OUTER SEA start (Inner \u2192 60% connected)",
       "critPct": 0,
-      "okPct": 10,
-      "n": 10,
+      "okPct": 11,
+      "n": 9,
       "sites": "14 [12\u201316]",
       "crow": "40",
       "land": "44 [34\u201355]",
-      "landConnPct": 90,
+      "landConnPct": 100,
       "previews": [
         "rec/donut/seed-1.png",
         "rec/donut/seed-2.png",
@@ -193,8 +190,7 @@
         "rec/donut/seed-6.png",
         "rec/donut/seed-7.png",
         "rec/donut/seed-8.png",
-        "rec/donut/seed-9.png",
-        "rec/donut/seed-10.png"
+        "rec/donut/seed-9.png"
       ]
     },
     {
@@ -319,12 +315,12 @@
       ],
       "tip": "no map-option lever",
       "critPct": 30,
-      "okPct": 70,
+      "okPct": 80,
       "n": 10,
       "sites": "18 [15\u201324]",
       "crow": "53",
-      "land": "62 [53\u201384]",
-      "landConnPct": 90,
+      "land": "61 [46\u201384]",
+      "landConnPct": 100,
       "previews": [
         "rec/wetlands/seed-1.png",
         "rec/wetlands/seed-2.png",
@@ -351,9 +347,9 @@
       "okPct": 10,
       "n": 10,
       "sites": "31 [25\u201340]",
-      "crow": "53",
-      "land": "63 [51\u201379]",
-      "landConnPct": 90,
+      "crow": "52",
+      "land": "62 [51\u201379]",
+      "landConnPct": 100,
       "previews": [
         "rec/archipelago/seed-1.png",
         "rec/archipelago/seed-2.png",
