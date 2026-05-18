@@ -194,21 +194,44 @@ const yrows = [5,6,7,8,9,10,11,12].map(n => ({
           var ce=cen(x,y);
           ctx.fillStyle='rgb('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+')';
           hexp(ce[0],ce[1],S); ctx.fill();
-          if(!D.bnd[i]&&!isWater&&h.indexOf('HILL')>=0){ // hill bump
-            ctx.fillStyle='rgba(0,0,0,0.34)'; var bs=S*0.3;
-            ctx.beginPath();
-            ctx.moveTo(ce[0]-bs,ce[1]+bs*0.7);
-            ctx.lineTo(ce[0],ce[1]-bs*0.6);
-            ctx.lineTo(ce[0]+bs,ce[1]+bs*0.7); ctx.closePath(); ctx.fill(); }
-          if(!D.bnd[i]&&!isWater){            // veg = stripes (no recolour)
-            var ns = v.indexOf('JUNGLE')>=0 ? 3
-              : (v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0) ? 2
-              : v.indexOf('SCRUB')>=0 ? 1 : 0;
-            if(ns){ ctx.strokeStyle='rgba(20,40,16,0.55)';
-              ctx.lineWidth=Math.max(1,S/7); var sw=S*0.62, gap=S*0.32;
-              for(var s=0;s<ns;s++){ var sy=ce[1]+(s-(ns-1)/2)*gap;
-                ctx.beginPath(); ctx.moveTo(ce[0]-sw/2,sy);
-                ctx.lineTo(ce[0]+sw/2,sy); ctx.stroke(); } } }
+          if(!D.bnd[i]&&!isWater){
+            // LAYER 1 — hill: a rounded mound silhouette at tile base
+            // (shaded relief, leaves the top free for veg glyphs)
+            if(h.indexOf('HILL')>=0){
+              ctx.fillStyle='rgba(0,0,0,0.22)';
+              ctx.beginPath();
+              ctx.arc(ce[0], ce[1]+S*0.34, S*0.62, Math.PI, 0); ctx.fill();
+              ctx.fillStyle='rgba(255,255,255,0.10)';
+              ctx.beginPath();
+              ctx.arc(ce[0], ce[1]+S*0.30, S*0.62, Math.PI*1.05, Math.PI*1.55);
+              ctx.lineTo(ce[0], ce[1]+S*0.30); ctx.fill();
+            }
+            // LAYER 2 — vegetation glyphs on top (compose w/ hill)
+            var jg=v.indexOf('JUNGLE')>=0,
+                fr=v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0,
+                sc=v.indexOf('SCRUB')>=0;
+            if(jg||fr){                       // trees: filled triangles
+              var nt=jg?3:2, tw=S*0.30, th=S*0.62,
+                  col=jg?'rgba(18,54,20,0.92)':'rgba(26,70,28,0.9)';
+              ctx.fillStyle=col;
+              for(var tk=0;tk<nt;tk++){
+                var tx=ce[0]+(tk-(nt-1)/2)*(tw*1.15),
+                    ty=ce[1]+S*0.18;
+                ctx.beginPath();
+                ctx.moveTo(tx, ty-th);
+                ctx.lineTo(tx-tw, ty);
+                ctx.lineTo(tx+tw, ty); ctx.closePath(); ctx.fill();
+              }
+            } else if(sc){                    // scrub: small sparse dots
+              ctx.fillStyle='rgba(70,86,40,0.85)';
+              var dpos=[[-0.34,0.12],[0.30,-0.10],[0.04,0.30]];
+              for(var dk=0;dk<3;dk++){
+                ctx.beginPath();
+                ctx.arc(ce[0]+dpos[dk][0]*S, ce[1]+dpos[dk][1]*S,
+                        S*0.13, 0, 7); ctx.fill();
+              }
+            }
+          }
           if(!D.bnd[i]&&D.cs[i]){ ctx.fillStyle='#ff2daa';
             ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.4,0,7); ctx.fill(); }
         }
