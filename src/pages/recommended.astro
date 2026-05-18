@@ -16,6 +16,12 @@ const D = (o: any) => o == null ? '<td class="dash">—</td><td class="dash">—
   + `<td class="mono">${o.p10}–${o.p90}</td>`
   + `<td class="mono dim">${o.min}–${o.max}</td>`;
 const N = dist.configs[0]?.n ?? 0;
+const pill = (label: string, o: any) => o == null
+  ? `<div class="pill"><div class="pill__l">${label}</div><div class="pill__v dash">—</div></div>`
+  : `<div class="pill"><div class="pill__l">${label}</div>`
+    + `<div class="pill__v"><b>${o.mean}</b> <span class="pm">±${o.sd}</span></div>`
+    + `<div class="pill__r">min ${o.min} · p10 ${o.p10} · `
+    + `<b>med ${o.med}</b> · p90 ${o.p90} · max ${o.max}</div></div>`;
 ---
 <Base title="Map Distributions">
   <p class="lede">
@@ -63,23 +69,11 @@ const N = dist.configs[0]?.n ?? 0;
             <span class="cfg__set">{c.setting}{c.tip ? ` · ${c.tip}` : ''}</span>
           </div>
           <div class="cfg__body">
-            <table class="dt">
-              <thead><tr>
-                <th>metric</th><th>mean</th><th>med</th>
-                <th>p10–p90</th><th>min–max</th>
-              </tr></thead>
-              <tbody>
-                <tr><td class="m">Land hex dist</td><Fragment set:html={D(c.dist.land)} /></tr>
-                <tr><td class="m">City sites</td><Fragment set:html={D(c.dist.sites)} /></tr>
-                <tr><td class="m">Scout orders</td><Fragment set:html={D(c.dist.scout)} /></tr>
-                <tr><td class="m">Slinger (land)</td><Fragment set:html={D(c.dist.slLand)} /></tr>
-                <tr><td class="m">Crow hex</td><Fragment set:html={D(c.dist.crow)} /></tr>
-                <tr><td class="m">Ocean %</td><Fragment set:html={D(c.dist.oceanPct)} /></tr>
-                <tr><td class="m">Tribes</td><Fragment set:html={D(c.dist.tribes)} /></tr>
-                <tr><td class="m">Resources</td><Fragment set:html={D(c.dist.res)} /></tr>
-              </tbody>
-            </table>
-            <div class="aux">n={c.n}</div>
+            <div class="pills">
+              <Fragment set:html={pill('Land hex distance', c.dist.land)} />
+              <Fragment set:html={pill('City sites', c.dist.sites)} />
+            </div>
+            <div class="aux">n={c.n} · full breakdown on each map's detail page</div>
             <details class="gal" open>
               <summary>{c.imgs.length} generated maps (click to collapse)</summary>
               <div class="gal__grid">
@@ -142,6 +136,20 @@ const N = dist.configs[0]?.n ?? 0;
     .cfg__set { font-size:0.78rem; color:var(--text-faint);
       font-family:var(--font-mono); margin-left:auto; }
     .cfg__body { margin-top:0.6rem; }
+    .pills { display:flex; flex-wrap:wrap; gap:0.8rem; }
+    .pill { flex:1 1 280px; background:#16181d;
+      border:1px solid var(--gold-deep); border-radius:8px;
+      padding:0.6rem 0.9rem; }
+    .pill__l { font-size:0.66rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim); }
+    .pill__v { font-size:2rem; font-family:var(--font-display);
+      font-weight:700; color:var(--gold); line-height:1.15; }
+    .pill__v .pm { font-size:0.95rem; color:var(--text-faint);
+      font-family:var(--font-ui); font-weight:400; }
+    .pill__v.dash { color:var(--text-dim); }
+    .pill__r { font-size:0.74rem; color:var(--text-faint);
+      font-family:var(--font-mono); margin-top:0.15rem; }
+    .pill__r b { color:var(--text-soft); }
     .dt { border-collapse:collapse; font-size:0.84rem; min-width:440px; }
     .dt thead th { font-family:var(--font-ui); font-size:0.56rem;
       letter-spacing:0.13em; text-transform:uppercase; color:var(--text-dim);
