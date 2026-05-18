@@ -180,7 +180,11 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           S=11, HW=Math.sqrt(3)*S, VS=1.5*S, PAD=4, D=null, baseImg=null,
           icons={}, activeRes=null, pinRes=null, yieldHi=null, csHi=false, unHi=false,
           capHi=false, k=1, tx=0, ty=0;
-      function cen(x,y){ return [x*HW+(y%2===0?HW/2:0)+HW/2+PAD, y*VS+S+PAD]; }
+      // OW origin is bottom-left (y grows north). Flip data-row → screen-Y
+      // so row 0 paints at the bottom. Horizontal stagger stays keyed to the
+      // true data-y parity so the odd-r tiling (and rivers/caps via cen) stay
+      // coherent — this is a pure vertical reflection of the raster.
+      function cen(x,y){ return [x*HW+(y%2===0?HW/2:0)+HW/2+PAD, ((D?D.h:0)-1-y)*VS+S+PAD]; }
       function hexp(cx,cy,r){ ctx.beginPath();
         for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-90),
           px=cx+r*Math.cos(a),py=cy+r*Math.sin(a);
@@ -431,7 +435,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         if(!D)return;
         var r=wrap.getBoundingClientRect(),
           px=(e.clientX-r.left-tx)/k, py=(e.clientY-r.top-ty)/k,
-          W=D.w,H=D.h, ry=Math.max(0,Math.min(H-1,Math.round((py-PAD-S)/VS))),
+          W=D.w,H=D.h, ry=Math.max(0,Math.min(H-1,Math.round((H-1)-(py-PAD-S)/VS))),
           best=-1,bd=S*S*1.6;
         for(var yy=ry-1;yy<=ry+1;yy++){ if(yy<0||yy>=H)continue;
           for(var xx=0;xx<W;xx++){ var ce=cen(xx,yy),
