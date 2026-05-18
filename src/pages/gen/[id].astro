@@ -70,22 +70,6 @@ const thr = ['5','6','7','8','9','10','11','12'];
     </div>
   </div>
 
-  <h2 class="sec">What resources can this map make?</h2>
-  <p class="expl">Every Old World resource, grouped by the improvement
-    you'd build to work it (Farm, Pasture, Camp, Grove, Nets, Mine,
-    Quarry, Lumbermill). <b>Bright = present on this map</b> (with its
-    count); <span class="dim">grey = not on this map</span> — so you can
-    see at a glance what's available vs missing.</p>
-  {(resTax as [string,string[]][]).map(([title, list]) => (
-    <div class="resgrp">
-      <div class="resgrp__t">{title}</div>
-      <div class="reschips">
-        {list.map((n) => { const c = have(n); return (
-          <span class={'chip' + (c ? '' : ' off')}>{nice(n)}{c ? <b> {c}</b> : null}</span>
-        ); })}
-      </div>
-    </div>
-  ))}
 
   <style>
     .back { font-size:0.8rem; margin:0 0 0.4rem; }
@@ -174,20 +158,27 @@ const thr = ['5','6','7','8','9','10','11','12'];
       function drawBase(){
         var W=D.w,H=D.h,Lt=D.L.terr,Lh=D.L.hgt,Lv=D.L.veg;
         ctx.fillStyle='#0b0c0f'; ctx.fillRect(0,0,cv.width,cv.height);
+        // owmapgen tags ALL sea as HEIGHT_COAST; derive ocean vs coast
+        // like the game: coast = water touching land, else ocean.
+        function isWaterTile(j){ return (Lt[D.terr[j]]||'').toUpperCase()==='WATER'; }
+        var oDXe=[0,1,1,1,0,-1],oDXo=[-1,0,1,0,-1,-1],oDY=[1,1,0,-1,-1,0];
+        function touchesLand(x,y){
+          for(var k=0;k<6;k++){ var nx=x+(y%2===0?oDXe:oDXo)[k], ny=y+oDY[k];
+            if(nx<0||ny<0||nx>=W||ny>=H) continue;
+            var j=ny*W+nx; if(!D.bnd[j] && !isWaterTile(j)) return true; }
+          return false;
+        }
         for(var i=0;i<W*H;i++){ var x=i%W,y=(i/W)|0,
           tn=(Lt[D.terr[i]]||'').toUpperCase(),
           h=(Lh[D.hgt[i]]||'').toUpperCase(),
           v=(Lv[D.veg[i]]||'').toUpperCase(), c, isWater=false;
-          if(tn==='WATER'||h.indexOf('OCEAN')>=0||h.indexOf('COAST')>=0||h.indexOf('LAKE')>=0){
+          if(tn==='WATER'||h.indexOf('LAKE')>=0){
             isWater=true;
-            c = h.indexOf('LAKE')>=0 ? [40,118,124]      // lake — teal
-              : h.indexOf('COAST')>=0 ? [70,120,168]     // coast — light
-              : [22,46,82];                              // ocean — deep
+            c = h.indexOf('LAKE')>=0 ? [40,118,124]            // lake — teal
+              : touchesLand(x,y) ? [70,120,168]                // coast
+              : [20,42,78];                                    // ocean — deep
           } else {
-            c=tcol(tn);
-            if(v.indexOf('JUNGLE')>=0)c=[c[0]-30,c[1]-6,c[2]-28];
-            else if(v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0)c=[c[0]-22,c[1]+2,c[2]-22];
-            else if(v.indexOf('SCRUB')>=0)c=[c[0]+16,c[1]+12,c[2]-6];
+            c=tcol(tn);   // keep true terrain colour; veg = stripes
           }
           if(D.bnd[i]){var g=lum(c)*0.42;c=[g,g,g];}
           else if(h.indexOf('MOUNTAIN')>=0||h.indexOf('VOLCANO')>=0){
@@ -203,6 +194,15 @@ const thr = ['5','6','7','8','9','10','11','12'];
             ctx.moveTo(ce[0]-bs,ce[1]+bs*0.7);
             ctx.lineTo(ce[0],ce[1]-bs*0.6);
             ctx.lineTo(ce[0]+bs,ce[1]+bs*0.7); ctx.closePath(); ctx.fill(); }
+          if(!D.bnd[i]&&!isWater){            // veg = stripes (no recolour)
+            var ns = v.indexOf('JUNGLE')>=0 ? 3
+              : (v.indexOf('FOREST')>=0||v.indexOf('TREE')>=0) ? 2
+              : v.indexOf('SCRUB')>=0 ? 1 : 0;
+            if(ns){ ctx.strokeStyle='rgba(20,40,16,0.55)';
+              ctx.lineWidth=Math.max(1,S/7); var sw=S*0.62, gap=S*0.32;
+              for(var s=0;s<ns;s++){ var sy=ce[1]+(s-(ns-1)/2)*gap;
+                ctx.beginPath(); ctx.moveTo(ce[0]-sw/2,sy);
+                ctx.lineTo(ce[0]+sw/2,sy); ctx.stroke(); } } }
           if(!D.bnd[i]&&D.cs[i]){ ctx.fillStyle='#ff2daa';
             ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.4,0,7); ctx.fill(); }
         }
@@ -225,7 +225,7 @@ const thr = ['5','6','7','8','9','10','11','12'];
           var im=icons[slug(D.L.res[D.res[i]])]; if(!im||!im.complete)continue;
           var x=i%W,y=(i/W)|0,ce=cen(x,y);
           ctx.drawImage(im,ce[0]-is/2,ce[1]-is/2,is,is); }
-        (D.caps||[]).forEach(function(p){ var ce=cen(p[0],p[1]),R=S*1.7;
+        (D.caps||[]).forEach(function(p){ var ce=cen(p[0],p[1]),R=S*1.12;
           ctx.fillStyle='#fff'; ctx.strokeStyle='#000'; ctx.lineWidth=2;
           ctx.beginPath(); ctx.arc(ce[0],ce[1],R,0,7); ctx.fill(); ctx.stroke();
           ctx.fillStyle='#ff2daa'; ctx.beginPath();
@@ -276,8 +276,7 @@ const thr = ['5','6','7','8','9','10','11','12'];
         var rp=document.getElementById('respanel');
         names.forEach(function(nm){ var sg=slug(nm),
           el=document.createElement('span'); el.className='rchip';
-          el.innerHTML='<img src="'+base+'img/icons/resources/'+sg
-            +'.png" alt=""> '+nm+' <b>'+cnt[nm]+'</b>';
+          el.innerHTML=nm+' <b>'+cnt[nm]+'</b>';
           el.addEventListener('mouseenter',function(){ if(pinRes)return;
             activeRes=sg; overlay(-1); });
           el.addEventListener('mouseleave',function(){ if(pinRes)return;
@@ -303,10 +302,13 @@ const thr = ['5','6','7','8','9','10','11','12'];
             if(dd<bd){bd=dd;best=yy*W+xx;} } }
         overlay(best);
         if(best<0){ tip.style.display='none'; return; }
-        var i=best,x=i%W,y=(i/W)|0,rn=D.res[i]>=0?D.L.res[D.res[i]]:null;
+        var i=best,x=i%W,y=(i/W)|0,rn=D.res[i]>=0?D.L.res[D.res[i]]:null,
+          isCap=(D.caps||[]).some(function(p){return p[0]===x&&p[1]===y;});
         tip.innerHTML='<b>('+x+','+y+')</b> '+(D.L.terr[D.terr[i]]||'?')
           +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')+' · '+(D.L.veg[D.veg[i]]||'—')
-          +(rn?'<br><b>'+rn+'</b>':'')+(D.bnd[i]?'<br><i>off-map</i>':'')
+          +(rn?'<br><b>'+rn+'</b>':'')
+          +(isCap?'<br><b style="color:#ff2daa">★ CAPITAL</b>':'')
+          +(D.bnd[i]?'<br><i>off-map</i>':'')
           +(D.cs[i]?'<br>city site':'');
         tip.style.display='block';
         tip.style.left=(e.clientX-rect.left+14)+'px';
