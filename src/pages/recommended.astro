@@ -82,7 +82,7 @@ const pill = (label: string, o: any) => o == null
     <div class="snav__t">Map scripts</div>
     {groups.map((g: string) => (
       <div class="ng" data-g={gslug(g)}>
-        <a class="ng__h" href={`#${gslug(g)}`}>{g}</a>
+        <a class="ng__h" href={`#${gslug(g)}`}>{g}<span class="ng__done" hidden>✓</span></a>
         <div class="ng__chips">
           {byGroup[g].map((c: any) => (
             <a class="vchip" data-slug={c.slug} href={`#cfg-${c.slug}`}
@@ -249,8 +249,7 @@ const pill = (label: string, o: any) => o == null
     .vchip.v-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
     .vchip.v-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
     .vchip.v-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
-    .vchip.v-like::before, .vchip.v-maybe::before, .vchip.v-no::before {
-      content:'✓ '; font-weight:700; }
+    .ng__done { color:#bfe89f; font-weight:700; margin-left:0.35rem; }
     .pill.g-bg { border-color:#3b6e3b; }
     .pill.o-bg { border-color:var(--gold-deep); }
     .pill.n-bg { border-color:#5a2e28; }
@@ -367,6 +366,12 @@ const pill = (label: string, o: any) => o == null
         });
         var ad=document.getElementById('alldone');
         if(ad) ad.hidden=!(total>0 && cnt===total);
+        document.querySelectorAll('.ng').forEach(function(ng){
+          var chips=ng.querySelectorAll('.vchip'), allv=chips.length>0;
+          chips.forEach(function(ch){
+            if(!votes[ch.getAttribute('data-slug')]) allv=false; });
+          var d=ng.querySelector('.ng__done'); if(d) d.hidden=!allv;
+        });
       }
       // scroll-spy: open the script group currently in view
       var ngs=[].slice.call(document.querySelectorAll('.ng'));
