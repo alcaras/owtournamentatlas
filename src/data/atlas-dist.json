@@ -1,6 +1,124 @@
 {
- "configCount": 46,
+ "configCount": 52,
  "configs": [
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
+     "max": 45,
+     "mean": 37.3,
+     "med": 34,
+     "min": 32,
+     "n": 9,
+     "p10": 32,
+     "p90": 45,
+     "sd": 5.3
+    },
+    "land": {
+     "max": 47,
+     "mean": 37.6,
+     "med": 34,
+     "min": 32,
+     "n": 9,
+     "p10": 32,
+     "p90": 45,
+     "sd": 5.7
+    },
+    "oceanPct": {
+     "max": 51,
+     "mean": 45.2,
+     "med": 44,
+     "min": 39,
+     "n": 9,
+     "p10": 41,
+     "p90": 50,
+     "sd": 3.9
+    },
+    "res": {
+     "max": 90,
+     "mean": 70.2,
+     "med": 70,
+     "min": 52,
+     "n": 9,
+     "p10": 54,
+     "p90": 84,
+     "sd": 11.6
+    },
+    "scout": {
+     "max": 20,
+     "mean": 15.0,
+     "med": 16,
+     "min": 10,
+     "n": 9,
+     "p10": 11,
+     "p90": 18,
+     "sd": 3.2
+    },
+    "sites": {
+     "max": 14,
+     "mean": 12.7,
+     "med": 12,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 14,
+     "sd": 0.9
+    },
+    "slLand": {
+     "max": 29,
+     "mean": 21.9,
+     "med": 23,
+     "min": 14,
+     "n": 9,
+     "p10": 16,
+     "p90": 26,
+     "sd": 4.7
+    },
+    "tribes": {
+     "max": 3,
+     "mean": 2.2,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.4
+    },
+    "water": {
+     "max": 47,
+     "mean": 37.6,
+     "med": 34,
+     "min": 32,
+     "n": 9,
+     "p10": 32,
+     "p90": 45,
+     "sd": 5.7
+    }
+   },
+   "group": "Continent",
+   "imgs": [
+    "atlas/continent-smallest-square-sym/seed-1.png",
+    "atlas/continent-smallest-square-sym/seed-2.png",
+    "atlas/continent-smallest-square-sym/seed-3.png",
+    "atlas/continent-smallest-square-sym/seed-4.png",
+    "atlas/continent-smallest-square-sym/seed-5.png",
+    "atlas/continent-smallest-square-sym/seed-6.png",
+    "atlas/continent-smallest-square-sym/seed-7.png",
+    "atlas/continent-smallest-square-sym/seed-8.png",
+    "atlas/continent-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Continent \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 45,
+   "reachMean": 99,
+   "res": 70,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "continent-smallest-square-sym",
+   "splitPct": 0,
+   "tip": "",
+   "tribes": 2.2,
+   "variant": ""
+  },
   {
    "connPct": 89,
    "dist": {
@@ -1298,6 +1416,124 @@
    "tip": "",
    "tribes": 4.1,
    "variant": ""
+  },
+  {
+   "connPct": 78,
+   "dist": {
+    "crow": {
+     "max": 42,
+     "mean": 37.0,
+     "med": 37,
+     "min": 32,
+     "n": 9,
+     "p10": 33,
+     "p90": 40,
+     "sd": 3.5
+    },
+    "land": {
+     "max": 47,
+     "mean": 42.6,
+     "med": 45,
+     "min": 37,
+     "n": 7,
+     "p10": 39,
+     "p90": 46,
+     "sd": 3.8
+    },
+    "oceanPct": {
+     "max": 58,
+     "mean": 50.2,
+     "med": 51,
+     "min": 41,
+     "n": 9,
+     "p10": 47,
+     "p90": 53,
+     "sd": 4.4
+    },
+    "res": {
+     "max": 88,
+     "mean": 75.3,
+     "med": 78,
+     "min": 64,
+     "n": 9,
+     "p10": 66,
+     "p90": 82,
+     "sd": 7.7
+    },
+    "scout": {
+     "max": 19,
+     "mean": 16.9,
+     "med": 16,
+     "min": 15,
+     "n": 7,
+     "p10": 15,
+     "p90": 19,
+     "sd": 1.6
+    },
+    "sites": {
+     "max": 16,
+     "mean": 13.3,
+     "med": 14,
+     "min": 12,
+     "n": 9,
+     "p10": 12,
+     "p90": 14,
+     "sd": 1.3
+    },
+    "slLand": {
+     "max": 28,
+     "mean": 25.0,
+     "med": 24,
+     "min": 23,
+     "n": 7,
+     "p10": 23,
+     "p90": 28,
+     "sd": 2.1
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 3.0,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.8
+    },
+    "water": {
+     "max": 42,
+     "mean": 37.2,
+     "med": 37,
+     "min": 32,
+     "n": 9,
+     "p10": 33,
+     "p90": 42,
+     "sd": 3.7
+    }
+   },
+   "group": "Donut",
+   "imgs": [
+    "atlas/donut-irreg-low-smallest-square-sym/seed-1.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-2.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-3.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-4.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-5.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-6.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-7.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-8.png",
+    "atlas/donut-irreg-low-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Donut \u00b7 Irreg Low \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 50,
+   "reachMean": 84,
+   "res": 75,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "donut-irreg-low-smallest-square-sym",
+   "splitPct": 33,
+   "tip": "",
+   "tribes": 3.0,
+   "variant": "Irreg Low"
   },
   {
    "connPct": 100,
@@ -3306,6 +3542,124 @@
    "variant": "Sand"
   },
   {
+   "connPct": 89,
+   "dist": {
+    "crow": {
+     "max": 46,
+     "mean": 42.2,
+     "med": 43,
+     "min": 32,
+     "n": 9,
+     "p10": 40,
+     "p90": 45,
+     "sd": 4.0
+    },
+    "land": {
+     "max": 52,
+     "mean": 43.6,
+     "med": 43.0,
+     "min": 38,
+     "n": 8,
+     "p10": 40,
+     "p90": 46,
+     "sd": 4.0
+    },
+    "oceanPct": {
+     "max": 42,
+     "mean": 37.7,
+     "med": 38,
+     "min": 35,
+     "n": 9,
+     "p10": 35,
+     "p90": 40,
+     "sd": 2.3
+    },
+    "res": {
+     "max": 98,
+     "mean": 69.6,
+     "med": 66,
+     "min": 58,
+     "n": 9,
+     "p10": 64,
+     "p90": 72,
+     "sd": 10.8
+    },
+    "scout": {
+     "max": 26,
+     "mean": 19.0,
+     "med": 19.0,
+     "min": 13,
+     "n": 8,
+     "p10": 15,
+     "p90": 22,
+     "sd": 3.9
+    },
+    "sites": {
+     "max": 16,
+     "mean": 12.9,
+     "med": 14,
+     "min": 8,
+     "n": 9,
+     "p10": 10,
+     "p90": 16,
+     "sd": 2.5
+    },
+    "slLand": {
+     "max": 38,
+     "mean": 28.4,
+     "med": 28.0,
+     "min": 20,
+     "n": 8,
+     "p10": 23,
+     "p90": 33,
+     "sd": 5.5
+    },
+    "tribes": {
+     "max": 3,
+     "mean": 2.3,
+     "med": 2,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 3,
+     "sd": 0.5
+    },
+    "water": {
+     "max": 50,
+     "mean": 44.0,
+     "med": 43,
+     "min": 38,
+     "n": 9,
+     "p10": 40,
+     "p90": 49,
+     "sd": 3.7
+    }
+   },
+   "group": "Hardwood Forest",
+   "imgs": [
+    "atlas/hardwood-forest-smallest-square-sym/seed-1.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-2.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-3.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-4.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-5.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-6.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-7.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-8.png",
+    "atlas/hardwood-forest-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Hardwood Forest \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 38,
+   "reachMean": 91,
+   "res": 70,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "hardwood-forest-smallest-square-sym",
+   "splitPct": 11,
+   "tip": "",
+   "tribes": 2.3,
+   "variant": ""
+  },
+  {
    "connPct": 100,
    "dist": {
     "crow": {
@@ -4250,6 +4604,124 @@
    "variant": ""
   },
   {
+   "connPct": 67,
+   "dist": {
+    "crow": {
+     "max": 48,
+     "mean": 41.3,
+     "med": 41,
+     "min": 36,
+     "n": 9,
+     "p10": 37,
+     "p90": 46,
+     "sd": 3.6
+    },
+    "land": {
+     "max": 42,
+     "mean": 39.7,
+     "med": 40.5,
+     "min": 36,
+     "n": 6,
+     "p10": 36,
+     "p90": 42,
+     "sd": 2.4
+    },
+    "oceanPct": {
+     "max": 43,
+     "mean": 39.7,
+     "med": 40,
+     "min": 36,
+     "n": 9,
+     "p10": 38,
+     "p90": 41,
+     "sd": 1.9
+    },
+    "res": {
+     "max": 90,
+     "mean": 72.4,
+     "med": 74,
+     "min": 56,
+     "n": 9,
+     "p10": 64,
+     "p90": 82,
+     "sd": 9.5
+    },
+    "scout": {
+     "max": 17,
+     "mean": 13.7,
+     "med": 13.0,
+     "min": 11,
+     "n": 6,
+     "p10": 11,
+     "p90": 16,
+     "sd": 2.2
+    },
+    "sites": {
+     "max": 16,
+     "mean": 13.8,
+     "med": 14,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 2.0
+    },
+    "slLand": {
+     "max": 25,
+     "mean": 20.5,
+     "med": 19.5,
+     "min": 17,
+     "n": 6,
+     "p10": 17,
+     "p90": 24,
+     "sd": 3.1
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 48,
+     "mean": 41.3,
+     "med": 41,
+     "min": 36,
+     "n": 9,
+     "p10": 37,
+     "p90": 46,
+     "sd": 3.6
+    }
+   },
+   "group": "Desert",
+   "imgs": [
+    "atlas/desert-lush-std-smallest-square-sym/seed-1.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-2.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-3.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-4.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-5.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-6.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-7.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-8.png",
+    "atlas/desert-lush-std-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Desert \u00b7 Lush \u00b7 Std \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 40,
+   "reachMean": 65,
+   "res": 72,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "desert-lush-std-smallest-square-sym",
+   "splitPct": 33,
+   "tip": "",
+   "tribes": 2.9,
+   "variant": "Lush \u00b7 Std"
+  },
+  {
    "connPct": 100,
    "dist": {
     "crow": {
@@ -4961,6 +5433,124 @@
    "connPct": 100,
    "dist": {
     "crow": {
+     "max": 49,
+     "mean": 41.8,
+     "med": 41,
+     "min": 34,
+     "n": 9,
+     "p10": 35,
+     "p90": 47,
+     "sd": 5.0
+    },
+    "land": {
+     "max": 49,
+     "mean": 43.0,
+     "med": 44,
+     "min": 35,
+     "n": 9,
+     "p10": 38,
+     "p90": 47,
+     "sd": 4.3
+    },
+    "oceanPct": {
+     "max": 0,
+     "mean": 0.0,
+     "med": 0,
+     "min": 0,
+     "n": 9,
+     "p10": 0,
+     "p90": 0,
+     "sd": 0.0
+    },
+    "res": {
+     "max": 94,
+     "mean": 74.2,
+     "med": 74,
+     "min": 54,
+     "n": 9,
+     "p10": 62,
+     "p90": 84,
+     "sd": 10.9
+    },
+    "scout": {
+     "max": 26,
+     "mean": 20.0,
+     "med": 20,
+     "min": 16,
+     "n": 9,
+     "p10": 17,
+     "p90": 23,
+     "sd": 2.9
+    },
+    "sites": {
+     "max": 16,
+     "mean": 13.6,
+     "med": 14,
+     "min": 10,
+     "n": 9,
+     "p10": 12,
+     "p90": 16,
+     "sd": 1.8
+    },
+    "slLand": {
+     "max": 39,
+     "mean": 29.7,
+     "med": 29,
+     "min": 23,
+     "n": 9,
+     "p10": 25,
+     "p90": 34,
+     "sd": 4.6
+    },
+    "tribes": {
+     "max": 4,
+     "mean": 2.9,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 2,
+     "p90": 4,
+     "sd": 0.9
+    },
+    "water": {
+     "max": 49,
+     "mean": 43.0,
+     "med": 44,
+     "min": 35,
+     "n": 9,
+     "p10": 38,
+     "p90": 47,
+     "sd": 4.3
+    }
+   },
+   "group": "Mountain Pass",
+   "imgs": [
+    "atlas/mountain-pass-smallest-square-sym/seed-1.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-2.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-3.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-4.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-5.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-6.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-7.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-8.png",
+    "atlas/mountain-pass-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Mountain Pass \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 0,
+   "reachMean": 100,
+   "res": 74,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "mountain-pass-smallest-square-sym",
+   "splitPct": 0,
+   "tip": "",
+   "tribes": 2.9,
+   "variant": ""
+  },
+  {
+   "connPct": 100,
+   "dist": {
+    "crow": {
      "max": 63,
      "mean": 59.1,
      "med": 61,
@@ -5191,6 +5781,124 @@
    "splitPct": 0,
    "tip": "",
    "tribes": 3.6,
+   "variant": ""
+  },
+  {
+   "connPct": 67,
+   "dist": {
+    "crow": {
+     "max": 59,
+     "mean": 52.6,
+     "med": 52,
+     "min": 41,
+     "n": 9,
+     "p10": 46,
+     "p90": 58,
+     "sd": 5.6
+    },
+    "land": {
+     "max": 65,
+     "mean": 57.5,
+     "med": 57.5,
+     "min": 47,
+     "n": 6,
+     "p10": 47,
+     "p90": 62,
+     "sd": 5.6
+    },
+    "oceanPct": {
+     "max": 61,
+     "mean": 57.7,
+     "med": 58,
+     "min": 53,
+     "n": 9,
+     "p10": 56,
+     "p90": 61,
+     "sd": 2.4
+    },
+    "res": {
+     "max": 118,
+     "mean": 99.8,
+     "med": 100,
+     "min": 82,
+     "n": 9,
+     "p10": 90,
+     "p90": 108,
+     "sd": 9.9
+    },
+    "scout": {
+     "max": 31,
+     "mean": 24.5,
+     "med": 25.5,
+     "min": 17,
+     "n": 6,
+     "p10": 17,
+     "p90": 27,
+     "sd": 4.5
+    },
+    "sites": {
+     "max": 20,
+     "mean": 18.4,
+     "med": 18,
+     "min": 16,
+     "n": 9,
+     "p10": 18,
+     "p90": 20,
+     "sd": 1.3
+    },
+    "slLand": {
+     "max": 46,
+     "mean": 36.8,
+     "med": 38.5,
+     "min": 26,
+     "n": 6,
+     "p10": 26,
+     "p90": 41,
+     "sd": 6.6
+    },
+    "tribes": {
+     "max": 6,
+     "mean": 3.7,
+     "med": 3,
+     "min": 2,
+     "n": 9,
+     "p10": 3,
+     "p90": 5,
+     "sd": 1.2
+    },
+    "water": {
+     "max": 59,
+     "mean": 52.6,
+     "med": 52,
+     "min": 41,
+     "n": 9,
+     "p10": 46,
+     "p90": 58,
+     "sd": 5.6
+    }
+   },
+   "group": "Wetlands",
+   "imgs": [
+    "atlas/wetlands-smallest-square-sym/seed-1.png",
+    "atlas/wetlands-smallest-square-sym/seed-2.png",
+    "atlas/wetlands-smallest-square-sym/seed-3.png",
+    "atlas/wetlands-smallest-square-sym/seed-4.png",
+    "atlas/wetlands-smallest-square-sym/seed-5.png",
+    "atlas/wetlands-smallest-square-sym/seed-6.png",
+    "atlas/wetlands-smallest-square-sym/seed-7.png",
+    "atlas/wetlands-smallest-square-sym/seed-8.png",
+    "atlas/wetlands-smallest-square-sym/seed-9.png"
+   ],
+   "label": "Wetlands \u00b7 Duel/square/sym",
+   "n": 9,
+   "oceanPct": 58,
+   "reachMean": 75,
+   "res": 100,
+   "setting": "Duel \u00b7 square \u00b7 point-sym on \u00b7 mirror",
+   "slug": "wetlands-smallest-square-sym",
+   "splitPct": 33,
+   "tip": "",
+   "tribes": 3.7,
    "variant": ""
   },
   {
