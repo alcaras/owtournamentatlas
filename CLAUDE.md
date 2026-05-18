@@ -141,6 +141,17 @@ configs via direct URL — harmless, just unlinked from `/recommended`.)
   ballots concatenate unambiguously. No voter name (attribute via the
   Discord message author). When aggregating: split on the sentinels,
   map slug→label from `atlas-dist.json`, tally per slug.
+- **Aggregation tool: `scripts/tally_votes.py`** (committed; generic, no
+  private data). Reads `notes/ballots.txt` (gitignored) — paste every
+  voter's whole Discord block in, any order; sentinels delimit ballots so
+  names/timestamps between them are ignored. Rerun on each new ballot;
+  no rebuild. Scoring **like=3 / maybe=1 / no=0**; tiebreakers
+  score→likes→maybes→slug. Prints scored ranking (`=` marks tied
+  scores), per-config `L/M/N` tally, unanimous-LIKE list, and
+  like-vs-no conflict list. A config a voter omits counts as a
+  flagged no-vote (don't let partial ballots silently skew scores).
+  Pool is 6 voters → max score 18; with few ballots expect flat
+  score tiers (don't draw a hard top-N line until the spread emerges).
 
 ---
 
