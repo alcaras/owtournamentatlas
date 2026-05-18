@@ -56,7 +56,11 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     </div>
     <div class="col">
       <h3>Tiles by exact yield <span class="rh">(hover → highlight)</span></h3>
-      <table class="kv yt"><thead><tr><th>yld</th><th>F</th><th>I</th><th>S</th><th>W</th></tr></thead>
+      <table class="kv yt"><thead><tr><th>yld</th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/food.png`} alt="Food"/></th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/iron.png`} alt="Iron"/></th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/stone.png`} alt="Stone"/></th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/wood.png`} alt="Wood"/></th></tr></thead>
         <tbody id="ytbody"><tr><td colspan="5" class="dim">loading…</td></tr></tbody>
       </table>
     </div>
@@ -87,6 +91,9 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       line-height:1.45; }
     #tip b { color:var(--gold); }
     #tip .ti { width:15px; height:15px; vertical-align:-3px; }
+    .yi { width:18px; height:18px; vertical-align:-4px; display:inline-block; }
+    .yt th .yi { width:15px; height:15px; vertical-align:-3px; }
+    .totals span { display:inline-flex; align-items:center; gap:0.3rem; }
     #reset { position:absolute; left:8px; bottom:8px; z-index:8;
       background:rgba(12,13,16,0.85); color:var(--text-soft);
       border:1px solid var(--border-strong); border-radius:5px;
@@ -317,11 +324,12 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         document.getElementById('s_fw').textContent=d.fwTiles!=null?d.fwTiles:'—';
         document.getElementById('s_riv').textContent=d.rivTiles!=null?d.rivTiles:'—';
         var T=d.totals||{};
+        function yi(n){ return '<img class="yi" src="'+base+'img/icons/yields/'+n+'.png" alt="'+n+'">'; }
         document.getElementById('totals').innerHTML=
-          '<span>Food <b>'+(T.food||0)+'</b></span>'
-         +'<span>Iron <b>'+(T.iron||0)+'</b></span>'
-         +'<span>Stone <b>'+(T.stone||0)+'</b></span>'
-         +'<span>Wood <b>'+(T.wood||0)+'</b></span>';
+          '<span>'+yi('food')+'<b>'+(T.food||0)+'</b></span>'
+         +'<span>'+yi('iron')+'<b>'+(T.iron||0)+'</b></span>'
+         +'<span>'+yi('stone')+'<b>'+(T.stone||0)+'</b></span>'
+         +'<span>'+yi('wood')+'<b>'+(T.wood||0)+'</b></span>';
         buildYields(); buildPanel();
         // preload icons; redraw once loaded so they appear on the map
         var pend=0;
