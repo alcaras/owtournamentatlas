@@ -65,13 +65,19 @@ const N = dist.configs[0]?.n ?? 0;
               </tbody>
             </table>
             <div class="aux">n={c.n}</div>
-            <details class="gal">
-              <summary>Show all {c.imgs.length} generated maps</summary>
+            <details class="gal" open>
+              <summary>{c.imgs.length} generated maps (click to collapse)</summary>
               <div class="gal__grid">
-                {c.imgs.map((p: string) => (
-                  <img src={`${baseUrl}img/${p}`} loading="lazy"
-                       alt={`${c.label} sample`} />
-                ))}
+                {c.imgs.map((p: string) => {
+                  const m = p.match(/seed-(\d+)/);
+                  const id = `${c.slug}-s${m ? m[1] : 1}`;
+                  return (
+                    <a class="gal__cell" href={`${baseUrl}gen/${id}`}>
+                      <img src={`${baseUrl}img/${p}`} loading="lazy"
+                           alt={`${c.label} seed ${m ? m[1] : ''}`} />
+                    </a>
+                  );
+                })}
               </div>
             </details>
           </div>
@@ -140,7 +146,11 @@ const N = dist.configs[0]?.n ?? 0;
       font-family:var(--font-ui); padding:0.3rem 0; user-select:none; }
     .gal > summary:hover { color:var(--gold); }
     .gal__grid { display:grid; gap:0.6rem; margin-top:0.5rem;
-      grid-template-columns:repeat(auto-fill,minmax(480px,1fr)); }
+      grid-template-columns:repeat(3,1fr); }
+    @media (max-width:760px){ .gal__grid{ grid-template-columns:1fr 1fr; } }
+    .gal__cell { display:block; border-radius:4px; overflow:hidden;
+      border:1px solid var(--border-strong); }
+    .gal__cell:hover { border-color:var(--gold); }
     .gal__grid img { width:100%; height:auto; display:block;
       border-radius:3px; border:1px solid var(--border-strong);
       image-rendering:auto; }

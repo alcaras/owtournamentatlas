@@ -1,0 +1,76 @@
+---
+import Base from '../../layouts/Base.astro';
+import gens from '../../data/gens.json';
+const baseUrl = import.meta.env.BASE_URL;
+
+export function getStaticPaths() {
+  return (gens as any[]).map((g) => ({ params: { id: g.id }, props: { g } }));
+}
+const { g } = Astro.props as { g: any };
+const y8 = g.y8 || {};
+---
+<Base title={`Gen · ${g.label}`}>
+  <p class="back"><a href={`${baseUrl}recommended`}>← all recommended</a></p>
+  <p class="lede">
+    <b>{g.label}</b> · seed {g.seed}. <span class="mono">{g.setting}</span>.
+    Pretty render — rivers (blue), game resource icons, out-of-bounds
+    greyed; pink stars = capitals, pink dots = city sites.
+  </p>
+
+  <div class="grid">
+    <figure class="mapfig">
+      <img src={`${baseUrl}img/${g.img}`} alt={`${g.label} seed ${g.seed}`} />
+    </figure>
+
+    <div class="stats">
+      <h2>Capital distance</h2>
+      <table class="kv">
+        <tr><td>Land-connected</td><td class={g.conn ? 'good' : 'bad'}>
+          {g.conn ? 'YES' : 'NO'}</td></tr>
+        <tr><td>Crow (hex)</td><td><b>{g.crow ?? '—'}</b></td></tr>
+        <tr><td>Land path</td><td><b>{g.land ?? '—'}</b></td></tr>
+        <tr><td>Sea path</td><td>{g.water ?? '—'}</td></tr>
+        <tr><td>Scout orders (move 3)</td><td><b>{g.scout ?? '—'}</b></td></tr>
+        <tr><td>Slinger — land</td><td>{g.slLand ?? '—'}</td></tr>
+        <tr><td>Slinger — sea</td><td>{g.slSea ?? '—'}</td></tr>
+        <tr><td>Slinger — Hatti</td><td>{g.slHatti ?? '—'}</td></tr>
+      </table>
+      <h2>Map</h2>
+      <table class="kv">
+        <tr><td>City sites</td><td><b>{g.sites ?? '—'}</b></td></tr>
+        {g.tiles != null && <tr><td>Playable tiles</td><td>{g.tiles}</td></tr>}
+        <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
+        <tr><td>Tribes</td><td>{g.tribes ?? '—'}</td></tr>
+        <tr><td>Resources</td><td>{g.res ?? '—'}</td></tr>
+      </table>
+      <h2>8+ yield tiles</h2>
+      <table class="kv">
+        <tr><td>F·I·W·S</td><td class="mono">
+          {y8.food != null ? `${y8.food}·${y8.iron}·${y8.wood}·${y8.stone}` : '—'}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <style>
+    .back { font-size:0.8rem; margin:0 0 0.4rem; }
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:80ch; margin:0.2rem 0 1.4rem; }
+    .grid { display:grid; grid-template-columns:minmax(480px,1.7fr) 1fr;
+      gap:1.6rem; align-items:start; }
+    @media (max-width:880px){ .grid{ grid-template-columns:1fr; } }
+    .mapfig { margin:0; }
+    .mapfig img { width:100%; height:auto; display:block; border-radius:5px;
+      border:1px solid var(--border-strong); background:#0b0c0f; }
+    .stats h2 { font-size:1.05rem; color:var(--gold); margin:1rem 0 0.3rem; }
+    .stats h2:first-child { margin-top:0; }
+    .kv { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .kv td { padding:0.28rem 0.4rem; border-bottom:1px solid var(--border); }
+    .kv td:first-child { color:var(--text-soft); }
+    .kv td:last-child { text-align:right; }
+    .kv b { color:var(--text); }
+    .mono { font-family:var(--font-mono); font-size:0.86em; }
+    .good { color:#9fd07f; font-weight:700; }
+    .bad { color:#d08070; font-weight:700; }
+  </style>
+</Base>
