@@ -99,11 +99,11 @@ const SITE_LO = 10, SITE_HI = 30;
 // render neutral. Water sits between sites and land per the request.
 const METRICS: { key: MK; name: string; step: number; cap: string }[] = [
   { key: 'sites', name: 'City sites', step: 1,
-    cap: `Reroll if <${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low <${SITE_LO} ≈ 0.5% ↔ high ≥${SITE_HI} ≈ 0.3%), in line with the existing hard <12 / >30 rule. Target 18–22 (green), 15–25 ok.` },
+    cap: `Reroll if <${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low <${SITE_LO} ≈ 0.5% ↔ high ≥${SITE_HI} ≈ 0.3%), in line with the existing hard <12 / >30 rule. Tournament target 18–22 sites.` },
   { key: 'water', name: 'Water-route hexes', step: 5,
     cap: 'Cap→cap path with embark allowed (hex tiles, no move cost).' },
   { key: 'land', name: 'Land hex distance', step: 5,
-    cap: 'Cap→cap land-hex path. Target 45–65 (green), 40–70 tolerable.' },
+    cap: 'Cap→cap land-hex path. Tournament target 45–65.' },
   { key: 'slLand', name: 'Land move-cost (turns)', step: 5,
     cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only.' },
   { key: 'slSea', name: 'Water move-cost (turns)', step: 5,
@@ -126,19 +126,21 @@ function bins(items: GP[], key: MK, step: number): Bin[] {
   }
   return out;
 }
-// Zone class for a representative value (drives bar / cell colour).
-const siteZone = (v: number) =>
-  v < 12 || v > 30 ? 'z-bad'
-  : v < SITE_LO || v >= SITE_HI ? 'z-edge'
-  : v >= 18 && v <= 22 ? 'z-good' : 'z-ok';
-const landZone = (v: number) =>
-  v < 40 || v > 70 ? 'z-edge'
-  : v >= 45 && v <= 65 ? 'z-good' : 'z-ok';
-// Only sites + land have tournament target gates; the move-cost and
-// water-route metrics are descriptive, so they render neutral.
-const zoneOf = (key: MK, mid: number) =>
-  key === 'sites' ? siteZone(mid)
-  : key === 'land' ? landZone(mid) : 'z-ok';
+// Colour = distance from the mean in std-devs of whatever set is being
+// charted (pool for the top bars, the config's own seeds for the
+// per-config dots). |z| ≤1 green · ≤2 yellow · ≤3 orange · >3 red.
+type Stat = { m: number; s: number };
+function stat(vals: number[]): Stat {
+  const n = vals.length || 1;
+  const m = vals.reduce((a, b) => a + b, 0) / n;
+  const s = Math.sqrt(vals.reduce((a, b) => a + (b - m) ** 2, 0) / n);
+  return { m, s };
+}
+const zClass = (v: number, st: Stat) => {
+  if (!st.s) return 'z-good';
+  const z = Math.abs((v - st.m) / st.s);
+  return z <= 1 ? 'z-good' : z <= 2 ? 'z-ok' : z <= 3 ? 'z-edge' : 'z-bad';
+};
 const maxN = (bs: Bin[]) => Math.max(1, ...bs.map((b) => b.cells.length));
 
 // ---- In-game SETUP GUIDE ---------------------------------------------
@@ -202,11 +204,17 @@ function setup(c: any): Row[] {
     <div class="dist__h">
       <h2 class="dist__t">Pool distribution</h2>
       <span class="dist__sub">{poolGens.length} maps across {pool.length} configs · click a bar for its maps</span>
+      <span class="dist__leg">colour = σ from mean
+        <i class="z-good"></i>≤1
+        <i class="z-ok"></i>≤2
+        <i class="z-edge"></i>≤3
+        <i class="z-bad"></i>&gt;3</span>
     </div>
     <div class="dist__grid">
       {METRICS.map((ch) => {
         const bs = bins(poolGens, ch.key, ch.step);
         const mx = maxN(bs);
+        const st = stat(poolGens.map((g) => g[ch.key]));
         return (
           <div class="chart">
             <div class="chart__t">{ch.name}</div>
@@ -215,7 +223,7 @@ function setup(c: any): Row[] {
                 const mid = ch.step === 1 ? b.x0 : b.x0 + ch.step / 2;
                 return (
                   <details class="hb">
-                    <summary class={'bar ' + zoneOf(ch.key, mid)}
+                    <summary class={'bar ' + zClass(mid, st)}
                       title={`${b.label}: ${b.cells.length} maps`}
                       style={`--h:${Math.round(b.cells.length / mx * 116) + (b.cells.length ? 4 : 0)}px`}>
                       <span class="bar__n">{b.cells.length || ''}</span>
@@ -313,17 +321,18 @@ function setup(c: any): Row[] {
           const cg = poolGens.filter((g) => g.slug === c.slug);
           return (
             <div class="cfgdist">
-              {METRICS.map((ch) => (
+              {METRICS.map((ch) => {
+                const st = stat(cg.map((g) => g[ch.key]));
+                return (
                 <div class="cd">
                   <div class="cd__t">{ch.name}<span>{cg.length} maps · click a square</span></div>
                   <div class="cd__cols">
                     {bins(cg, ch.key, ch.step).map((b) => {
-                      const mid = ch.step === 1 ? b.x0 : b.x0 + ch.step / 2;
                       return (
                         <div class="cd__col">
                           <div class="cd__stack">
                             {b.cells.map((g) => (
-                              <a class={'dot ' + zoneOf(ch.key, mid)}
+                              <a class={'dot ' + zClass(g[ch.key], st)}
                                 href={`${baseUrl}gen/${g.id}`}
                                 target="_blank" rel="noopener"
                                 title={tipOf(g)}></a>
@@ -335,7 +344,8 @@ function setup(c: any): Row[] {
                     })}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           );
         })()}
@@ -526,6 +536,12 @@ function setup(c: any): Row[] {
       font-size:1.25rem; color:var(--gold); }
     .dist__sub { font-family:var(--font-display); font-style:italic;
       font-size:0.85rem; color:var(--text-faint); }
+    .dist__leg { margin-left:auto; display:inline-flex; align-items:center;
+      gap:0.35rem; font-size:0.62rem; font-family:var(--font-mono);
+      color:var(--text-dim); letter-spacing:0.04em; }
+    .dist__leg i { width:10px; height:10px; border-radius:2px;
+      margin-left:0.45rem; background:var(--zb); border:1px solid var(--zc); }
+    .dist__leg i:first-of-type { margin-left:0; }
     .dist__grid { display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; }
     @media (max-width:760px){ .dist__grid{ grid-template-columns:1fr; } }
     .chart__t { font-size:0.66rem; letter-spacing:0.14em;
