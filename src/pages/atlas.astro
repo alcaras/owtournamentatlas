@@ -78,9 +78,9 @@ const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
           </div>
         </div>
         <details class="gal">
-          <summary>{c.imgs.length} generated maps</summary>
+          <summary>{Math.min(c.imgs.length, 21)} generated maps</summary>
           <div class="gal__grid">
-            {c.imgs.map((p: string) => {
+            {c.imgs.slice(0, 21).map((p: string) => {
               const id = idFromImg(c.slug, p);
               const gm = genMap[id] || {};
               return (
@@ -149,7 +149,7 @@ const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
       padding:0.25rem 0; user-select:none; }
     .gal > summary:hover { color:var(--gold); }
     .gal__grid { display:grid; gap:0.5rem; margin-top:0.5rem;
-      grid-template-columns:repeat(4,1fr); }
+      grid-template-columns:repeat(3,1fr); }
     @media (max-width:760px){ .gal__grid{ grid-template-columns:1fr 1fr; } }
     .gal__cell { display:block; border-radius:4px; overflow:hidden;
       border:1px solid var(--border-strong); }
