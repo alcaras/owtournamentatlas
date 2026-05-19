@@ -135,6 +135,12 @@ const zClass = (v: number, st: Stat) => {
   return z <= 1 ? 'z-good' : z <= 2 ? 'z-ok' : z <= 3 ? 'z-edge' : 'z-bad';
 };
 const maxN = (bs: Bin[]) => Math.max(1, ...bs.map((b) => b.cells.length));
+// Pool mean/sd per metric, computed once. The per-config dots colour
+// off the SAME pool stats as the top bars so a colour means the same
+// thing everywhere (cross-config comparable, not self-normalised).
+const poolStat = Object.fromEntries(
+  (['sites', 'water', 'land', 'slLand', 'slSea'] as MK[]).map((k) =>
+    [k, stat(poolGens.map((g) => g[k]))])) as Record<MK, Stat>;
 
 // ---- In-game SETUP GUIDE ---------------------------------------------
 // The exact New Game → Advanced Options to set so the in-game generator
@@ -207,7 +213,7 @@ function setup(c: any): Row[] {
       {METRICS.map((ch) => {
         const bs = bins(poolGens, ch.key, ch.step);
         const mx = maxN(bs);
-        const st = stat(poolGens.map((g) => g[ch.key]));
+        const st = poolStat[ch.key];
         return (
           <div class="chart">
             <div class="chart__t">{ch.name}</div>
@@ -315,7 +321,7 @@ function setup(c: any): Row[] {
           return (
             <div class="cfgdist">
               {METRICS.map((ch) => {
-                const st = stat(cg.map((g) => g[ch.key]));
+                const st = poolStat[ch.key];
                 return (
                 <div class="cd">
                   <div class="cd__t">{ch.name}<span>{cg.length} maps · click a square</span></div>
