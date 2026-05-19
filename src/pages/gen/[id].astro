@@ -31,6 +31,8 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     <b>Hover a tile</b> for details; <b>scroll to zoom, drag to pan</b>;
     hover a resource or yield cell to light up matching tiles.
     Pink ★ = capital · pink • = city site · blue = river.
+    Hover a capital → cyan = land route, red = water/embark route
+    (dashed when both exist); tooltip shows hex + move-cost turns.
     (<a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">static image ↗</a>)
   </p>
 
@@ -49,11 +51,12 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         <tr><td>Land-connected</td><td class={g.conn ? 'good' : 'bad'}>
           {g.conn ? 'YES' : 'NO'}</td></tr>
         <tr><td>Crow (hex)</td><td><b>{g.crow ?? '—'}</b></td></tr>
-        <tr><td>Land path</td><td><b>{g.land ?? '—'}</b></td></tr>
-        <tr><td>Sea path</td><td>{g.water ?? '—'}</td></tr>
-        <tr><td>Scout orders</td><td><b>{g.scout ?? '—'}</b></td></tr>
-        <tr><td>Slinger L/S/Hatti</td><td>
-          {g.slLand ?? '—'}/{g.slSea ?? '—'}/{g.slHatti ?? '—'}</td></tr>
+        <tr><td>Land path (hex)</td><td><b>{g.land ?? '—'}</b></td></tr>
+        <tr><td>Water path (hex)</td><td>{g.water ?? '—'}</td></tr>
+        <tr><td>Scout orders (turns)</td><td><b>{g.scout ?? '—'}</b></td></tr>
+        <tr><td>Move-cost turns — Land</td><td><b>{g.slLand ?? '—'}</b></td></tr>
+        <tr><td>Move-cost turns — Water</td><td><b>{g.slSea ?? '—'}</b></td></tr>
+        <tr><td>Move-cost turns — Hatti</td><td>{g.slHatti ?? '—'}</td></tr>
       </table>
     </div>
     <div class="col">
@@ -180,7 +183,8 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       font-variant-numeric:tabular-nums; }
   </style>
 
-  <script is:inline define:vars={{ gid: g.id, base: baseUrl, resTax }}>
+  <script is:inline define:vars={{ gid: g.id, base: baseUrl, resTax,
+    slLand: g.slLand ?? null, slSea: g.slSea ?? null }}>
     (function(){
       var TERR={WATER:[38,71,110],TEMPERATE:[104,138,74],LUSH:[74,110,56],
         ARID:[170,148,95],SAND:[206,184,120],MARSH:[96,110,80],
@@ -336,16 +340,23 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           ctx.shadowBlur=0; }
         if(capHi){
           var lp=(D.capPath&&D.capPath.length>1)?D.capPath:null,
-              wp=(!lp&&D.capPathW&&D.capPathW.length>1)?D.capPathW:null,
-              pp=lp||wp;
-          if(pp){ ctx.strokeStyle=lp?'#35e0e0':'#ff3b30';
-            ctx.lineWidth=Math.max(3,S/2);
-            ctx.lineJoin='round'; ctx.lineCap='round';
-            ctx.shadowColor=ctx.strokeStyle; ctx.shadowBlur=S*1.2;
-            ctx.beginPath();
-            pp.forEach(function(p,j){ var c=cen(p[0],p[1]);
-              j?ctx.lineTo(c[0],c[1]):ctx.moveTo(c[0],c[1]); });
-            ctx.stroke(); ctx.shadowBlur=0; } }
+              wp=(D.capPathW&&D.capPathW.length>1)?D.capPathW:null,
+              trace=function(pp){ ctx.beginPath();
+                pp.forEach(function(p,j){ var c=cen(p[0],p[1]);
+                  j?ctx.lineTo(c[0],c[1]):ctx.moveTo(c[0],c[1]); });
+                ctx.stroke(); };
+          ctx.lineJoin='round'; ctx.lineCap='round';
+          ctx.lineWidth=Math.max(3,S/2);
+          // Water/embark route — always shown (dashed when a land
+          // route also exists, so the two read apart).
+          if(wp){ ctx.strokeStyle='#ff3b30';
+            ctx.setLineDash(lp?[S*0.6,S*0.5]:[]);
+            ctx.shadowColor='#ff3b30'; ctx.shadowBlur=S*1.2; trace(wp);
+            ctx.setLineDash([]); ctx.shadowBlur=0; }
+          // Land route on top, solid cyan.
+          if(lp){ ctx.strokeStyle='#35e0e0';
+            ctx.shadowColor='#35e0e0'; ctx.shadowBlur=S*1.2; trace(lp);
+            ctx.shadowBlur=0; } }
         if(hi>=0){ var ce=cen(hi%W,(hi/W)|0);
           ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(2,S/3);
           hexp(ce[0],ce[1],S*0.98); ctx.stroke(); }
@@ -474,12 +485,16 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           +'<br>'+(D.L.hgt[D.hgt[i]]||'Flat')+' · '+(D.L.veg[D.veg[i]]||'no veg')
           +(rn?'<br>'+rimg+'<b>'+rn+'</b>':'')+yl
           +(extra.length?'<br><b>'+extra.join(' · ')+'</b>':'')
-          +(isCap?'<br><b style="color:#ff2daa">★ CAPITAL</b>'+(
-             (D.capPath&&D.capPath.length>1)
-               ? ' <span style="color:#35e0e0">· land path '+(D.capPath.length-1)+' hex</span>'
-               : (D.capPathW&&D.capPathW.length>1)
-                 ? ' <span style="color:#ff3b30">· no land path · water path '+(D.capPathW.length-1)+' hex</span>'
-                 : ' <span style="color:#ff5c3a">· no path</span>'):'')
+          +(isCap?'<br><b style="color:#ff2daa">★ CAPITAL</b>'+(function(){
+             var lh=(D.capPath&&D.capPath.length>1)?(D.capPath.length-1):null,
+                 wh=(D.capPathW&&D.capPathW.length>1)?(D.capPathW.length-1):null,
+                 s='';
+             if(lh!=null) s+=' <span style="color:#35e0e0">· land '+lh+' hex'
+               +(slLand!=null?' / '+slLand+'t':'')+'</span>';
+             else s+=' <span style="color:#ff5c3a">· no land path</span>';
+             if(wh!=null) s+=' <span style="color:#ff3b30">· water '+wh+' hex'
+               +(slSea!=null?' / '+slSea+'t':'')+'</span>';
+             return s; })():'')
           +(D.cs[i]?'<br>city site':'')+(D.bnd[i]?'<br><i>off-map</i>':'');
         tip.style.display='block';
         tip.style.left=(e.clientX-r.left+14)+'px';

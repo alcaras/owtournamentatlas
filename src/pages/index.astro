@@ -216,10 +216,10 @@ function setup(c: any): Row[] {
                 return (
                   <details class="hb">
                     <summary class={'bar ' + zoneOf(ch.key, mid)}
-                      title={`${b.label}: ${b.cells.length} maps`}>
+                      title={`${b.label}: ${b.cells.length} maps`}
+                      style={`--h:${Math.round(b.cells.length / mx * 116) + (b.cells.length ? 4 : 0)}px`}>
                       <span class="bar__n">{b.cells.length || ''}</span>
-                      <span class="bar__f"
-                        style={`height:${Math.round(b.cells.length / mx * 116) + (b.cells.length ? 4 : 0)}px`}></span>
+                      <span class="bar__f"></span>
                       <span class="bar__x">{b.label}</span>
                     </summary>
                     <div class="pop">
@@ -530,21 +530,28 @@ function setup(c: any): Row[] {
     @media (max-width:760px){ .dist__grid{ grid-template-columns:1fr; } }
     .chart__t { font-size:0.66rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.4rem; }
-    .bars { display:flex; align-items:flex-end; gap:2px; height:150px; }
+    /* Bars are absolutely placed off a shared baseline so the count
+       and x-axis labels never push the bar up (long/wrapping labels
+       like “105–109” were lifting their column). --h = bar height. */
+    .bars { display:flex; align-items:flex-end; gap:2px; height:162px; }
     .hb { flex:1 1 0; min-width:0; position:relative; height:100%; }
-    .hb > summary { list-style:none; cursor:pointer; height:100%;
-      display:flex; flex-direction:column; justify-content:flex-end;
-      align-items:center; }
+    .hb > summary { list-style:none; cursor:pointer;
+      position:absolute; inset:0; }
     .hb > summary::-webkit-details-marker { display:none; }
-    .bar__n { font-size:0.58rem; font-family:var(--font-mono);
-      color:var(--text-faint); line-height:1; margin-bottom:2px; }
-    .bar__f { width:100%; border-radius:2px 2px 0 0;
+    .bar__n { position:absolute; left:0; right:0; text-align:center;
+      bottom:calc(16px + var(--h) + 2px); font-size:0.58rem;
+      font-family:var(--font-mono); color:var(--text-faint);
+      line-height:1; pointer-events:none; }
+    .bar__f { position:absolute; left:0; right:0; bottom:16px;
+      height:var(--h); border-radius:2px 2px 0 0;
       background:linear-gradient(var(--zb),var(--zc));
       border:1px solid var(--zc); box-shadow:inset 0 0 0 1px #0006; }
     .hb > summary:hover .bar__f { filter:brightness(1.25); }
     .hb[open] .bar__f { outline:1px solid var(--gold); }
-    .bar__x { font-size:0.56rem; font-family:var(--font-mono);
-      color:var(--text-dim); margin-top:3px; }
+    .bar__x { position:absolute; left:50%; bottom:0;
+      transform:translateX(-50%); white-space:nowrap;
+      font-size:0.54rem; font-family:var(--font-mono);
+      color:var(--text-dim); pointer-events:none; }
     .pop { position:absolute; left:50%; transform:translateX(-50%);
       bottom:calc(100% + 4px); z-index:30; width:max-content;
       max-width:280px; background:#0e0f12;
@@ -583,8 +590,8 @@ function setup(c: any): Row[] {
       background:var(--zb); border:1px solid var(--zc); }
     .dot:hover { outline:1px solid var(--gold); outline-offset:1px;
       filter:brightness(1.3); }
-    .cd__x { font-size:0.54rem; font-family:var(--font-mono);
-      color:var(--text-dim); margin-top:3px; }
+    .cd__x { font-size:0.52rem; font-family:var(--font-mono);
+      color:var(--text-dim); margin-top:3px; white-space:nowrap; }
   </style>
 
   <script is:inline>
