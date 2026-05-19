@@ -87,27 +87,20 @@ const tipOf = (g: GP) =>
   `${g.label} · seed ${g.seed} — ${g.sites} sites · ${g.water} water-hex · `
   + `${g.land} land-hex · ${g.slLand} land-turns · ${g.slSea} water-turns`;
 
-// Reroll-cutoff equivalence: a low cutoff at <10 sites rejects only
-// 0.5% of the pool (2/392, the two 9s). The equal-tail-mass match at
-// the top is ≥30 sites (0.3%, 1/392) — essentially the existing hard
-// <12 / >30 rule, i.e. no site-count reroll beyond the extremes.
-const SITE_LO = 10, SITE_HI = 30;
-
 // Chart roster (drives both the pool bars and per-config dots, in
-// order). Movement-cost metrics (slLand/slSea) and water-route hexes
-// come from movement_model.py via gens.json — no target gates, so they
-// render neutral. Water sits between sites and land per the request.
+// order). Captions are purely descriptive — what each metric measures,
+// not whether a value is "good"; the group hasn't defined that.
 const METRICS: { key: MK; name: string; step: number; cap: string }[] = [
   { key: 'sites', name: 'City sites', step: 1,
-    cap: `Reroll if <${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low <${SITE_LO} ≈ 0.5% ↔ high ≥${SITE_HI} ≈ 0.3%), in line with the existing hard <12 / >30 rule. Tournament target 18–22 sites.` },
+    cap: 'Number of valid city sites placed on the map.' },
   { key: 'water', name: 'Water-route hexes', step: 5,
-    cap: 'Cap→cap path with embark allowed (hex tiles, no move cost).' },
+    cap: 'Cap→cap shortest path with embark allowed, in hex tiles (no move cost).' },
   { key: 'land', name: 'Land hex distance', step: 5,
-    cap: 'Cap→cap land-hex path. Tournament target 45–65.' },
+    cap: 'Cap→cap shortest land-only path, in hex tiles.' },
   { key: 'slLand', name: 'Land move-cost (turns)', step: 5,
-    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only.' },
+    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in turns.' },
   { key: 'slSea', name: 'Water move-cost (turns)', step: 5,
-    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed.' },
+    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed — in turns.' },
 ];
 
 type Bin = { x0: number; x1: number; label: string; cells: GP[] };
@@ -377,9 +370,9 @@ function setup(c: any): Row[] {
   <p class="note">
     {pool.length} of {dist.configCount} voted configs · {N} seeds each.
     Pool is land-connected by construction; split-dropped % is how often a
-    seed had no connected symmetric pair. Targets (not gates): 18–22 city
-    sites, ~45–65 land-hex capital distance. Vote tally from
-    notes/ballots.txt via scripts/tally_votes.py.
+    seed had no connected symmetric pair. Charts are descriptive — colour
+    is std-devs from each set's mean, not a judgement of what's good.
+    Vote tally from notes/ballots.txt via scripts/tally_votes.py.
   </p>
 
   <style>
