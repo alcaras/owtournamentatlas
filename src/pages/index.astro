@@ -38,6 +38,58 @@ const pool = dist.configs
   .sort((a: any, b: any) => RANK[a.slug] - RANK[b.slug]);
 
 const N = pool[0]?.n ?? 0;
+
+// ---- In-game SETUP GUIDE ---------------------------------------------
+// The exact New Game → Advanced Options to set so the in-game generator
+// reproduces this config. Universal four (Size/Aspect/Point-Sym/Mirror)
+// are parsed from c.setting; the script + its map-options come from
+// owmapgen-lab/scripts/configs.py (single source of truth).
+const SCRIPT_NAME: Record<string, string> = {
+  'Continent': 'Continent',
+  'Coastal Rain Basin': 'Coastal Rain Basin',
+  'Donut': 'Donut',
+  'Archipelago': 'Archipelago',
+  'Arid Plateau': 'Arid Plateau',
+  'DOTA': 'Duel of the Ancients',
+  'Hardwood Forest': 'Hardwood Forest',
+  'Inland Sea': 'Inland Sea',
+  'Desert': 'Lush Desert',
+  'Mountain Pass': 'Mountain Pass',
+};
+// keyed by `${group}|${variant}` — script-specific dropdowns to change
+const SCRIPT_OPTS: Record<string, [string, string][]> = {
+  'Arid Plateau|Small Seas': [['Arid Water Size', 'Small']],
+  'Coastal Rain Basin|': [],
+  'DOTA|Jungle': [['Separating Terrain', 'Jungle']],
+  'DOTA|Sand': [['Separating Terrain', 'Sand']],
+  'DOTA|Water': [['Separating Terrain', 'Water']],
+  'Inland Sea|': [],
+  'Continent|': [['Continent Terrain', 'None']],
+  'Hardwood Forest|': [],
+  'Archipelago|Land Lg · Water Sm': [
+    ['Archipelago Landmass', 'Large'],
+    ['Archipelago Water Size', 'Merged']],
+  'Desert|Lush · Std': [['Desert Coast', 'Lush'], ['Desert Size', 'Standard']],
+  'Donut|Irreg Low': [['Donut Irregularity', 'Low']],
+  'Mountain Pass|': [],
+};
+type Row = { label: string; value: string; toggle?: boolean };
+function setup(c: any): Row[] {
+  const p = (c.setting || '').split(' · ');           // Duel · square · point-sym on · mirror
+  const aspect = (p[1] || 'square');
+  const sym = (p[2] || '').includes('on');
+  const rows: Row[] = [
+    { label: 'Map Script', value: SCRIPT_NAME[c.group] || c.group },
+    { label: 'Map Size', value: p[0] === 'Tiny' ? 'Tiny' : 'Duel' },
+    { label: 'Map Aspect Ratio',
+      value: aspect.charAt(0).toUpperCase() + aspect.slice(1) },
+  ];
+  for (const [l, v] of (SCRIPT_OPTS[`${c.group}|${c.variant || ''}`] || []))
+    rows.push({ label: l, value: v });
+  rows.push({ label: 'Point Symmetry', value: sym ? 'ON' : 'OFF', toggle: true });
+  rows.push({ label: 'Mirror Map', value: 'ON', toggle: true });
+  return rows;
+}
 ---
 <Base title="Tournament Pool">
   <p class="lede">The {pool.length} maps for the tournament.</p>
@@ -75,9 +127,28 @@ const N = pool[0]?.n ?? 0;
           <div class="pill">
             <div class="pill__l">Avg reachable</div>
             <div class="pill__v"><b>{c.reachMean ?? '—'}</b><span class="pm">%</span></div>
-            <div class="pill__r">{c.n} connected maps · land-connected by construction</div>
           </div>
         </div>
+        <details class="setup">
+          <summary><span class="setup__btn">⚙ SETUP GUIDE</span><span class="setup__hint">New Game → Advanced Options</span></summary>
+          <div class="ow">
+            <div class="ow__ttl">Advanced Options</div>
+            {setup(c).map((r: any) => (
+              <div class="ow__row">
+                <span class="ow__lab">{r.label}</span>
+                {r.toggle
+                  ? <span class={'ow__tg ' + (r.value === 'ON' ? 'on' : 'off')}>
+                      {r.value === 'ON' && <i>ON</i>}
+                      <b></b>
+                      {r.value === 'OFF' && <i>OFF</i>}
+                    </span>
+                  : <span class="ow__sel">{r.value}<svg viewBox="0 0 16 16" class="ow__cv"><path d="M3 5l5 6 5-6z"/></svg></span>}
+              </div>
+            ))}
+            <div class="ow__note">Everything else: game defaults. Mirror Map ON keeps both
+              capitals' starts identical.</div>
+          </div>
+        </details>
         <details class="gal" open>
           <summary>{Math.min(c.imgs.length, 21)} generated maps</summary>
           <div class="gal__grid">
@@ -155,6 +226,56 @@ const N = pool[0]?.n ?? 0;
     .pill__r { font-size:0.72rem; color:var(--text-faint);
       font-family:var(--font-mono); }
     .pill__r b { color:var(--text-soft); }
+    /* ---- SETUP GUIDE (in-game settings mock) ---- */
+    .setup { margin-top:0.6rem; }
+    .setup > summary { list-style:none; cursor:pointer; display:inline-flex;
+      align-items:center; gap:0.6rem; user-select:none; }
+    .setup > summary::-webkit-details-marker { display:none; }
+    .setup__btn { font-family:var(--font-display); font-weight:700;
+      font-size:0.92rem; letter-spacing:0.06em; color:var(--gold);
+      background:linear-gradient(#231f0d,#1a1709);
+      border:1px solid var(--gold-deep); border-radius:6px;
+      padding:0.32rem 0.8rem; }
+    .setup > summary:hover .setup__btn { background:#2e2810;
+      border-color:var(--gold-soft); }
+    .setup__hint { font-size:0.72rem; color:var(--text-faint);
+      font-family:var(--font-mono); }
+    .setup[open] .setup__hint { display:none; }
+    .ow { margin-top:0.7rem; max-width:560px;
+      background:radial-gradient(120% 140% at 50% 0%,#1c1d18,#0c0d0a);
+      border:1px solid var(--gold-deep);
+      border-radius:8px; padding:0.6rem 1rem 0.9rem;
+      box-shadow:inset 0 0 40px rgba(0,0,0,0.6); }
+    .ow__ttl { font-family:var(--font-display); font-weight:700;
+      font-size:1.15rem; letter-spacing:0.12em; text-transform:uppercase;
+      color:var(--gold); text-align:center; padding:0.3rem 0 0.5rem;
+      text-shadow:0 1px 2px #000; }
+    .ow__row { display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; padding:0.42rem 0.2rem; border-bottom:1px solid #00000055; }
+    .ow__row:last-of-type { border-bottom:0; }
+    .ow__lab { font-family:var(--font-ui); font-weight:600;
+      font-size:0.9rem; color:#cdc6b4; text-shadow:0 1px 1px #000; }
+    .ow__sel { display:inline-flex; align-items:center; justify-content:space-between;
+      min-width:220px; gap:0.6rem; font-family:var(--font-display);
+      font-weight:700; font-size:1.05rem; color:var(--gold);
+      background:linear-gradient(#15160f,#0c0d09);
+      border:1px solid #4a431f; border-radius:6px;
+      padding:0.34rem 0.7rem; box-shadow:inset 0 0 0 1px #000; }
+    .ow__cv { width:15px; height:15px; fill:var(--gold-soft); flex:none; }
+    .ow__tg { display:inline-flex; align-items:center; gap:0.45rem;
+      width:96px; height:30px; padding:0 0.4rem; border-radius:999px;
+      border:1px solid #4a431f; box-shadow:inset 0 1px 4px #000;
+      font-family:var(--font-ui); font-weight:800; font-size:0.7rem;
+      letter-spacing:0.08em; }
+    .ow__tg b { width:20px; height:20px; border-radius:50%;
+      background:radial-gradient(circle at 35% 30%,#d8cdab,#7d7448);
+      border:1px solid #000; flex:none; }
+    .ow__tg.on  { background:linear-gradient(#1e7a5a,#125c43);
+      color:#d8f3e7; justify-content:flex-start; }
+    .ow__tg.off { background:linear-gradient(#2a2622,#171411);
+      color:#8a8275; justify-content:flex-end; }
+    .ow__note { font-size:0.72rem; color:var(--text-faint);
+      font-family:var(--font-ui); margin-top:0.6rem; line-height:1.45; }
     .gal { margin-top:0.5rem; }
     .gal > summary { cursor:pointer; font-size:0.78rem;
       color:var(--gold-soft); font-family:var(--font-ui);
