@@ -4,26 +4,42 @@ import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
 const baseUrl = import.meta.env.BASE_URL;
 
-// The voted tournament pool: one config per map family, the highest-rated
-// sibling of each script (see configs.py / vote tally). Order = ballot
-// rank, best first; the score itself is intentionally not surfaced here.
-const POOL: string[] = [
-  'arid-plateau-small-seas-smallest-square-sym',
-  'coastal-rain-basin-smallest-wide-nosym',
-  'dota-jungle-smallest-square-sym',
-  'inland-sea-smallest-square-sym',
-  'dota-sand-smallest-square-sym',
-  'continent-smallest-wide-sym',
-  'dota-water-smallest-square-sym',
-  'hardwood-forest-smallest-wide-nosym',
-  'archipelago-land-lg-water-sm-smallest-wide-nosym',
-  'continent-tiny-square-sym',
-  'desert-lush-std-smallest-wide-sym',
-  'donut-irreg-low-smallest-square-sym',
-  'mountain-pass-tiny-square-sym',
+// The voted tournament pool, grouped by ballot tier (see vote tally /
+// configs.py). S = unanimous like (21). A = strong consensus, ≤1 no
+// (17–19). B = solid picks that round out the map-type variety (13–16).
+const TIERS: { key: string; title: string; sub: string; slugs: string[] }[] = [
+  { key: 'S', title: 'S — Unanimous',
+    sub: 'Every voter liked these.',
+    slugs: [
+      'arid-plateau-small-seas-smallest-square-sym',
+      'coastal-rain-basin-smallest-wide-nosym',
+      'dota-jungle-smallest-square-sym',
+      'inland-sea-smallest-square-sym',
+    ] },
+  { key: 'A', title: 'A — Strong consensus',
+    sub: 'Liked by almost everyone (≤1 no).',
+    slugs: [
+      'dota-sand-smallest-square-sym',
+      'arid-plateau-small-seas-smallest-wide-sym',
+      'continent-smallest-wide-sym',
+      'dota-water-smallest-square-sym',
+      'hardwood-forest-smallest-wide-nosym',
+    ] },
+  { key: 'B', title: 'B — Variety',
+    sub: 'Solid, majority-liked picks that round out the map types.',
+    slugs: [
+      'coastal-rain-basin-smallest-square-sym',
+      'dota-jungle-smallest-wide-sym',
+      'inland-sea-smallest-wide-sym',
+      'archipelago-land-lg-water-sm-smallest-wide-nosym',
+      'continent-tiny-square-sym',
+      'desert-lush-std-smallest-wide-sym',
+      'donut-irreg-low-smallest-square-sym',
+      'mountain-pass-tiny-square-sym',
+    ] },
 ];
-const RANK: Record<string, number> = Object.fromEntries(
-  POOL.map((s, i) => [s, i]));
+const TIER_OF: Record<string, string> = {};
+for (const t of TIERS) for (const s of t.slugs) TIER_OF[s] = t.key;
 
 const genMap: Record<string, any> = {};
 for (const gn of (gensData as any).gens)
@@ -39,11 +55,17 @@ const sizeOf = (c: any) =>
 // and any future same-script doubles, are distinguishable)
 const navName = (c: any) =>
   `${c.group}${c.variant ? ` · ${c.variant}` : ''} · ${sizeOf(c)}`;
-const pool = dist.configs
-  .filter((c: any) => c.slug in RANK)
-  // sort alphabetically by map name (Duel before Tiny within a script)
-  .sort((a: any, b: any) => navName(a).localeCompare(navName(b)));
-
+const bySlug: Record<string, any> = {};
+for (const c of dist.configs) bySlug[c.slug] = c;
+// resolved sections: each tier's configs, sorted by map name within it
+const sections = TIERS.map((t) => ({
+  ...t,
+  cfgs: t.slugs
+    .map((s) => bySlug[s])
+    .filter(Boolean)
+    .sort((a: any, b: any) => navName(a).localeCompare(navName(b))),
+}));
+const pool = sections.flatMap((s) => s.cfgs);
 const N = pool[0]?.n ?? 0;
 
 // ---- In-game SETUP GUIDE ---------------------------------------------
@@ -102,15 +124,26 @@ function setup(c: any): Row[] {
   <p class="lede">The {pool.length} maps for the tournament.</p>
 
   <nav class="snav" id="snav">
-    <div class="snav__t">Tournament maps</div>
-    {pool.map((c: any) => (
-      <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
-         title={c.label}>{navName(c)}</a>
+    {sections.map((sec: any) => (
+      <div class="snav__sec">
+        <div class="snav__t">{sec.title}</div>
+        {sec.cfgs.map((c: any) => (
+          <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
+             title={c.label}>{navName(c)}</a>
+        ))}
+      </div>
     ))}
   </nav>
 
   <div class="pool">
-    {pool.map((c: any) => (
+    {sections.map((sec: any) => (
+      <section class="tier" id={`tier-${sec.key}`}>
+        <div class="tier__h">
+          <h2 class="tier__t">{sec.title}</h2>
+          <span class="tier__sub">{sec.sub}</span>
+          <span class="tier__n">{sec.cfgs.length} maps</span>
+        </div>
+        {sec.cfgs.map((c: any) => (
       <div class="cfg" id={`cfg-${c.slug}`}>
         <details class="setup">
           <summary><span class="setup__btn">⚙ SETUP GUIDE</span></summary>
@@ -175,6 +208,8 @@ function setup(c: any): Row[] {
           </div>
         </details>
       </div>
+        ))}
+      </section>
     ))}
   </div>
 
@@ -190,7 +225,18 @@ function setup(c: any): Row[] {
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
       max-width:80ch; margin:0.6rem 0 1.4rem; }
-    .pool { display:flex; flex-direction:column; gap:0.8rem; }
+    .pool { display:flex; flex-direction:column; gap:2rem; }
+    .tier { display:flex; flex-direction:column; gap:0.8rem; }
+    .tier__h { display:flex; align-items:baseline; gap:0.7rem;
+      flex-wrap:wrap; border-bottom:1px solid var(--gold-deep);
+      padding-bottom:0.35rem; }
+    .tier__t { font-family:var(--font-display); font-weight:700;
+      font-size:1.55rem; color:var(--gold); }
+    .tier__sub { font-family:var(--font-display); font-style:italic;
+      font-size:0.92rem; color:var(--text-faint); }
+    .tier__n { margin-left:auto; font-size:0.68rem;
+      font-family:var(--font-mono); color:var(--text-dim);
+      letter-spacing:0.08em; }
     .cfg { position:relative; display:flex; flex-direction:column;
       background:var(--bg-elev); border:1px solid var(--border);
       border-radius:6px; padding:0.8rem 1rem; }
@@ -213,9 +259,10 @@ function setup(c: any): Row[] {
     @media (max-width:1360px){ .snav{ left:8px; } }
     @media (max-width:1040px){ .snav{ position:static; width:auto;
       flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
-    .snav__t { font-size:0.6rem; letter-spacing:0.14em;
-      text-transform:uppercase; color:var(--text-dim);
-      margin-bottom:0.35rem; }
+    .snav__sec { margin-bottom:0.7rem; }
+    .snav__t { font-size:0.64rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gold-soft);
+      margin-bottom:0.3rem; font-weight:700; }
     .snav__l { display:block; color:var(--text-soft); text-decoration:none;
       font-size:0.78rem; padding:0.16rem 0.4rem; border-radius:4px;
       border-left:2px solid transparent; }
