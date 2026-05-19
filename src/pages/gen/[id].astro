@@ -26,6 +26,19 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
       }catch(e){}
     })();
   </script>
+  <script is:inline>
+    (function(){
+      var b=document.getElementById('pscopy'),
+          v=document.getElementById('psval');
+      if(!b||!v) return;
+      b.addEventListener('click',function(){
+        navigator.clipboard.writeText(v.textContent.trim()).then(function(){
+          var o=b.textContent; b.textContent='✓ copied';
+          setTimeout(function(){ b.textContent=o; },1500);
+        });
+      });
+    })();
+  </script>
   <p class="lede">
     <b>{g.label}</b> · seed {g.seed}. <span class="mono">{g.setting}</span>.
     <b>Hover a tile</b> for details; <b>scroll to zoom, drag to pan</b>;
@@ -33,6 +46,19 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     Pink ★ = capital · pink • = city site · blue = river.
     (<a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">static image ↗</a>)
   </p>
+
+  {g.ps && (
+    <div class="ps">
+      <div class="ps__hd">
+        <span class="ps__lbl">Old World Parameter String</span>
+        <button id="pscopy" type="button">⧉ copy</button>
+      </div>
+      <code id="psval" class="ps__v">{g.ps}</code>
+      <p class="ps__hint">Paste into Old World → <b>New Game → Parameter
+        String</b> to generate this exact map (script · size · aspect ·
+        mirror · point-symmetry · options · <b>seed {g.seed}</b>).</p>
+    </div>
+  )}
 
   <div id="mapwrap"><canvas id="cv"></canvas><div id="tip"></div>
     <button id="reset" type="button">⤾ reset view</button>
@@ -168,6 +194,26 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     :global(.yt td.yc) { cursor:crosshair; }
     :global(.yt td.yc:hover) { background:#16290f; color:#9fd07f; }
     .mono { font-family:var(--font-mono); font-size:0.86em; }
+    .ps { background:var(--bg-elev); border:1px solid var(--gold-deep);
+      border-radius:8px; padding:0.6rem 0.9rem; margin:0 0 1rem;
+      max-width:80ch; }
+    .ps__hd { display:flex; align-items:center; gap:0.8rem;
+      margin-bottom:0.4rem; }
+    .ps__lbl { font-size:0.62rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--gold-soft); font-weight:700; }
+    #pscopy { margin-left:auto; font-family:var(--font-ui);
+      font-size:0.74rem; font-weight:700; color:var(--gold);
+      background:#231f0d; border:1px solid var(--gold-deep);
+      border-radius:5px; padding:0.22rem 0.6rem; cursor:pointer; }
+    #pscopy:hover { background:#2e2810; border-color:var(--gold-soft); }
+    .ps__v { display:block; font-family:var(--font-mono);
+      font-size:0.78rem; color:var(--text); background:#0b0c0f;
+      border:1px solid var(--border-strong); border-radius:5px;
+      padding:0.5rem 0.6rem; word-break:break-all; line-height:1.5;
+      user-select:all; }
+    .ps__hint { font-size:0.74rem; color:var(--text-faint);
+      margin:0.45rem 0 0; line-height:1.45; }
+    .ps__hint b { color:var(--text-soft); }
     .dim { color:var(--text-dim); }
     .good { color:#9fd07f; font-weight:700; }
     .bad { color:#d08070; font-weight:700; }
