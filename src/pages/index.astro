@@ -80,10 +80,11 @@ const poolGens: GP[] = ((gensData as any).gens as any[])
   .map((gn) => ({ id: gn.id, slug: gn.cslug, label: gn.label,
     seed: gn.seed, sites: gn.sites, land: gn.land }));
 
-// Reroll-cutoff equivalence: a low cutoff at ≤10 sites rejects 4.8% of
-// the pool (19/392). The equal-tail-mass match at the top is ≥26 sites
-// (4.1%, 16/392). (Current hard rule is the wider <12 / >30.)
-const SITE_LO = 10, SITE_HI = 26;
+// Reroll-cutoff equivalence: a low cutoff at <10 sites rejects only
+// 0.5% of the pool (2/392, the two 9s). The equal-tail-mass match at
+// the top is ≥30 sites (0.3%, 1/392) — essentially the existing hard
+// <12 / >30 rule, i.e. no site-count reroll beyond the extremes.
+const SITE_LO = 10, SITE_HI = 30;
 
 type Bin = { x0: number; x1: number; label: string; cells: GP[] };
 function bins(items: GP[], key: 'sites' | 'land', step: number): Bin[] {
@@ -104,7 +105,7 @@ function bins(items: GP[], key: 'sites' | 'land', step: number): Bin[] {
 // Zone class for a representative value (drives bar / cell colour).
 const siteZone = (v: number) =>
   v < 12 || v > 30 ? 'z-bad'
-  : v <= SITE_LO || v >= SITE_HI ? 'z-edge'
+  : v < SITE_LO || v >= SITE_HI ? 'z-edge'
   : v >= 18 && v <= 22 ? 'z-good' : 'z-ok';
 const landZone = (v: number) =>
   v < 40 || v > 70 ? 'z-edge'
@@ -182,7 +183,7 @@ function setup(c: any): Row[] {
       {[
         { key: 'sites' as const, name: 'City sites', bs: poolSiteBins,
           step: 1,
-          cap: `Reroll if ≤${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low ${SITE_LO} ≈ 4.8% ↔ high ${SITE_HI} ≈ 4.1%). Hard rule stays the wider <12 / >30. Target 18–22 (green), 15–25 ok.` },
+          cap: `Reroll if <${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low <${SITE_LO} ≈ 0.5% ↔ high ≥${SITE_HI} ≈ 0.3%), in line with the existing hard <12 / >30 rule. Target 18–22 (green), 15–25 ok.` },
         { key: 'land' as const, name: 'Land hex distance', bs: poolLandBins,
           step: 5,
           cap: 'Cap→cap land-hex path. Target 45–65 (green), 40–70 tolerable.' },
