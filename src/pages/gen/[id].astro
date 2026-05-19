@@ -11,7 +11,21 @@ export function getStaticPaths() {
 const { g, resTax } = Astro.props as { g: any; resTax: any };
 ---
 <Base title={`Gen · ${g.label}`}>
-  <p class="back"><a href={`${baseUrl}recommended`}>← all recommended</a></p>
+  <p class="back"><a id="backlink" href={baseUrl}>← all maps</a></p>
+  <script is:inline define:vars={{ base: baseUrl }}>
+    // Default back to the atlas (now the root). Only return to
+    // /recommended if that's actually where you came from.
+    (function(){
+      var a=document.getElementById('backlink');
+      try{
+        var r=document.referrer;
+        if(r && r.indexOf(location.origin)===0
+           && r.indexOf(base+'recommended')>=0){
+          a.href=base+'recommended'; a.textContent='← all recommended';
+        }
+      }catch(e){}
+    })();
+  </script>
   <p class="lede">
     <b>{g.label}</b> · seed {g.seed}. <span class="mono">{g.setting}</span>.
     <b>Hover a tile</b> for details; <b>scroll to zoom, drag to pan</b>;
