@@ -33,9 +33,16 @@ const idFromImg = (slug: string, p: string) => {
   const m = p.match(/seed-(\d+)/); return `${slug}-s${m ? m[1] : 1}`;
 };
 
+const sizeOf = (c: any) =>
+  (c.setting || '').split(' · ')[0] === 'Tiny' ? 'Tiny' : 'Duel';
+// sidebar / title text: group + variant + size (so the two Continents,
+// and any future same-script doubles, are distinguishable)
+const navName = (c: any) =>
+  `${c.group}${c.variant ? ` · ${c.variant}` : ''} · ${sizeOf(c)}`;
 const pool = dist.configs
   .filter((c: any) => c.slug in RANK)
-  .sort((a: any, b: any) => RANK[a.slug] - RANK[b.slug]);
+  // sort alphabetically by map name (Duel before Tiny within a script)
+  .sort((a: any, b: any) => navName(a).localeCompare(navName(b)));
 
 const N = pool[0]?.n ?? 0;
 
@@ -98,7 +105,7 @@ function setup(c: any): Row[] {
     <div class="snav__t">Tournament maps</div>
     {pool.map((c: any) => (
       <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
-         title={c.label}>{c.group}{c.variant ? ` · ${c.variant}` : ''}</a>
+         title={c.label}>{navName(c)}</a>
     ))}
   </nav>
 
@@ -125,7 +132,7 @@ function setup(c: any): Row[] {
           </div>
         </details>
         <div class="cfg__hd">
-          <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
+          <span class="cfg__name">{navName(c)}</span>
           <span class="cfg__chips">
             {c.setting.split(' · ').map((p: string) => (<span class="ch">{p}</span>))}
           </span>
