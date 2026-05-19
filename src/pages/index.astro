@@ -38,10 +38,17 @@ const pool = dist.configs
   .sort((a: any, b: any) => RANK[a.slug] - RANK[b.slug]);
 
 const N = pool[0]?.n ?? 0;
-const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
 ---
 <Base title="Tournament Pool">
   <p class="lede">The {pool.length} maps for the tournament.</p>
+
+  <nav class="snav" id="snav">
+    <div class="snav__t">Tournament maps</div>
+    {pool.map((c: any) => (
+      <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
+         title={c.label}>{c.group}{c.variant ? ` · ${c.variant}` : ''}</a>
+    ))}
+  </nav>
 
   <div class="pool">
     {pool.map((c: any) => (
@@ -51,7 +58,6 @@ const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
           <span class="cfg__chips">
             {c.setting.split(' · ').map((p: string) => (<span class="ch">{p}</span>))}
           </span>
-          <a class="more" href={`${baseUrl}recommended#cfg-${c.slug}`}>full distribution →</a>
         </div>
         <div class="pills">
           <div class="pill">
@@ -66,10 +72,10 @@ const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
               <div class="pill__r">min {c.dist.land.min} · <b>med {c.dist.land.med}</b> · max {c.dist.land.max}</div>
             </>) : <div class="pill__v dash">—</div>}
           </div>
-          <div class={'pill ' + dropClass(c.dropPct) + '-bg'}>
-            <div class="pill__l">Split-dropped</div>
-            <div class="pill__v"><b>{c.dropPct ?? 0}</b><span class="pm">%</span></div>
-            <div class="pill__r">{c.n} connected maps kept</div>
+          <div class="pill">
+            <div class="pill__l">Avg reachable</div>
+            <div class="pill__v"><b>{c.reachMean ?? '—'}</b><span class="pm">%</span></div>
+            <div class="pill__r">{c.n} connected maps · land-connected by construction</div>
           </div>
         </div>
         <details class="gal" open>
@@ -118,15 +124,26 @@ const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
       color:var(--text-soft); background:#0e0f12;
       border:1px solid var(--border-strong); border-radius:4px;
       padding:0.08rem 0.4rem; }
-    .more { margin-left:auto; font-size:0.74rem; font-family:var(--font-ui);
-      color:var(--gold-soft); white-space:nowrap; }
+    .snav { position:fixed; left:max(8px, calc((100vw - 1180px)/2 - 188px));
+      top:104px; width:180px; display:flex; flex-direction:column;
+      gap:0.1rem; max-height:calc(100vh - 130px); overflow:auto; z-index:20; }
+    @media (max-width:1360px){ .snav{ left:8px; } }
+    @media (max-width:1040px){ .snav{ position:static; width:auto;
+      flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
+    .snav__t { font-size:0.6rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim);
+      margin-bottom:0.35rem; }
+    .snav__l { display:block; color:var(--text-soft); text-decoration:none;
+      font-size:0.78rem; padding:0.16rem 0.4rem; border-radius:4px;
+      border-left:2px solid transparent; }
+    .snav__l:hover { color:var(--gold); background:var(--bg-elev);
+      text-decoration:none; }
+    .snav__l.on { color:var(--gold); font-weight:700;
+      border-left-color:var(--gold); background:var(--bg-elev); }
     .pills { display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:0.7rem; }
     .pill { flex:1 1 240px; background:#16181d;
       border:1px solid var(--gold-deep); border-radius:8px;
       padding:0.55rem 0.85rem; }
-    .pill.g-bg { border-color:#3b6e3b; }
-    .pill.o-bg { border-color:var(--gold-deep); }
-    .pill.n-bg { border-color:#5a2e28; }
     .pill__l { font-size:0.62rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); }
     .pill__v { font-size:2.4rem; font-family:var(--font-display);
@@ -162,4 +179,24 @@ const dropClass = (p: number) => (p ?? 0) === 0 ? 'g' : p <= 10 ? 'o' : 'n';
     .note { font-size:0.8rem; color:var(--text-faint); line-height:1.5;
       max-width:84ch; margin-top:1.6rem; }
   </style>
+
+  <script is:inline>
+    (function(){
+      var links=[].slice.call(document.querySelectorAll('.snav__l'));
+      var secs=links.map(function(l){
+        return document.getElementById('cfg-'+l.getAttribute('data-slug')); });
+      function spy(){
+        var best=0, bt=-1e9;
+        secs.forEach(function(s,i){
+          if(!s) return;
+          var t=s.getBoundingClientRect().top-110;
+          if(t<=0 && t>bt){ bt=t; best=i; }
+        });
+        links.forEach(function(l,i){ l.classList.toggle('on', i===best); });
+      }
+      window.addEventListener('scroll',function(){
+        window.requestAnimationFrame(spy); },{passive:true});
+      spy();
+    })();
+  </script>
 </Base>
