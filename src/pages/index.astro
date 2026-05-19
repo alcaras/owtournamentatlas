@@ -73,12 +73,19 @@ const N = pool[0]?.n ?? 0;
 // source of truth). Powers the pool-wide bar chart at the top and the
 // per-config unit dot-histograms above each gallery.
 const POOL_SLUGS = new Set(pool.map((c: any) => c.slug));
+type MK = 'sites' | 'water' | 'land' | 'slLand' | 'slSea';
 type GP = { id: string; slug: string; label: string; seed: number;
-  sites: number; land: number };
+  sites: number; water: number; land: number; slLand: number;
+  slSea: number };
 const poolGens: GP[] = ((gensData as any).gens as any[])
   .filter((gn) => POOL_SLUGS.has(gn.cslug))
   .map((gn) => ({ id: gn.id, slug: gn.cslug, label: gn.label,
-    seed: gn.seed, sites: gn.sites, land: gn.land }));
+    seed: gn.seed, sites: gn.sites, water: gn.water, land: gn.land,
+    slLand: gn.slLand, slSea: gn.slSea }));
+// Full multi-metric hover line, shared by bars + per-config dots.
+const tipOf = (g: GP) =>
+  `${g.label} · seed ${g.seed} — ${g.sites} sites · ${g.water} water-hex · `
+  + `${g.land} land-hex · ${g.slLand} land-turns · ${g.slSea} water-turns`;
 
 // Reroll-cutoff equivalence: a low cutoff at <10 sites rejects only
 // 0.5% of the pool (2/392, the two 9s). The equal-tail-mass match at
@@ -86,8 +93,25 @@ const poolGens: GP[] = ((gensData as any).gens as any[])
 // <12 / >30 rule, i.e. no site-count reroll beyond the extremes.
 const SITE_LO = 10, SITE_HI = 30;
 
+// Chart roster (drives both the pool bars and per-config dots, in
+// order). Movement-cost metrics (slLand/slSea) and water-route hexes
+// come from movement_model.py via gens.json — no target gates, so they
+// render neutral. Water sits between sites and land per the request.
+const METRICS: { key: MK; name: string; step: number; cap: string }[] = [
+  { key: 'sites', name: 'City sites', step: 1,
+    cap: `Reroll if <${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low <${SITE_LO} ≈ 0.5% ↔ high ≥${SITE_HI} ≈ 0.3%), in line with the existing hard <12 / >30 rule. Target 18–22 (green), 15–25 ok.` },
+  { key: 'water', name: 'Water-route hexes', step: 5,
+    cap: 'Cap→cap path with embark allowed (hex tiles, no move cost).' },
+  { key: 'land', name: 'Land hex distance', step: 5,
+    cap: 'Cap→cap land-hex path. Target 45–65 (green), 40–70 tolerable.' },
+  { key: 'slLand', name: 'Land move-cost (turns)', step: 5,
+    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only.' },
+  { key: 'slSea', name: 'Water move-cost (turns)', step: 5,
+    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed.' },
+];
+
 type Bin = { x0: number; x1: number; label: string; cells: GP[] };
-function bins(items: GP[], key: 'sites' | 'land', step: number): Bin[] {
+function bins(items: GP[], key: MK, step: number): Bin[] {
   if (!items.length) return [];
   const vals = items.map((i) => i[key]);
   const lo = Math.min(...vals), hi = Math.max(...vals);
@@ -110,11 +134,11 @@ const siteZone = (v: number) =>
 const landZone = (v: number) =>
   v < 40 || v > 70 ? 'z-edge'
   : v >= 45 && v <= 65 ? 'z-good' : 'z-ok';
-const zoneOf = (key: 'sites' | 'land', mid: number) =>
-  key === 'sites' ? siteZone(mid) : landZone(mid);
-
-const poolSiteBins = bins(poolGens, 'sites', 1);
-const poolLandBins = bins(poolGens, 'land', 5);
+// Only sites + land have tournament target gates; the move-cost and
+// water-route metrics are descriptive, so they render neutral.
+const zoneOf = (key: MK, mid: number) =>
+  key === 'sites' ? siteZone(mid)
+  : key === 'land' ? landZone(mid) : 'z-ok';
 const maxN = (bs: Bin[]) => Math.max(1, ...bs.map((b) => b.cells.length));
 
 // ---- In-game SETUP GUIDE ---------------------------------------------
@@ -180,20 +204,14 @@ function setup(c: any): Row[] {
       <span class="dist__sub">{poolGens.length} maps across {pool.length} configs · click a bar for its maps</span>
     </div>
     <div class="dist__grid">
-      {[
-        { key: 'sites' as const, name: 'City sites', bs: poolSiteBins,
-          step: 1,
-          cap: `Reroll if <${SITE_LO} or ≥${SITE_HI} sites — equal-tail-mass cutoffs (low <${SITE_LO} ≈ 0.5% ↔ high ≥${SITE_HI} ≈ 0.3%), in line with the existing hard <12 / >30 rule. Target 18–22 (green), 15–25 ok.` },
-        { key: 'land' as const, name: 'Land hex distance', bs: poolLandBins,
-          step: 5,
-          cap: 'Cap→cap land-hex path. Target 45–65 (green), 40–70 tolerable.' },
-      ].map((ch) => {
-        const mx = maxN(ch.bs);
+      {METRICS.map((ch) => {
+        const bs = bins(poolGens, ch.key, ch.step);
+        const mx = maxN(bs);
         return (
           <div class="chart">
             <div class="chart__t">{ch.name}</div>
             <div class="bars">
-              {ch.bs.map((b) => {
+              {bs.map((b) => {
                 const mid = ch.step === 1 ? b.x0 : b.x0 + ch.step / 2;
                 return (
                   <details class="hb">
@@ -209,7 +227,7 @@ function setup(c: any): Row[] {
                       <div class="pop__l">
                         {b.cells.map((g) => (
                           <a href={`${baseUrl}gen/${g.id}`} target="_blank"
-                             rel="noopener" title={g.label}>
+                             rel="noopener" title={tipOf(g)}>
                             {g.label.split(' · ')[0]} <i>s{g.seed}</i>
                           </a>
                         ))}
@@ -295,16 +313,11 @@ function setup(c: any): Row[] {
           const cg = poolGens.filter((g) => g.slug === c.slug);
           return (
             <div class="cfgdist">
-              {[
-                { key: 'sites' as const, name: 'City sites',
-                  bs: bins(cg, 'sites', 1), step: 1 },
-                { key: 'land' as const, name: 'Land hex distance',
-                  bs: bins(cg, 'land', 5), step: 5 },
-              ].map((ch) => (
+              {METRICS.map((ch) => (
                 <div class="cd">
                   <div class="cd__t">{ch.name}<span>{cg.length} maps · click a square</span></div>
                   <div class="cd__cols">
-                    {ch.bs.map((b) => {
+                    {bins(cg, ch.key, ch.step).map((b) => {
                       const mid = ch.step === 1 ? b.x0 : b.x0 + ch.step / 2;
                       return (
                         <div class="cd__col">
@@ -313,7 +326,7 @@ function setup(c: any): Row[] {
                               <a class={'dot ' + zoneOf(ch.key, mid)}
                                 href={`${baseUrl}gen/${g.id}`}
                                 target="_blank" rel="noopener"
-                                title={`${g.label} · seed ${g.seed} — ${g[ch.key]} ${ch.key === 'sites' ? 'sites' : 'land'}`}></a>
+                                title={tipOf(g)}></a>
                             ))}
                           </div>
                           <span class="cd__x">{b.label}</span>
