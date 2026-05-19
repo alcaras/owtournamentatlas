@@ -105,6 +105,25 @@ function setup(c: any): Row[] {
   <div class="pool">
     {pool.map((c: any) => (
       <div class="cfg" id={`cfg-${c.slug}`}>
+        <details class="setup">
+          <summary><span class="setup__btn">⚙ SETUP GUIDE</span></summary>
+          <div class="ow">
+            <div class="ow__ttl">Advanced Options</div>
+            {setup(c).map((r: any) => (
+              <div class="ow__row">
+                <span class="ow__lab">{r.label}</span>
+                {r.toggle
+                  ? <span class={'ow__tg ' + (r.value === 'ON' ? 'on' : 'off')}>
+                      {r.value === 'ON' && <i>ON</i>}
+                      <b></b>
+                      {r.value === 'OFF' && <i>OFF</i>}
+                    </span>
+                  : <span class="ow__sel">{r.value}<svg viewBox="0 0 16 16" class="ow__cv"><path d="M3 5l5 6 5-6z"/></svg></span>}
+              </div>
+            ))}
+            <div class="ow__note">Everything is always mirrored. Everything else: tournament defaults.</div>
+          </div>
+        </details>
         <div class="cfg__hd">
           <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
           <span class="cfg__chips">
@@ -129,26 +148,6 @@ function setup(c: any): Row[] {
             <div class="pill__v"><b>{c.reachMean ?? '—'}</b><span class="pm">%</span></div>
           </div>
         </div>
-        <details class="setup">
-          <summary><span class="setup__btn">⚙ SETUP GUIDE</span><span class="setup__hint">New Game → Advanced Options</span></summary>
-          <div class="ow">
-            <div class="ow__ttl">Advanced Options</div>
-            {setup(c).map((r: any) => (
-              <div class="ow__row">
-                <span class="ow__lab">{r.label}</span>
-                {r.toggle
-                  ? <span class={'ow__tg ' + (r.value === 'ON' ? 'on' : 'off')}>
-                      {r.value === 'ON' && <i>ON</i>}
-                      <b></b>
-                      {r.value === 'OFF' && <i>OFF</i>}
-                    </span>
-                  : <span class="ow__sel">{r.value}<svg viewBox="0 0 16 16" class="ow__cv"><path d="M3 5l5 6 5-6z"/></svg></span>}
-              </div>
-            ))}
-            <div class="ow__note">Everything else: game defaults. Mirror Map ON keeps both
-              capitals' starts identical.</div>
-          </div>
-        </details>
         <details class="gal" open>
           <summary>{Math.min(c.imgs.length, 21)} generated maps</summary>
           <div class="gal__grid">
@@ -185,16 +184,22 @@ function setup(c: any): Row[] {
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
       max-width:80ch; margin:0.6rem 0 1.4rem; }
     .pool { display:flex; flex-direction:column; gap:0.8rem; }
-    .cfg { background:var(--bg-elev); border:1px solid var(--border);
+    .cfg { position:relative; display:flex; flex-direction:column;
+      background:var(--bg-elev); border:1px solid var(--border);
       border-radius:6px; padding:0.8rem 1rem; }
-    .cfg__hd { display:flex; align-items:baseline; gap:0.8rem; flex-wrap:wrap; }
+    .cfg__hd { order:0; display:flex; align-items:baseline; gap:0.8rem;
+      flex-wrap:wrap; padding-right:10.5rem; }
+    .pills { order:1; }
+    .setup { order:2; }
+    .gal { order:3; }
     .cfg__name { font-family:var(--font-display); font-weight:700;
       font-size:1.18rem; color:var(--text); }
-    .cfg__chips { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
-    .ch { font-size:0.66rem; font-family:var(--font-mono);
-      color:var(--text-soft); background:#0e0f12;
-      border:1px solid var(--border-strong); border-radius:4px;
-      padding:0.08rem 0.4rem; }
+    .cfg__chips { display:inline-flex; gap:0.35rem; flex-wrap:wrap; }
+    .ch { font-family:var(--font-display); font-weight:700;
+      font-size:0.84rem; color:var(--gold);
+      background:linear-gradient(#15160f,#0c0d09);
+      border:1px solid #4a431f; border-radius:6px;
+      padding:0.1rem 0.55rem; box-shadow:inset 0 0 0 1px #000; }
     .snav { position:fixed; left:max(8px, calc((100vw - 1180px)/2 - 188px));
       top:104px; width:180px; display:flex; flex-direction:column;
       gap:0.1rem; max-height:calc(100vh - 130px); overflow:auto; z-index:20; }
@@ -227,21 +232,20 @@ function setup(c: any): Row[] {
       font-family:var(--font-mono); }
     .pill__r b { color:var(--text-soft); }
     /* ---- SETUP GUIDE (in-game settings mock) ---- */
-    .setup { margin-top:0.6rem; }
-    .setup > summary { list-style:none; cursor:pointer; display:inline-flex;
-      align-items:center; gap:0.6rem; user-select:none; }
+    .setup > summary { list-style:none; cursor:pointer;
+      position:absolute; top:0.8rem; right:1rem; z-index:3;
+      user-select:none; }
     .setup > summary::-webkit-details-marker { display:none; }
-    .setup__btn { font-family:var(--font-display); font-weight:700;
-      font-size:0.92rem; letter-spacing:0.06em; color:var(--gold);
-      background:linear-gradient(#231f0d,#1a1709);
+    .setup__btn { display:inline-block; font-family:var(--font-display);
+      font-weight:700; font-size:0.86rem; letter-spacing:0.06em;
+      color:var(--gold); background:linear-gradient(#231f0d,#1a1709);
       border:1px solid var(--gold-deep); border-radius:6px;
-      padding:0.32rem 0.8rem; }
+      padding:0.3rem 0.75rem; box-shadow:0 1px 3px #0008; }
     .setup > summary:hover .setup__btn { background:#2e2810;
       border-color:var(--gold-soft); }
-    .setup__hint { font-size:0.72rem; color:var(--text-faint);
-      font-family:var(--font-mono); }
-    .setup[open] .setup__hint { display:none; }
-    .ow { margin-top:0.7rem; max-width:560px;
+    .setup[open] .setup__btn { background:#2e2810;
+      border-color:var(--gold-soft); }
+    .ow { margin:0.2rem 0 0.6rem; max-width:560px;
       background:radial-gradient(120% 140% at 50% 0%,#1c1d18,#0c0d0a);
       border:1px solid var(--gold-deep);
       border-radius:8px; padding:0.6rem 1rem 0.9rem;
