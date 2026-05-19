@@ -189,7 +189,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-90),
           px=cx+r*Math.cos(a),py=cy+r*Math.sin(a);
           i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); }
-      function minK(){ return cv.width? wrap.clientWidth/cv.width : 0.15; }
+      // contain scale: whole map fits in the viewport (both axes)
+      function minK(){ return (cv.width && cv.height)
+        ? Math.min(wrap.clientWidth/cv.width, wrap.clientHeight/cv.height)
+        : 0.15; }
       function clampView(){
         var W=wrap.clientWidth, H=wrap.clientHeight,
             kw=cv.width*k, kh=cv.height*k;
@@ -399,10 +402,9 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         fitView();
       });
       function fitView(){
-        k = wrap.clientWidth / cv.width;
-        var dh=cv.height*k;
-        ty = dh < wrap.clientHeight ? (wrap.clientHeight-dh)/2 : 0;
-        tx = 0; applyView();
+        // show the entire map by default: scale to contain, then
+        // clampView() centres it on whichever axis has slack
+        k = minK(); tx = 0; ty = 0; applyView();
       }
       (function(rb){
         rb.addEventListener('mousedown',function(e){ e.stopPropagation(); });
