@@ -2,69 +2,161 @@
 import Base from '../layouts/Base.astro';
 import data from '../data/tournament-games.json';
 
-const games = [...data.games];
-// group by map type for readability
-const byScript: Record<string, typeof games> = {};
-for (const g of games) (byScript[g.script] ??= []).push(g);
-const scripts = Object.keys(byScript).sort();
-const cap = (s: string) => s ? s[0] + s.slice(1).toLowerCase() : s;
-const sz = (s: string) => s === 'SMALLEST' ? 'Duel' : cap(s);
+// Sorted chronologically (id is a sequential match number); gameNo is a
+// friendly 1..N index for the table.
+const games = [...data.games].sort((a, b) => (+a.id) - (+b.id));
+const cap = (s: string) => (s ? s[0] + s.slice(1).toLowerCase() : s);
+const sz = (s: string) => (s === 'SMALLEST' ? 'Duel' : cap(s));
+
+// The five measured metrics — same roster as the atlas distribution
+// charts, mapped onto the tournament-games field names.
+type MK = 'citySites' | 'sea' | 'land' | 'slingerLand' | 'slingerSea';
+const METRICS: { key: MK; name: string; short: string; step: number;
+  cap: string }[] = [
+  { key: 'citySites', name: 'City sites', short: 'City sites', step: 1,
+    cap: 'Number of valid city sites placed on the map.' },
+  { key: 'sea', name: 'Water-route hexes', short: 'Water hex', step: 5,
+    cap: 'Cap→cap shortest path with embark allowed, in hex tiles (no move cost).' },
+  { key: 'land', name: 'Land hex distance', short: 'Land hex', step: 5,
+    cap: 'Cap→cap shortest land-only path, in hex tiles.' },
+  { key: 'slingerLand', name: 'Land move-cost (turns)', short: 'Land turns',
+    step: 5,
+    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in turns.' },
+  { key: 'slingerSea', name: 'Water move-cost (turns)', short: 'Water turns',
+    step: 5,
+    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed — in turns.' },
+];
+
+// ---- distribution helpers (same model as the atlas histograms) ------
+type Stat = { m: number; s: number };
+function stat(vals: number[]): Stat {
+  const n = vals.length || 1;
+  const m = vals.reduce((a, b) => a + b, 0) / n;
+  const s = Math.sqrt(vals.reduce((a, b) => a + (b - m) ** 2, 0) / n);
+  return { m, s };
+}
+// Colour = |z| std-devs from the mean: ≤1 green · ≤2 yellow · ≤3 orange
+// · >3 red. Descriptive only — not a judgement of what's "good".
+const zClass = (v: number, st: Stat) => {
+  if (!st.s) return 'z-good';
+  const z = Math.abs((v - st.m) / st.s);
+  return z <= 1 ? 'z-good' : z <= 2 ? 'z-ok' : z <= 3 ? 'z-edge' : 'z-bad';
+};
+type G = (typeof games)[number];
+type Bin = { x0: number; label: string; cells: G[] };
+function bins(items: G[], key: MK, step: number): Bin[] {
+  if (!items.length) return [];
+  const vals = items.map((i) => i[key] as number);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const start = Math.floor(lo / step) * step;
+  const out: Bin[] = [];
+  for (let x = start; x <= hi; x += step) {
+    const cells = items
+      .filter((i) => (i[key] as number) >= x && (i[key] as number) < x + step)
+      .sort((a, b) => (a[key] as number) - (b[key] as number));
+    out.push({ x0: x,
+      label: step === 1 ? String(x) : `${x}–${x + step - 1}`, cells });
+  }
+  return out;
+}
+const maxN = (bs: Bin[]) => Math.max(1, ...bs.map((b) => b.cells.length));
+const poolStat = Object.fromEntries(
+  METRICS.map((m) => [m.key, stat(games.map((g) => g[m.key] as number))]),
+) as Record<MK, Stat>;
+const N = games.length;
+const gameNo = new Map(games.map((g, i) => [g.id, i + 1]));
 ---
 <Base title="Tournament Calibration">
   <p class="lede">
-    {data.count} completed competitive games, measured with the exact
-    even-r atlas model (verified against the game's own
-    <code>Tile.cs::tileAdjacent</code>). Tag which felt good / too
-    big / too close and we calibrate the recommended settings per map
-    from real outcomes. ID = tournament game number.
+    The {N} completed competitive games from the last tournament,
+    measured with the atlas model. Five facts per map — city sites and
+    four capital-distance measures — shown as distributions and a table.
+    Descriptive only: the charts show the spread, they don't say which
+    values are good.
   </p>
 
-  {scripts.map(s => (
-    <section class="grp">
-      <h2 class="grp__h">{s}</h2>
-      <div class="tscroll">
-        <table class="tbl">
-          <thead><tr>
-            <th>#</th><th>Matchup</th><th>Size</th><th>Aspect</th>
-            <th>City sites</th><th>Tribes</th><th>Crow</th><th>Land</th><th>Conn</th>
-            <th>Scout</th><th>Slinger L</th><th>Sl Sea</th><th>Sl Hatti</th>
-            <th>Ocean%</th><th>Res</th><th>8+ F·I·W·S</th>
-          </tr></thead>
-          <tbody>
-            {byScript[s].sort((a,b)=>(+a.id||999)-(+b.id||999)).map(g => (
-              <tr>
-                <td class="mono id">{g.id}</td>
-                <td>{g.matchup}</td>
-                <td>{sz(g.size)}</td>
-                <td class="cap">{g.aspect.toLowerCase()}</td>
-                <td><b>{g.citySites}</b></td>
-                <td class="mono" title={(g.tribes || []).join(', ')}>{g.tribeCount ?? '—'}</td>
-                <td class="mono">{g.crow}</td>
-                <td class="mono">{g.land ?? '—'}</td>
-                <td class={g.landConnected ? '' : 'bad'}>{g.landConnected ? 'Y' : 'NO'}</td>
-                <td class="mono"><b>{g.scout ?? '—'}</b></td>
-                <td class="mono">{g.slingerLand ?? '—'}</td>
-                <td class="mono">{g.slingerSea ?? '—'}</td>
-                <td class="mono">{g.slingerHatti ?? '—'}</td>
-                <td class="mono" title={`forest ${g.forestPct}% · hills ${g.hillPct}% · mtn ${g.mountainPct}%`}>{g.oceanPct ?? '—'}</td>
-                <td class="mono" title={Object.entries(g.resources||{}).slice(0,12).map(([k,v])=>`${k} ${v}`).join(', ')}>{g.resourceCount ?? '—'}</td>
-                <td class="mono" title={g.yield6 ? `6+  F${g.yield6.food} I${g.yield6.iron} W${g.yield6.wood} S${g.yield6.stone}` : ''}>
-                  {g.yield8 ? `${g.yield8.food}·${g.yield8.iron}·${g.yield8.wood}·${g.yield8.stone}` : '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  ))}
+  <section class="dist">
+    <div class="dist__h">
+      <h2 class="dist__t">Distribution across {N} games</h2>
+      <span class="dist__leg">colour = σ from mean
+        <i class="z-good"></i>≤1
+        <i class="z-ok"></i>≤2
+        <i class="z-edge"></i>≤3
+        <i class="z-bad"></i>&gt;3</span>
+    </div>
+    <div class="dist__grid">
+      {METRICS.map((ch) => {
+        const bs = bins(games, ch.key, ch.step);
+        const mx = maxN(bs);
+        const st = poolStat[ch.key];
+        return (
+          <div class="chart">
+            <div class="chart__t">{ch.name}</div>
+            <div class="bars">
+              {bs.map((b) => {
+                const mid = ch.step === 1 ? b.x0 : b.x0 + ch.step / 2;
+                return (
+                  <details class="hb">
+                    <summary class={'bar ' + zClass(mid, st)}
+                      title={`${b.label}: ${b.cells.length} games`}
+                      style={`--h:${Math.round(b.cells.length / mx * 116) + (b.cells.length ? 4 : 0)}px`}>
+                      <span class="bar__n">{b.cells.length || ''}</span>
+                      <span class="bar__f"></span>
+                      <span class="bar__x">{b.label}</span>
+                    </summary>
+                    <div class="pop">
+                      <div class="pop__h">{b.label} · {b.cells.length} games</div>
+                      <div class="pop__l">
+                        {b.cells.map((g) => (
+                          <span title={`game ${gameNo.get(g.id)} · ${g.matchup} · ${ch.short} ${g[ch.key]}`}>
+                            <i>#{gameNo.get(g.id)}</i> {g.matchup}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
+            <div class="chart__cap">{ch.cap}</div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <h2 class="sec">Per-game</h2>
+  <div class="tscroll">
+    <table class="tbl">
+      <thead><tr>
+        <th>#</th><th>Matchup</th><th>Script</th><th>Size</th><th>Aspect</th>
+        <th>City sites</th><th>Water hex</th><th>Land hex</th>
+        <th>Land turns</th><th>Water turns</th>
+      </tr></thead>
+      <tbody>
+        {games.map((g) => (
+          <tr>
+            <td class="mono id">{gameNo.get(g.id)}</td>
+            <td>{g.matchup}</td>
+            <td>{g.script}</td>
+            <td>{sz(g.size)}</td>
+            <td class="cap">{g.aspect.toLowerCase()}</td>
+            <td><b>{g.citySites}</b></td>
+            <td class="mono">{g.sea ?? '—'}</td>
+            <td class="mono">{g.land ?? '—'}</td>
+            <td class="mono">{g.slingerLand ?? '—'}</td>
+            <td class="mono">{g.slingerSea ?? '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 
   <script is:inline>
     (function () {
       function val(cell) {
         var t = (cell.textContent || '').trim();
         if (t === '' || t === '—') return -Infinity;
-        if (t === 'Y') return 1;
-        if (t === 'NO') return 0;
         var m = t.match(/-?\d+(\.\d+)?/);
         return m ? parseFloat(m[0]) : t.toLowerCase();
       }
@@ -97,40 +189,97 @@ const sz = (s: string) => s === 'SMALLEST' ? 'Duel' : cap(s);
     })();
   </script>
 
-  <p class="note" style="margin-top:1.6rem;">
-    Click any column header to sort. Capital = each player's
-    <i>original</i> capital (the founded
-    <code>&lt;Capital/&gt;</code>, FirstPlayer == player) — robust to
-    captures. Distances: Crow = even-r hex (terrain ignored); Land =
-    walkable-land BFS (water/mountain impassable); Scout = orders for a
-    Scout (move 3) capital→capital; Slinger = move 2 (L land / Sea
-    coastal / Hatti ignores hill). Exploration law assumed (rivers fast).
-    <b>Ocean%</b> = water share (hover: forest/hills/mtn). <b>Res</b> =
-    total resources on the map (hover: top types). <b>8+ F·I·W·S</b> =
-    land tiles that can yield 8+ Food/Iron/Wood/Stone via the best
-    improvement (hover shows the 6+ counts). Tribes = distinct named
-    tribes spawned (Barbarians excluded; hover lists them).
+  <p class="note">
+    Click a bar for the games in that bin · click any column header to
+    sort. <b>City sites</b> = valid city sites on the map. <b>Water hex</b>
+    = capital→capital shortest path with embark allowed (hex tiles).
+    <b>Land hex</b> = capital→capital shortest land-only path (hex tiles).
+    <b>Land / Water turns</b> = army (move-2) capital→capital weighted by
+    terrain move cost, land-only and embark-allowed respectively
+    (exploration law assumed — rivers fast). Capital = each player's
+    original founded capital. # = chronological game number.
   </p>
 </Base>
 
 <style>
-  .lede { font-family: var(--font-display); font-style: italic; font-size: 1.05rem;
-    line-height: 1.55; color: var(--text-soft); max-width: 74ch; margin: 0.6rem 0 1.6rem; }
-  .grp { margin-bottom: 2rem; }
-  .grp__h { font-size: 1.35rem; border-bottom: 1px solid var(--gold-deep);
-    padding-bottom: 0.3rem; margin-bottom: 0.5rem; }
+  .lede { font-family: var(--font-display); font-style: italic;
+    font-size: 1.05rem; line-height: 1.55; color: var(--text-soft);
+    max-width: 78ch; margin: 0.6rem 0 1.4rem; }
+  .sec { font-size: 1.35rem; border-bottom: 1px solid var(--gold-deep);
+    padding-bottom: 0.3rem; margin: 1.8rem 0 0.7rem; }
   .tscroll { overflow-x: auto; }
   .tbl { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-  .tbl thead th { font-family: var(--font-ui); font-size: 0.56rem; letter-spacing: 0.13em;
-    text-transform: uppercase; color: var(--text-dim); font-weight: 600; text-align: left;
-    padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--border-strong); white-space: nowrap;
+  .tbl thead th { font-family: var(--font-ui); font-size: 0.56rem;
+    letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-dim);
+    font-weight: 600; text-align: left; padding: 0.35rem 0.6rem;
+    border-bottom: 1px solid var(--border-strong); white-space: nowrap;
     cursor: pointer; user-select: none; }
   .tbl thead th:hover { color: var(--gold-soft); }
-  .tbl td { padding: 0.36rem 0.6rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .tbl td { padding: 0.36rem 0.6rem; border-bottom: 1px solid var(--border);
+    white-space: nowrap; }
   .tbl tbody tr:hover td { background: #1c1f25; }
   .mono { font-family: var(--font-mono); font-size: 0.82em; }
   .id { color: var(--gold-soft); }
   .cap { text-transform: capitalize; }
-  .bad { color: #b06a5f; font-weight: 600; }
-  .note { font-size: 0.82rem; color: var(--text-faint); line-height: 1.5; max-width: 82ch; }
+  .note { font-size: 0.82rem; color: var(--text-faint); line-height: 1.5;
+    max-width: 88ch; margin-top: 1.6rem; }
+
+  /* ---- zone palette (shared with the atlas histograms) ---- */
+  .z-good { --zc:#2f7d4f; --zb:#4cc080; }
+  .z-ok   { --zc:#7a6a2a; --zb:var(--gold-soft); }
+  .z-edge { --zc:#7a4a1f; --zb:#d08a3a; }
+  .z-bad  { --zc:#7a2a2a; --zb:#d05656; }
+
+  /* ---- distribution panel ---- */
+  .dist { background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.8rem 1rem 0.9rem; margin: 0 0 1rem; }
+  .dist__h { display: flex; align-items: baseline; gap: 0.7rem;
+    flex-wrap: wrap; border-bottom: 1px solid var(--gold-deep);
+    padding-bottom: 0.35rem; margin-bottom: 0.7rem; }
+  .dist__t { font-family: var(--font-display); font-weight: 700;
+    font-size: 1.25rem; color: var(--gold); }
+  .dist__leg { margin-left: auto; display: inline-flex; align-items: center;
+    gap: 0.35rem; font-size: 0.62rem; font-family: var(--font-mono);
+    color: var(--text-dim); letter-spacing: 0.04em; }
+  .dist__leg i { width: 10px; height: 10px; border-radius: 2px;
+    margin-left: 0.45rem; background: var(--zb); border: 1px solid var(--zc); }
+  .dist__leg i:first-of-type { margin-left: 0; }
+  .dist__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  @media (max-width: 760px) { .dist__grid { grid-template-columns: 1fr; } }
+  .chart__t { font-size: 0.66rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.4rem; }
+  .bars { display: flex; align-items: flex-end; gap: 2px; height: 162px; }
+  .hb { flex: 1 1 0; min-width: 0; position: relative; height: 100%; }
+  .hb > summary { list-style: none; cursor: pointer;
+    position: absolute; inset: 0; }
+  .hb > summary::-webkit-details-marker { display: none; }
+  .bar__n { position: absolute; left: 0; right: 0; text-align: center;
+    bottom: calc(16px + var(--h) + 2px); font-size: 0.58rem;
+    font-family: var(--font-mono); color: var(--text-faint);
+    line-height: 1; pointer-events: none; }
+  .bar__f { position: absolute; left: 0; right: 0; bottom: 16px;
+    height: var(--h); border-radius: 2px 2px 0 0;
+    background: linear-gradient(var(--zb), var(--zc));
+    border: 1px solid var(--zc); box-shadow: inset 0 0 0 1px #0006; }
+  .hb > summary:hover .bar__f { filter: brightness(1.25); }
+  .hb[open] .bar__f { outline: 1px solid var(--gold); }
+  .bar__x { position: absolute; left: 50%; bottom: 0;
+    transform: translateX(-50%); white-space: nowrap;
+    font-size: 0.54rem; font-family: var(--font-mono);
+    color: var(--text-dim); pointer-events: none; }
+  .pop { position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: calc(100% + 4px); z-index: 30; width: max-content;
+    max-width: 300px; background: #0e0f12;
+    border: 1px solid var(--gold-deep); border-radius: 6px;
+    padding: 0.45rem 0.55rem; box-shadow: 0 6px 20px #000c; }
+  .pop__h { font-size: 0.62rem; font-family: var(--font-mono);
+    color: var(--gold-soft); letter-spacing: 0.06em; margin-bottom: 0.35rem; }
+  .pop__l { display: flex; flex-direction: column; gap: 0.15rem;
+    max-height: 220px; overflow: auto; }
+  .pop__l span { font-size: 0.68rem; color: var(--text-soft);
+    white-space: nowrap; }
+  .pop__l i { font-style: normal; color: var(--gold-soft);
+    font-family: var(--font-mono); font-size: 0.62rem; }
+  .chart__cap { font-size: 0.66rem; color: var(--text-faint);
+    line-height: 1.45; margin-top: 0.45rem; font-family: var(--font-ui); }
 </style>
