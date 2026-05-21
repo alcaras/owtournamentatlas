@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import gensData from '../data/gens.json';
+const baseUrl = import.meta.env.BASE_URL;
+
+// ---- Filter --------------------------------------------------------
+// Keep map configs that RELIABLY land in a tournament-usable window:
+// ≥70% of their generated seeds must hit BOTH ranges at once —
+//   • 14–26 city sites
+//   • 40–60 land-hex capital distance
+// Ranked most-reliable → least. Universe = tiny/duel × wide/square ×
+// point-sym on/off (ultrawide excluded per request).
+const SITES_LO = 14, SITES_HI = 26;
+const LAND_LO = 40, LAND_HI = 60;
+const THRESH = 0.70;
+
+type G = { cslug: string; sites: number; land: number; label: string;
+  setting: string; group: string; id: string; seed: number };
+const all = (gensData as any).gens as G[];
+const inUniverse = (s: string) => !/ultrawide/.test(s || '');
+
+const byCfg: Record<string, G[]> = {};
+for (const g of all)
+  if (inUniverse(g.setting)) (byCfg[g.cslug] ??= []).push(g);
+
+const med = (a: number[]) => {
+  const s = [...a].sort((x, y) => x - y), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+};
+type Pick = {
+  slug: string; label: string; setting: string; group: string;
+  n: number; inN: number; pct: number; sitePct: number; landPct: number;
+  sitesMed: number; landMed: number; sampleId: string;
+};
+const inSite = (g: G) => g.sites >= SITES_LO && g.sites <= SITES_HI;
+const inLand = (g: G) => g.land >= LAND_LO && g.land <= LAND_HI;
+
+const ranked: Pick[] = Object.entries(byCfg).map(([slug, rows]) => {
+  const n = rows.length;
+  return {
+    slug, label: rows[0].label, setting: rows[0].setting,
+    group: rows[0].group, n,
+    inN: rows.filter((g) => inSite(g) && inLand(g)).length,
+    pct: rows.filter((g) => inSite(g) && inLand(g)).length / n,
+    sitePct: rows.filter(inSite).length / n,
+    landPct: rows.filter(inLand).length / n,
+    sitesMed: med(rows.map((g) => g.sites)),
+    landMed: med(rows.map((g) => g.land)),
+    sampleId: rows[0].id,
+  };
+});
+const picks = ranked
+  .filter((p) => p.pct >= THRESH)
+  .sort((a, b) => b.pct - a.pct || b.inN - a.inN
+    || a.label.localeCompare(b.label));
+const considered = Object.keys(byCfg).length;
+const pc = (x: number) => Math.round(x * 100);
+// chips: drop the always-on "mirror" token, it's universal
+const chips = (s: string) =>
+  (s || '').split(' · ').filter((t) => t && t !== 'mirror');
+---
+<Base title="Alcaras Picks">
+  <p class="lede">
+    Map configs that <b>reliably</b> produce a tournament-usable map —
+    at least {pc(THRESH)}% of generated seeds landing in <b>both</b>
+    windows at once: {SITES_LO}–{SITES_HI} city sites and {LAND_LO}–{LAND_HI}
+    land-hex capital distance. Ranked most-reliable first.
+    {picks.length} of {considered} configs clear the bar
+    (tiny/duel × wide/square × point-sym on/off; ultrawide excluded).
+  </p>
+
+  <div class="picks">
+    {picks.map((p, i) => (
+      <a class="pk" href={`${baseUrl}gen/${p.sampleId}`}
+         target="_blank" rel="noopener"
+         data-rank={i < 3 ? i + 1 : ''}>
+        <div class="pk__rank">{i + 1}</div>
+        <div class="pk__main">
+          <div class="pk__top">
+            <span class="pk__name">{p.label}</span>
+            <span class="pk__chips">
+              {chips(p.setting).map((t) => (<span class="ch">{t}</span>))}
+            </span>
+          </div>
+          <div class="pk__bar" title={`${p.inN}/${p.n} seeds in range`}>
+            <span class="pk__fill" style={`width:${p.pct * 100}%`}></span>
+            <span class="pk__thr" style={`left:${THRESH * 100}%`}></span>
+          </div>
+          <div class="pk__sub">
+            <span class="sub">
+              <i>sites {SITES_LO}–{SITES_HI}</i>
+              <span class="mini"><span style={`width:${p.sitePct * 100}%`}></span></span>
+              <b>{pc(p.sitePct)}%</b>
+            </span>
+            <span class="sub">
+              <i>land {LAND_LO}–{LAND_HI}</i>
+              <span class="mini"><span style={`width:${p.landPct * 100}%`}></span></span>
+              <b>{pc(p.landPct)}%</b>
+            </span>
+            <span class="sub med">
+              med <b>{p.sitesMed}</b> sites · <b>{p.landMed}</b> land · n={p.n}
+            </span>
+          </div>
+        </div>
+        <div class="pk__pct">
+          <span class="pk__num">{pc(p.pct)}<i>%</i></span>
+          <span class="pk__lab">in range</span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <p class="note">
+    {picks.length} configs ≥{pc(THRESH)}%, of {considered} considered.
+    “In range” = a seed whose city-site count is {SITES_LO}–{SITES_HI}
+    <i>and</i> whose capital→capital land-hex path is {LAND_LO}–{LAND_HI}.
+    The tick on each bar marks the {pc(THRESH)}% cut. Per-metric bars show
+    how often each window is hit on its own. Click a row for a sample
+    generated map. Data: deterministic owmapgen sweep (gens.json) —
+    descriptive, no judgement of what's good. DOTA is locked point-sym
+    on in-game.
+  </p>
+
+  <style>
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:82ch; margin:0.6rem 0 1.4rem; }
+    .picks { display:flex; flex-direction:column; gap:0.55rem; }
+    .pk { display:flex; align-items:stretch; gap:0.9rem;
+      background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:8px; padding:0.7rem 0.9rem; text-decoration:none;
+      color:inherit; }
+    .pk:hover { border-color:var(--gold-deep); text-decoration:none;
+      background:#1b1d23; }
+    .pk__rank { flex:none; width:2.1rem; display:flex;
+      align-items:center; justify-content:center;
+      font-family:var(--font-display); font-weight:700; font-size:1.5rem;
+      color:var(--text-dim); }
+    .pk[data-rank="1"] .pk__rank { color:var(--gold); }
+    .pk[data-rank="1"] { border-color:var(--gold-deep); }
+    .pk[data-rank="2"] .pk__rank { color:#c7c7cf; }
+    .pk[data-rank="3"] .pk__rank { color:#c08a5a; }
+    .pk__main { flex:1 1 auto; min-width:0; display:flex;
+      flex-direction:column; gap:0.4rem; justify-content:center; }
+    .pk__top { display:flex; align-items:baseline; gap:0.7rem;
+      flex-wrap:wrap; }
+    .pk__name { font-family:var(--font-display); font-weight:700;
+      font-size:1.12rem; color:var(--text); }
+    .pk__chips { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
+    .ch { font-family:var(--font-mono); font-size:0.6rem;
+      letter-spacing:0.03em; color:var(--gold-soft);
+      background:#15160f; border:1px solid #4a431f; border-radius:4px;
+      padding:0.08rem 0.4rem; }
+    .pk__bar { position:relative; height:9px; border-radius:5px;
+      background:#0e0f12; border:1px solid var(--border-strong);
+      overflow:hidden; }
+    .pk__fill { position:absolute; left:0; top:0; bottom:0;
+      background:linear-gradient(90deg,#7a6a2a,#4cc080);
+      border-radius:5px 0 0 5px; }
+    .pk__thr { position:absolute; top:-2px; bottom:-2px; width:2px;
+      background:var(--gold); box-shadow:0 0 4px #000; }
+    .pk__sub { display:flex; align-items:center; gap:1.1rem;
+      flex-wrap:wrap; font-size:0.7rem; color:var(--text-faint);
+      font-family:var(--font-mono); }
+    .sub { display:inline-flex; align-items:center; gap:0.4rem; }
+    .sub i { font-style:normal; color:var(--text-dim);
+      text-transform:uppercase; letter-spacing:0.06em; font-size:0.62rem; }
+    .sub b { color:var(--text-soft); }
+    .mini { display:inline-block; width:60px; height:5px;
+      border-radius:3px; background:#0e0f12;
+      border:1px solid var(--border-strong); overflow:hidden; }
+    .mini span { display:block; height:100%;
+      background:var(--gold-soft); }
+    .sub.med { color:var(--text-dim); }
+    .sub.med b { color:var(--text-soft); }
+    .pk__pct { flex:none; width:5rem; display:flex;
+      flex-direction:column; align-items:center; justify-content:center;
+      border-left:1px solid var(--border); }
+    .pk__num { font-family:var(--font-display); font-weight:700;
+      font-size:2rem; line-height:1; color:var(--gold); }
+    .pk__num i { font-style:normal; font-size:0.9rem;
+      color:var(--text-faint); }
+    .pk__lab { font-size:0.56rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--text-dim);
+      margin-top:0.15rem; }
+    .note { font-size:0.8rem; color:var(--text-faint); line-height:1.55;
+      max-width:86ch; margin-top:1.6rem; }
+  </style>
+</Base>
