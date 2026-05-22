@@ -3,13 +3,13 @@ import Base from '../layouts/Base.astro';
 import gensData from '../data/gens.json';
 const baseUrl = import.meta.env.BASE_URL;
 
-// ---- Round 2 ballot, organised by Round 1 tier ---------------------
-// S tier (unanimous) is locked in — no vote. A and B tier go back into
-// the vote as their own categories (even the configs that miss the
-// reliability criteria — Round 1 liked them, so they get re-examined).
-// Then: New maps (the freshly-swept grid, never balloted) and
-// Additional (reliable configs voted in Round 1 that never made the
-// 17-map pool). Reliability badges show the criteria fit either way.
+// ---- Round 2 ballot — three groups ---------------------------------
+//   Locked in        — the unanimous Round 1 picks; in the pool, no vote.
+//   Previously considered — every other config that was on a Round 1
+//                      ballot (former A / B / C). Re-voted fresh.
+//   New maps         — reliable configs from the full-grid sweep that
+//                      were never balloted.
+// No Round 1 results are shown — Round 2 is a clean re-vote.
 const SITES_LO = 14, SITES_HI = 26, LAND_LO = 40, LAND_HI = 60;
 const THRESH = 0.70;
 
@@ -19,14 +19,14 @@ const LOCKED = [
   'dota-jungle-smallest-square-sym',
   'inland-sea-smallest-square-sym',
 ];
-const ATIER = [
+// every config that was on a Round 1 ballot and isn't locked (former
+// A + B pool tiers, plus the reliable also-rans that weren't pooled)
+const PREVIOUS = [
   'dota-sand-smallest-square-sym',
   'arid-plateau-small-seas-smallest-wide-sym',
   'continent-smallest-wide-sym',
   'dota-water-smallest-square-sym',
   'hardwood-forest-smallest-wide-nosym',
-];
-const BTIER = [
   'coastal-rain-basin-smallest-square-sym',
   'inland-sea-smallest-wide-sym',
   'archipelago-land-lg-water-sm-smallest-wide-nosym',
@@ -35,6 +35,19 @@ const BTIER = [
   'donut-irreg-low-smallest-square-sym',
   'mountain-pass-tiny-square-sym',
   'highlands-tiny-square-sym',
+  'dota-jungle-smallest-wide-sym',
+  'coastal-rain-basin-smallest-wide-sym',
+  'inland-sea-smallest-wide-nosym',
+  'dota-sand-smallest-wide-sym',
+  'arid-plateau-small-seas-smallest-wide-nosym',
+  'hardwood-forest-tiny-square-nosym',
+  'hardwood-forest-tiny-square-sym',
+  'dota-water-smallest-wide-sym',
+  'archipelago-land-lg-water-sm-smallest-square-sym',
+  'desert-none-std-tiny-square-sym',
+  'wetlands-smallest-square-sym',
+  'continent-tiny-square-nosym',
+  'donut-irreg-low-tiny-square-nosym',
 ];
 // reliable (≥70% both windows) configs never balloted in Round 1
 const NEWMAPS = [
@@ -51,53 +64,6 @@ const NEWMAPS = [
   'mountain-pass-tiny-square-nosym',
   'wetlands-smallest-square-nosym',
 ];
-// reliable configs voted in Round 1 that didn't make the 17-map pool —
-// AND were positively received (nos < likes). Round-1 net-rejected
-// configs (the C/D also-rans) are deliberately left off — no re-vote.
-const ADDITIONAL = [
-  'dota-jungle-smallest-wide-sym',
-  'coastal-rain-basin-smallest-wide-sym',
-  'inland-sea-smallest-wide-nosym',
-  'dota-sand-smallest-wide-sym',
-  'arid-plateau-small-seas-smallest-wide-nosym',
-  'dota-water-smallest-wide-sym',
-  'archipelago-land-lg-water-sm-smallest-square-sym',
-  'desert-none-std-tiny-square-sym',
-  'wetlands-smallest-square-sym',
-];
-// Round 1 tally — [like, maybe, no] over the 7 non-organiser voters.
-const R1: Record<string, [number, number, number]> = {
-  'arid-plateau-small-seas-smallest-square-sym': [7, 0, 0],
-  'coastal-rain-basin-smallest-wide-nosym': [7, 0, 0],
-  'dota-jungle-smallest-square-sym': [6, 0, 1],
-  'inland-sea-smallest-square-sym': [7, 0, 0],
-  'dota-sand-smallest-square-sym': [5, 1, 1],
-  'arid-plateau-small-seas-smallest-wide-sym': [6, 0, 1],
-  'continent-smallest-wide-sym': [6, 0, 1],
-  'dota-water-smallest-square-sym': [4, 2, 1],
-  'hardwood-forest-smallest-wide-nosym': [6, 1, 0],
-  'coastal-rain-basin-smallest-square-sym': [5, 1, 1],
-  'inland-sea-smallest-wide-sym': [5, 1, 1],
-  'archipelago-land-lg-water-sm-smallest-wide-nosym': [4, 0, 3],
-  'continent-tiny-square-sym': [4, 1, 2],
-  'desert-lush-std-smallest-wide-sym': [4, 1, 2],
-  'donut-irreg-low-smallest-square-sym': [5, 1, 1],
-  'mountain-pass-tiny-square-sym': [3, 1, 3],
-  'highlands-tiny-square-sym': [0, 1, 0],
-  'archipelago-land-lg-water-sm-smallest-square-sym': [3, 1, 2],
-  'arid-plateau-small-seas-smallest-wide-nosym': [4, 1, 1],
-  'coastal-rain-basin-smallest-wide-sym': [4, 0, 2],
-  'continent-tiny-square-nosym': [2, 1, 3],
-  'desert-none-std-tiny-square-sym': [3, 2, 1],
-  'donut-irreg-low-tiny-square-nosym': [0, 3, 3],
-  'dota-jungle-smallest-wide-sym': [5, 0, 1],
-  'dota-sand-smallest-wide-sym': [4, 1, 1],
-  'dota-water-smallest-wide-sym': [3, 2, 1],
-  'hardwood-forest-tiny-square-nosym': [2, 0, 4],
-  'hardwood-forest-tiny-square-sym': [1, 3, 2],
-  'inland-sea-smallest-wide-nosym': [2, 2, 2],
-  'wetlands-smallest-square-sym': [3, 3, 0],
-};
 
 type G = { cslug: string; sites: number; land: number; slLand: number;
   label: string; group: string; setting: string; id: string;
@@ -119,15 +85,13 @@ const pc = (x: number) => Math.round(x * 100);
 type Cfg = {
   slug: string; group: string; variant: string; n: number; rows: G[];
   setting: string[]; sitePct: number; landPct: number;
-  sites: Stat; land: Stat; move: Stat; r1: [number, number, number] | null;
-  r1score: number;
+  sites: Stat; land: Stat; move: Stat;
 };
 function build(slug: string): Cfg {
   const rows = (byCfg[slug] || []).slice().sort((a, b) => a.seed - b.seed);
   const n = rows.length || 1;
   const r0 = rows[0] || ({} as G);
   const parts = (r0.label || slug).split(' · ');
-  const r1 = R1[slug] || null;
   return {
     slug, group: r0.group || '', variant: parts.slice(1, -1).join(' · '),
     n, rows, setting: (r0.setting || '').split(' · ').filter((p) => p !== 'mirror'),
@@ -136,30 +100,32 @@ function build(slug: string): Cfg {
     sites: stats(rows.map((g) => g.sites)),
     land: stats(rows.map((g) => g.land)),
     move: stats(rows.map((g) => g.slLand)),
-    r1, r1score: r1 ? r1[0] * 2 - r1[2] : -99,
   };
 }
-const byScore = (a: Cfg, b: Cfg) => b.r1score - a.r1score;
-const byRel = (a: Cfg, b: Cfg) =>
-  (b.sitePct + b.landPct) - (a.sitePct + a.landPct);
+// neutral ordering: by map script, then label — no Round 1 signal
+const byName = (a: Cfg, b: Cfg) =>
+  a.group.localeCompare(b.group) || a.slug.localeCompare(b.slug);
 
-const locked = LOCKED.map(build);
+const locked = LOCKED.map(build).sort(byName);
 const SECTIONS = [
-  { id: 'a', tag: 'A', title: 'A tier — Round 1 strong consensus',
-    sub: 'Liked by almost everyone in Round 1. Back on the ballot — note several miss the reliability windows; re-examine with that in view.',
-    list: ATIER.map(build).sort(byScore) },
-  { id: 'b', tag: 'B', title: 'B tier — Round 1 variety picks',
-    sub: 'The solid, variety-rounding picks from Round 1 — re-voted here.',
-    list: BTIER.map(build).sort(byScore) },
-  { id: 'new', tag: 'New', title: 'New maps — never balloted',
-    sub: 'Reliable configs from the freshly-swept grid (Arid Large Seas, the Tiny variants) — nobody has voted on these. First look.',
-    list: NEWMAPS.map(build).sort(byRel) },
-  { id: 'extra', tag: 'Extra', title: 'Additional — Round 1 near-misses',
-    sub: 'Reliable configs that were on the Round 1 ballot, liked (nos < likes), but didn’t make the 17-map pool — mostly an alternate variant of a pooled script. Round 1’s net-rejected configs are NOT here — no re-vote of C/D.',
-    list: ADDITIONAL.map(build).sort(byScore) },
+  { id: 'prev', title: 'Previously considered',
+    sub: 'Every config that was on a Round 1 ballot and isn’t locked in — re-voted fresh. Reliability badges show how each one fits the criteria; vote on the maps, not the history.',
+    list: PREVIOUS.map(build).sort(byName) },
+  { id: 'new', title: 'New maps',
+    sub: 'Reliable configs from the full-grid sweep (Arid Large Seas, the Tiny variants) that were never on a ballot before.',
+    list: NEWMAPS.map(build).sort(byName) },
 ];
 const N = SECTIONS.reduce((s, x) => s + x.list.length, 0);
 const PREVIEWS = 6;
+// group a section's configs by map script (list is pre-sorted by group)
+function byScript(list: Cfg[]): [string, Cfg[]][] {
+  const m = new Map<string, Cfg[]>();
+  for (const c of list) {
+    const a = m.get(c.group);
+    if (a) a.push(c); else m.set(c.group, [c]);
+  }
+  return [...m.entries()];
+}
 
 const SHORT: Record<string, string> = {
   'Continent': 'Cont', 'Coastal Rain Basin': 'CRB', 'Donut': 'Donut',
@@ -177,14 +143,13 @@ const abbr = (c: Cfg) => {
 ---
 <Base title="Round 2 Voting">
   <p class="lede">
-    <b>Round 2.</b> The {locked.length} <b>S-tier</b> maps (unanimous in
-    Round 1) are <b>locked in</b> — no vote. Everything else goes back to
-    the vote, in four groups: <b>A tier</b> and <b>B tier</b> from the
-    Round 1 pool, the <b>new maps</b> from the full grid sweep, and the
-    <b>additional</b> reliable configs that were voted in Round 1 but never
-    pooled. {N} on the ballot. Each card shows the three stats and how
-    often it lands in the {SITES_LO}–{SITES_HI} site / {LAND_LO}–{LAND_HI}
-    land windows.
+    <b>Round 2.</b> The {locked.length} maps that were unanimous in
+    Round 1 are <b>locked in</b> — no vote. Everything else is a clean
+    re-vote in two groups: <b>previously considered</b> (every config
+    that was on a Round 1 ballot) and <b>new maps</b> (reliable configs
+    from the full grid that were never balloted). {N} on the ballot —
+    each card shows the three stats and how often it lands in the
+    {SITES_LO}–{SITES_HI} site / {LAND_LO}–{LAND_HI} land windows.
   </p>
 
   <nav class="snav" id="snav">
@@ -196,7 +161,7 @@ const abbr = (c: Cfg) => {
       <span class="tly tly-no">👎 <b id="t-no">0</b></span>
     </div>
     <div class="ngsec">
-      <a class="snav__lnk" href="#locked">✓ Locked · S tier · {locked.length}</a>
+      <a class="snav__lnk" href="#locked">✓ Locked in · {locked.length}</a>
       <div class="chips">
         {locked.map((c) => (
           <a class="vchip vchip--lock" href={`#cfg-${c.slug}`}
@@ -206,7 +171,7 @@ const abbr = (c: Cfg) => {
     </div>
     {SECTIONS.map((sec) => (
       <div class="ngsec">
-        <a class="snav__lnk" href={`#${sec.id}`}>{sec.title.split(' — ')[0]} · {sec.list.length}</a>
+        <a class="snav__lnk" href={`#${sec.id}`}>{sec.title} · {sec.list.length}</a>
         <div class="chips">
           {sec.list.map((c) => (
             <a class="vchip" href={`#cfg-${c.slug}`} data-slug={c.slug}
@@ -219,8 +184,8 @@ const abbr = (c: Cfg) => {
 
   <div class="rmain">
     <section id="locked">
-      <h2 class="grp__h">✓ Locked in — S tier, no vote needed</h2>
-      <p class="grp__sub">Unanimous likes in Round 1 — these are in the pool.</p>
+      <h2 class="grp__h">✓ Locked in — no vote needed</h2>
+      <p class="grp__sub">Unanimous in Round 1 — already in the pool.</p>
       {locked.map((c) => (
         <div class="cfg cfg--lock" id={`cfg-${c.slug}`}>
           <div class="cfg__hd">
@@ -232,7 +197,6 @@ const abbr = (c: Cfg) => {
             <span class="rels">
               <span class={'rel ' + (c.sitePct >= THRESH ? 'rel--ok' : 'rel--lo')}>sites {pc(c.sitePct)}%</span>
               <span class={'rel ' + (c.landPct >= THRESH ? 'rel--ok' : 'rel--lo')}>land {pc(c.landPct)}%</span>
-              <span class="r1">R1 {c.r1![0]}L·{c.r1![1]}M·{c.r1![2]}N</span>
             </span>
           </div>
           <div class="mini">
@@ -248,7 +212,10 @@ const abbr = (c: Cfg) => {
       <section id={sec.id}>
         <h2 class="grp__h">{sec.title}</h2>
         <p class="grp__sub">{sec.sub}</p>
-        {sec.list.map((c) => (
+        {byScript(sec.list).map(([script, cfgs]) => (
+          <div class="scriptgrp">
+          <h3 class="scripth">{script}</h3>
+          {cfgs.map((c) => (
           <div class="cfg" id={`cfg-${c.slug}`} data-slug={c.slug}>
             <div class="cfg__hd">
               <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
@@ -258,9 +225,6 @@ const abbr = (c: Cfg) => {
               <span class="rels">
                 <span class={'rel ' + (c.sitePct >= THRESH ? 'rel--ok' : 'rel--lo')}>sites 14–26 <b>{pc(c.sitePct)}%</b></span>
                 <span class={'rel ' + (c.landPct >= THRESH ? 'rel--ok' : 'rel--lo')}>land 40–60 <b>{pc(c.landPct)}%</b></span>
-                {c.r1
-                  ? <span class="r1">Round 1: {c.r1[0]}L · {c.r1[1]}M · {c.r1[2]}N</span>
-                  : <span class="r1 r1--new">first look — no Round 1 vote</span>}
               </span>
               <span class="vote" data-slug={c.slug}>
                 <button data-v="like">👍 like</button>
@@ -303,6 +267,8 @@ const abbr = (c: Cfg) => {
               </div>
             </details>
           </div>
+          ))}
+          </div>
         ))}
       </section>
     ))}
@@ -313,10 +279,8 @@ const abbr = (c: Cfg) => {
     <b>City sites / Land hex distance / Land hex cost</b> are per-config
     means over the owmapgen sweep; the two badges are how often a config
     lands inside the {SITES_LO}–{SITES_HI} and {LAND_LO}–{LAND_HI}
-    windows. A tier &amp; B tier keep every Round 1 pool config — including
-    ones below the criteria — so nothing popular is silently dropped.
-    Votes are stored locally, separate from Round 1; COPY emits an
-    <code>OW-VOTES-R2</code> block.
+    windows. Round 2 is a clean re-vote — no Round 1 results are shown.
+    Votes are stored locally; COPY emits an <code>OW-VOTES-R2</code> block.
   </p>
 
   <style>
@@ -329,6 +293,11 @@ const abbr = (c: Cfg) => {
     .grp__sub { font-size:0.84rem; color:var(--text-faint);
       font-style:italic; font-family:var(--font-display);
       margin:0 0 0.7rem; max-width:84ch; }
+    .scriptgrp { margin-bottom:0.4rem; }
+    .scripth { font-size:0.66rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--gold-soft);
+      font-family:var(--font-ui); font-weight:700;
+      margin:1rem 0 0.4rem; }
     .cfg { background:var(--bg-elev); border:1px solid var(--border);
       border-radius:6px; padding:0.8rem 1rem; margin-bottom:0.8rem; }
     .cfg--lock { border-color:#3b6e3b; background:#13200f; }
@@ -351,9 +320,6 @@ const abbr = (c: Cfg) => {
     .rel b { font-weight:800; }
     .rel--ok { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
     .rel--lo { color:#e0b061; border-color:var(--gold-deep); background:#231f0d; }
-    .r1 { font-size:0.62rem; font-family:var(--font-mono);
-      color:var(--text-faint); }
-    .r1--new { color:#8fc0e8; }
     .vote { display:inline-flex; gap:0.4rem; margin-left:auto; }
     .vote button { background:#1b1d23; color:var(--text-soft);
       border:1px solid var(--border-strong); border-radius:7px;
