@@ -3,137 +3,135 @@ import Base from '../layouts/Base.astro';
 import gensData from '../data/gens.json';
 const baseUrl = import.meta.env.BASE_URL;
 
-// ---- Round 2 ballot ------------------------------------------------
-// Connection is solved this round (every map is land-connected by
-// construction), so the vote is on three stats only:
-//   city sites · land-hex distance · land-hex move cost (turns)
-// Ballot = the 21 configs that reliably (≥70%) land in BOTH the
-// 14–26 city-site and 40–60 land-hex windows, PLUS the 9 current-pool
-// configs that fall short — so nothing already voted-in is dropped
-// silently. 30 configs, grouped by map script.
+// ---- Round 2 ballot — designed for CLARITY, not a full re-vote ------
+// Of the 33 reliable configs (≥70% in both the 14–26 site & 40–60 land
+// windows), Round 1 already settled some. Round 2 only asks what a vote
+// can still change:
+//   LOCKED   — reliable + near-unanimous Round 1 like → IN, no vote.
+//   CONTESTED — reliable but Round 1 votes were split → needs a verdict.
+//   UNVOTED  — reliable but never balloted (the new grid) → first look.
+// hardwood-forest-tiny-square-nosym is reliable but Round 1 rejected it
+// (2 like / 4 no) — settled OUT, off the ballot.
 const SITES_LO = 14, SITES_HI = 26, LAND_LO = 40, LAND_HI = 60;
 const THRESH = 0.70;
 
-// the 17 configs in the current voted tournament pool (index.astro)
-const POOL = new Set([
-  'arid-plateau-small-seas-smallest-square-sym',
+const LOCKED = [
   'coastal-rain-basin-smallest-wide-nosym',
-  'dota-jungle-smallest-square-sym',
+  'arid-plateau-small-seas-smallest-square-sym',
   'inland-sea-smallest-square-sym',
-  'dota-sand-smallest-square-sym',
-  'arid-plateau-small-seas-smallest-wide-sym',
-  'continent-smallest-wide-sym',
-  'dota-water-smallest-square-sym',
-  'hardwood-forest-smallest-wide-nosym',
+  'dota-jungle-smallest-square-sym',
+];
+const CONTESTED = [
   'coastal-rain-basin-smallest-square-sym',
-  'inland-sea-smallest-wide-sym',
-  'archipelago-land-lg-water-sm-smallest-wide-nosym',
+  'dota-jungle-smallest-wide-sym',
+  'arid-plateau-small-seas-smallest-wide-nosym',
+  'dota-water-smallest-square-sym',
+  'dota-sand-smallest-wide-sym',
   'continent-tiny-square-sym',
-  'desert-lush-std-smallest-wide-sym',
-  'donut-irreg-low-smallest-square-sym',
-  'mountain-pass-tiny-square-sym',
+  'coastal-rain-basin-smallest-wide-sym',
+  'wetlands-smallest-square-sym',
+  'dota-water-smallest-wide-sym',
+  'desert-none-std-tiny-square-sym',
+  'archipelago-land-lg-water-sm-smallest-square-sym',
+  'inland-sea-smallest-wide-nosym',
+  'continent-tiny-square-nosym',
+  'hardwood-forest-tiny-square-sym',
+  'donut-irreg-low-tiny-square-nosym',
+];
+const UNVOTED = [
   'highlands-tiny-square-sym',
-]);
+  'mountain-pass-smallest-wide-sym',
+  'donut-irreg-low-tiny-square-sym',
+  'arid-plateau-large-seas-smallest-square-sym',
+  'arid-plateau-large-seas-smallest-wide-nosym',
+  'arid-plateau-large-seas-smallest-wide-sym',
+  'inland-sea-smallest-square-nosym',
+  'desert-lush-std-tiny-square-nosym',
+  'desert-dry-std-tiny-wide-nosym',
+  'desert-none-std-tiny-wide-nosym',
+  'mountain-pass-tiny-square-nosym',
+  'wetlands-smallest-square-nosym',
+  'highlands-tiny-wide-nosym',
+];
+// Round 1 tally — [like, maybe, no] over the 7 non-organiser voters.
+const R1: Record<string, [number, number, number]> = {
+  'coastal-rain-basin-smallest-wide-nosym': [7, 0, 0],
+  'arid-plateau-small-seas-smallest-square-sym': [7, 0, 0],
+  'inland-sea-smallest-square-sym': [7, 0, 0],
+  'dota-jungle-smallest-square-sym': [6, 0, 1],
+  'coastal-rain-basin-smallest-square-sym': [5, 1, 1],
+  'dota-jungle-smallest-wide-sym': [5, 0, 1],
+  'arid-plateau-small-seas-smallest-wide-nosym': [4, 1, 1],
+  'dota-water-smallest-square-sym': [4, 2, 1],
+  'dota-sand-smallest-wide-sym': [4, 1, 1],
+  'continent-tiny-square-sym': [4, 1, 2],
+  'coastal-rain-basin-smallest-wide-sym': [4, 0, 2],
+  'wetlands-smallest-square-sym': [3, 3, 0],
+  'dota-water-smallest-wide-sym': [3, 2, 1],
+  'desert-none-std-tiny-square-sym': [3, 2, 1],
+  'archipelago-land-lg-water-sm-smallest-square-sym': [3, 1, 2],
+  'inland-sea-smallest-wide-nosym': [2, 2, 2],
+  'continent-tiny-square-nosym': [2, 1, 3],
+  'hardwood-forest-tiny-square-sym': [1, 3, 2],
+  'donut-irreg-low-tiny-square-nosym': [0, 3, 3],
+};
 
 type G = { cslug: string; sites: number; land: number; slLand: number;
   label: string; group: string; setting: string; id: string;
   img: string; seed: number };
-const all = (gensData as any).gens as G[];
 const byCfg: Record<string, G[]> = {};
-for (const g of all) (byCfg[g.cslug] ??= []).push(g);
+for (const g of (gensData as any).gens as G[]) (byCfg[g.cslug] ??= []).push(g);
 
-type Stat = { n: number; mean: number; sd: number; med: number;
-  p10: number; p90: number; min: number; max: number };
+type Stat = { mean: number; sd: number; med: number; min: number;
+  max: number };
 function stats(vals: number[]): Stat {
   const s = [...vals].sort((a, b) => a - b), n = s.length;
   const mean = s.reduce((a, b) => a + b, 0) / n;
   const sd = Math.sqrt(s.reduce((a, b) => a + (b - mean) ** 2, 0) / n);
-  const q = (p: number) =>
-    s[Math.max(0, Math.min(n - 1, Math.round(p * (n - 1))))];
-  return { n, mean: Math.round(mean * 10) / 10,
-    sd: Math.round(sd * 10) / 10, med: q(0.5), p10: q(0.1),
-    p90: q(0.9), min: s[0], max: s[n - 1] };
+  return { mean: Math.round(mean * 10) / 10,
+    sd: Math.round(sd * 10) / 10, med: s[n >> 1], min: s[0], max: s[n - 1] };
 }
-const inSite = (g: G) => g.sites >= SITES_LO && g.sites <= SITES_HI;
-const inLand = (g: G) => g.land >= LAND_LO && g.land <= LAND_HI;
-
-const variantOf = (label: string) =>
-  label.split(' · ').slice(1, -1).join(' · ');
+const pc = (x: number) => Math.round(x * 100);
 
 type Cfg = {
-  slug: string; label: string; group: string; setting: string;
-  variant: string; n: number; rows: G[]; pct: number; inN: number;
-  sitePct: number; landPct: number;
-  pass: boolean; inPool: boolean; isBaseline: boolean; isAridLarge: boolean;
-  sites: Stat; land: Stat; move: Stat;
+  slug: string; group: string; variant: string; n: number; rows: G[];
+  setting: string[]; sitePct: number; landPct: number;
+  sites: Stat; land: Stat; move: Stat; r1: [number, number, number] | null;
 };
-// Per-script baselines always on the Round 2 ballot: the canonical
-// Duel · square and Duel · wide point-sym-on configs.
-const BASELINES = new Set([
-  'Duel · square · point-sym on · mirror',
-  'Duel · wide · point-sym on · mirror',
-]);
-const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
-  rows.sort((a, b) => a.seed - b.seed);
-  const n = rows.length;
-  const inN = rows.filter((g) => inSite(g) && inLand(g)).length;
+function build(slug: string): Cfg {
+  const rows = (byCfg[slug] || []).slice().sort((a, b) => a.seed - b.seed);
+  const n = rows.length || 1;
+  const r0 = rows[0] || ({} as G);
+  const parts = (r0.label || slug).split(' · ');
   return {
-    slug, label: rows[0].label, group: rows[0].group,
-    setting: rows[0].setting, variant: variantOf(rows[0].label),
-    n, rows, inN, pct: inN / n,
-    sitePct: rows.filter(inSite).length / n,
-    landPct: rows.filter(inLand).length / n,
-    pass: inN / n >= THRESH, inPool: POOL.has(slug),
-    isBaseline: BASELINES.has(rows[0].setting),
-    isAridLarge: slug.startsWith('arid-plateau-large'),
+    slug, group: r0.group || '', variant: parts.slice(1, -1).join(' · '),
+    n, rows, setting: (r0.setting || '').split(' · ').filter((p) => p !== 'mirror'),
+    sitePct: rows.filter((g) => g.sites >= SITES_LO && g.sites <= SITES_HI).length / n,
+    landPct: rows.filter((g) => g.land >= LAND_LO && g.land <= LAND_HI).length / n,
     sites: stats(rows.map((g) => g.sites)),
     land: stats(rows.map((g) => g.land)),
     move: stats(rows.map((g) => g.slLand)),
+    r1: R1[slug] || null,
   };
-});
-// Round 2 ballot = the full structural grid — every map script crossed
-// over Duel/Tiny × square/wide × point-sym on/off (DOTA sym-locked).
-// The 4 leftover ultrawide configs from earlier sweeps are excluded.
-const ballot = cfgs.filter((c) => !c.setting.includes('ultrawide'));
-
-// group heading: DOTA by subtype, Desert by coast, else the script
-const dg = (c: Cfg) => {
-  if (c.group === 'DOTA') return `DOTA · ${c.variant}`;
-  if (c.group === 'Desert') {
-    const coast = c.variant.split(' · ')[0];
-    return `Desert: ${coast === 'None' ? 'No' : coast} Coast`;
-  }
-  return c.group;
-};
-const byGroup: Record<string, Cfg[]> = {};
-for (const c of ballot) (byGroup[dg(c)] ??= []).push(c);
-const groups = Object.keys(byGroup).sort();
-for (const g of groups)
-  byGroup[g].sort((a, b) => b.pct - a.pct || a.label.localeCompare(b.label));
-
-const gslug = (s: string) => 'g-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-const abbr = (c: Cfg) => {
-  const p = c.setting.split(' · ');
-  const sz = p[0] === 'Duel' ? 'D' : 'T';
-  const asp = p[1] === 'square' ? 'sq' : p[1] === 'wide' ? 'w' : 'uw';
-  const sym = (p[2] || '').includes('on') ? 's' : 'n';
-  return (c.variant ? c.variant + ' ' : '') + `${sz}·${asp}·${sym}`;
-};
-const pc = (x: number) => Math.round(x * 100);
-
-const N = ballot.length;
+}
+const locked = LOCKED.map(build);
+const contested = CONTESTED.map(build)
+  .sort((a, b) => (b.r1![0] * 2 - b.r1![2]) - (a.r1![0] * 2 - a.r1![2]));
+const unvoted = UNVOTED.map(build)
+  .sort((a, b) => (b.sitePct + b.landPct) - (a.sitePct + a.landPct));
+const N = contested.length + unvoted.length;
 const PREVIEWS = 6;
 ---
 <Base title="Round 2 Voting">
   <p class="lede">
-    <b>Round 2.</b> Connection is solved — every map is land-connected
-    by construction — so this ballot is about three numbers only:
-    <b>city sites</b>, <b>land-hex distance</b> between capitals, and
-    <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs —
-    the full structural grid: every map script crossed over Duel/Tiny ×
-    square/wide × point-sym on/off. The two badges show how often each one
-    lands in the {SITES_LO}–{SITES_HI} site and {LAND_LO}–{LAND_HI} land
-    windows.
+    <b>Round 2 — built for clarity, not a re-vote.</b> Every config here
+    is <b>reliable</b> (≥{pc(THRESH)}% of seeds inside both the
+    {SITES_LO}–{SITES_HI} city-site and {LAND_LO}–{LAND_HI} land-hex
+    windows). Round 1 already settled the obvious ones — those are
+    <b>locked in</b> below, no vote needed. You only vote on the
+    {N} where a vote still changes the answer: the <b>{contested.length}
+    contested</b> (Round 1 was split) and the <b>{unvoted.length} never
+    balloted</b> (the new size/aspect/sym variants — first look).
   </p>
 
   <nav class="snav" id="snav">
@@ -144,41 +142,63 @@ const PREVIEWS = 6;
       <span class="tly tly-maybe">🤷 <b id="t-maybe">0</b></span>
       <span class="tly tly-no">👎 <b id="t-no">0</b></span>
     </div>
-    <div class="snav__t">Map scripts</div>
-    {groups.map((g) => (
-      <div class="ng" data-g={gslug(g)}>
-        <a class="ng__h" href={`#${gslug(g)}`}>{g}<span class="ng__done" hidden>✓</span></a>
-        <div class="ng__chips">
-          {byGroup[g].map((c) => (
-            <a class="vchip" data-slug={c.slug} href={`#cfg-${c.slug}`}
-               title={c.label}>{abbr(c)}</a>
-          ))}
-        </div>
-      </div>
-    ))}
+    <a class="snav__lnk" href="#locked">✓ Locked in · {locked.length}</a>
+    <a class="snav__lnk" href="#contested">① Contested · {contested.length}</a>
+    <a class="snav__lnk" href="#unvoted">② First look · {unvoted.length}</a>
   </nav>
 
   <div class="rmain">
-    {groups.map((g) => (
-      <section class="grp" id={gslug(g)}>
-        <h2 class="grp__h">{g}</h2>
-        {byGroup[g].map((c) => (
-          <div class="cfg" id={`cfg-${c.slug}`} data-slug={c.slug}>
+    <section id="locked">
+      <h2 class="grp__h">✓ Locked in — already voted in, no vote needed</h2>
+      <p class="grp__sub">Reliable and near-unanimous in Round 1. Shown
+        for reference; these are in the pool.</p>
+      {locked.map((c) => (
+        <div class="cfg cfg--lock">
+          <div class="cfg__hd">
+            <span class="lockin">✓ IN</span>
+            <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
+            <span class="cfg__chips">
+              {c.setting.map((p) => (<span class="ch">{p}</span>))}
+            </span>
+            <span class="rels">
+              <span class={'rel ' + (c.sitePct >= THRESH ? 'rel--ok' : 'rel--lo')}>sites {pc(c.sitePct)}%</span>
+              <span class={'rel ' + (c.landPct >= THRESH ? 'rel--ok' : 'rel--lo')}>land {pc(c.landPct)}%</span>
+              <span class="r1">R1 {c.r1![0]}L·{c.r1![1]}M·{c.r1![2]}N</span>
+            </span>
+          </div>
+          <div class="mini">
+            <span><i>city sites</i><b>{c.sites.mean}</b></span>
+            <span><i>land hex</i><b>{c.land.mean}</b></span>
+            <span><i>land cost</i><b>{c.move.mean}</b></span>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    {[
+      { id: 'contested', list: contested, n: 1,
+        title: 'Contested — Round 1 was split, pick the verdict',
+        sub: 'These cleared the reliability bar but Round 1 votes were mixed. Mostly “which variant of a script that’s already in”, or a straight in/out.' },
+      { id: 'unvoted', list: unvoted, n: 2,
+        title: 'First look — reliable, never balloted',
+        sub: 'New size/aspect/symmetry variants (incl. Arid Large Seas and the Tiny grid) — nobody has voted on these. This is where Round 2 buys the most clarity, and the path back to Tiny / wide / no-sym variety.' },
+    ].map((sec) => (
+      <section id={sec.id}>
+        <h2 class="grp__h">{sec.n === 1 ? '①' : '②'} {sec.title}</h2>
+        <p class="grp__sub">{sec.sub}</p>
+        {sec.list.map((c) => (
+          <div class="cfg" data-slug={c.slug}>
             <div class="cfg__hd">
               <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
               <span class="cfg__chips">
-                {c.setting.split(' · ').filter((p) => p !== 'mirror').map((p) => (
-                  <span class="ch">{p}</span>
-                ))}
+                {c.setting.map((p) => (<span class="ch">{p}</span>))}
               </span>
               <span class="rels">
-                <span class={'rel ' + (c.sitePct >= THRESH ? 'rel--ok' : 'rel--lo')}>
-                  sites 14–26 <b>{pc(c.sitePct)}%</b>
-                </span>
-                <span class={'rel ' + (c.landPct >= THRESH ? 'rel--ok' : 'rel--lo')}>
-                  land 40–60 <b>{pc(c.landPct)}%</b>
-                </span>
-                {c.inPool && <span class="rel rel--pool">in pool</span>}
+                <span class={'rel ' + (c.sitePct >= THRESH ? 'rel--ok' : 'rel--lo')}>sites 14–26 <b>{pc(c.sitePct)}%</b></span>
+                <span class={'rel ' + (c.landPct >= THRESH ? 'rel--ok' : 'rel--lo')}>land 40–60 <b>{pc(c.landPct)}%</b></span>
+                {c.r1
+                  ? <span class="r1">Round 1: {c.r1[0]}L · {c.r1[1]}M · {c.r1[2]}N</span>
+                  : <span class="r1 r1--new">first look — no Round 1 vote</span>}
               </span>
               <span class="vote" data-slug={c.slug}>
                 <button data-v="like">👍 like</button>
@@ -190,17 +210,17 @@ const PREVIEWS = 6;
               <div class="pill">
                 <div class="pill__l">City sites</div>
                 <div class="pill__v"><b>{c.sites.mean}</b> <span class="pm">±{c.sites.sd}</span></div>
-                <div class="pill__r">min {c.sites.min} · p10 {c.sites.p10} · <b>med {c.sites.med}</b> · p90 {c.sites.p90} · max {c.sites.max}</div>
+                <div class="pill__r">min {c.sites.min} · <b>med {c.sites.med}</b> · max {c.sites.max}</div>
               </div>
               <div class="pill">
                 <div class="pill__l">Land hex distance</div>
                 <div class="pill__v"><b>{c.land.mean}</b> <span class="pm">±{c.land.sd}</span></div>
-                <div class="pill__r">min {c.land.min} · p10 {c.land.p10} · <b>med {c.land.med}</b> · p90 {c.land.p90} · max {c.land.max}</div>
+                <div class="pill__r">min {c.land.min} · <b>med {c.land.med}</b> · max {c.land.max}</div>
               </div>
               <div class="pill">
-                <div class="pill__l">Land move-cost <span class="u">turns</span></div>
+                <div class="pill__l">Land hex cost <span class="u">turns</span></div>
                 <div class="pill__v"><b>{c.move.mean}</b> <span class="pm">±{c.move.sd}</span></div>
-                <div class="pill__r">min {c.move.min} · p10 {c.move.p10} · <b>med {c.move.med}</b> · p90 {c.move.p90} · max {c.move.max}</div>
+                <div class="pill__r">min {c.move.min} · <b>med {c.move.med}</b> · max {c.move.max}</div>
               </div>
             </div>
             <details class="gal" open>
@@ -210,11 +230,11 @@ const PREVIEWS = 6;
                   <a class="gal__cell" href={`${baseUrl}gen/${r.id}`}
                      target="_blank" rel="noopener">
                     <img src={`${baseUrl}img/${r.img}`} loading="lazy"
-                         alt={`${c.label} seed ${r.seed}`} />
+                         alt={`seed ${r.seed}`} />
                     <div class="cap">
                       <span><i>sites</i><b>{r.sites}</b></span>
-                      <span><i>land hex</i><b>{r.land}</b></span>
-                      <span><i>move</i><b>{r.slLand}</b></span>
+                      <span><i>land</i><b>{r.land}</b></span>
+                      <span><i>cost</i><b>{r.slLand}</b></span>
                     </div>
                   </a>
                 ))}
@@ -227,41 +247,50 @@ const PREVIEWS = 6;
   </div>
 
   <p class="note">
-    {N} configs · {ballot[0]?.n ?? 0}-ish seeds each. <b>City sites</b> =
-    valid settle spots. <b>Land hex distance</b> = capital→capital
-    shortest land-only path (hex tiles). <b>Land move-cost</b> = army
-    (move-2) capital→capital weighted by terrain move cost, in turns.
-    The <b>reliable / below-bar %</b> is how often a config's seeds land
-    in both the {SITES_LO}–{SITES_HI} site and {LAND_LO}–{LAND_HI} land
-    windows at once. Votes are stored locally and separate from Round 1;
-    COPY emits an <code>OW-VOTES-R2</code> block.
+    {N} configs on the ballot ({contested.length} contested +
+    {' '}{unvoted.length} first-look); {locked.length} more are locked in
+    above. <b>City sites / Land hex distance / Land hex cost</b> are
+    per-config means over the owmapgen sweep; the two badges are how
+    often a config lands inside the {SITES_LO}–{SITES_HI} and
+    {LAND_LO}–{LAND_HI} windows. Votes are stored locally, separate from
+    Round 1; COPY emits an <code>OW-VOTES-R2</code> block.
   </p>
 
   <style>
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
-      max-width:82ch; margin:0.6rem 0 1.4rem; }
-    .grp { margin-bottom:2.2rem; }
-    .grp__h { font-size:1.45rem; color:var(--gold); border-bottom:1px solid
-      var(--gold-deep); padding-bottom:0.3rem; margin-bottom:0.7rem; }
+      max-width:84ch; margin:0.6rem 0 1.4rem; }
+    .grp__h { font-size:1.4rem; color:var(--gold); border-bottom:1px solid
+      var(--gold-deep); padding-bottom:0.3rem; margin:1.6rem 0 0.3rem;
+      font-family:var(--font-display); font-weight:700; }
+    .grp__sub { font-size:0.84rem; color:var(--text-faint);
+      font-style:italic; font-family:var(--font-display);
+      margin:0 0 0.7rem; max-width:84ch; }
     .cfg { background:var(--bg-elev); border:1px solid var(--border);
       border-radius:6px; padding:0.8rem 1rem; margin-bottom:0.8rem; }
+    .cfg--lock { border-color:#3b6e3b; background:#13200f; }
     .cfg__hd { display:flex; align-items:baseline; gap:0.7rem; flex-wrap:wrap; }
     .cfg__name { font-family:var(--font-display); font-weight:700;
       font-size:1.18rem; color:var(--text); }
+    .lockin { font-family:var(--font-ui); font-weight:800; font-size:0.66rem;
+      letter-spacing:0.1em; color:#bfe89f; background:#1e4d18;
+      border:1px solid #3b6e3b; border-radius:5px; padding:0.16rem 0.5rem; }
     .cfg__chips { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
     .ch { font-size:0.66rem; font-family:var(--font-mono);
       color:var(--text-soft); background:#0e0f12;
       border:1px solid var(--border-strong); border-radius:4px;
       padding:0.08rem 0.4rem; }
-    .rels { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
+    .rels { display:inline-flex; gap:0.3rem; flex-wrap:wrap;
+      align-items:center; }
     .rel { font-family:var(--font-ui); font-weight:600; font-size:0.64rem;
       letter-spacing:0.03em; padding:0.12rem 0.5rem; border-radius:999px;
       border:1px solid; white-space:nowrap; }
     .rel b { font-weight:800; }
     .rel--ok { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
     .rel--lo { color:#e0b061; border-color:var(--gold-deep); background:#231f0d; }
-    .rel--pool { color:#7fd6a8; border-color:#2f6b4a; background:#13241b; }
+    .r1 { font-size:0.62rem; font-family:var(--font-mono);
+      color:var(--text-faint); }
+    .r1--new { color:#8fc0e8; }
     .vote { display:inline-flex; gap:0.4rem; margin-left:auto; }
     .vote button { background:#1b1d23; color:var(--text-soft);
       border:1px solid var(--border-strong); border-radius:7px;
@@ -271,20 +300,26 @@ const PREVIEWS = 6;
     .vote button.on[data-v="like"]  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; box-shadow:0 0 0 1px #3b6e3b; }
     .vote button.on[data-v="maybe"] { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); box-shadow:0 0 0 1px var(--gold-deep); }
     .vote button.on[data-v="no"]    { background:#46211b; color:#eaa091; border-color:#5a2e28; box-shadow:0 0 0 1px #5a2e28; }
-    .pills { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:0.6rem; }
-    .pill { flex:1 1 270px; background:#16181d;
-      border:1px solid var(--gold-deep); border-radius:8px;
-      padding:0.6rem 0.9rem; }
-    .pill__l { font-size:0.66rem; letter-spacing:0.14em;
+    .mini { display:flex; gap:1.4rem; margin-top:0.5rem; }
+    .mini span { display:flex; flex-direction:column; gap:0.05rem; }
+    .mini i { font-style:normal; font-size:0.58rem; letter-spacing:0.1em;
       text-transform:uppercase; color:var(--text-dim); }
-    .pill__l .u { letter-spacing:0.06em; color:var(--text-faint);
+    .mini b { font-family:var(--font-display); font-weight:700;
+      font-size:1.3rem; color:var(--gold); }
+    .pills { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:0.6rem; }
+    .pill { flex:1 1 240px; background:#16181d;
+      border:1px solid var(--gold-deep); border-radius:8px;
+      padding:0.55rem 0.85rem; }
+    .pill__l { font-size:0.64rem; letter-spacing:0.13em;
+      text-transform:uppercase; color:var(--text-dim); }
+    .pill__l .u { letter-spacing:0.05em; color:var(--text-faint);
       font-size:0.92em; }
-    .pill__v { font-size:2.7rem; font-family:var(--font-display);
+    .pill__v { font-size:2.5rem; font-family:var(--font-display);
       font-weight:700; color:var(--gold); line-height:1.1;
-      margin:0.1rem 0 0.15rem; }
-    .pill__v .pm { font-size:1rem; color:var(--text-faint);
+      margin:0.05rem 0 0.1rem; }
+    .pill__v .pm { font-size:0.95rem; color:var(--text-faint);
       font-family:var(--font-ui); font-weight:400; }
-    .pill__r { font-size:0.72rem; color:var(--text-faint);
+    .pill__r { font-size:0.71rem; color:var(--text-faint);
       font-family:var(--font-mono); }
     .pill__r b { color:var(--text-soft); }
     .snav { position:fixed; left:max(8px, calc((100vw - 1180px)/2 - 178px));
@@ -308,45 +343,31 @@ const PREVIEWS = 6;
     .tly-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
     .tly-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
     .tly-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
-    .snav__t { font-size:0.6rem; letter-spacing:0.14em;
-      text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
-    .ng__h { display:block; color:var(--text-soft); text-decoration:none;
-      padding:0.12rem 0.3rem; border-radius:4px; font-size:0.78rem; }
-    .ng__h:hover { color:var(--gold); background:var(--bg-elev); }
-    .ng.on .ng__h { color:var(--gold); font-weight:700; }
-    .ng__chips { display:none; flex-wrap:wrap; gap:0.18rem;
-      padding:0.2rem 0 0.35rem 0.4rem; }
-    .ng.on .ng__chips { display:flex; }
-    .vchip { font-size:0.62rem; font-family:var(--font-mono);
-      color:var(--text-faint); background:#16181d;
-      border:1px solid var(--border); border-radius:4px;
-      padding:0.05rem 0.3rem; text-decoration:none; }
-    .vchip:hover { color:var(--gold); border-color:var(--gold-deep); }
-    .vchip.v-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
-    .vchip.v-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
-    .vchip.v-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
-    .ng__done { color:#bfe89f; font-weight:700; margin-left:0.35rem; }
+    .snav__lnk { display:block; color:var(--text-soft); text-decoration:none;
+      padding:0.2rem 0.35rem; border-radius:4px; font-size:0.78rem; }
+    .snav__lnk:hover { color:var(--gold); background:var(--bg-elev);
+      text-decoration:none; }
     .rmain { width:100%; }
     .gal { margin-top:0.6rem; }
-    .gal > summary { cursor:pointer; font-size:0.8rem; color:var(--gold-soft);
-      font-family:var(--font-ui); padding:0.3rem 0; user-select:none; }
+    .gal > summary { cursor:pointer; font-size:0.78rem; color:var(--gold-soft);
+      font-family:var(--font-ui); padding:0.25rem 0; user-select:none; }
     .gal > summary:hover { color:var(--gold); }
     .gal__grid { display:grid; gap:0.6rem; margin-top:0.5rem;
-      grid-template-columns:repeat(4,1fr); }
-    @media (max-width:760px){ .gal__grid{ grid-template-columns:1fr 1fr; } }
+      grid-template-columns:repeat(6,1fr); }
+    @media (max-width:760px){ .gal__grid{ grid-template-columns:1fr 1fr 1fr; } }
     .gal__cell { display:block; border-radius:4px; overflow:hidden;
       border:1px solid var(--border-strong); }
     .gal__cell:hover { border-color:var(--gold); }
     .gal__grid img { width:100%; height:auto; display:block; }
     .cap { display:grid; grid-template-columns:1fr 1fr 1fr;
-      background:#0e0f12; font-size:0.66rem; }
+      background:#0e0f12; font-size:0.6rem; }
     .cap span { display:flex; flex-direction:column; align-items:center;
-      padding:0.18rem 0; border-right:1px solid var(--border);
+      padding:0.16rem 0; border-right:1px solid var(--border);
       color:var(--text-soft); }
     .cap span:last-child { border-right:0; }
-    .cap i { font-style:normal; font-size:0.54rem; color:var(--text-dim);
-      text-transform:uppercase; letter-spacing:0.05em; }
-    .cap b { color:var(--text); font-size:0.82rem; }
+    .cap i { font-style:normal; font-size:0.5rem; color:var(--text-dim);
+      text-transform:uppercase; }
+    .cap b { color:var(--text); font-size:0.76rem; }
     .note { font-size:0.8rem; color:var(--text-faint); line-height:1.55;
       max-width:88ch; margin-top:1.6rem; }
   </style>
@@ -365,37 +386,13 @@ const PREVIEWS = 6;
             b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
           });
         });
-        document.querySelectorAll('.vchip').forEach(function(ch){
-          var s=ch.getAttribute('data-slug'); ch.classList.remove('v-like','v-maybe','v-no');
-          if(votes[s]) ch.classList.add('v-'+votes[s]);
-        });
         var vc=document.getElementById('vc'); if(vc) vc.textContent=cnt;
         ['like','maybe','no'].forEach(function(k){
           var e=document.getElementById('t-'+k); if(e) e.textContent=t[k];
         });
         var ad=document.getElementById('alldone');
         if(ad) ad.hidden=!(total>0 && cnt===total);
-        document.querySelectorAll('.ng').forEach(function(ng){
-          var chips=ng.querySelectorAll('.vchip'), allv=chips.length>0;
-          chips.forEach(function(ch){
-            if(!votes[ch.getAttribute('data-slug')]) allv=false; });
-          var d=ng.querySelector('.ng__done'); if(d) d.hidden=!allv;
-        });
       }
-      var ngs=[].slice.call(document.querySelectorAll('.ng'));
-      function spy(){
-        var best=null, bt=-1e9;
-        ngs.forEach(function(ng){
-          var sec=document.getElementById(ng.getAttribute('data-g'));
-          if(!sec)return; var t=sec.getBoundingClientRect().top-90;
-          if(t<=0 && t>bt){ bt=t; best=ng; }
-        });
-        if(!best && ngs.length) best=ngs[0];
-        ngs.forEach(function(ng){ ng.classList.toggle('on', ng===best); });
-      }
-      window.addEventListener('scroll',function(){
-        window.requestAnimationFrame(spy); },{passive:true});
-      spy();
       document.querySelectorAll('.vote button').forEach(function(b){
         b.addEventListener('click',function(){
           var s=b.parentElement.getAttribute('data-slug');
@@ -406,10 +403,8 @@ const PREVIEWS = 6;
       });
       paint();
       document.getElementById('copyv').addEventListener('click',function(){
-        // OW-VOTES-R2 — own sentinel so Round 2 ballots never mix with
-        // Round 1's OW-VOTES v3 when ballots are concatenated.
         var by={like:[],maybe:[],no:[]};
-        document.querySelectorAll('.cfg').forEach(function(c){
+        document.querySelectorAll('.cfg[data-slug]').forEach(function(c){
           var s=c.getAttribute('data-slug'), v=votes[s];
           if(by[v]) by[v].push(s);
         });
