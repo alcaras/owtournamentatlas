@@ -91,16 +91,10 @@ const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
     move: stats(rows.map((g) => g.slLand)),
   };
 });
-// Round 2 ballot = the full structural grid (every map script ×
-// Duel/Tiny × square/wide × point-sym on/off), minus ultrawide and
-// minus any config whose AVERAGE city sites (14–26) or AVERAGE
-// land-hex distance (40–60) falls outside the window — EXCEPT the 17
-// Round 1 pool configs, which are always carried over.
-const inWindow = (c: Cfg) =>
-  c.sites.mean >= SITES_LO && c.sites.mean <= SITES_HI
-  && c.land.mean >= LAND_LO && c.land.mean <= LAND_HI;
-const ballot = cfgs.filter((c) =>
-  !c.setting.includes('ultrawide') && (c.inPool || inWindow(c)));
+// Round 2 ballot = the full structural grid — every map script crossed
+// over Duel/Tiny × square/wide × point-sym on/off (DOTA sym-locked).
+// The 4 leftover ultrawide configs from earlier sweeps are excluded.
+const ballot = cfgs.filter((c) => !c.setting.includes('ultrawide'));
 
 // group heading: DOTA by subtype, Desert by coast, else the script
 const dg = (c: Cfg) => {
@@ -136,12 +130,10 @@ const PREVIEWS = 6;
     by construction — so this ballot is about three numbers only:
     <b>city sites</b>, <b>land-hex distance</b> between capitals, and
     <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs —
-    the full structural grid (every map script × Duel/Tiny × square/wide ×
-    point-sym on/off), keeping those whose <b>average</b> city sites sit in
-    {SITES_LO}–{SITES_HI} <i>and</i> average land-hex distance in
-    {LAND_LO}–{LAND_HI}, plus all 17 Round 1 pool configs (carried over
-    even if their average is out of window). The two badges show how often
-    each one actually lands inside those windows.
+    the full structural grid: every map script crossed over Duel/Tiny ×
+    square/wide × point-sym on/off. The two badges show how often each one
+    lands in the {SITES_LO}–{SITES_HI} site and {LAND_LO}–{LAND_HI} land
+    windows.
   </p>
 
   <nav class="snav" id="snav">
