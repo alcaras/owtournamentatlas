@@ -145,35 +145,43 @@ configs via direct URL — harmless, just unlinked from `/recommended`.)
 
 ## Vote system
 
-- Client-side only. `localStorage` key `ow_votes_v1`, per config slug.
-- Side nav (`/recommended`): pinned, full-width content, `voted X / N`,
-  colour-coded like/maybe/no tally pills, ✓ on a category heading when
-  all its maps are voted, "✓ all in" when every config is voted.
-- **COPY VOTES → clipboard, format `OW-VOTES v3`:**
+**ROUND 2 is the active vote — it replaces Round 1.** Connection is
+solved (every map land-connected by construction), so Round 2 votes on
+three stats only: city sites · land-hex distance · land-hex move cost.
+
+- **Active page `/round-2`** (`round-2.astro`). Client-side only,
+  `localStorage` key **`ow_votes_r2`** per config slug. Ballot = 30
+  configs (the 21 that reliably hit the 14–26 site / 40–60 land
+  windows + the 9 current-pool configs below that bar), grouped by map
+  script with a side nav, `voted X / N`, like/maybe/no tally pills,
+  per-script ✓, "✓ all in". Three pills per config (sites / land-hex /
+  move-cost), move-cost shown against the 52 real games; aggregates
+  computed in-page from `gens.json`.
+- **COPY ROUND-2 VOTES → clipboard, format `OW-VOTES-R2`:**
   ```
-  OW-VOTES v3
-  n: 52
+  OW-VOTES-R2 v1
+  n: 30
   like: slugA,slugB,…
   maybe: …
   no: …
-  OW-VOTES END
+  OW-VOTES-R2 END
   ```
-  One line per non-empty category, comma-joined **slugs** (the stable
-  join key — labels dropped, derive from slug). Sentinels let 6 pasted
-  ballots concatenate unambiguously. No voter name (attribute via the
-  Discord message author). When aggregating: split on the sentinels,
-  map slug→label from `atlas-dist.json`, tally per slug.
-- **Aggregation tool: `scripts/tally_votes.py`** (committed; generic, no
-  private data). Reads `notes/ballots.txt` (gitignored) — paste every
-  voter's whole Discord block in, any order; sentinels delimit ballots so
-  names/timestamps between them are ignored. Rerun on each new ballot;
-  no rebuild. Scoring **like=3 / maybe=1 / no=0**; tiebreakers
-  score→likes→maybes→slug. Prints scored ranking (`=` marks tied
-  scores), per-config `L/M/N` tally, unanimous-LIKE list, and
-  like-vs-no conflict list. A config a voter omits counts as a
-  flagged no-vote (don't let partial ballots silently skew scores).
-  Pool is 6 voters → max score 18; with few ballots expect flat
-  score tiers (don't draw a hard top-N line until the spread emerges).
+  Own sentinel (distinct from Round 1's `OW-VOTES v3`) so the two
+  rounds' ballots never mix when concatenated. One line per non-empty
+  category, comma-joined **slugs** (the stable join key). No voter name
+  (attribute via the Discord author).
+- **Aggregation: `scripts/tally_votes_r2.py`** (committed; generic).
+  Reads `notes/ballots-r2.txt` (gitignored). Labels resolved from
+  `gens.json` (all 53 configs). Scoring **like=+2 / maybe=0 / no=−1** —
+  maybe is a true neutral, a no actively costs the config, an omit
+  scores 0 but is flagged (so "rejected" ≠ "didn't vote"); net-disliked
+  configs go negative. Tiebreakers score→likes→maybes→slug. Prints
+  scored ranking (`=` ties), `L/M/N` tally, unanimous-LIKE, like-vs-no
+  conflicts. Score range −n..+2n.
+- **Round 1 (history, superseded):** page `/recommended`, `localStorage`
+  `ow_votes_v1`, format `OW-VOTES v3`, `scripts/tally_votes.py` over
+  `notes/ballots.txt`, scoring like=3/maybe=1/no=0. Left intact as a
+  record — don't route new voting through it.
 
 ---
 
