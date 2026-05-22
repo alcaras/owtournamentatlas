@@ -121,6 +121,21 @@ const unvoted = UNVOTED.map(build)
   .sort((a, b) => (b.sitePct + b.landPct) - (a.sitePct + a.landPct));
 const N = contested.length + unvoted.length;
 const PREVIEWS = 6;
+
+// short labels for the sidebar jump-chips
+const SHORT: Record<string, string> = {
+  'Continent': 'Cont', 'Coastal Rain Basin': 'CRB', 'Donut': 'Donut',
+  'Archipelago': 'Arch', 'Arid Plateau': 'Arid', 'DOTA': 'DOTA',
+  'Hardwood Forest': 'Hardwd', 'Inland Sea': 'Inland', 'Desert': 'Desert',
+  'Mountain Pass': 'MtnPass', 'Wetlands': 'Wet', 'Highlands': 'Highl',
+};
+const abbr = (c: Cfg) => {
+  const sz = c.setting[0] === 'Duel' ? 'D' : 'T';
+  const asp = c.setting[1] === 'square' ? 'sq' : 'w';
+  const sym = (c.setting[2] || '').includes('on') ? 's' : 'n';
+  const v = c.variant ? ' ' + c.variant.split(' · ')[0].slice(0, 4) : '';
+  return `${SHORT[c.group] || c.group}${v} ${sz}·${asp}·${sym}`;
+};
 ---
 <Base title="Round 2 Voting">
   <p class="lede">
@@ -142,9 +157,25 @@ const PREVIEWS = 6;
       <span class="tly tly-maybe">🤷 <b id="t-maybe">0</b></span>
       <span class="tly tly-no">👎 <b id="t-no">0</b></span>
     </div>
-    <a class="snav__lnk" href="#locked">✓ Locked in · {locked.length}</a>
-    <a class="snav__lnk" href="#contested">① Contested · {contested.length}</a>
-    <a class="snav__lnk" href="#unvoted">② First look · {unvoted.length}</a>
+    {[
+      { href: '#locked', label: `✓ Locked in · ${locked.length}`,
+        list: locked, vote: false },
+      { href: '#contested', label: `① Contested · ${contested.length}`,
+        list: contested, vote: true },
+      { href: '#unvoted', label: `② First look · ${unvoted.length}`,
+        list: unvoted, vote: true },
+    ].map((sec) => (
+      <div class="ngsec">
+        <a class="snav__lnk" href={sec.href}>{sec.label}</a>
+        <div class="chips">
+          {sec.list.map((c) => (
+            <a class={'vchip' + (sec.vote ? '' : ' vchip--lock')}
+               href={`#cfg-${c.slug}`} title={c.group + (c.variant ? ' · ' + c.variant : '')}
+               data-slug={sec.vote ? c.slug : undefined}>{abbr(c)}</a>
+          ))}
+        </div>
+      </div>
+    ))}
   </nav>
 
   <div class="rmain">
@@ -153,7 +184,7 @@ const PREVIEWS = 6;
       <p class="grp__sub">Reliable and near-unanimous in Round 1. Shown
         for reference; these are in the pool.</p>
       {locked.map((c) => (
-        <div class="cfg cfg--lock">
+        <div class="cfg cfg--lock" id={`cfg-${c.slug}`}>
           <div class="cfg__hd">
             <span class="lockin">✓ IN</span>
             <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
@@ -187,7 +218,7 @@ const PREVIEWS = 6;
         <h2 class="grp__h">{sec.n === 1 ? '①' : '②'} {sec.title}</h2>
         <p class="grp__sub">{sec.sub}</p>
         {sec.list.map((c) => (
-          <div class="cfg" data-slug={c.slug}>
+          <div class="cfg" id={`cfg-${c.slug}`} data-slug={c.slug}>
             <div class="cfg__hd">
               <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
               <span class="cfg__chips">
@@ -343,10 +374,24 @@ const PREVIEWS = 6;
     .tly-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
     .tly-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
     .tly-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
-    .snav__lnk { display:block; color:var(--text-soft); text-decoration:none;
-      padding:0.2rem 0.35rem; border-radius:4px; font-size:0.78rem; }
+    .ngsec { margin-bottom:0.5rem; }
+    .snav__lnk { display:block; color:var(--gold-soft); text-decoration:none;
+      padding:0.2rem 0.35rem; border-radius:4px; font-size:0.74rem;
+      font-weight:700; letter-spacing:0.02em; }
     .snav__lnk:hover { color:var(--gold); background:var(--bg-elev);
       text-decoration:none; }
+    .chips { display:flex; flex-wrap:wrap; gap:0.16rem;
+      padding:0.18rem 0 0.1rem 0.3rem; }
+    .vchip { font-size:0.58rem; font-family:var(--font-mono);
+      color:var(--text-faint); background:#16181d;
+      border:1px solid var(--border); border-radius:4px;
+      padding:0.05rem 0.28rem; text-decoration:none; white-space:nowrap; }
+    .vchip:hover { color:var(--gold); border-color:var(--gold-deep);
+      text-decoration:none; }
+    .vchip--lock { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
+    .vchip.v-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
+    .vchip.v-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
+    .vchip.v-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
     .rmain { width:100%; }
     .gal { margin-top:0.6rem; }
     .gal > summary { cursor:pointer; font-size:0.78rem; color:var(--gold-soft);
@@ -385,6 +430,11 @@ const PREVIEWS = 6;
           v.querySelectorAll('button').forEach(function(b){
             b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
           });
+        });
+        document.querySelectorAll('.vchip[data-slug]').forEach(function(ch){
+          var s=ch.getAttribute('data-slug');
+          ch.classList.remove('v-like','v-maybe','v-no');
+          if(votes[s]) ch.classList.add('v-'+votes[s]);
         });
         var vc=document.getElementById('vc'); if(vc) vc.textContent=cnt;
         ['like','maybe','no'].forEach(function(k){
