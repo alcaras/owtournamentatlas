@@ -94,11 +94,13 @@ const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
 // Round 2 ballot = the full structural grid (every map script ×
 // Duel/Tiny × square/wide × point-sym on/off), minus ultrawide and
 // minus any config whose AVERAGE city sites (14–26) or AVERAGE
-// land-hex distance (40–60) falls outside the window.
+// land-hex distance (40–60) falls outside the window — EXCEPT the 17
+// Round 1 pool configs, which are always carried over.
+const inWindow = (c: Cfg) =>
+  c.sites.mean >= SITES_LO && c.sites.mean <= SITES_HI
+  && c.land.mean >= LAND_LO && c.land.mean <= LAND_HI;
 const ballot = cfgs.filter((c) =>
-  !c.setting.includes('ultrawide')
-  && c.sites.mean >= SITES_LO && c.sites.mean <= SITES_HI
-  && c.land.mean >= LAND_LO && c.land.mean <= LAND_HI);
+  !c.setting.includes('ultrawide') && (c.inPool || inWindow(c)));
 
 // group heading: DOTA by subtype, Desert by coast, else the script
 const dg = (c: Cfg) => {
@@ -135,10 +137,11 @@ const PREVIEWS = 6;
     <b>city sites</b>, <b>land-hex distance</b> between capitals, and
     <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs —
     the full structural grid (every map script × Duel/Tiny × square/wide ×
-    point-sym on/off), keeping only those whose <b>average</b> city sites
-    sit in {SITES_LO}–{SITES_HI} <i>and</i> average land-hex distance in
-    {LAND_LO}–{LAND_HI}. The two badges show how often each one actually
-    lands inside those windows.
+    point-sym on/off), keeping those whose <b>average</b> city sites sit in
+    {SITES_LO}–{SITES_HI} <i>and</i> average land-hex distance in
+    {LAND_LO}–{LAND_HI}, plus all 17 Round 1 pool configs (carried over
+    even if their average is out of window). The two badges show how often
+    each one actually lands inside those windows.
   </p>
 
   <nav class="snav" id="snav">
