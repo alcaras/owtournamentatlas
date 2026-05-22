@@ -51,21 +51,19 @@ const NEWMAPS = [
   'mountain-pass-tiny-square-nosym',
   'wetlands-smallest-square-nosym',
 ];
-// reliable configs voted in Round 1 that didn't make the 17-map pool
+// reliable configs voted in Round 1 that didn't make the 17-map pool —
+// AND were positively received (nos < likes). Round-1 net-rejected
+// configs (the C/D also-rans) are deliberately left off — no re-vote.
 const ADDITIONAL = [
   'dota-jungle-smallest-wide-sym',
   'coastal-rain-basin-smallest-wide-sym',
   'inland-sea-smallest-wide-nosym',
   'dota-sand-smallest-wide-sym',
   'arid-plateau-small-seas-smallest-wide-nosym',
-  'hardwood-forest-tiny-square-nosym',
-  'hardwood-forest-tiny-square-sym',
   'dota-water-smallest-wide-sym',
   'archipelago-land-lg-water-sm-smallest-square-sym',
   'desert-none-std-tiny-square-sym',
   'wetlands-smallest-square-sym',
-  'continent-tiny-square-nosym',
-  'donut-irreg-low-tiny-square-nosym',
 ];
 // Round 1 tally — [like, maybe, no] over the 7 non-organiser voters.
 const R1: Record<string, [number, number, number]> = {
@@ -156,8 +154,8 @@ const SECTIONS = [
   { id: 'new', tag: 'New', title: 'New maps — never balloted',
     sub: 'Reliable configs from the freshly-swept grid (Arid Large Seas, the Tiny variants) — nobody has voted on these. First look.',
     list: NEWMAPS.map(build).sort(byRel) },
-  { id: 'extra', tag: 'Extra', title: 'Additional — voted in Round 1, not pooled',
-    sub: 'Reliable configs that were on the Round 1 ballot but didn’t make the 17-map pool — worth a second look.',
+  { id: 'extra', tag: 'Extra', title: 'Additional — Round 1 near-misses',
+    sub: 'Reliable configs that were on the Round 1 ballot, liked (nos < likes), but didn’t make the 17-map pool — mostly an alternate variant of a pooled script. Round 1’s net-rejected configs are NOT here — no re-vote of C/D.',
     list: ADDITIONAL.map(build).sort(byScore) },
 ];
 const N = SECTIONS.reduce((s, x) => s + x.list.length, 0);
