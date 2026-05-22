@@ -46,19 +46,20 @@ const POOL: Row[] = [
   { slug: 'archipelago-land-lg-water-sm-smallest-square-sym', status: 'swap',
     score: 4, L: 3, M: 1, N: 2,
     note: 'Swapped from Archipelago wide/no-sym (67%) to square/sym (83%).' },
-  { slug: 'hardwood-forest-tiny-square-nosym', status: 'swap',
-    score: 0, L: 2, M: 0, N: 4,
-    note: 'Swapped from Hardwood wide/no-sym (21%) to Tiny/square (88%). Voters were lukewarm on the reliable variant — kept for script variety.' },
-  { slug: 'highlands-tiny-square-sym', status: 'kept',
-    score: 0, L: 0, M: 1, N: 0,
-    note: 'Reliable (88%). Added after Round 1, so almost no vote signal — an organiser terrain probe.' },
-  { slug: 'donut-irreg-low-tiny-square-nosym', status: 'swap',
-    score: -3, L: 0, M: 3, N: 3,
-    note: 'Swapped from Donut Duel/square (41%) to Tiny/square/no-sym (79%) — the only reliable Donut. Voters are cool on it; the weakest link — drop for a 14-map pool.' },
 ];
 
+// Reliable, but cut for weak voter support — see CUT section below.
 type Drop = { slug: string; score: number; L: number; M: number;
   N: number; reason: string };
+const CUT: Drop[] = [
+  { slug: 'hardwood-forest-tiny-square-nosym', score: 0, L: 2, M: 0, N: 4,
+    reason: 'Reliable Tiny/square (88%), but 4 of 7 voters said no — voters only liked Hardwood’s unreliable wide form. No Hardwood config is both reliable and liked.' },
+  { slug: 'highlands-tiny-square-sym', score: 0, L: 0, M: 1, N: 0,
+    reason: 'Reliable (88%), but added after Round 1 — only one voter ever saw it. No support signal to stand on; re-add if Round 2 likes it.' },
+  { slug: 'donut-irreg-low-tiny-square-nosym', score: -3, L: 0, M: 3, N: 3,
+    reason: 'Reliable Tiny/square/no-sym (79%) but scored −3 — three no-votes, zero likes. Voters rejected the only reliable Donut.' },
+];
+
 const DROPPED: Drop[] = [
   { slug: 'hardwood-forest-smallest-wide-nosym', score: 12, L: 6, M: 1, N: 0,
     reason: 'Voters’ top non-unanimous pick — but only 21% in-window. Hardwood stays in via Tiny/square.' },
@@ -120,8 +121,9 @@ const scripts = new Set(POOL.map((p) => metrics(p.slug).group)).size;
     three things: every Round 1 ballot (7 voters, scored +2 like / 0 maybe
     / −1 no), the site &amp; distance criteria ({SITES_LO}–{SITES_HI} city
     sites and {LAND_LO}–{LAND_HI} land-hex distance, hit by ≥70% of seeds),
-    and deliberate variety across map script, size, point-symmetry and
-    aspect. {POOL.filter((p) => p.status === 'kept').length} kept from the
+    and variety across map script, size, point-symmetry and aspect. Every
+    map here is reliable <i>and</i> carries real voter support —
+    {' '}{POOL.filter((p) => p.status === 'kept').length} kept from the
     Round 1 pool, {POOL.filter((p) => p.status === 'swap').length} swapped
     to a reliable variant of the same script,
     {' '}{POOL.filter((p) => p.status === 'add').length} newly added.
@@ -139,8 +141,9 @@ const scripts = new Set(POOL.map((p) => metrics(p.slug).group)).size;
         <i>unreliable</i> variant of a script (e.g. Hardwood wide/no-sym,
         +12 but 21% in-window). The fix: keep the script, take its reliable
         variant.</li>
-      <li><b>Variety is enforced.</b> 13 distinct map scripts; both sizes,
-        both aspects, both symmetries represented.</li>
+      <li><b>No weak votes.</b> Configs whose reliable variant had no real
+        voter support — Hardwood, Donut, Highlands — were cut, even at the
+        cost of those scripts. The {scripts} scripts here all earned it.</li>
     </ol>
     <div class="why__ax">
       <span><i>scripts</i><b>{scripts}</b></span>
@@ -149,10 +152,12 @@ const scripts = new Set(POOL.map((p) => metrics(p.slug).group)).size;
       <span><i>sym / no-sym</i><b>{ax.sym} / {ax.nosym}</b></span>
     </div>
     <p class="why__cav">
-      Honest caveat: the reliable &amp; well-voted configs skew square + sym
-      (Tiny maps in particular are square-only when reliable), so the pool
-      leans that way — {ax.wide} of {POOL.length} are wide. A 50/50 split
-      isn’t reachable without dropping reliability or voter support.
+      Honest caveat: insisting on real voter support thins the structural
+      variety. The reliable Tiny configs are mostly the ones voters never
+      rated or rated low — so cutting weak votes leaves only {ax.Tiny} Tiny
+      maps, {ax.wide} wide and {ax.nosym} no-sym of {POOL.length}. Both ends
+      of every axis appear, but the pool leans Duel / square / sym — that
+      lean is where reliability and voter support actually overlap.
     </p>
   </div>
 
@@ -189,6 +194,37 @@ const scripts = new Set(POOL.map((p) => metrics(p.slug).group)).size;
             <div class="mp__note">{p.note}</div>
           </div>
         </a>
+      );
+    })}
+  </div>
+
+  <h2 class="sec">Cut for weak voter support · {CUT.length}</h2>
+  <p class="sub">
+    These three <i>are</i> reliable (≥70% on both windows) — but their
+    reliable variant has no real voter backing. Cutting them costs the
+    pool the Hardwood Forest, Donut and Highlands scripts. Re-add any of
+    them if Round 2 voting gives them support.
+  </p>
+  <div class="dropped">
+    {CUT.map((d) => {
+      const m = metrics(d.slug);
+      return (
+        <div class="dr dr--cut">
+          <div class="dr__hd">
+            <span class="dr__name">{m.label}</span>
+            <span class="dr__chips">
+              {m.setting.map((s: string) => (<span class="ch">{s}</span>))}
+            </span>
+            <span class={'badge ' + (m.sitePct >= 70 ? 'b-ok' : 'b-lo')}>
+              sites <b>{m.sitePct}%</b></span>
+            <span class={'badge ' + (m.landPct >= 70 ? 'b-ok' : 'b-lo')}>
+              land <b>{m.landPct}%</b></span>
+            <span class="vote">votes <b>{d.L}</b>L · {d.M}M · <b>{d.N}</b>N
+              <span class={'sc ' + (d.score >= 0 ? 'sc--p' : 'sc--n')}>
+                {d.score >= 0 ? '+' : ''}{d.score}</span></span>
+          </div>
+          <div class="dr__why">{d.reason}</div>
+        </div>
       );
     })}
   </div>
@@ -313,6 +349,7 @@ const scripts = new Set(POOL.map((p) => metrics(p.slug).group)).size;
     .dr { background:#16181d; border:1px solid var(--border);
       border-left:3px solid #5a2e28; border-radius:6px;
       padding:0.5rem 0.8rem; }
+    .dr--cut { border-left-color:var(--gold-deep); }
     .dr__hd { display:flex; align-items:baseline; gap:0.5rem;
       flex-wrap:wrap; }
     .dr__name { font-family:var(--font-display); font-weight:700;
