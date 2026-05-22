@@ -8,8 +8,10 @@ const baseUrl = import.meta.env.BASE_URL;
 // ≥70% of their generated seeds must hit BOTH ranges at once —
 //   • 14–26 city sites
 //   • 40–60 land-hex capital distance
-// Ranked most-reliable → least. Universe = tiny/duel × wide/square ×
-// point-sym on/off (ultrawide excluded per request).
+// Ranked most-reliable → least. Universe = every swept config of the
+// mirror-capable map scripts (size × aspect × point-sym). Non-mirror
+// scripts and Multiple Continents are excluded — they can't be made
+// symmetric, so they're not tournament-valid.
 const SITES_LO = 14, SITES_HI = 26;
 const LAND_LO = 40, LAND_HI = 60;
 const THRESH = 0.70;
@@ -17,11 +19,31 @@ const THRESH = 0.70;
 type G = { cslug: string; sites: number; land: number; label: string;
   setting: string; group: string; id: string; seed: number };
 const all = (gensData as any).gens as G[];
-const inUniverse = (s: string) => !/ultrawide/.test(s || '');
+
+// The 17 configs in the current voted tournament pool (see index.astro
+// TIERS) — flagged here so the picks list shows which are already in.
+const POOL = new Set([
+  'arid-plateau-small-seas-smallest-square-sym',
+  'coastal-rain-basin-smallest-wide-nosym',
+  'dota-jungle-smallest-square-sym',
+  'inland-sea-smallest-square-sym',
+  'dota-sand-smallest-square-sym',
+  'arid-plateau-small-seas-smallest-wide-sym',
+  'continent-smallest-wide-sym',
+  'dota-water-smallest-square-sym',
+  'hardwood-forest-smallest-wide-nosym',
+  'coastal-rain-basin-smallest-square-sym',
+  'inland-sea-smallest-wide-sym',
+  'archipelago-land-lg-water-sm-smallest-wide-nosym',
+  'continent-tiny-square-sym',
+  'desert-lush-std-smallest-wide-sym',
+  'donut-irreg-low-smallest-square-sym',
+  'mountain-pass-tiny-square-sym',
+  'highlands-tiny-square-sym',
+]);
 
 const byCfg: Record<string, G[]> = {};
-for (const g of all)
-  if (inUniverse(g.setting)) (byCfg[g.cslug] ??= []).push(g);
+for (const g of all) (byCfg[g.cslug] ??= []).push(g);
 
 const med = (a: number[]) => {
   const s = [...a].sort((x, y) => x - y), m = s.length >> 1;
@@ -31,28 +53,31 @@ type Pick = {
   slug: string; label: string; setting: string; group: string;
   n: number; inN: number; pct: number; sitePct: number; landPct: number;
   sitesMed: number; landMed: number; sampleId: string;
+  inPool: boolean; pass: boolean;
 };
 const inSite = (g: G) => g.sites >= SITES_LO && g.sites <= SITES_HI;
 const inLand = (g: G) => g.land >= LAND_LO && g.land <= LAND_HI;
 
 const ranked: Pick[] = Object.entries(byCfg).map(([slug, rows]) => {
   const n = rows.length;
+  const inN = rows.filter((g) => inSite(g) && inLand(g)).length;
   return {
     slug, label: rows[0].label, setting: rows[0].setting,
-    group: rows[0].group, n,
-    inN: rows.filter((g) => inSite(g) && inLand(g)).length,
-    pct: rows.filter((g) => inSite(g) && inLand(g)).length / n,
+    group: rows[0].group, n, inN, pct: inN / n,
     sitePct: rows.filter(inSite).length / n,
     landPct: rows.filter(inLand).length / n,
     sitesMed: med(rows.map((g) => g.sites)),
     landMed: med(rows.map((g) => g.land)),
     sampleId: rows[0].id,
+    inPool: POOL.has(slug), pass: inN / n >= THRESH,
   };
 });
-const picks = ranked
-  .filter((p) => p.pct >= THRESH)
-  .sort((a, b) => b.pct - a.pct || b.inN - a.inN
-    || a.label.localeCompare(b.label));
+const bySort = (a: Pick, b: Pick) =>
+  b.pct - a.pct || b.inN - a.inN || a.label.localeCompare(b.label);
+const picks = ranked.filter((p) => p.pass).sort(bySort);
+// the current voted pool, ranked the same way (incl. configs that fail)
+const poolRanked = ranked.filter((p) => p.inPool).sort(bySort);
+const poolPass = poolRanked.filter((p) => p.pass).length;
 const considered = Object.keys(byCfg).length;
 const pc = (x: number) => Math.round(x * 100);
 // chips: drop the always-on "mirror" token, it's universal
@@ -65,16 +90,66 @@ const chips = (s: string) =>
     at least {pc(THRESH)}% of generated seeds landing in <b>both</b>
     windows at once: {SITES_LO}–{SITES_HI} city sites and {LAND_LO}–{LAND_HI}
     land-hex capital distance. Ranked most-reliable first.
-    {picks.length} of {considered} configs clear the bar
-    (tiny/duel × wide/square × point-sym on/off; ultrawide excluded).
+    {picks.length} of {considered} swept configs clear the bar — the full
+    mirror-capable universe (size × aspect × point-sym; Multiple
+    Continents and the non-mirror scripts excluded).
   </p>
 
+  <h2 class="sec">Reliable configs · {picks.length} ≥ {pc(THRESH)}%</h2>
   <div class="picks">
     {picks.map((p, i) => (
       <a class="pk" href={`${baseUrl}gen/${p.sampleId}`}
          target="_blank" rel="noopener"
          data-rank={i < 3 ? i + 1 : ''}>
         <div class="pk__rank">{i + 1}</div>
+        <div class="pk__main">
+          <div class="pk__top">
+            <span class="pk__name">{p.label}</span>
+            {p.inPool && <span class="tag tag--pool">in pool</span>}
+            <span class="pk__chips">
+              {chips(p.setting).map((t) => (<span class="ch">{t}</span>))}
+            </span>
+          </div>
+          <div class="pk__bar" title={`${p.inN}/${p.n} seeds in range`}>
+            <span class="pk__fill" style={`width:${p.pct * 100}%`}></span>
+            <span class="pk__thr" style={`left:${THRESH * 100}%`}></span>
+          </div>
+          <div class="pk__sub">
+            <span class="sub">
+              <i>sites {SITES_LO}–{SITES_HI}</i>
+              <span class="mini"><span style={`width:${p.sitePct * 100}%`}></span></span>
+              <b>{pc(p.sitePct)}%</b>
+            </span>
+            <span class="sub">
+              <i>land {LAND_LO}–{LAND_HI}</i>
+              <span class="mini"><span style={`width:${p.landPct * 100}%`}></span></span>
+              <b>{pc(p.landPct)}%</b>
+            </span>
+            <span class="sub med">
+              med <b>{p.sitesMed}</b> sites · <b>{p.landMed}</b> land · n={p.n}
+            </span>
+          </div>
+        </div>
+        <div class="pk__pct">
+          <span class="pk__num">{pc(p.pct)}<i>%</i></span>
+          <span class="pk__lab">in range</span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <h2 class="sec">Current tournament pool · {poolPass} of {poolRanked.length} clear the bar</h2>
+  <p class="sub-lede">
+    The {poolRanked.length} configs in the voted atlas pool, scored on the
+    same criteria. {poolRanked.length - poolPass} fall short of {pc(THRESH)}%
+    — mostly on the land-distance window.
+  </p>
+  <div class="picks">
+    {poolRanked.map((p) => (
+      <a class={'pk' + (p.pass ? '' : ' pk--fail')}
+         href={`${baseUrl}gen/${p.sampleId}`}
+         target="_blank" rel="noopener">
+        <div class="pk__rank">{p.pass ? '✓' : '✕'}</div>
         <div class="pk__main">
           <div class="pk__top">
             <span class="pk__name">{p.label}</span>
@@ -125,6 +200,13 @@ const chips = (s: string) =>
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
       max-width:82ch; margin:0.6rem 0 1.4rem; }
+    .sec { font-size:1.3rem; color:var(--gold);
+      font-family:var(--font-display); font-weight:700;
+      border-bottom:1px solid var(--gold-deep); padding-bottom:0.3rem;
+      margin:1.8rem 0 0.7rem; }
+    .sub-lede { font-family:var(--font-display); font-style:italic;
+      font-size:0.95rem; color:var(--text-faint); max-width:80ch;
+      margin:0 0 0.9rem; }
     .picks { display:flex; flex-direction:column; gap:0.55rem; }
     .pk { display:flex; align-items:stretch; gap:0.9rem;
       background:var(--bg-elev); border:1px solid var(--border);
@@ -140,6 +222,16 @@ const chips = (s: string) =>
     .pk[data-rank="1"] { border-color:var(--gold-deep); }
     .pk[data-rank="2"] .pk__rank { color:#c7c7cf; }
     .pk[data-rank="3"] .pk__rank { color:#c08a5a; }
+    .pk--fail { opacity:0.78; }
+    .pk--fail .pk__rank { color:#b06a5f; }
+    .pk--fail .pk__num { color:#c98f84; }
+    /* pool cards carry no data-rank — a passing one gets a green tick */
+    .pk:not([data-rank]):not(.pk--fail) .pk__rank { color:#4cc080; }
+    .tag { font-family:var(--font-ui); font-size:0.56rem; font-weight:700;
+      letter-spacing:0.1em; text-transform:uppercase;
+      padding:0.1rem 0.4rem; border-radius:4px; }
+    .tag--pool { color:#7fd6a8; background:#13241b;
+      border:1px solid #2f6b4a; }
     .pk__main { flex:1 1 auto; min-width:0; display:flex;
       flex-direction:column; gap:0.4rem; justify-content:center; }
     .pk__top { display:flex; align-items:baseline; gap:0.7rem;
