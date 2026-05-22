@@ -63,6 +63,7 @@ const variantOf = (label: string) =>
 type Cfg = {
   slug: string; label: string; group: string; setting: string;
   variant: string; n: number; rows: G[]; pct: number; inN: number;
+  sitePct: number; landPct: number;
   pass: boolean; inPool: boolean; isBaseline: boolean; isAridLarge: boolean;
   sites: Stat; land: Stat; move: Stat;
 };
@@ -80,6 +81,8 @@ const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
     slug, label: rows[0].label, group: rows[0].group,
     setting: rows[0].setting, variant: variantOf(rows[0].label),
     n, rows, inN, pct: inN / n,
+    sitePct: rows.filter(inSite).length / n,
+    landPct: rows.filter(inLand).length / n,
     pass: inN / n >= THRESH, inPool: POOL.has(slug),
     isBaseline: BASELINES.has(rows[0].setting),
     isAridLarge: slug.startsWith('arid-plateau-large'),
@@ -169,11 +172,14 @@ const PREVIEWS = 6;
                   <span class="ch">{p}</span>
                 ))}
               </span>
-              <span class={'rel ' + (c.pass ? 'rel--ok' : 'rel--lo')}>
-                {c.pass ? 'reliable' : 'below bar'} {pc(c.pct)}%
-                {(c.inPool || c.isBaseline || c.isAridLarge) && (
-                  <i>{c.inPool ? ' · in pool' : ''}{c.isBaseline ? ' · baseline' : ''}{c.isAridLarge ? ' · large seas' : ''}</i>
-                )}
+              <span class="rels">
+                <span class={'rel ' + (c.sitePct >= THRESH ? 'rel--ok' : 'rel--lo')}>
+                  sites 14–26 <b>{pc(c.sitePct)}%</b>
+                </span>
+                <span class={'rel ' + (c.landPct >= THRESH ? 'rel--ok' : 'rel--lo')}>
+                  land 40–60 <b>{pc(c.landPct)}%</b>
+                </span>
+                {c.inPool && <span class="rel rel--pool">in pool</span>}
               </span>
               <span class="vote" data-slug={c.slug}>
                 <button data-v="like">👍 like</button>
@@ -249,12 +255,14 @@ const PREVIEWS = 6;
       color:var(--text-soft); background:#0e0f12;
       border:1px solid var(--border-strong); border-radius:4px;
       padding:0.08rem 0.4rem; }
-    .rel { font-family:var(--font-ui); font-weight:700; font-size:0.66rem;
-      letter-spacing:0.04em; padding:0.12rem 0.5rem; border-radius:999px;
-      border:1px solid; }
-    .rel i { font-style:normal; font-weight:600; opacity:0.85; }
+    .rels { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
+    .rel { font-family:var(--font-ui); font-weight:600; font-size:0.64rem;
+      letter-spacing:0.03em; padding:0.12rem 0.5rem; border-radius:999px;
+      border:1px solid; white-space:nowrap; }
+    .rel b { font-weight:800; }
     .rel--ok { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
     .rel--lo { color:#e0b061; border-color:var(--gold-deep); background:#231f0d; }
+    .rel--pool { color:#7fd6a8; border-color:#2f6b4a; background:#13241b; }
     .vote { display:inline-flex; gap:0.4rem; margin-left:auto; }
     .vote button { background:#1b1d23; color:var(--text-soft);
       border:1px solid var(--border-strong); border-radius:7px;
