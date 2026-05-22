@@ -8,23 +8,17 @@ const games = [...data.games].sort((a, b) => (+a.id) - (+b.id));
 const cap = (s: string) => (s ? s[0] + s.slice(1).toLowerCase() : s);
 const sz = (s: string) => (s === 'SMALLEST' ? 'Duel' : cap(s));
 
-// The five measured metrics — same roster as the atlas distribution
-// charts, mapped onto the tournament-games field names.
-type MK = 'citySites' | 'sea' | 'land' | 'slingerLand' | 'slingerSea';
+// Three measured metrics, mapped onto the tournament-games field names.
+type MK = 'citySites' | 'land' | 'slingerLand';
 const METRICS: { key: MK; name: string; short: string; step: number;
   cap: string }[] = [
   { key: 'citySites', name: 'City sites', short: 'City sites', step: 1,
     cap: 'Number of valid city sites placed on the map.' },
-  { key: 'sea', name: 'Water-route hexes', short: 'Water hex', step: 5,
-    cap: 'Cap→cap shortest path with embark allowed, in hex tiles (no move cost).' },
   { key: 'land', name: 'Land hex distance', short: 'Land hex', step: 5,
     cap: 'Cap→cap shortest land-only path, in hex tiles.' },
-  { key: 'slingerLand', name: 'Land move-cost (turns)', short: 'Land turns',
+  { key: 'slingerLand', name: 'Land hex cost (turns)', short: 'Land cost',
     step: 5,
     cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in turns.' },
-  { key: 'slingerSea', name: 'Water move-cost (turns)', short: 'Water turns',
-    step: 5,
-    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed — in turns.' },
 ];
 
 // ---- distribution helpers (same model as the atlas histograms) ------
@@ -69,10 +63,10 @@ const gameNo = new Map(games.map((g, i) => [g.id, i + 1]));
 <Base title="Tournament Calibration">
   <p class="lede">
     The {N} completed competitive games from the last tournament,
-    measured with the atlas model. Five facts per map — city sites and
-    four capital-distance measures — shown as distributions and a table.
-    Descriptive only: the charts show the spread, they don't say which
-    values are good.
+    measured with the atlas model. Three facts per map — city sites,
+    land-hex distance, and land-hex move cost — shown as distributions
+    and one table. Descriptive only: the charts show the spread, they
+    don't say which values are good.
   </p>
 
   <section class="dist">
@@ -130,8 +124,7 @@ const gameNo = new Map(games.map((g, i) => [g.id, i + 1]));
     <table class="tbl">
       <thead><tr>
         <th>#</th><th>Matchup</th><th>Script</th><th>Size</th><th>Aspect</th>
-        <th>City sites</th><th>Water hex</th><th>Land hex</th>
-        <th>Land turns</th><th>Water turns</th>
+        <th>City sites</th><th>Land hex</th><th>Land hex cost</th>
       </tr></thead>
       <tbody>
         {games.map((g) => (
@@ -142,10 +135,8 @@ const gameNo = new Map(games.map((g, i) => [g.id, i + 1]));
             <td>{sz(g.size)}</td>
             <td class="cap">{g.aspect.toLowerCase()}</td>
             <td><b>{g.citySites}</b></td>
-            <td class="mono">{g.sea ?? '—'}</td>
             <td class="mono">{g.land ?? '—'}</td>
             <td class="mono">{g.slingerLand ?? '—'}</td>
-            <td class="mono">{g.slingerSea ?? '—'}</td>
           </tr>
         ))}
       </tbody>
@@ -191,13 +182,11 @@ const gameNo = new Map(games.map((g, i) => [g.id, i + 1]));
 
   <p class="note">
     Click a bar for the games in that bin · click any column header to
-    sort. <b>City sites</b> = valid city sites on the map. <b>Water hex</b>
-    = capital→capital shortest path with embark allowed (hex tiles).
-    <b>Land hex</b> = capital→capital shortest land-only path (hex tiles).
-    <b>Land / Water turns</b> = army (move-2) capital→capital weighted by
-    terrain move cost, land-only and embark-allowed respectively
-    (exploration law assumed — rivers fast). Capital = each player's
-    original founded capital. # = chronological game number.
+    sort. <b>City sites</b> = valid city sites on the map. <b>Land hex</b>
+    = capital→capital shortest land-only path (hex tiles). <b>Land hex
+    cost</b> = army (move-2) capital→capital weighted by terrain move
+    cost, in turns (exploration law assumed — rivers fast). Capital =
+    each player's original founded capital. # = chronological game number.
   </p>
 </Base>
 
