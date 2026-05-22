@@ -1,0 +1,326 @@
+---
+import Base from '../layouts/Base.astro';
+import gensData from '../data/gens.json';
+const baseUrl = import.meta.env.BASE_URL;
+
+// ---- The proposal --------------------------------------------------
+// A 15-map tournament pool built from: (1) all 7 Round 1 voter ballots
+// (alcaras excluded — the organiser's preference IS the criteria),
+// scored +2 like / 0 maybe / −1 no; (2) the site + distance criteria —
+// 14–26 city sites and 40–60 land-hex distance, ≥70% of seeds; and
+// (3) variety across map script, size, point-symmetry and aspect.
+type St = 'kept' | 'swap' | 'add';
+type Row = { slug: string; status: St; score: number;
+  L: number; M: number; N: number; note: string };
+const POOL: Row[] = [
+  { slug: 'arid-plateau-small-seas-smallest-square-sym', status: 'kept',
+    score: 14, L: 7, M: 0, N: 0,
+    note: 'Unanimous like, reliable on both windows.' },
+  { slug: 'coastal-rain-basin-smallest-wide-nosym', status: 'kept',
+    score: 14, L: 7, M: 0, N: 0,
+    note: 'Unanimous like — and the pool’s strongest wide + no-sym map.' },
+  { slug: 'inland-sea-smallest-square-sym', status: 'kept',
+    score: 14, L: 7, M: 0, N: 0, note: 'Unanimous like.' },
+  { slug: 'dota-jungle-smallest-wide-sym', status: 'swap',
+    score: 9, L: 5, M: 0, N: 1,
+    note: 'Swapped from the pool’s Jungle/square to wide — 100% on both windows, the single most reliable config, and adds a wide DOTA.' },
+  { slug: 'coastal-rain-basin-smallest-square-sym', status: 'kept',
+    score: 9, L: 5, M: 1, N: 1,
+    note: 'Reliable and well-liked; the square counterpart to the wide CRB.' },
+  { slug: 'dota-sand-smallest-wide-sym', status: 'swap',
+    score: 7, L: 4, M: 1, N: 1,
+    note: 'Swapped from Sand/square (only 46% in-window) to wide/sym (88%).' },
+  { slug: 'arid-plateau-small-seas-smallest-wide-nosym', status: 'add',
+    score: 7, L: 4, M: 1, N: 1,
+    note: 'Added — Arid Plateau at wide + no-sym (92%/96%), broadening the unanimous favourite across both aspects.' },
+  { slug: 'dota-water-smallest-square-sym', status: 'kept',
+    score: 7, L: 4, M: 2, N: 1, note: 'Reliable, liked; the square DOTA.' },
+  { slug: 'wetlands-smallest-square-sym', status: 'add',
+    score: 6, L: 3, M: 3, N: 0,
+    note: 'Added — a script that was never in the Round 1 pool. Zero no-votes, 80% in-window.' },
+  { slug: 'continent-tiny-square-sym', status: 'kept',
+    score: 6, L: 4, M: 1, N: 2, note: 'Reliable; the Tiny Continent.' },
+  { slug: 'desert-none-std-tiny-square-sym', status: 'swap',
+    score: 5, L: 3, M: 2, N: 1,
+    note: 'Swapped from Desert Lush/wide (17% in-window) to Desert No-Coast Tiny/square (71%).' },
+  { slug: 'archipelago-land-lg-water-sm-smallest-square-sym', status: 'swap',
+    score: 4, L: 3, M: 1, N: 2,
+    note: 'Swapped from Archipelago wide/no-sym (67%) to square/sym (83%).' },
+  { slug: 'hardwood-forest-tiny-square-nosym', status: 'swap',
+    score: 0, L: 2, M: 0, N: 4,
+    note: 'Swapped from Hardwood wide/no-sym (21%) to Tiny/square (88%). Voters were lukewarm on the reliable variant — kept for script variety.' },
+  { slug: 'highlands-tiny-square-sym', status: 'kept',
+    score: 0, L: 0, M: 1, N: 0,
+    note: 'Reliable (88%). Added after Round 1, so almost no vote signal — an organiser terrain probe.' },
+  { slug: 'donut-irreg-low-tiny-square-nosym', status: 'swap',
+    score: -3, L: 0, M: 3, N: 3,
+    note: 'Swapped from Donut Duel/square (41%) to Tiny/square/no-sym (79%) — the only reliable Donut. Voters are cool on it; the weakest link — drop for a 14-map pool.' },
+];
+
+type Drop = { slug: string; score: number; L: number; M: number;
+  N: number; reason: string };
+const DROPPED: Drop[] = [
+  { slug: 'hardwood-forest-smallest-wide-nosym', score: 12, L: 6, M: 1, N: 0,
+    reason: 'Voters’ top non-unanimous pick — but only 21% in-window. Hardwood stays in via Tiny/square.' },
+  { slug: 'dota-jungle-smallest-square-sym', score: 11, L: 6, M: 0, N: 1,
+    reason: 'Reliable (75%) and well-liked, but its wide sibling is 100% on both windows — kept the better variant.' },
+  { slug: 'arid-plateau-small-seas-smallest-wide-sym', score: 11, L: 6, M: 0, N: 1,
+    reason: '65% in-window — just misses. Arid Plateau stays via square/sym + wide/no-sym.' },
+  { slug: 'continent-smallest-wide-sym', score: 11, L: 6, M: 0, N: 1,
+    reason: '42% in-window. Continent stays via Tiny/square.' },
+  { slug: 'inland-sea-smallest-wide-sym', score: 9, L: 5, M: 1, N: 1,
+    reason: '55% in-window. Inland Sea stays via square/sym.' },
+  { slug: 'dota-sand-smallest-square-sym', score: 9, L: 5, M: 1, N: 1,
+    reason: 'Only 46% in-window — replaced by Sand wide/sym (88%).' },
+  { slug: 'donut-irreg-low-smallest-square-sym', score: 9, L: 5, M: 1, N: 1,
+    reason: '41% in-window — replaced by Donut Tiny/square/no-sym.' },
+  { slug: 'desert-lush-std-smallest-wide-sym', score: 6, L: 4, M: 1, N: 2,
+    reason: '17% in-window — replaced by Desert No-Coast Tiny/square.' },
+  { slug: 'archipelago-land-lg-water-sm-smallest-wide-nosym', score: 5, L: 4, M: 0, N: 3,
+    reason: '67% in-window — replaced by Archipelago square/sym (83%).' },
+  { slug: 'mountain-pass-tiny-square-sym', score: 3, L: 3, M: 1, N: 3,
+    reason: '46% in-window — and NO Mountain Pass variant clears the bar at any size/aspect/sym. The one script with no reliable form; removed entirely.' },
+];
+
+// ---- per-config metrics from gens.json ------------------------------
+const SITES_LO = 14, SITES_HI = 26, LAND_LO = 40, LAND_HI = 60;
+const byCfg: Record<string, any[]> = {};
+for (const g of (gensData as any).gens) (byCfg[g.cslug] ??= []).push(g);
+const mean = (a: number[]) =>
+  Math.round((a.reduce((x, y) => x + y, 0) / a.length) * 10) / 10;
+function metrics(slug: string) {
+  const r = byCfg[slug] || [];
+  const n = r.length || 1;
+  const r0 = r[0] || {};
+  return {
+    n, label: r0.label || slug, group: r0.group || '',
+    setting: (r0.setting || '').split(' · ').filter((p: string) => p !== 'mirror'),
+    sites: mean(r.map((g) => g.sites)),
+    land: mean(r.map((g) => g.land)),
+    cost: mean(r.map((g) => g.slLand)),
+    sitePct: Math.round(r.filter((g) => g.sites >= SITES_LO && g.sites <= SITES_HI).length / n * 100),
+    landPct: Math.round(r.filter((g) => g.land >= LAND_LO && g.land <= LAND_HI).length / n * 100),
+    sample: r0.id, img: r0.img,
+  };
+}
+const ST = { kept: 'Kept', swap: 'Swapped', add: 'Added' };
+// axis variety tally
+const ax = { Duel: 0, Tiny: 0, square: 0, wide: 0, sym: 0, nosym: 0 };
+for (const p of POOL) {
+  const s = metrics(p.slug).setting;
+  ax[s[0] as 'Duel' | 'Tiny']++;
+  ax[s[1] as 'square' | 'wide']++;
+  (s[2] || '').includes('on') ? ax.sym++ : ax.nosym++;
+}
+const scripts = new Set(POOL.map((p) => metrics(p.slug).group)).size;
+---
+<Base title="Proposed Tournament Pool">
+  <p class="lede">
+    A <b>{POOL.length}-map pool</b> for the tournament — the intersection of
+    three things: every Round 1 ballot (7 voters, scored +2 like / 0 maybe
+    / −1 no), the site &amp; distance criteria ({SITES_LO}–{SITES_HI} city
+    sites and {LAND_LO}–{LAND_HI} land-hex distance, hit by ≥70% of seeds),
+    and deliberate variety across map script, size, point-symmetry and
+    aspect. {POOL.filter((p) => p.status === 'kept').length} kept from the
+    Round 1 pool, {POOL.filter((p) => p.status === 'swap').length} swapped
+    to a reliable variant of the same script,
+    {' '}{POOL.filter((p) => p.status === 'add').length} newly added.
+  </p>
+
+  <div class="why">
+    <h2 class="why__t">How it was built</h2>
+    <ol>
+      <li><b>Reliability is the gate.</b> Every map here lands in both the
+        14–26 site and 40–60 land windows on ≥70% of generated seeds. 9 of
+        the original 17 failed that and were swapped or dropped.</li>
+      <li><b>Votes break ties &amp; pick variants.</b> Where a script had
+        several reliable configs, the one with the best 7-voter score won.</li>
+      <li><b>Vote at the script level.</b> Voters often liked an
+        <i>unreliable</i> variant of a script (e.g. Hardwood wide/no-sym,
+        +12 but 21% in-window). The fix: keep the script, take its reliable
+        variant.</li>
+      <li><b>Variety is enforced.</b> 13 distinct map scripts; both sizes,
+        both aspects, both symmetries represented.</li>
+    </ol>
+    <div class="why__ax">
+      <span><i>scripts</i><b>{scripts}</b></span>
+      <span><i>Duel / Tiny</i><b>{ax.Duel} / {ax.Tiny}</b></span>
+      <span><i>square / wide</i><b>{ax.square} / {ax.wide}</b></span>
+      <span><i>sym / no-sym</i><b>{ax.sym} / {ax.nosym}</b></span>
+    </div>
+    <p class="why__cav">
+      Honest caveat: the reliable &amp; well-voted configs skew square + sym
+      (Tiny maps in particular are square-only when reliable), so the pool
+      leans that way — {ax.wide} of {POOL.length} are wide. A 50/50 split
+      isn’t reachable without dropping reliability or voter support.
+    </p>
+  </div>
+
+  <h2 class="sec">The {POOL.length} maps</h2>
+  <div class="pool">
+    {POOL.map((p, i) => {
+      const m = metrics(p.slug);
+      return (
+        <a class={'mp mp--' + p.status} href={`${baseUrl}gen/${m.sample}`}
+           target="_blank" rel="noopener">
+          <img class="mp__img" src={`${baseUrl}img/${m.img}`} loading="lazy"
+               alt={m.label} />
+          <div class="mp__body">
+            <div class="mp__top">
+              <span class="mp__rank">{i + 1}</span>
+              <span class="mp__name">{m.label}</span>
+              <span class={'st st--' + p.status}>{ST[p.status]}</span>
+              <span class="mp__chips">
+                {m.setting.map((s: string) => (<span class="ch">{s}</span>))}
+              </span>
+            </div>
+            <div class="mp__stats">
+              <span class="stat"><i>city sites</i><b>{m.sites}</b></span>
+              <span class="stat"><i>land hex</i><b>{m.land}</b></span>
+              <span class="stat"><i>land cost</i><b>{m.cost}</b></span>
+              <span class={'badge ' + (m.sitePct >= 70 ? 'b-ok' : 'b-lo')}>
+                sites 14–26 <b>{m.sitePct}%</b></span>
+              <span class={'badge ' + (m.landPct >= 70 ? 'b-ok' : 'b-lo')}>
+                land 40–60 <b>{m.landPct}%</b></span>
+              <span class="vote">votes <b>{p.L}</b>L · {p.M}M · <b>{p.N}</b>N
+                <span class={'sc ' + (p.score >= 0 ? 'sc--p' : 'sc--n')}>
+                  {p.score >= 0 ? '+' : ''}{p.score}</span></span>
+            </div>
+            <div class="mp__note">{p.note}</div>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+  <h2 class="sec">Dropped from the Round 1 pool · {DROPPED.length}</h2>
+  <p class="sub">
+    Nine of these failed the reliability gate; one (DOTA Jungle/square)
+    was simply beaten by a better variant. Voter score shown is from the
+    same 7-voter tally — note how many were popular yet unreliable.
+  </p>
+  <div class="dropped">
+    {DROPPED.map((d) => {
+      const m = metrics(d.slug);
+      return (
+        <div class="dr">
+          <div class="dr__hd">
+            <span class="dr__name">{m.label}</span>
+            <span class="dr__chips">
+              {m.setting.map((s: string) => (<span class="ch">{s}</span>))}
+            </span>
+            <span class={'badge ' + (m.sitePct >= 70 ? 'b-ok' : 'b-lo')}>
+              sites <b>{m.sitePct}%</b></span>
+            <span class={'badge ' + (m.landPct >= 70 ? 'b-ok' : 'b-lo')}>
+              land <b>{m.landPct}%</b></span>
+            <span class="vote">votes <b>{d.L}</b>L · {d.M}M · <b>{d.N}</b>N
+              <span class={'sc ' + (d.score >= 0 ? 'sc--p' : 'sc--n')}>
+                {d.score >= 0 ? '+' : ''}{d.score}</span></span>
+          </div>
+          <div class="dr__why">{d.reason}</div>
+        </div>
+      );
+    })}
+  </div>
+
+  <p class="note">
+    City sites / land-hex distance / land-hex cost are per-config means
+    over the deterministic owmapgen sweep. The two badges are how often a
+    config’s seeds land inside the 14–26 and 40–60 windows. Voter score
+    = +2 like / 0 maybe (or no vote) / −1 no, over the 7 Round 1 voters
+    (organiser ballot excluded). Click any map for a sample.
+  </p>
+
+  <style>
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:84ch; margin:0.6rem 0 1.3rem; }
+    .why { background:var(--bg-elev); border:1px solid var(--gold-deep);
+      border-radius:8px; padding:0.8rem 1.1rem 1rem; margin-bottom:1.6rem; }
+    .why__t { font-family:var(--font-display); font-weight:700;
+      font-size:1.15rem; color:var(--gold); margin-bottom:0.4rem; }
+    .why ol { margin:0.3rem 0 0.7rem; padding-left:1.2rem;
+      font-size:0.86rem; color:var(--text-soft); line-height:1.5; }
+    .why li { margin-bottom:0.25rem; }
+    .why__ax { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0; }
+    .why__ax span { display:flex; flex-direction:column; gap:0.1rem;
+      background:#0e0f12; border:1px solid var(--border-strong);
+      border-radius:6px; padding:0.3rem 0.7rem; }
+    .why__ax i { font-style:normal; font-size:0.58rem; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--text-dim); }
+    .why__ax b { font-family:var(--font-display); font-weight:700;
+      font-size:1.1rem; color:var(--gold); }
+    .why__cav { font-size:0.78rem; color:var(--text-faint);
+      line-height:1.5; margin:0.5rem 0 0; }
+    .sec { font-size:1.35rem; color:var(--gold);
+      font-family:var(--font-display); font-weight:700;
+      border-bottom:1px solid var(--gold-deep); padding-bottom:0.3rem;
+      margin:1.8rem 0 0.5rem; }
+    .sub { font-size:0.82rem; color:var(--text-faint); line-height:1.5;
+      max-width:84ch; margin:0 0 0.9rem; }
+    .pool { display:flex; flex-direction:column; gap:0.6rem; }
+    .mp { display:flex; gap:0.9rem; background:var(--bg-elev);
+      border:1px solid var(--border); border-left:3px solid var(--border-strong);
+      border-radius:7px; padding:0.6rem 0.8rem; text-decoration:none;
+      color:inherit; }
+    .mp:hover { background:#1b1d23; text-decoration:none; }
+    .mp--kept { border-left-color:#3b6e3b; }
+    .mp--swap { border-left-color:var(--gold-deep); }
+    .mp--add  { border-left-color:#3a6ea5; }
+    .mp__img { width:128px; height:96px; object-fit:cover; flex:none;
+      border-radius:4px; border:1px solid var(--border-strong); }
+    .mp__body { flex:1 1 auto; min-width:0; display:flex;
+      flex-direction:column; gap:0.32rem; justify-content:center; }
+    .mp__top { display:flex; align-items:baseline; gap:0.55rem;
+      flex-wrap:wrap; }
+    .mp__rank { font-family:var(--font-mono); font-size:0.74rem;
+      color:var(--text-dim); }
+    .mp__name { font-family:var(--font-display); font-weight:700;
+      font-size:1.1rem; color:var(--text); }
+    .st { font-family:var(--font-ui); font-weight:700; font-size:0.56rem;
+      letter-spacing:0.1em; text-transform:uppercase;
+      padding:0.1rem 0.4rem; border-radius:4px; }
+    .st--kept { color:#9fd07f; background:#16290f; border:1px solid #3b6e3b; }
+    .st--swap { color:#e0c061; background:#231f0d; border:1px solid var(--gold-deep); }
+    .st--add  { color:#8fc0e8; background:#10202e; border:1px solid #3a6ea5; }
+    .mp__chips { display:inline-flex; gap:0.25rem; flex-wrap:wrap; }
+    .ch { font-family:var(--font-mono); font-size:0.58rem;
+      color:var(--gold-soft); background:#15160f; border:1px solid #4a431f;
+      border-radius:4px; padding:0.05rem 0.35rem; }
+    .mp__stats { display:flex; flex-wrap:wrap; gap:0.4rem 0.8rem;
+      align-items:center; }
+    .stat { display:inline-flex; align-items:baseline; gap:0.3rem;
+      font-size:0.74rem; color:var(--text-faint); font-family:var(--font-mono); }
+    .stat i { font-style:normal; font-size:0.58rem; letter-spacing:0.07em;
+      text-transform:uppercase; color:var(--text-dim); }
+    .stat b { color:var(--text); font-size:0.92rem;
+      font-family:var(--font-display); }
+    .badge { font-family:var(--font-ui); font-size:0.62rem; font-weight:600;
+      padding:0.08rem 0.45rem; border-radius:999px; border:1px solid; }
+    .badge b { font-weight:800; }
+    .b-ok { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
+    .b-lo { color:#e0b061; border-color:var(--gold-deep); background:#231f0d; }
+    .vote { font-size:0.66rem; font-family:var(--font-mono);
+      color:var(--text-faint); display:inline-flex; align-items:center;
+      gap:0.35rem; }
+    .vote b { color:var(--text-soft); }
+    .sc { font-family:var(--font-display); font-weight:700;
+      font-size:0.92rem; padding:0 0.25rem; }
+    .sc--p { color:#9fd07f; } .sc--n { color:#d08070; }
+    .mp__note { font-size:0.76rem; color:var(--text-faint);
+      line-height:1.45; }
+    .dropped { display:flex; flex-direction:column; gap:0.4rem; }
+    .dr { background:#16181d; border:1px solid var(--border);
+      border-left:3px solid #5a2e28; border-radius:6px;
+      padding:0.5rem 0.8rem; }
+    .dr__hd { display:flex; align-items:baseline; gap:0.5rem;
+      flex-wrap:wrap; }
+    .dr__name { font-family:var(--font-display); font-weight:700;
+      font-size:0.98rem; color:var(--text-soft); }
+    .dr__chips { display:inline-flex; gap:0.25rem; flex-wrap:wrap; }
+    .dr__why { font-size:0.76rem; color:var(--text-faint);
+      line-height:1.45; margin-top:0.2rem; }
+    .note { font-size:0.78rem; color:var(--text-faint); line-height:1.55;
+      max-width:88ch; margin-top:1.6rem; }
+  </style>
+</Base>
