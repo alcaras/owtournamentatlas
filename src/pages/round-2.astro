@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import gensData from '../data/gens.json';
-import tour from '../data/tournament-games.json';
 const baseUrl = import.meta.env.BASE_URL;
 
 // ---- Round 2 ballot ------------------------------------------------
@@ -64,9 +63,12 @@ const variantOf = (label: string) =>
 type Cfg = {
   slug: string; label: string; group: string; setting: string;
   variant: string; n: number; rows: G[]; pct: number; inN: number;
-  pass: boolean; inPool: boolean;
+  pass: boolean; inPool: boolean; isDSS: boolean;
   sites: Stat; land: Stat; move: Stat;
 };
+// the canonical Duel · square · point-sym-on config — always on the
+// Round 2 ballot for every map script, as a per-script baseline.
+const DSS = 'Duel · square · point-sym on · mirror';
 const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
   rows.sort((a, b) => a.seed - b.seed);
   const n = rows.length;
@@ -76,12 +78,15 @@ const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
     setting: rows[0].setting, variant: variantOf(rows[0].label),
     n, rows, inN, pct: inN / n,
     pass: inN / n >= THRESH, inPool: POOL.has(slug),
+    isDSS: rows[0].setting === DSS,
     sites: stats(rows.map((g) => g.sites)),
     land: stats(rows.map((g) => g.land)),
     move: stats(rows.map((g) => g.slLand)),
   };
 });
-const ballot = cfgs.filter((c) => c.pass || c.inPool);
+// Ballot = reliable picks ∪ current pool ∪ every script's Duel/square/
+// point-sym baseline.
+const ballot = cfgs.filter((c) => c.pass || c.inPool || c.isDSS);
 
 // group heading: DOTA by subtype, Desert by coast, else the script
 const dg = (c: Cfg) => {
@@ -108,8 +113,6 @@ const abbr = (c: Cfg) => {
 };
 const pc = (x: number) => Math.round(x * 100);
 
-// last-tournament calibration for land-hex move cost (slingerLand)
-const tMove = stats((tour as any).games.map((g: any) => g.slingerLand));
 const N = ballot.length;
 const PREVIEWS = 12;
 ---
@@ -118,12 +121,10 @@ const PREVIEWS = 12;
     <b>Round 2.</b> Connection is solved — every map is land-connected
     by construction — so this ballot is about three numbers only:
     <b>city sites</b>, <b>land-hex distance</b> between capitals, and
-    <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs:
-    the {ballot.filter((c) => c.pass).length} that reliably hit the
-    {SITES_LO}–{SITES_HI} site / {LAND_LO}–{LAND_HI} land windows, plus
-    the {ballot.filter((c) => !c.pass).length} current-pool configs that
-    fall short — vote them all. Move-cost is shown against the last
-    tournament's {tMove.n} games (median {tMove.med} turns).
+    <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs
+    on the ballot: every config that reliably hits the {SITES_LO}–{SITES_HI}
+    site / {LAND_LO}–{LAND_HI} land windows, the current voted pool, and
+    each map script's Duel/square/point-sym baseline — vote them all.
   </p>
 
   <nav class="snav" id="snav">
@@ -163,7 +164,9 @@ const PREVIEWS = 12;
               </span>
               <span class={'rel ' + (c.pass ? 'rel--ok' : 'rel--lo')}>
                 {c.pass ? 'reliable' : 'below bar'} {pc(c.pct)}%
-                {c.inPool && <i> · in pool</i>}
+                {(c.inPool || c.isDSS) && (
+                  <i>{c.inPool ? ' · in pool' : ''}{c.isDSS ? ' · baseline' : ''}</i>
+                )}
               </span>
               <span class="vote" data-slug={c.slug}>
                 <button data-v="like">👍 like</button>
@@ -186,7 +189,6 @@ const PREVIEWS = 12;
                 <div class="pill__l">Land move-cost <span class="u">turns</span></div>
                 <div class="pill__v"><b>{c.move.mean}</b> <span class="pm">±{c.move.sd}</span></div>
                 <div class="pill__r">min {c.move.min} · p10 {c.move.p10} · <b>med {c.move.med}</b> · p90 {c.move.p90} · max {c.move.max}</div>
-                <div class="pill__cal">last tournament: med <b>{tMove.med}</b> · typ {tMove.p10}–{tMove.p90}</div>
               </div>
             </div>
             <details class="gal" open>
@@ -216,9 +218,7 @@ const PREVIEWS = 12;
     {N} configs · {ballot[0]?.n ?? 0}-ish seeds each. <b>City sites</b> =
     valid settle spots. <b>Land hex distance</b> = capital→capital
     shortest land-only path (hex tiles). <b>Land move-cost</b> = army
-    (move-2) capital→capital weighted by terrain move cost, in turns —
-    compared on each pill to the last tournament's {tMove.n} games
-    (mean {tMove.mean}, median {tMove.med}, typical {tMove.p10}–{tMove.p90}).
+    (move-2) capital→capital weighted by terrain move cost, in turns.
     The <b>reliable / below-bar %</b> is how often a config's seeds land
     in both the {SITES_LO}–{SITES_HI} site and {LAND_LO}–{LAND_HI} land
     windows at once. Votes are stored locally and separate from Round 1;
@@ -273,10 +273,6 @@ const PREVIEWS = 12;
     .pill__r { font-size:0.72rem; color:var(--text-faint);
       font-family:var(--font-mono); }
     .pill__r b { color:var(--text-soft); }
-    .pill__cal { font-size:0.68rem; color:var(--gold-soft);
-      font-family:var(--font-mono); margin-top:0.3rem;
-      border-top:1px solid var(--border); padding-top:0.25rem; }
-    .pill__cal b { color:var(--gold); }
     .snav { position:fixed; left:max(8px, calc((100vw - 1180px)/2 - 178px));
       top:84px; width:168px; display:flex; flex-direction:column;
       gap:0.12rem; font-size:0.78rem; max-height:calc(100vh - 100px);
