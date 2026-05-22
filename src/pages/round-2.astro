@@ -1,0 +1,418 @@
+---
+import Base from '../layouts/Base.astro';
+import gensData from '../data/gens.json';
+import tour from '../data/tournament-games.json';
+const baseUrl = import.meta.env.BASE_URL;
+
+// ---- Round 2 ballot ------------------------------------------------
+// Connection is solved this round (every map is land-connected by
+// construction), so the vote is on three stats only:
+//   city sites · land-hex distance · land-hex move cost (turns)
+// Ballot = the 21 configs that reliably (≥70%) land in BOTH the
+// 14–26 city-site and 40–60 land-hex windows, PLUS the 9 current-pool
+// configs that fall short — so nothing already voted-in is dropped
+// silently. 30 configs, grouped by map script.
+const SITES_LO = 14, SITES_HI = 26, LAND_LO = 40, LAND_HI = 60;
+const THRESH = 0.70;
+
+// the 17 configs in the current voted tournament pool (index.astro)
+const POOL = new Set([
+  'arid-plateau-small-seas-smallest-square-sym',
+  'coastal-rain-basin-smallest-wide-nosym',
+  'dota-jungle-smallest-square-sym',
+  'inland-sea-smallest-square-sym',
+  'dota-sand-smallest-square-sym',
+  'arid-plateau-small-seas-smallest-wide-sym',
+  'continent-smallest-wide-sym',
+  'dota-water-smallest-square-sym',
+  'hardwood-forest-smallest-wide-nosym',
+  'coastal-rain-basin-smallest-square-sym',
+  'inland-sea-smallest-wide-sym',
+  'archipelago-land-lg-water-sm-smallest-wide-nosym',
+  'continent-tiny-square-sym',
+  'desert-lush-std-smallest-wide-sym',
+  'donut-irreg-low-smallest-square-sym',
+  'mountain-pass-tiny-square-sym',
+  'highlands-tiny-square-sym',
+]);
+
+type G = { cslug: string; sites: number; land: number; slLand: number;
+  label: string; group: string; setting: string; id: string;
+  img: string; seed: number };
+const all = (gensData as any).gens as G[];
+const byCfg: Record<string, G[]> = {};
+for (const g of all) (byCfg[g.cslug] ??= []).push(g);
+
+type Stat = { n: number; mean: number; sd: number; med: number;
+  p10: number; p90: number; min: number; max: number };
+function stats(vals: number[]): Stat {
+  const s = [...vals].sort((a, b) => a - b), n = s.length;
+  const mean = s.reduce((a, b) => a + b, 0) / n;
+  const sd = Math.sqrt(s.reduce((a, b) => a + (b - mean) ** 2, 0) / n);
+  const q = (p: number) =>
+    s[Math.max(0, Math.min(n - 1, Math.round(p * (n - 1))))];
+  return { n, mean: Math.round(mean * 10) / 10,
+    sd: Math.round(sd * 10) / 10, med: q(0.5), p10: q(0.1),
+    p90: q(0.9), min: s[0], max: s[n - 1] };
+}
+const inSite = (g: G) => g.sites >= SITES_LO && g.sites <= SITES_HI;
+const inLand = (g: G) => g.land >= LAND_LO && g.land <= LAND_HI;
+
+const variantOf = (label: string) =>
+  label.split(' · ').slice(1, -1).join(' · ');
+
+type Cfg = {
+  slug: string; label: string; group: string; setting: string;
+  variant: string; n: number; rows: G[]; pct: number; inN: number;
+  pass: boolean; inPool: boolean;
+  sites: Stat; land: Stat; move: Stat;
+};
+const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
+  rows.sort((a, b) => a.seed - b.seed);
+  const n = rows.length;
+  const inN = rows.filter((g) => inSite(g) && inLand(g)).length;
+  return {
+    slug, label: rows[0].label, group: rows[0].group,
+    setting: rows[0].setting, variant: variantOf(rows[0].label),
+    n, rows, inN, pct: inN / n,
+    pass: inN / n >= THRESH, inPool: POOL.has(slug),
+    sites: stats(rows.map((g) => g.sites)),
+    land: stats(rows.map((g) => g.land)),
+    move: stats(rows.map((g) => g.slLand)),
+  };
+});
+const ballot = cfgs.filter((c) => c.pass || c.inPool);
+
+// group heading: DOTA by subtype, Desert by coast, else the script
+const dg = (c: Cfg) => {
+  if (c.group === 'DOTA') return `DOTA · ${c.variant}`;
+  if (c.group === 'Desert') {
+    const coast = c.variant.split(' · ')[0];
+    return `Desert: ${coast === 'None' ? 'No' : coast} Coast`;
+  }
+  return c.group;
+};
+const byGroup: Record<string, Cfg[]> = {};
+for (const c of ballot) (byGroup[dg(c)] ??= []).push(c);
+const groups = Object.keys(byGroup).sort();
+for (const g of groups)
+  byGroup[g].sort((a, b) => b.pct - a.pct || a.label.localeCompare(b.label));
+
+const gslug = (s: string) => 'g-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const abbr = (c: Cfg) => {
+  const p = c.setting.split(' · ');
+  const sz = p[0] === 'Duel' ? 'D' : 'T';
+  const asp = p[1] === 'square' ? 'sq' : p[1] === 'wide' ? 'w' : 'uw';
+  const sym = (p[2] || '').includes('on') ? 's' : 'n';
+  return (c.variant ? c.variant + ' ' : '') + `${sz}·${asp}·${sym}`;
+};
+const pc = (x: number) => Math.round(x * 100);
+
+// last-tournament calibration for land-hex move cost (slingerLand)
+const tMove = stats((tour as any).games.map((g: any) => g.slingerLand));
+const N = ballot.length;
+const PREVIEWS = 12;
+---
+<Base title="Round 2 Voting">
+  <p class="lede">
+    <b>Round 2.</b> Connection is solved — every map is land-connected
+    by construction — so this ballot is about three numbers only:
+    <b>city sites</b>, <b>land-hex distance</b> between capitals, and
+    <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs:
+    the {ballot.filter((c) => c.pass).length} that reliably hit the
+    {SITES_LO}–{SITES_HI} site / {LAND_LO}–{LAND_HI} land windows, plus
+    the {ballot.filter((c) => !c.pass).length} current-pool configs that
+    fall short — vote them all. Move-cost is shown against the last
+    tournament's {tMove.n} games (median {tMove.med} turns).
+  </p>
+
+  <nav class="snav" id="snav">
+    <button id="copyv" class="snav__cv">⬇ COPY ROUND-2 VOTES</button>
+    <div class="snav__c">voted <b id="vc">0</b> / {N}<span id="alldone" class="alldone" hidden>✓ all in</span></div>
+    <div class="snav__tly">
+      <span class="tly tly-like">👍 <b id="t-like">0</b></span>
+      <span class="tly tly-maybe">🤷 <b id="t-maybe">0</b></span>
+      <span class="tly tly-no">👎 <b id="t-no">0</b></span>
+    </div>
+    <div class="snav__t">Map scripts</div>
+    {groups.map((g) => (
+      <div class="ng" data-g={gslug(g)}>
+        <a class="ng__h" href={`#${gslug(g)}`}>{g}<span class="ng__done" hidden>✓</span></a>
+        <div class="ng__chips">
+          {byGroup[g].map((c) => (
+            <a class="vchip" data-slug={c.slug} href={`#cfg-${c.slug}`}
+               title={c.label}>{abbr(c)}</a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </nav>
+
+  <div class="rmain">
+    {groups.map((g) => (
+      <section class="grp" id={gslug(g)}>
+        <h2 class="grp__h">{g}</h2>
+        {byGroup[g].map((c) => (
+          <div class="cfg" id={`cfg-${c.slug}`} data-slug={c.slug}>
+            <div class="cfg__hd">
+              <span class="cfg__name">{c.group}{c.variant ? ` · ${c.variant}` : ''}</span>
+              <span class="cfg__chips">
+                {c.setting.split(' · ').filter((p) => p !== 'mirror').map((p) => (
+                  <span class="ch">{p}</span>
+                ))}
+              </span>
+              <span class={'rel ' + (c.pass ? 'rel--ok' : 'rel--lo')}>
+                {c.pass ? 'reliable' : 'below bar'} {pc(c.pct)}%
+                {c.inPool && <i> · in pool</i>}
+              </span>
+              <span class="vote" data-slug={c.slug}>
+                <button data-v="like">👍 like</button>
+                <button data-v="maybe">🤔 maybe</button>
+                <button data-v="no">👎 no</button>
+              </span>
+            </div>
+            <div class="pills">
+              <div class="pill">
+                <div class="pill__l">City sites</div>
+                <div class="pill__v"><b>{c.sites.mean}</b> <span class="pm">±{c.sites.sd}</span></div>
+                <div class="pill__r">min {c.sites.min} · p10 {c.sites.p10} · <b>med {c.sites.med}</b> · p90 {c.sites.p90} · max {c.sites.max}</div>
+              </div>
+              <div class="pill">
+                <div class="pill__l">Land hex distance</div>
+                <div class="pill__v"><b>{c.land.mean}</b> <span class="pm">±{c.land.sd}</span></div>
+                <div class="pill__r">min {c.land.min} · p10 {c.land.p10} · <b>med {c.land.med}</b> · p90 {c.land.p90} · max {c.land.max}</div>
+              </div>
+              <div class="pill">
+                <div class="pill__l">Land move-cost <span class="u">turns</span></div>
+                <div class="pill__v"><b>{c.move.mean}</b> <span class="pm">±{c.move.sd}</span></div>
+                <div class="pill__r">min {c.move.min} · p10 {c.move.p10} · <b>med {c.move.med}</b> · p90 {c.move.p90} · max {c.move.max}</div>
+                <div class="pill__cal">last tournament: med <b>{tMove.med}</b> · typ {tMove.p10}–{tMove.p90}</div>
+              </div>
+            </div>
+            <details class="gal" open>
+              <summary>{Math.min(PREVIEWS, c.n)} of {c.n} map previews</summary>
+              <div class="gal__grid">
+                {c.rows.slice(0, PREVIEWS).map((r) => (
+                  <a class="gal__cell" href={`${baseUrl}gen/${r.id}`}
+                     target="_blank" rel="noopener">
+                    <img src={`${baseUrl}img/${r.img}`} loading="lazy"
+                         alt={`${c.label} seed ${r.seed}`} />
+                    <div class="cap">
+                      <span><i>sites</i><b>{r.sites}</b></span>
+                      <span><i>land hex</i><b>{r.land}</b></span>
+                      <span><i>move</i><b>{r.slLand}</b></span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </details>
+          </div>
+        ))}
+      </section>
+    ))}
+  </div>
+
+  <p class="note">
+    {N} configs · {ballot[0]?.n ?? 0}-ish seeds each. <b>City sites</b> =
+    valid settle spots. <b>Land hex distance</b> = capital→capital
+    shortest land-only path (hex tiles). <b>Land move-cost</b> = army
+    (move-2) capital→capital weighted by terrain move cost, in turns —
+    compared on each pill to the last tournament's {tMove.n} games
+    (mean {tMove.mean}, median {tMove.med}, typical {tMove.p10}–{tMove.p90}).
+    The <b>reliable / below-bar %</b> is how often a config's seeds land
+    in both the {SITES_LO}–{SITES_HI} site and {LAND_LO}–{LAND_HI} land
+    windows at once. Votes are stored locally and separate from Round 1;
+    COPY emits an <code>OW-VOTES-R2</code> block.
+  </p>
+
+  <style>
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:82ch; margin:0.6rem 0 1.4rem; }
+    .grp { margin-bottom:2.2rem; }
+    .grp__h { font-size:1.45rem; color:var(--gold); border-bottom:1px solid
+      var(--gold-deep); padding-bottom:0.3rem; margin-bottom:0.7rem; }
+    .cfg { background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:6px; padding:0.8rem 1rem; margin-bottom:0.8rem; }
+    .cfg__hd { display:flex; align-items:baseline; gap:0.7rem; flex-wrap:wrap; }
+    .cfg__name { font-family:var(--font-display); font-weight:700;
+      font-size:1.18rem; color:var(--text); }
+    .cfg__chips { display:inline-flex; gap:0.3rem; flex-wrap:wrap; }
+    .ch { font-size:0.66rem; font-family:var(--font-mono);
+      color:var(--text-soft); background:#0e0f12;
+      border:1px solid var(--border-strong); border-radius:4px;
+      padding:0.08rem 0.4rem; }
+    .rel { font-family:var(--font-ui); font-weight:700; font-size:0.66rem;
+      letter-spacing:0.04em; padding:0.12rem 0.5rem; border-radius:999px;
+      border:1px solid; }
+    .rel i { font-style:normal; font-weight:600; opacity:0.85; }
+    .rel--ok { color:#9fd07f; border-color:#3b6e3b; background:#16290f; }
+    .rel--lo { color:#e0b061; border-color:var(--gold-deep); background:#231f0d; }
+    .vote { display:inline-flex; gap:0.4rem; margin-left:auto; }
+    .vote button { background:#1b1d23; color:var(--text-soft);
+      border:1px solid var(--border-strong); border-radius:7px;
+      padding:0.34rem 0.8rem; font-size:0.85rem; font-weight:600;
+      cursor:pointer; transition:transform .06s; }
+    .vote button:hover { color:var(--text); transform:translateY(-1px); }
+    .vote button.on[data-v="like"]  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; box-shadow:0 0 0 1px #3b6e3b; }
+    .vote button.on[data-v="maybe"] { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); box-shadow:0 0 0 1px var(--gold-deep); }
+    .vote button.on[data-v="no"]    { background:#46211b; color:#eaa091; border-color:#5a2e28; box-shadow:0 0 0 1px #5a2e28; }
+    .pills { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:0.6rem; }
+    .pill { flex:1 1 270px; background:#16181d;
+      border:1px solid var(--gold-deep); border-radius:8px;
+      padding:0.6rem 0.9rem; }
+    .pill__l { font-size:0.66rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim); }
+    .pill__l .u { letter-spacing:0.06em; color:var(--text-faint);
+      font-size:0.92em; }
+    .pill__v { font-size:2.7rem; font-family:var(--font-display);
+      font-weight:700; color:var(--gold); line-height:1.1;
+      margin:0.1rem 0 0.15rem; }
+    .pill__v .pm { font-size:1rem; color:var(--text-faint);
+      font-family:var(--font-ui); font-weight:400; }
+    .pill__r { font-size:0.72rem; color:var(--text-faint);
+      font-family:var(--font-mono); }
+    .pill__r b { color:var(--text-soft); }
+    .pill__cal { font-size:0.68rem; color:var(--gold-soft);
+      font-family:var(--font-mono); margin-top:0.3rem;
+      border-top:1px solid var(--border); padding-top:0.25rem; }
+    .pill__cal b { color:var(--gold); }
+    .snav { position:fixed; left:max(8px, calc((100vw - 1180px)/2 - 178px));
+      top:84px; width:168px; display:flex; flex-direction:column;
+      gap:0.12rem; font-size:0.78rem; max-height:calc(100vh - 100px);
+      overflow:auto; z-index:20; }
+    @media (max-width:1340px){ .snav{ left:8px; } }
+    @media (max-width:990px){ .snav{ position:static; width:auto;
+      flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
+    .snav__cv { background:#231f0d; color:var(--gold); cursor:pointer;
+      border:1px solid var(--gold-deep); border-radius:7px;
+      padding:0.5rem 0.6rem; font-weight:700; font-size:0.8rem;
+      margin-bottom:0.35rem; }
+    .snav__cv:hover { background:#2e2810; }
+    .snav__c { font-size:0.74rem; color:var(--text-soft);
+      margin-bottom:0.4rem; } .snav__c b { color:var(--gold); }
+    .snav__c .alldone { color:#bfe89f; margin-left:0.3rem; }
+    .snav__tly { display:flex; gap:0.3rem; margin-bottom:0.6rem; }
+    .tly { font-size:0.62rem; font-family:var(--font-mono);
+      padding:0.1rem 0.4rem; border:1px solid; border-radius:999px; }
+    .tly-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
+    .tly-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
+    .tly-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
+    .snav__t { font-size:0.6rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
+    .ng__h { display:block; color:var(--text-soft); text-decoration:none;
+      padding:0.12rem 0.3rem; border-radius:4px; font-size:0.78rem; }
+    .ng__h:hover { color:var(--gold); background:var(--bg-elev); }
+    .ng.on .ng__h { color:var(--gold); font-weight:700; }
+    .ng__chips { display:none; flex-wrap:wrap; gap:0.18rem;
+      padding:0.2rem 0 0.35rem 0.4rem; }
+    .ng.on .ng__chips { display:flex; }
+    .vchip { font-size:0.62rem; font-family:var(--font-mono);
+      color:var(--text-faint); background:#16181d;
+      border:1px solid var(--border); border-radius:4px;
+      padding:0.05rem 0.3rem; text-decoration:none; }
+    .vchip:hover { color:var(--gold); border-color:var(--gold-deep); }
+    .vchip.v-like  { background:#1e4d18; color:#bfe89f; border-color:#3b6e3b; }
+    .vchip.v-maybe { background:#3a3110; color:#f0d27a; border-color:var(--gold-deep); }
+    .vchip.v-no    { background:#46211b; color:#eaa091; border-color:#5a2e28; }
+    .ng__done { color:#bfe89f; font-weight:700; margin-left:0.35rem; }
+    .rmain { width:100%; }
+    .gal { margin-top:0.6rem; }
+    .gal > summary { cursor:pointer; font-size:0.8rem; color:var(--gold-soft);
+      font-family:var(--font-ui); padding:0.3rem 0; user-select:none; }
+    .gal > summary:hover { color:var(--gold); }
+    .gal__grid { display:grid; gap:0.6rem; margin-top:0.5rem;
+      grid-template-columns:repeat(4,1fr); }
+    @media (max-width:760px){ .gal__grid{ grid-template-columns:1fr 1fr; } }
+    .gal__cell { display:block; border-radius:4px; overflow:hidden;
+      border:1px solid var(--border-strong); }
+    .gal__cell:hover { border-color:var(--gold); }
+    .gal__grid img { width:100%; height:auto; display:block; }
+    .cap { display:grid; grid-template-columns:1fr 1fr 1fr;
+      background:#0e0f12; font-size:0.66rem; }
+    .cap span { display:flex; flex-direction:column; align-items:center;
+      padding:0.18rem 0; border-right:1px solid var(--border);
+      color:var(--text-soft); }
+    .cap span:last-child { border-right:0; }
+    .cap i { font-style:normal; font-size:0.54rem; color:var(--text-dim);
+      text-transform:uppercase; letter-spacing:0.05em; }
+    .cap b { color:var(--text); font-size:0.82rem; }
+    .note { font-size:0.8rem; color:var(--text-faint); line-height:1.55;
+      max-width:88ch; margin-top:1.6rem; }
+  </style>
+
+  <script is:inline>
+    (function(){
+      var KEY='ow_votes_r2';
+      var votes={}; try{ votes=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+      function paint(){
+        var cnt=0, total=0, t={like:0,maybe:0,no:0};
+        document.querySelectorAll('.vote').forEach(function(v){
+          total++;
+          var s=v.getAttribute('data-slug');
+          if(votes[s]){ cnt++; if(t[votes[s]]!=null) t[votes[s]]++; }
+          v.querySelectorAll('button').forEach(function(b){
+            b.classList.toggle('on', votes[s]===b.getAttribute('data-v'));
+          });
+        });
+        document.querySelectorAll('.vchip').forEach(function(ch){
+          var s=ch.getAttribute('data-slug'); ch.classList.remove('v-like','v-maybe','v-no');
+          if(votes[s]) ch.classList.add('v-'+votes[s]);
+        });
+        var vc=document.getElementById('vc'); if(vc) vc.textContent=cnt;
+        ['like','maybe','no'].forEach(function(k){
+          var e=document.getElementById('t-'+k); if(e) e.textContent=t[k];
+        });
+        var ad=document.getElementById('alldone');
+        if(ad) ad.hidden=!(total>0 && cnt===total);
+        document.querySelectorAll('.ng').forEach(function(ng){
+          var chips=ng.querySelectorAll('.vchip'), allv=chips.length>0;
+          chips.forEach(function(ch){
+            if(!votes[ch.getAttribute('data-slug')]) allv=false; });
+          var d=ng.querySelector('.ng__done'); if(d) d.hidden=!allv;
+        });
+      }
+      var ngs=[].slice.call(document.querySelectorAll('.ng'));
+      function spy(){
+        var best=null, bt=-1e9;
+        ngs.forEach(function(ng){
+          var sec=document.getElementById(ng.getAttribute('data-g'));
+          if(!sec)return; var t=sec.getBoundingClientRect().top-90;
+          if(t<=0 && t>bt){ bt=t; best=ng; }
+        });
+        if(!best && ngs.length) best=ngs[0];
+        ngs.forEach(function(ng){ ng.classList.toggle('on', ng===best); });
+      }
+      window.addEventListener('scroll',function(){
+        window.requestAnimationFrame(spy); },{passive:true});
+      spy();
+      document.querySelectorAll('.vote button').forEach(function(b){
+        b.addEventListener('click',function(){
+          var s=b.parentElement.getAttribute('data-slug');
+          var val=b.getAttribute('data-v');
+          if(votes[s]===val){ delete votes[s]; } else { votes[s]=val; }
+          localStorage.setItem(KEY,JSON.stringify(votes)); paint();
+        });
+      });
+      paint();
+      document.getElementById('copyv').addEventListener('click',function(){
+        // OW-VOTES-R2 — own sentinel so Round 2 ballots never mix with
+        // Round 1's OW-VOTES v3 when ballots are concatenated.
+        var by={like:[],maybe:[],no:[]};
+        document.querySelectorAll('.cfg').forEach(function(c){
+          var s=c.getAttribute('data-slug'), v=votes[s];
+          if(by[v]) by[v].push(s);
+        });
+        var tot=by.like.length+by.maybe.length+by.no.length;
+        var lines=['OW-VOTES-R2 v1','n: '+tot];
+        ['like','maybe','no'].forEach(function(k){
+          if(by[k].length) lines.push(k+': '+by[k].sort().join(',')); });
+        lines.push('OW-VOTES-R2 END');
+        navigator.clipboard.writeText(lines.join('\n')).then(function(){
+          var b=document.getElementById('copyv'); var o=b.textContent;
+          b.textContent='✓ copied!'; setTimeout(function(){b.textContent=o;},1500);
+        });
+      });
+    })();
+  </script>
+</Base>
