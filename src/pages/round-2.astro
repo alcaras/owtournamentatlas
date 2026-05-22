@@ -91,10 +91,14 @@ const cfgs: Cfg[] = Object.entries(byCfg).map(([slug, rows]) => {
     move: stats(rows.map((g) => g.slLand)),
   };
 });
-// Round 2 ballot = the FULL structural grid — every map script crossed
-// over Duel/Tiny × square/wide × point-sym on/off (DOTA sym-locked).
-// The 4 leftover ultrawide configs from earlier sweeps are excluded.
-const ballot = cfgs.filter((c) => !c.setting.includes('ultrawide'));
+// Round 2 ballot = the full structural grid (every map script ×
+// Duel/Tiny × square/wide × point-sym on/off), minus ultrawide and
+// minus any config whose AVERAGE city sites (14–26) or AVERAGE
+// land-hex distance (40–60) falls outside the window.
+const ballot = cfgs.filter((c) =>
+  !c.setting.includes('ultrawide')
+  && c.sites.mean >= SITES_LO && c.sites.mean <= SITES_HI
+  && c.land.mean >= LAND_LO && c.land.mean <= LAND_HI);
 
 // group heading: DOTA by subtype, Desert by coast, else the script
 const dg = (c: Cfg) => {
@@ -122,7 +126,6 @@ const abbr = (c: Cfg) => {
 const pc = (x: number) => Math.round(x * 100);
 
 const N = ballot.length;
-const reliableN = ballot.filter((c) => c.pass).length;
 const PREVIEWS = 6;
 ---
 <Base title="Round 2 Voting">
@@ -131,10 +134,11 @@ const PREVIEWS = 6;
     by construction — so this ballot is about three numbers only:
     <b>city sites</b>, <b>land-hex distance</b> between capitals, and
     <b>land-hex move cost</b> (army turns, terrain-weighted). {N} configs —
-    the full structural grid: every map script crossed over Duel/Tiny ×
-    square/wide × point-sym on/off. The <b>reliability tag</b> on each
-    shows how often it lands in both the {SITES_LO}–{SITES_HI} site and
-    {LAND_LO}–{LAND_HI} land windows — {reliableN} of {N} clear {pc(THRESH)}%.
+    the full structural grid (every map script × Duel/Tiny × square/wide ×
+    point-sym on/off), keeping only those whose <b>average</b> city sites
+    sit in {SITES_LO}–{SITES_HI} <i>and</i> average land-hex distance in
+    {LAND_LO}–{LAND_HI}. The two badges show how often each one actually
+    lands inside those windows.
   </p>
 
   <nav class="snav" id="snav">
