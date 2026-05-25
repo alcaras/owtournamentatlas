@@ -4,48 +4,42 @@ import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
 const baseUrl = import.meta.env.BASE_URL;
 
-// The Round-2-voted tournament pool — 8 voters (incl. organiser,
-// frederik's Round-1 votes ported for the Previously-Considered
-// configs he didn't re-vote), scored +2 like / 0 maybe / −1 no.
-//
-// S = locked from Round 1 (unanimous in Round 1, kept regardless).
-// A = strong R2 consensus, score +9 to +11 (5–6 likes of 8).
-// B = solid R2 picks, score +7 to +8, rounding out the map types.
-// Round 1 pool archived at /round-1; Round 2 ballot at /round-2.
-const TIERS: { key: string; title: string; sub: string; slugs: string[] }[] = [
-  { key: 'S', title: 'S — Locked from Round 1',
-    sub: 'Unanimous in Round 1, kept regardless of Round 2.',
-    slugs: [
-      'arid-plateau-small-seas-smallest-square-sym',
-      'coastal-rain-basin-smallest-wide-nosym',
-      'dota-jungle-smallest-square-sym',
-      'inland-sea-smallest-square-sym',
-    ] },
-  { key: 'A', title: 'A — Round 2 strong consensus',
-    sub: 'Voted +9 to +11 in Round 2 (5–6 likes of 8).',
-    slugs: [
-      'arid-plateau-small-seas-smallest-wide-nosym',
-      'inland-sea-smallest-wide-nosym',
-      'archipelago-land-lg-water-sm-smallest-square-sym',
-      'dota-jungle-smallest-wide-sym',
-      'dota-sand-smallest-square-sym',
-      'desert-lush-std-tiny-square-nosym',
-    ] },
-  { key: 'B', title: 'B — Round 2 variety',
-    sub: 'Voted +6 to +8 in Round 2; round out the map-type variety.',
-    slugs: [
-      'continent-smallest-wide-sym',
-      'desert-none-std-tiny-square-sym',
-      'donut-irreg-low-smallest-square-sym',
-      'wetlands-smallest-square-sym',
-      'arid-plateau-large-seas-smallest-square-sym',
-      'hardwood-forest-smallest-wide-nosym',
-      'dota-water-smallest-square-sym',
-      'mountain-pass-smallest-wide-sym',
-    ] },
+// The finalised tournament pool — 16 maps, organised by map script.
+// Derived from the Round 1 unanimous locks + the Round 2 vote (8
+// voters), trimmed of duplicate-script redundancy (Arid Plateau Small
+// Seas and DOTA Jungle each had a 2nd variant cut for being a same-
+// script duplicate). This page is the tournament reference.
+const POOL: string[] = [
+  // Archipelago (sq/sym + wide/nosym for axis+sym variety)
+  'archipelago-land-lg-water-sm-smallest-square-sym',
+  'archipelago-land-lg-water-sm-smallest-wide-nosym',
+  // Arid Plateau (Small Seas + Large Seas)
+  'arid-plateau-small-seas-smallest-square-sym',
+  'arid-plateau-large-seas-smallest-square-sym',
+  // Coastal Rain Basin (wide/nosym locked + sq/sym for sym variety)
+  'coastal-rain-basin-smallest-wide-nosym',
+  'coastal-rain-basin-smallest-square-sym',
+  // Continent
+  'continent-smallest-wide-sym',
+  // Desert (Lush + No Coast)
+  'desert-lush-std-tiny-square-nosym',
+  'desert-none-std-tiny-square-sym',
+  // Donut
+  'donut-irreg-low-smallest-square-sym',
+  // DOTA (Jungle, Sand, Water)
+  'dota-jungle-smallest-square-sym',
+  'dota-sand-smallest-square-sym',
+  'dota-water-smallest-square-sym',
+  // Hardwood Forest
+  'hardwood-forest-smallest-wide-nosym',
+  // Inland Sea
+  'inland-sea-smallest-square-sym',
+  'inland-sea-smallest-wide-nosym',
+  // Mountain Pass
+  'mountain-pass-smallest-wide-sym',
+  // Wetlands
+  'wetlands-smallest-square-sym',
 ];
-const TIER_OF: Record<string, string> = {};
-for (const t of TIERS) for (const s of t.slugs) TIER_OF[s] = t.key;
 
 const genMap: Record<string, any> = {};
 for (const gn of (gensData as any).gens)
@@ -63,16 +57,29 @@ const navName = (c: any) =>
   `${c.group}${c.variant ? ` · ${c.variant}` : ''} · ${sizeOf(c)}`;
 const bySlug: Record<string, any> = {};
 for (const c of dist.configs) bySlug[c.slug] = c;
-// resolved sections: each tier's configs, sorted by map name within it
-const sections = TIERS.map((t) => ({
-  ...t,
-  cfgs: t.slugs
-    .map((s) => bySlug[s])
-    .filter(Boolean)
-    .sort((a: any, b: any) => navName(a).localeCompare(navName(b))),
-}));
-const pool = sections.flatMap((s) => s.cfgs);
+const pool = POOL.map((s) => bySlug[s]).filter(Boolean);
 const N = pool[0]?.n ?? 0;
+
+// Group by map script — DOTA by subtype, Desert by coast, else the
+// script. Sections are alphabetised; cfgs within a section sorted
+// by full name so locked-and-2nd variants sit together.
+const dg = (c: any) => {
+  if (c.group === 'DOTA') return `DOTA · ${c.variant}`;
+  if (c.group === 'Desert') {
+    const coast = (c.variant || '').split(' · ')[0];
+    return `Desert: ${coast === 'None' ? 'No' : coast} Coast`;
+  }
+  return c.group;
+};
+const groupMap: Record<string, any[]> = {};
+for (const c of pool) (groupMap[dg(c)] ??= []).push(c);
+const sections = Object.keys(groupMap)
+  .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  .map((k) => ({
+  key: k, title: k,
+  cfgs: groupMap[k].sort((a: any, b: any) =>
+    navName(a).localeCompare(navName(b))),
+}));
 
 // ---- Distribution charts ---------------------------------------------
 // Per-seed values for the pool, straight from gens.json (the per-map
@@ -205,13 +212,13 @@ function setup(c: any): Row[] {
   return rows;
 }
 ---
-<Base title="Tournament Pool">
+<Base title="Tournament Pool" hideNav={true}>
   <p class="lede">
-    The <b>{pool.length} maps</b> for the tournament — the Round-2 vote
-    pool (8 voters). 4 carried over locked from Round 1 (unanimous),
-    14 added or re-affirmed in Round 2 (incl. DOTA Water and Mountain
-    Pass at +6, organiser adds for script variety). Round 1 pool
-    archived at <a href={`${baseUrl}round-1`}>/round-1</a>.
+    The <b>{pool.length}-map tournament pool</b>, grouped by map script.
+    The reference for in-game setup — pills show the live distribution
+    of each config (city sites, distances, terrain), the SETUP GUIDE
+    button gives the exact in-game Advanced Options, and the gallery
+    shows generated samples. Hover or click any preview to inspect.
   </p>
 
   <section class="dist">
@@ -280,11 +287,10 @@ function setup(c: any): Row[] {
 
   <div class="pool">
     {sections.map((sec: any) => (
-      <section class="tier" id={`tier-${sec.key}`}>
+      <section class="tier" id={`s-${sec.key.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
         <div class="tier__h">
           <h2 class="tier__t">{sec.title}</h2>
-          <span class="tier__sub">{sec.sub}</span>
-          <span class="tier__n">{sec.cfgs.length} maps</span>
+          <span class="tier__n">{sec.cfgs.length === 1 ? '1 map' : `${sec.cfgs.length} maps`}</span>
         </div>
         {sec.cfgs.map((c: any) => (
       <div class="cfg" id={`cfg-${c.slug}`}>
@@ -393,9 +399,6 @@ function setup(c: any): Row[] {
     by construction; split-dropped % is how often a seed had no
     connected symmetric pair. Charts are descriptive — colour is
     std-devs from each set's mean, not a judgement of what's good.
-    Round 2 vote (8 voters, scored +2 like / 0 maybe / −1 no, organiser
-    included, frederik's Round 1 votes ported for configs he didn't
-    re-vote). Round 1 archive: <a href={`${baseUrl}round-1`}>/round-1</a>.
   </p>
 
   <style>

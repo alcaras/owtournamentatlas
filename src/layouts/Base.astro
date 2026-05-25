@@ -1,6 +1,6 @@
 ---
-interface Props { title: string; description?: string; }
-const { title, description } = Astro.props;
+interface Props { title: string; description?: string; hideNav?: boolean; }
+const { title, description, hideNav } = Astro.props;
 const desc = description ?? "Empirical Old World map analysis for tournament organizers — city-site counts, capital distance, terrain and resources across map size, point-symmetry and aspect.";
 ---
 <!doctype html>
@@ -59,14 +59,16 @@ const desc = description ?? "Empirical Old World map analysis for tournament org
         <h1>{title}</h1>
         <span class="hdr__tag">Old World · Tournament Map Atlas</span>
       </header>
-      <nav class="nav">
-        <a href={`${import.meta.env.BASE_URL}`}>Atlas</a>
-        <a href={`${import.meta.env.BASE_URL}round-1`}>Round 1 archive</a>
-        <a href={`${import.meta.env.BASE_URL}round-2`}>Round 2 Voting</a>
-        <a href={`${import.meta.env.BASE_URL}proposed-pool`}>Proposed Pool</a>
-        <a href={`${import.meta.env.BASE_URL}alcaras-picks`}>Picks</a>
-        <a href={`${import.meta.env.BASE_URL}calibration`}>Calibration</a>
-      </nav>
+      {!hideNav && (
+        <nav class="nav">
+          <a href={`${import.meta.env.BASE_URL}`}>Atlas</a>
+          <a href={`${import.meta.env.BASE_URL}round-1`}>Round 1 archive</a>
+          <a href={`${import.meta.env.BASE_URL}round-2`}>Round 2 Voting</a>
+          <a href={`${import.meta.env.BASE_URL}proposed-pool`}>Proposed Pool</a>
+          <a href={`${import.meta.env.BASE_URL}alcaras-picks`}>Picks</a>
+          <a href={`${import.meta.env.BASE_URL}calibration`}>Calibration</a>
+        </nav>
+      )}
       <slot />
       <footer class="foot">
         Generated from owmapgen (the game's own map-gen code, run headless).
