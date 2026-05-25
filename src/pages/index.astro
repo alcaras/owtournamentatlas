@@ -221,58 +221,6 @@ function setup(c: any): Row[] {
     shows generated samples. Hover or click any preview to inspect.
   </p>
 
-  <section class="dist">
-    <div class="dist__h">
-      <h2 class="dist__t">Pool distribution</h2>
-      <span class="dist__sub">{poolGens.length} maps across {pool.length} configs · click a bar for its maps</span>
-      <span class="dist__leg">colour = σ from mean
-        <i class="z-good"></i>≤1
-        <i class="z-ok"></i>≤2
-        <i class="z-edge"></i>≤3
-        <i class="z-bad"></i>&gt;3</span>
-    </div>
-    <div class="dist__grid">
-      {METRICS.map((ch) => {
-        const bs = bins(poolGens, ch.key, ch.step);
-        const mx = maxN(bs);
-        const st = poolStat[ch.key];
-        return (
-          <div class="chart">
-            <div class="chart__t">{ch.name}</div>
-            <div class="bars">
-              {bs.map((b) => {
-                const mid = ch.step === 1 ? b.x0 : b.x0 + ch.step / 2;
-                return (
-                  <details class="hb">
-                    <summary class={'bar ' + zClass(mid, st)}
-                      title={`${b.label}: ${b.cells.length} maps`}
-                      style={`--h:${Math.round(b.cells.length / mx * 116) + (b.cells.length ? 4 : 0)}px`}>
-                      <span class="bar__n">{b.cells.length || ''}</span>
-                      <span class="bar__f"></span>
-                      <span class="bar__x">{b.label}</span>
-                    </summary>
-                    <div class="pop">
-                      <div class="pop__h">{b.label} · {b.cells.length} maps</div>
-                      <div class="pop__l">
-                        {b.cells.map((g) => (
-                          <a href={`${baseUrl}gen/${g.id}`} target="_blank"
-                             rel="noopener" title={tipOf(g)}>
-                            {g.label.split(' · ')[0]} <i>s{g.seed}</i>
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  </details>
-                );
-              })}
-            </div>
-            <div class="chart__cap">{ch.cap}</div>
-          </div>
-        );
-      })}
-    </div>
-  </section>
-
   <nav class="snav" id="snav">
     {sections.map((sec: any) => (
       <div class="snav__sec">
@@ -333,42 +281,13 @@ function setup(c: any): Row[] {
             </>) : <div class="pill__v dash">—</div>}
           </div>
           <div class="pill">
-            <div class="pill__l">Avg reachable</div>
-            <div class="pill__v"><b>{c.reachMean ?? '—'}</b><span class="pm">%</span></div>
+            <div class="pill__l">Land hex cost</div>
+            {c.dist.slLand ? (<>
+              <div class="pill__v"><b>{c.dist.slLand.mean}</b> <span class="pm">±{c.dist.slLand.sd}</span></div>
+              <div class="pill__r">min {c.dist.slLand.min} · <b>med {c.dist.slLand.med}</b> · max {c.dist.slLand.max}</div>
+            </>) : <div class="pill__v dash">—</div>}
           </div>
         </div>
-        {(() => {
-          const cg = poolGens.filter((g) => g.slug === c.slug);
-          return (
-            <div class="cfgdist">
-              {METRICS.map((ch) => {
-                const st = poolStat[ch.key];
-                return (
-                <div class="cd">
-                  <div class="cd__t">{ch.name}<span>{cg.length} maps · click a square</span></div>
-                  <div class="cd__cols">
-                    {bins(cg, ch.key, ch.step).map((b) => {
-                      return (
-                        <div class="cd__col">
-                          <div class="cd__stack">
-                            {b.cells.map((g) => (
-                              <a class={'dot ' + zClass(g[ch.key], st)}
-                                href={`${baseUrl}gen/${g.id}`}
-                                target="_blank" rel="noopener"
-                                title={tipOf(g)}></a>
-                            ))}
-                          </div>
-                          <span class="cd__x">{b.label}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                );
-              })}
-            </div>
-          );
-        })()}
         <details class="gal" open>
           <summary>{Math.min(c.imgs.length, 21)} generated maps</summary>
           <div class="gal__grid">
@@ -397,8 +316,7 @@ function setup(c: any): Row[] {
   <p class="note">
     {pool.length} configs · {N}-ish seeds each. Pool is land-connected
     by construction; split-dropped % is how often a seed had no
-    connected symmetric pair. Charts are descriptive — colour is
-    std-devs from each set's mean, not a judgement of what's good.
+    connected symmetric pair.
   </p>
 
   <style>
