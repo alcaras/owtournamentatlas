@@ -32,7 +32,7 @@ const TIERS: { key: string; title: string; sub: string; slugs: string[] }[] = [
       'desert-lush-std-tiny-square-nosym',
     ] },
   { key: 'B', title: 'B — Round 2 variety',
-    sub: 'Voted +7 to +8 in Round 2; round out the map-type variety.',
+    sub: 'Voted +6 to +8 in Round 2; round out the map-type variety.',
     slugs: [
       'continent-smallest-wide-sym',
       'desert-none-std-tiny-square-sym',
@@ -40,6 +40,8 @@ const TIERS: { key: string; title: string; sub: string; slugs: string[] }[] = [
       'wetlands-smallest-square-sym',
       'arid-plateau-large-seas-smallest-square-sym',
       'hardwood-forest-smallest-wide-nosym',
+      'dota-water-smallest-square-sym',
+      'mountain-pass-smallest-wide-sym',
     ] },
 ];
 const TIER_OF: Record<string, string> = {};
@@ -207,8 +209,9 @@ function setup(c: any): Row[] {
   <p class="lede">
     The <b>{pool.length} maps</b> for the tournament — the Round-2 vote
     pool (8 voters). 4 carried over locked from Round 1 (unanimous),
-    12 added or re-affirmed in Round 2. Round 1 pool archived at
-    <a href={`${baseUrl}round-1`}>/round-1</a>.
+    14 added or re-affirmed in Round 2 (incl. DOTA Water and Mountain
+    Pass at +6, organiser adds for script variety). Round 1 pool
+    archived at <a href={`${baseUrl}round-1`}>/round-1</a>.
   </p>
 
   <section class="dist">
