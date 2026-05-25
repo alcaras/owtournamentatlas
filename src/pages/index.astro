@@ -55,6 +55,30 @@ const sizeOf = (c: any) =>
 // and any future same-script doubles, are distinguishable)
 const navName = (c: any) =>
   `${c.group}${c.variant ? ` · ${c.variant}` : ''} · ${sizeOf(c)}`;
+// Compact sidebar label — script name is in the section heading, so
+// only show what differs between configs under that heading. For 1-cfg
+// sections, fall back to full size · aspect · sym.
+const symOf = (c: any) =>
+  ((c.setting || '').split(' · ')[2] || '').includes('on') ? 'sym' : 'nosym';
+const aspOf = (c: any) => (c.setting || '').split(' · ')[1] || '';
+function navLabel(c: any, peers: any[]): string {
+  if (peers.length <= 1) return `${sizeOf(c)} · ${aspOf(c)} · ${symOf(c)}`;
+  const axes = [
+    ['variant', (x: any) => x.variant || ''],
+    ['size', sizeOf],
+    ['aspect', aspOf],
+    ['sym', symOf],
+  ] as const;
+  const parts: string[] = [];
+  for (const [, fn] of axes) {
+    const vals = new Set(peers.map(fn));
+    if (vals.size > 1) {
+      const v = fn(c);
+      if (v) parts.push(v);
+    }
+  }
+  return parts.join(' · ') || `${sizeOf(c)} · ${aspOf(c)} · ${symOf(c)}`;
+}
 const bySlug: Record<string, any> = {};
 for (const c of dist.configs) bySlug[c.slug] = c;
 const pool = POOL.map((s) => bySlug[s]).filter(Boolean);
@@ -227,7 +251,7 @@ function setup(c: any): Row[] {
         <div class="snav__t">{sec.title}</div>
         {sec.cfgs.map((c: any) => (
           <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
-             title={c.label}>{navName(c)}</a>
+             title={c.label}>{navLabel(c, sec.cfgs)}</a>
         ))}
       </div>
     ))}
