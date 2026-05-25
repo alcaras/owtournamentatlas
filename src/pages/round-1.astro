@@ -1,45 +1,44 @@
 ---
+// ARCHIVED — this was the post-Round-1 pool that lived at / until the
+// Round 2 vote replaced it (2026-05-25). The current tournament pool
+// is at /. Kept here as the historical Round 1 record.
 import Base from '../layouts/Base.astro';
 import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
 const baseUrl = import.meta.env.BASE_URL;
 
-// The Round-2-voted tournament pool — 8 voters (incl. organiser,
-// frederik's Round-1 votes ported for the Previously-Considered
-// configs he didn't re-vote), scored +2 like / 0 maybe / −1 no.
-//
-// S = locked from Round 1 (unanimous in Round 1, kept regardless).
-// A = strong R2 consensus, score +9 to +11 (5–6 likes of 8).
-// B = solid R2 picks, score +7 to +8, rounding out the map types.
-// Round 1 pool archived at /round-1; Round 2 ballot at /round-2.
+// The Round 1 voted tournament pool, grouped by ballot tier.
+// S = unanimous like (21). A = strong consensus, ≤1 no (17–19).
+// B = solid picks that round out the map-type variety (13–16).
 const TIERS: { key: string; title: string; sub: string; slugs: string[] }[] = [
-  { key: 'S', title: 'S — Locked from Round 1',
-    sub: 'Unanimous in Round 1, kept regardless of Round 2.',
+  { key: 'S', title: 'S — Unanimous',
+    sub: 'Every voter liked these.',
     slugs: [
       'arid-plateau-small-seas-smallest-square-sym',
       'coastal-rain-basin-smallest-wide-nosym',
       'dota-jungle-smallest-square-sym',
       'inland-sea-smallest-square-sym',
     ] },
-  { key: 'A', title: 'A — Round 2 strong consensus',
-    sub: 'Voted +9 to +11 in Round 2 (5–6 likes of 8).',
+  { key: 'A', title: 'A — Strong consensus',
+    sub: 'Liked by almost everyone (≤1 no).',
     slugs: [
-      'arid-plateau-small-seas-smallest-wide-nosym',
-      'inland-sea-smallest-wide-nosym',
-      'archipelago-land-lg-water-sm-smallest-square-sym',
-      'dota-jungle-smallest-wide-sym',
       'dota-sand-smallest-square-sym',
-      'desert-lush-std-tiny-square-nosym',
-    ] },
-  { key: 'B', title: 'B — Round 2 variety',
-    sub: 'Voted +7 to +8 in Round 2; round out the map-type variety.',
-    slugs: [
+      'arid-plateau-small-seas-smallest-wide-sym',
       'continent-smallest-wide-sym',
-      'desert-none-std-tiny-square-sym',
-      'donut-irreg-low-smallest-square-sym',
-      'wetlands-smallest-square-sym',
-      'arid-plateau-large-seas-smallest-square-sym',
+      'dota-water-smallest-square-sym',
       'hardwood-forest-smallest-wide-nosym',
+    ] },
+  { key: 'B', title: 'B — Variety',
+    sub: 'Solid picks that round out the map types (+ an organiser terrain probe).',
+    slugs: [
+      'coastal-rain-basin-smallest-square-sym',
+      'inland-sea-smallest-wide-sym',
+      'archipelago-land-lg-water-sm-smallest-wide-nosym',
+      'continent-tiny-square-sym',
+      'desert-lush-std-smallest-wide-sym',
+      'donut-irreg-low-smallest-square-sym',
+      'mountain-pass-tiny-square-sym',
+      'highlands-tiny-square-sym',
     ] },
 ];
 const TIER_OF: Record<string, string> = {};
@@ -167,7 +166,6 @@ const SCRIPT_NAME: Record<string, string> = {
 // keyed by `${group}|${variant}` — script-specific dropdowns to change
 const SCRIPT_OPTS: Record<string, [string, string][]> = {
   'Arid Plateau|Small Seas': [['Arid Water Size', 'Small']],
-  'Arid Plateau|Large Seas': [['Arid Water Size', 'Large']],
   'Coastal Rain Basin|': [],
   'DOTA|Jungle': [['Separating Terrain', 'Jungle']],
   'DOTA|Sand': [['Separating Terrain', 'Sand']],
@@ -179,8 +177,6 @@ const SCRIPT_OPTS: Record<string, [string, string][]> = {
     ['Archipelago Landmass', 'Large'],
     ['Archipelago Water Size', 'Merged']],
   'Desert|Lush · Std': [['Desert Coast', 'Lush'], ['Desert Size', 'Standard']],
-  'Desert|None · Std': [['Desert Coast', 'None'], ['Desert Size', 'Standard']],
-  'Desert|Dry · Std': [['Desert Coast', 'Dry'], ['Desert Size', 'Standard']],
   'Donut|Irreg Low': [['Donut Irregularity', 'Low']],
   'Mountain Pass|': [],
   'Highlands|': [],
@@ -203,13 +199,13 @@ function setup(c: any): Row[] {
   return rows;
 }
 ---
-<Base title="Tournament Pool">
-  <p class="lede">
-    The <b>{pool.length} maps</b> for the tournament — the Round-2 vote
-    pool (8 voters). 4 carried over locked from Round 1 (unanimous),
-    12 added or re-affirmed in Round 2. Round 1 pool archived at
-    <a href={`${baseUrl}round-1`}>/round-1</a>.
+<Base title="Round 1 Pool — Archived">
+  <p class="lede" style="border:1px solid var(--gold-deep); background:#231f0d; padding:0.6rem 0.9rem; border-radius:6px;">
+    <b>Archived.</b> This was the post-Round-1 voted pool. Round 2 voting
+    replaced it — the current tournament pool lives at <a href={baseUrl}>/</a>.
+    Kept here as the historical Round 1 record.
   </p>
+  <p class="lede">The {pool.length} maps from the Round 1 vote.</p>
 
   <section class="dist">
     <div class="dist__h">
@@ -386,13 +382,11 @@ function setup(c: any): Row[] {
   </div>
 
   <p class="note">
-    {pool.length} configs · {N}-ish seeds each. Pool is land-connected
-    by construction; split-dropped % is how often a seed had no
-    connected symmetric pair. Charts are descriptive — colour is
-    std-devs from each set's mean, not a judgement of what's good.
-    Round 2 vote (8 voters, scored +2 like / 0 maybe / −1 no, organiser
-    included, frederik's Round 1 votes ported for configs he didn't
-    re-vote). Round 1 archive: <a href={`${baseUrl}round-1`}>/round-1</a>.
+    {pool.length} of {dist.configCount} voted configs · {N} seeds each.
+    Pool is land-connected by construction; split-dropped % is how often a
+    seed had no connected symmetric pair. Charts are descriptive — colour
+    is std-devs from each set's mean, not a judgement of what's good.
+    Vote tally from notes/ballots.txt via scripts/tally_votes.py.
   </p>
 
   <style>
