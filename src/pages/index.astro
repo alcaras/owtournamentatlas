@@ -44,7 +44,7 @@ const POOL: string[] = [
 const genMap: Record<string, any> = {};
 for (const gn of (gensData as any).gens)
   genMap[gn.id] = { sites: gn.sites, land: gn.land, conn: gn.conn,
-    reach: gn.reachPct, split: gn.split };
+    reach: gn.reachPct, split: gn.split, slLand: gn.slLand };
 const idFromImg = (slug: string, p: string) => {
   const m = p.match(/seed-(\d+)/); return `${slug}-s${m ? m[1] : 1}`;
 };
@@ -57,10 +57,13 @@ const navName = (c: any) =>
   `${c.group}${c.variant ? ` · ${c.variant}` : ''} · ${sizeOf(c)}`;
 // Compact sidebar label — script name is in the section heading, so
 // only show what differs between configs under that heading. For 1-cfg
-// sections, fall back to full size · aspect · sym.
+// sections, fall back to full size · aspect · sym.  Title Case throughout.
 const symOf = (c: any) =>
-  ((c.setting || '').split(' · ')[2] || '').includes('on') ? 'sym' : 'nosym';
-const aspOf = (c: any) => (c.setting || '').split(' · ')[1] || '';
+  ((c.setting || '').split(' · ')[2] || '').includes('on') ? 'Sym' : 'No-Sym';
+const aspOf = (c: any) => {
+  const a = (c.setting || '').split(' · ')[1] || '';
+  return a ? a[0].toUpperCase() + a.slice(1) : '';
+};
 function navLabel(c: any, peers: any[]): string {
   if (peers.length <= 1) return `${sizeOf(c)} · ${aspOf(c)} · ${symOf(c)}`;
   const axes = [
@@ -324,7 +327,7 @@ function setup(c: any): Row[] {
                   <div class="cap">
                     <span><i>sites</i><b>{gm.sites ?? '—'}</b></span>
                     <span><i>land</i><b>{gm.land ?? '—'}</b></span>
-                    <span><i>reach</i><b>{gm.reach != null ? gm.reach + '%' : '—'}</b></span>
+                    <span><i>cost</i><b>{gm.slLand ?? '—'}</b></span>
                   </div>
                 </a>
               );
