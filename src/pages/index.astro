@@ -125,7 +125,7 @@ const poolGens: GP[] = ((gensData as any).gens as any[])
 // Full multi-metric hover line, shared by bars + per-config dots.
 const tipOf = (g: GP) =>
   `${g.label} · seed ${g.seed} — ${g.sites} sites · ${g.water} water-hex · `
-  + `${g.land} land-hex · ${g.slLand} land-turns · ${g.slSea} water-turns`;
+  + `${g.land} land-hex · ${g.slLand} land-moves · ${g.slSea} water-moves`;
 
 // Chart roster (drives both the pool bars and per-config dots, in
 // order). Captions are purely descriptive — what each metric measures,
@@ -137,10 +137,10 @@ const METRICS: { key: MK; name: string; step: number; cap: string }[] = [
     cap: 'Cap→cap shortest path with embark allowed, in hex tiles (no move cost).' },
   { key: 'land', name: 'Land hex distance', step: 5,
     cap: 'Cap→cap shortest land-only path, in hex tiles.' },
-  { key: 'slLand', name: 'Land move-cost (turns)', step: 5,
-    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in turns.' },
-  { key: 'slSea', name: 'Water move-cost (turns)', step: 5,
-    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed — in turns.' },
+  { key: 'slLand', name: 'Land move-cost (moves)', step: 5,
+    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in moves.' },
+  { key: 'slSea', name: 'Water move-cost (moves)', step: 5,
+    cap: 'Army (move-2) cap→cap, move-cost weighted, embark allowed — in moves.' },
 ];
 
 type Bin = { x0: number; x1: number; label: string; cells: GP[] };
@@ -213,7 +213,7 @@ const SCRIPT_OPTS: Record<string, [string, string][]> = {
   'Hardwood Forest|': [],
   'Archipelago|Land Lg · Water Sm': [
     ['Archipelago Landmass', 'Large'],
-    ['Archipelago Water Size', 'Merged']],
+    ['Archipelago Water Size', 'Small']],
   'Desert|Lush · Std': [['Desert Coast', 'Lush'], ['Desert Size', 'Standard']],
   'Desert|None · Std': [['Desert Coast', 'None'], ['Desert Size', 'Standard']],
   'Desert|Dry · Std': [['Desert Coast', 'Dry'], ['Desert Size', 'Standard']],

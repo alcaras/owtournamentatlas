@@ -16,9 +16,9 @@ const METRICS: { key: MK; name: string; short: string; step: number;
     cap: 'Number of valid city sites placed on the map.' },
   { key: 'land', name: 'Land hex distance', short: 'Land hex', step: 5,
     cap: 'Cap→cap shortest land-only path, in hex tiles.' },
-  { key: 'slingerLand', name: 'Land hex cost (turns)', short: 'Land cost',
+  { key: 'slingerLand', name: 'Land hex cost (moves)', short: 'Land cost',
     step: 5,
-    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in turns.' },
+    cap: 'Army (move-2) cap→cap, terrain move-cost weighted, land only — in moves.' },
 ];
 
 // ---- distribution helpers (same model as the atlas histograms) ------
@@ -185,7 +185,7 @@ const gameNo = new Map(games.map((g, i) => [g.id, i + 1]));
     sort. <b>City sites</b> = valid city sites on the map. <b>Land hex</b>
     = capital→capital shortest land-only path (hex tiles). <b>Land hex
     cost</b> = army (move-2) capital→capital weighted by terrain move
-    cost, in turns (exploration law assumed — rivers fast). Capital =
+    cost, in moves (exploration law assumed — rivers fast). Capital =
     each player's original founded capital. # = chronological game number.
   </p>
 </Base>

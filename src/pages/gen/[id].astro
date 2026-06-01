@@ -32,7 +32,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     hover a resource or yield cell to light up matching tiles.
     Pink ★ = capital · pink • = city site · blue = river.
     Hover a capital → cyan = land route, red = water/embark route
-    (dashed when both exist); tooltip shows hex + move-cost turns.
+    (dashed when both exist); tooltip shows hex + move-cost moves.
     (<a href={`${baseUrl}img/${g.img}`} target="_blank" rel="noopener">static image ↗</a>)
   </p>
 
@@ -54,9 +54,9 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         <tr><td>Land path (hex)</td><td><b>{g.land ?? '—'}</b></td></tr>
         <tr><td>Water path (hex)</td><td>{g.water ?? '—'}</td></tr>
         <tr><td>Scout orders (turns)</td><td><b>{g.scout ?? '—'}</b></td></tr>
-        <tr><td>Move-cost turns — Land</td><td><b>{g.slLand ?? '—'}</b></td></tr>
-        <tr><td>Move-cost turns — Water</td><td><b>{g.slSea ?? '—'}</b></td></tr>
-        <tr><td>Move-cost turns — Hatti</td><td>{g.slHatti ?? '—'}</td></tr>
+        <tr><td>Move-cost moves — Land</td><td><b>{g.slLand ?? '—'}</b></td></tr>
+        <tr><td>Move-cost moves — Water</td><td><b>{g.slSea ?? '—'}</b></td></tr>
+        <tr><td>Move-cost moves — Hatti</td><td>{g.slHatti ?? '—'}</td></tr>
       </table>
     </div>
     <div class="col">
