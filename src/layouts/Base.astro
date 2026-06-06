@@ -1,7 +1,7 @@
 ---
 interface Props { title: string; description?: string; hideNav?: boolean; }
 const { title, description, hideNav } = Astro.props;
-const desc = description ?? "Empirical Old World map analysis for tournament organizers — city-site counts, capital distance, terrain and resources across map size, point-symmetry and aspect.";
+const desc = description ?? "The map atlas for the Old World tournament — city sites, capital distance, terrain, resources and yields for every map in the pool, plus rankings. Generated from the game's own map generator.";
 ---
 <!doctype html>
 <html lang="en">
@@ -63,11 +63,6 @@ const desc = description ?? "Empirical Old World map analysis for tournament org
         <nav class="nav">
           <a href={`${import.meta.env.BASE_URL}`}>Atlas</a>
           <a href={`${import.meta.env.BASE_URL}rankings`}>Rankings</a>
-          <a href={`${import.meta.env.BASE_URL}round-1`}>Round 1 archive</a>
-          <a href={`${import.meta.env.BASE_URL}round-2`}>Round 2 Voting</a>
-          <a href={`${import.meta.env.BASE_URL}proposed-pool`}>Proposed Pool</a>
-          <a href={`${import.meta.env.BASE_URL}alcaras-picks`}>Picks</a>
-          <a href={`${import.meta.env.BASE_URL}calibration`}>Calibration</a>
         </nav>
       )}
       <slot />
