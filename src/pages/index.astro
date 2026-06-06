@@ -269,10 +269,22 @@ const RES_BARS = [
   { key: 'camel', icon: 'camel', label: 'Camels',
     desc: 'Camel resource' },
 ] as const;
+// total best-improvement yield ON the map (Food/Iron/Stone/Wood) — same
+// bar treatment, icons from the yields/ set.
+const YIELD_BARS = [
+  { key: 'food', icon: 'food', label: 'Food',
+    desc: 'Total best-improvement Food across the map' },
+  { key: 'iron', icon: 'iron', label: 'Iron',
+    desc: 'Total best-improvement Iron across the map' },
+  { key: 'stone', icon: 'stone', label: 'Stone',
+    desc: 'Total best-improvement Stone across the map' },
+  { key: 'wood', icon: 'wood', label: 'Wood',
+    desc: 'Total best-improvement Wood across the map' },
+] as const;
 // pool min/max of each resource's per-config mean → normalisation range,
 // so every bar reads "lots vs little of this RELATIVE to the other maps".
 const resRange: Record<string, { lo: number; hi: number }> = {};
-for (const b of RES_BARS) {
+for (const b of [...RES_BARS, ...YIELD_BARS]) {
   const ms = pool.map((c: any) => c.dist?.[b.key]?.mean)
     .filter((v: any) => v != null);
   resRange[b.key] = { lo: ms.length ? Math.min(...ms) : 0,
@@ -419,6 +431,21 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
               );
             })}
           </div>
+          <div class="rstrip__lab rstrip__lab--2">Yield on the map
+            <span class="rstrip__sub">total best-improvement food / iron / stone / wood · same relative scale · hover for exact amounts</span>
+          </div>
+          <div class="rstrip__ics">
+            {YIELD_BARS.map((b: any) => {
+              const bar = barOf(c, b.key);
+              return (
+                <div class="ric" title={barTip(b, bar.d)}>
+                  <img src={`${baseUrl}img/icons/yields/${b.icon}.png`} alt={b.label} />
+                  <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
+                  <div class="ric__c">{b.label}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <details class="gal" open>
           <summary>{Math.min(c.imgs.length, 21)} generated maps</summary>
@@ -544,6 +571,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .rstrip { margin-top:0.7rem; }
     .rstrip__lab { font-size:0.62rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.5rem; }
+    .rstrip__lab--2 { margin-top:0.85rem; }
     .rstrip__sub { text-transform:none; letter-spacing:0;
       font-family:var(--font-ui); color:var(--text-faint);
       font-size:0.66rem; margin-left:0.4rem; }
