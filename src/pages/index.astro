@@ -285,6 +285,24 @@ const barOf = (c: any, key: string) => {
 const barTip = (b: any, d: any) =>
   `${b.label} — ${b.desc}\navg ${d?.mean ?? 0} per map (±${d?.sd ?? 0} sd, `
   + `range ${d?.min ?? 0}–${d?.max ?? 0}). Bar = relative to other maps.`;
+
+// ---- hero-pill relative bars -----------------------------------------
+// Same green→red language as the resource bars, applied to the headline
+// stats so each pill also shows where this script sits vs the pool.
+const PILL_KEYS = ['sites', 'land', 'slLand', 'expansion'] as const;
+const pillRange: Record<string, { lo: number; hi: number }> = {};
+for (const k of PILL_KEYS) {
+  const ms = pool.map((c: any) => c.dist?.[k]?.mean)
+    .filter((v: any) => v != null);
+  pillRange[k] = { lo: ms.length ? Math.min(...ms) : 0,
+    hi: ms.length ? Math.max(...ms) : 0 };
+}
+const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) => {
+  if (mean == null) return 'width:0%;background:#333';
+  const t = range.hi > range.lo ? (mean - range.lo) / (range.hi - range.lo) : 0.5;
+  const tt = Math.max(0, Math.min(1, t));
+  return `width:${Math.round(8 + tt * 92)}%;background:hsl(${Math.round(tt * 125)},58%,42%)`;
+};
 ---
 <Base title="Tournament Pool" hideNav={true}>
   <p class="lede">
@@ -297,12 +315,11 @@ const barTip = (b: any, d: any) =>
     generated samples. Hover or click any preview to inspect.
   </p>
 
-  <div class="rand">
-    <button type="button" id="randPick" class="rand__btn">🎲 Surprise me — pick a random map</button>
-    <span class="rand__hint" id="randHint"></span>
-  </div>
-
   <nav class="snav" id="snav">
+    <div class="rand">
+      <button type="button" id="randPick" class="rand__btn">🎲 Random map</button>
+      <span class="rand__hint" id="randHint"></span>
+    </div>
     {sections.map((sec: any) => (
       <div class="snav__sec">
         <div class="snav__t">{sec.title}</div>
@@ -353,12 +370,14 @@ const barTip = (b: any, d: any) =>
             <div class="pill__l">City sites</div>
             <div class="pill__v"><b>{c.dist.sites?.mean ?? '—'}</b> <span class="pm">±{c.dist.sites?.sd ?? 0}</span></div>
             <div class="pill__r">min {c.dist.sites?.min} · <b>med {c.dist.sites?.med}</b> · max {c.dist.sites?.max}</div>
+            <div class="pill__bar" title="More vs fewer city sites, relative to the other maps"><span style={barStyle(c.dist.sites?.mean, pillRange.sites)}></span></div>
           </div>
           <div class="pill">
             <div class="pill__l">Land hex distance</div>
             {c.dist.land ? (<>
               <div class="pill__v"><b>{c.dist.land.mean}</b> <span class="pm">±{c.dist.land.sd}</span></div>
               <div class="pill__r">min {c.dist.land.min} · <b>med {c.dist.land.med}</b> · max {c.dist.land.max}</div>
+              <div class="pill__bar" title="Longer vs shorter cap→cap land distance, relative to the other maps"><span style={barStyle(c.dist.land.mean, pillRange.land)}></span></div>
             </>) : <div class="pill__v dash">—</div>}
           </div>
           <div class="pill">
@@ -366,13 +385,15 @@ const barTip = (b: any, d: any) =>
             {c.dist.slLand ? (<>
               <div class="pill__v"><b>{c.dist.slLand.mean}</b> <span class="pm">±{c.dist.slLand.sd}</span></div>
               <div class="pill__r">min {c.dist.slLand.min} · <b>med {c.dist.slLand.med}</b> · max {c.dist.slLand.max}</div>
+              <div class="pill__bar" title="Higher vs lower move-cost, relative to the other maps"><span style={barStyle(c.dist.slLand.mean, pillRange.slLand)}></span></div>
             </>) : <div class="pill__v dash">—</div>}
           </div>
           <div class="pill">
-            <div class="pill__l">Potential urban tiles</div>
-            {c.dist.urban ? (<>
-              <div class="pill__v"><b>{c.dist.urban.mean}</b> <span class="pm">±{c.dist.urban.sd}</span></div>
-              <div class="pill__r">min {c.dist.urban.min} · <b>med {c.dist.urban.med}</b> · max {c.dist.urban.max}</div>
+            <div class="pill__l">Expansion space</div>
+            {c.dist.expansion ? (<>
+              <div class="pill__v"><b>{c.dist.expansion.mean}</b> <span class="pm">±{c.dist.expansion.sd}</span></div>
+              <div class="pill__r">min {c.dist.expansion.min} · <b>med {c.dist.expansion.med}</b> · max {c.dist.expansion.max}</div>
+              <div class="pill__bar" title="Buildable land tiles (could become urban) — more = roomier, less = more cramped, relative to the other maps"><span style={barStyle(c.dist.expansion.mean, pillRange.expansion)}></span></div>
             </>) : <div class="pill__v dash">—</div>}
           </div>
         </div>
@@ -490,17 +511,24 @@ const barTip = (b: any, d: any) =>
     .pill__r { font-size:0.72rem; color:var(--text-faint);
       font-family:var(--font-mono); }
     .pill__r b { color:var(--text-soft); }
-    /* ---- random-map picker ---- */
-    .rand { display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap;
-      margin:0 0 1.5rem; }
+    .pill__bar { margin-top:0.5rem; width:100%; height:6px; cursor:help;
+      border-radius:4px; background:#0e0f12; border:1px solid var(--border);
+      overflow:hidden; }
+    .pill__bar span { display:block; height:100%; border-radius:4px 0 0 4px;
+      box-shadow:inset 0 0 0 1px #0006; }
+    /* ---- random-map picker (lives at the top of the left sidebar) ---- */
+    .rand { display:flex; flex-direction:column; align-items:stretch;
+      gap:0.3rem; margin:0 0 0.9rem; }
     .rand__btn { font-family:var(--font-display); font-weight:700;
-      font-size:1rem; letter-spacing:0.03em; color:var(--gold);
+      font-size:0.84rem; letter-spacing:0.02em; color:var(--gold);
       background:linear-gradient(#231f0d,#1a1709);
-      border:1px solid var(--gold-deep); border-radius:8px;
-      padding:0.5rem 1.1rem; cursor:pointer; box-shadow:0 1px 3px #0008; }
+      border:1px solid var(--gold-deep); border-radius:7px;
+      padding:0.42rem 0.55rem; cursor:pointer; box-shadow:0 1px 3px #0008;
+      width:100%; }
     .rand__btn:hover { background:#2e2810; border-color:var(--gold-soft); }
     .rand__hint { font-family:var(--font-display); font-style:italic;
-      font-size:0.95rem; color:var(--gold-soft); }
+      font-size:0.78rem; line-height:1.25; color:var(--gold-soft); }
+    @media (max-width:1040px){ .rand{ flex:1 1 100%; } }
     .cfg.flash { animation:flashcfg 1.8s ease-out; }
     @keyframes flashcfg {
       0%   { box-shadow:0 0 0 2px var(--gold), 0 0 28px var(--gold-deep); }
