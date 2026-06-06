@@ -295,14 +295,18 @@ const barOf = (c: any, key: string) => {
   const d = c.dist?.[key];
   const r = resRange[key] || { lo: 0, hi: 0 };
   const mean = d?.mean ?? 0;
+  const none = !d || (d.max ?? 0) <= 0;   // map never has this at all
   const t = r.hi > r.lo ? (mean - r.lo) / (r.hi - r.lo) : 0.5;
   const tt = Math.max(0, Math.min(1, t));
-  return { d, t: tt, w: Math.round(8 + tt * 92),
-    col: `hsl(${Math.round(tt * 125)},58%,42%)` };
+  return { d, none, t: tt,
+    w: none ? 100 : Math.round(8 + tt * 92),
+    col: none ? '#23262c' : `hsl(${Math.round(tt * 125)},58%,42%)` };
 };
 const barTip = (b: any, d: any) =>
-  `${b.label} — ${b.desc}\navg ${d?.mean ?? 0} per map (±${d?.sd ?? 0} sd, `
-  + `range ${d?.min ?? 0}–${d?.max ?? 0}). Bar = relative to other maps.`;
+  (!d || (d.max ?? 0) <= 0)
+    ? `${b.label} — ${b.desc}\nNone on this map.`
+    : `${b.label} — ${b.desc}\navg ${d.mean} per map (±${d.sd} sd, `
+      + `range ${d.min}–${d.max}). Bar = relative to other maps.`;
 
 // ---- hero-pill relative bars -----------------------------------------
 // Same green→red language as the resource bars, applied to the headline
@@ -423,7 +427,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
             {RES_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class="ric" title={barTip(b, bar.d)}>
+                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d)}>
                   <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
                   <div class="ric__c">{b.label}</div>
@@ -438,7 +442,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
             {YIELD_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class="ric" title={barTip(b, bar.d)}>
+                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d)}>
                   <img src={`${baseUrl}img/icons/yields/${b.icon}.png`} alt={b.label} />
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
                   <div class="ric__c">{b.label}</div>
@@ -586,6 +590,10 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       box-shadow:inset 0 0 0 1px #0006; }
     .ric__c { font-size:0.58rem; color:var(--text-faint);
       font-family:var(--font-ui); text-align:center; line-height:1.1; }
+    /* none on this map (no seed had it) — fully greyed out */
+    .ric--none { opacity:0.38; }
+    .ric--none img { filter:grayscale(1) brightness(0.75); }
+    .ric--none .ric__bar { border-style:dashed; }
     /* ---- SETUP GUIDE (in-game settings mock) ---- */
     .setup > summary { list-style:none; cursor:pointer;
       position:absolute; top:0.8rem; right:1rem; z-index:3;
