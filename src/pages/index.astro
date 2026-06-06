@@ -238,15 +238,69 @@ function setup(c: any): Row[] {
   rows.push({ label: 'Mirror Map', value: 'ON', toggle: true });
   return rows;
 }
+
+// ---- Resource strip --------------------------------------------------
+// Per-config resource picture: an icon + a colour bar (green = lots,
+// red = low) instead of a wall of numbers. Bar fill/colour is RELATIVE
+// to the rest of the pool, so a glance answers "lots of iron here vs
+// there". Exact mean ±sd is in the hover tooltip. (Design note from the
+// organisers: fewer numbers — most eyes glaze over a stat wall.)
+const RES_BARS = [
+  { key: 'grain', icon: 'wheat', label: 'Grain',
+    desc: 'Wheat / Barley / Sorghum (Farm)' },
+  { key: 'pasture', icon: 'cattle', label: 'Pasture',
+    desc: 'Cattle / Sheep / Pig / Goat / Horse' },
+  { key: 'grove', icon: 'wine', label: 'Grove',
+    desc: 'Wine / Olive / Citrus / Honey / Lavender / Silk / Spices / Tea' },
+  { key: 'ore', icon: 'iron', label: 'Ore',
+    desc: 'Ore (worked into iron)' },
+  { key: 'marble', icon: 'stone', label: 'Marble',
+    desc: 'Marble (worked into stone)' },
+  { key: 'horse', icon: 'horse', label: 'Horses',
+    desc: 'Horse resource' },
+  { key: 'ele', icon: 'elephant', label: 'Elephants',
+    desc: 'Elephant resource' },
+  { key: 'camel', icon: 'camel', label: 'Camels',
+    desc: 'Camel resource' },
+] as const;
+// pool min/max of each resource's per-config mean → normalisation range,
+// so every bar reads "lots vs little of this RELATIVE to the other maps".
+const resRange: Record<string, { lo: number; hi: number }> = {};
+for (const b of RES_BARS) {
+  const ms = pool.map((c: any) => c.dist?.[b.key]?.mean)
+    .filter((v: any) => v != null);
+  resRange[b.key] = { lo: ms.length ? Math.min(...ms) : 0,
+    hi: ms.length ? Math.max(...ms) : 0 };
+}
+// per-config bar: t∈[0,1] vs the pool range → fill width + red→amber→green
+const barOf = (c: any, key: string) => {
+  const d = c.dist?.[key];
+  const r = resRange[key] || { lo: 0, hi: 0 };
+  const mean = d?.mean ?? 0;
+  const t = r.hi > r.lo ? (mean - r.lo) / (r.hi - r.lo) : 0.5;
+  const tt = Math.max(0, Math.min(1, t));
+  return { d, t: tt, w: Math.round(8 + tt * 92),
+    col: `hsl(${Math.round(tt * 125)},58%,42%)` };
+};
+const barTip = (b: any, d: any) =>
+  `${b.label} — ${b.desc}\navg ${d?.mean ?? 0} per map (±${d?.sd ?? 0} sd, `
+  + `range ${d?.min ?? 0}–${d?.max ?? 0}). Bar = relative to other maps.`;
 ---
 <Base title="Tournament Pool" hideNav={true}>
   <p class="lede">
     The <b>{pool.length}-map tournament pool</b>, grouped by map script.
     The reference for in-game setup — pills show the live distribution
-    of each config (city sites, distances, terrain), the SETUP GUIDE
-    button gives the exact in-game Advanced Options, and the gallery
-    shows generated samples. Hover or click any preview to inspect.
+    of each config (city sites, distances, urban tiles), the resource
+    bars show how rich each map runs in a resource <i>relative to the
+    other maps</i> (hover for exact amounts), the SETUP GUIDE button
+    gives the exact in-game Advanced Options, and the gallery shows
+    generated samples. Hover or click any preview to inspect.
   </p>
+
+  <div class="rand">
+    <button type="button" id="randPick" class="rand__btn">🎲 Surprise me — pick a random map</button>
+    <span class="rand__hint" id="randHint"></span>
+  </div>
 
   <nav class="snav" id="snav">
     {sections.map((sec: any) => (
@@ -314,6 +368,30 @@ function setup(c: any): Row[] {
               <div class="pill__r">min {c.dist.slLand.min} · <b>med {c.dist.slLand.med}</b> · max {c.dist.slLand.max}</div>
             </>) : <div class="pill__v dash">—</div>}
           </div>
+          <div class="pill">
+            <div class="pill__l">Potential urban tiles</div>
+            {c.dist.urban ? (<>
+              <div class="pill__v"><b>{c.dist.urban.mean}</b> <span class="pm">±{c.dist.urban.sd}</span></div>
+              <div class="pill__r">min {c.dist.urban.min} · <b>med {c.dist.urban.med}</b> · max {c.dist.urban.max}</div>
+            </>) : <div class="pill__v dash">—</div>}
+          </div>
+        </div>
+        <div class="rstrip">
+          <div class="rstrip__lab">Resource abundance
+            <span class="rstrip__sub">green = lots · red = little, <i>relative to the other maps</i> · hover for exact amounts</span>
+          </div>
+          <div class="rstrip__ics">
+            {RES_BARS.map((b: any) => {
+              const bar = barOf(c, b.key);
+              return (
+                <div class="ric" title={barTip(b, bar.d)}>
+                  <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
+                  <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
+                  <div class="ric__c">{b.label}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <details class="gal" open>
           <summary>{Math.min(c.imgs.length, 21)} generated maps</summary>
@@ -368,6 +446,7 @@ function setup(c: any): Row[] {
     .cfg__hd { order:0; display:flex; align-items:baseline; gap:0.8rem;
       flex-wrap:wrap; padding-right:10.5rem; }
     .pills { order:1; }
+    .rstrip { order:2; }
     .cfgdist { order:2; }
     .setup { order:3; }
     .gal { order:4; }
@@ -411,6 +490,40 @@ function setup(c: any): Row[] {
     .pill__r { font-size:0.72rem; color:var(--text-faint);
       font-family:var(--font-mono); }
     .pill__r b { color:var(--text-soft); }
+    /* ---- random-map picker ---- */
+    .rand { display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap;
+      margin:0 0 1.5rem; }
+    .rand__btn { font-family:var(--font-display); font-weight:700;
+      font-size:1rem; letter-spacing:0.03em; color:var(--gold);
+      background:linear-gradient(#231f0d,#1a1709);
+      border:1px solid var(--gold-deep); border-radius:8px;
+      padding:0.5rem 1.1rem; cursor:pointer; box-shadow:0 1px 3px #0008; }
+    .rand__btn:hover { background:#2e2810; border-color:var(--gold-soft); }
+    .rand__hint { font-family:var(--font-display); font-style:italic;
+      font-size:0.95rem; color:var(--gold-soft); }
+    .cfg.flash { animation:flashcfg 1.8s ease-out; }
+    @keyframes flashcfg {
+      0%   { box-shadow:0 0 0 2px var(--gold), 0 0 28px var(--gold-deep); }
+      100% { box-shadow:0 0 0 1px var(--border); }
+    }
+    /* ---- resource abundance strip ---- */
+    .rstrip { margin-top:0.7rem; }
+    .rstrip__lab { font-size:0.62rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim); margin-bottom:0.5rem; }
+    .rstrip__sub { text-transform:none; letter-spacing:0;
+      font-family:var(--font-ui); color:var(--text-faint);
+      font-size:0.66rem; margin-left:0.4rem; }
+    .rstrip__ics { display:flex; flex-wrap:wrap; gap:0.85rem; }
+    .ric { display:flex; flex-direction:column; align-items:center;
+      gap:0.28rem; width:52px; cursor:help; }
+    .ric img { width:30px; height:30px; object-fit:contain;
+      filter:drop-shadow(0 1px 1px #000); }
+    .ric__bar { width:100%; height:7px; border-radius:4px;
+      background:#0e0f12; border:1px solid var(--border); overflow:hidden; }
+    .ric__bar span { display:block; height:100%; border-radius:4px 0 0 4px;
+      box-shadow:inset 0 0 0 1px #0006; }
+    .ric__c { font-size:0.58rem; color:var(--text-faint);
+      font-family:var(--font-ui); text-align:center; line-height:1.1; }
     /* ---- SETUP GUIDE (in-game settings mock) ---- */
     .setup > summary { list-style:none; cursor:pointer;
       position:absolute; top:0.8rem; right:1rem; z-index:3;
@@ -591,6 +704,22 @@ function setup(c: any): Row[] {
       window.addEventListener('scroll',function(){
         window.requestAnimationFrame(spy); },{passive:true});
       spy();
+    })();
+    (function(){
+      var btn=document.getElementById('randPick');
+      var hint=document.getElementById('randHint');
+      if(!btn) return;
+      var cfgs=[].slice.call(document.querySelectorAll('.cfg'));
+      btn.addEventListener('click',function(){
+        if(!cfgs.length) return;
+        var el=cfgs[Math.floor(Math.random()*cfgs.length)];
+        var nm=el.querySelector('.cfg__name');
+        if(hint&&nm) hint.textContent='→ '+nm.textContent;
+        el.scrollIntoView({behavior:'smooth',block:'start'});
+        cfgs.forEach(function(c){ c.classList.remove('flash'); });
+        void el.offsetWidth;            // restart the flash animation
+        el.classList.add('flash');
+      });
     })();
   </script>
 </Base>
