@@ -416,7 +416,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
             {c.dist.expansion ? (<>
               <div class="pill__v"><b>{c.dist.expansion.mean}</b> <span class="pm">±{c.dist.expansion.sd}</span></div>
               <div class="pill__r">min {c.dist.expansion.min} · <b>med {c.dist.expansion.med}</b> · max {c.dist.expansion.max}</div>
-              <div class="pill__bar" title="Urbanizable tiles — Lush/Temperate/Arid that are Flat or Hill (can host a city/urban; excludes sand, marsh, tundra, water, mountain). More = roomier, less = cramped, vs other maps."><span style={barStyle(c.dist.expansion.mean, pillRange.expansion)}></span></div>
+              <div class="pill__bar" title="Urbanizable tiles — Lush/Temperate/Arid that are Flat or Hill (can host a city/urban; excludes sand, marsh, tundra, jungle, water, mountain). More = roomier, less = cramped, vs other maps."><span style={barStyle(c.dist.expansion.mean, pillRange.expansion)}></span></div>
             </>) : <div class="pill__v dash">—</div>}
           </div>
         </div>
