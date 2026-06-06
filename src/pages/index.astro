@@ -341,6 +341,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     <div class="rand">
       <button type="button" id="randPick" class="rand__btn">🎲 Random map</button>
       <span class="rand__hint" id="randHint"></span>
+      <a class="rand__link" href={`${baseUrl}rankings`}>📊 Rankings →</a>
     </div>
     {sections.map((sec: any) => (
       <div class="snav__sec">
@@ -565,6 +566,9 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .rand__btn:hover { background:#2e2810; border-color:var(--gold-soft); }
     .rand__hint { font-family:var(--font-display); font-style:italic;
       font-size:0.78rem; line-height:1.25; color:var(--gold-soft); }
+    .rand__link { font-family:var(--font-ui); font-weight:600;
+      font-size:0.8rem; color:var(--gold-soft); }
+    .rand__link:hover { color:var(--gold); text-decoration:none; }
     @media (max-width:1040px){ .rand{ flex:1 1 100%; } }
     .cfg.flash { animation:flashcfg 1.8s ease-out; }
     @keyframes flashcfg {

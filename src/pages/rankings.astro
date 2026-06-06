@@ -1,0 +1,260 @@
+---
+import Base from '../layouts/Base.astro';
+import dist from '../data/atlas-dist.json';
+import gensData from '../data/gens.json';
+const baseUrl = import.meta.env.BASE_URL;
+
+// Same 18-map tournament pool as the index reference page. Each variant
+// is ranked separately (per the organiser: "rank each variant").
+const POOL: string[] = [
+  'archipelago-land-lg-water-sm-smallest-square-sym',
+  'archipelago-land-lg-water-sm-smallest-wide-nosym',
+  'arid-plateau-small-seas-smallest-square-sym',
+  'arid-plateau-large-seas-smallest-square-sym',
+  'coastal-rain-basin-smallest-wide-nosym',
+  'coastal-rain-basin-smallest-square-sym',
+  'continent-smallest-wide-sym',
+  'desert-lush-std-tiny-square-nosym',
+  'desert-none-std-tiny-square-sym',
+  'donut-irreg-low-smallest-square-sym',
+  'dota-jungle-smallest-square-sym',
+  'dota-sand-smallest-square-sym',
+  'dota-water-smallest-square-sym',
+  'hardwood-forest-smallest-wide-nosym',
+  'inland-sea-smallest-square-sym',
+  'inland-sea-smallest-wide-nosym',
+  'mountain-pass-smallest-wide-sym',
+  'wetlands-smallest-square-sym',
+];
+const bySlug: Record<string, any> = {};
+for (const c of dist.configs) bySlug[c.slug] = c;
+const pool = POOL.map((s) => bySlug[s]).filter(Boolean);
+
+// Mean land tiles per config (from the per-gen data) → drives the
+// "per 100 land tiles" density mode that neutralises map-size bias.
+const landBy: Record<string, number[]> = {};
+for (const gn of (gensData as any).gens)
+  if (gn.landTiles != null) (landBy[gn.cslug] ??= []).push(gn.landTiles);
+const landMean: Record<string, number> = {};
+for (const k in landBy) {
+  const a = landBy[k];
+  landMean[k] = a.reduce((x, y) => x + y, 0) / a.length;
+}
+
+// labels — variant + size/aspect/sym so the two-variant scripts (Inland
+// Sea, CRB, Archipelago, …) are individually identifiable.
+const sizeOf = (c: any) =>
+  (c.setting || '').split(' · ')[0] === 'Tiny' ? 'Tiny' : 'Duel';
+const aspOf = (c: any) => {
+  const a = (c.setting || '').split(' · ')[1] || '';
+  return a ? a[0].toUpperCase() + a.slice(1) : '';
+};
+const symOf = (c: any) =>
+  ((c.setting || '').split(' · ')[2] || '').includes('on') ? 'Sym' : 'No-Sym';
+const nameOf = (c: any) => `${c.group}${c.variant ? ` ${c.variant}` : ''}`;
+const subOf = (c: any) => `${sizeOf(c)} · ${aspOf(c)} · ${symOf(c)}`;
+
+// dimensions. tournament = size-independent (no density). resource/yield
+// = dual (totals + per-100-land-tiles). icon dir differs by kind.
+type Dim = { key: string; label: string; unit: string;
+  icon?: string; dir?: string; dual?: boolean };
+const TOURNAMENT: Dim[] = [
+  { key: 'sites', label: 'City sites', unit: 'sites' },
+  { key: 'land', label: 'Land hex distance', unit: 'hexes' },
+  { key: 'slLand', label: 'Land hex cost', unit: 'moves' },
+  { key: 'expansion', label: 'Expansion space', unit: 'urbanizable tiles' },
+];
+const RESOURCES: Dim[] = [
+  { key: 'grain', label: 'Grain', icon: 'wheat', dir: 'resources', dual: true, unit: '' },
+  { key: 'pasture', label: 'Pasture', icon: 'cattle', dir: 'resources', dual: true, unit: '' },
+  { key: 'camp', label: 'Camp', icon: 'game', dir: 'resources', dual: true, unit: '' },
+  { key: 'grove', label: 'Grove', icon: 'wine', dir: 'resources', dual: true, unit: '' },
+  { key: 'nets', label: 'Nets', icon: 'fish', dir: 'resources', dual: true, unit: '' },
+  { key: 'ore', label: 'Ore', icon: 'iron', dir: 'resources', dual: true, unit: '' },
+  { key: 'precious', label: 'Precious', icon: 'gold', dir: 'resources', dual: true, unit: '' },
+  { key: 'marble', label: 'Marble', icon: 'stone', dir: 'resources', dual: true, unit: '' },
+  { key: 'horse', label: 'Horses', icon: 'horse', dir: 'resources', dual: true, unit: '' },
+  { key: 'ele', label: 'Elephants', icon: 'elephant', dir: 'resources', dual: true, unit: '' },
+  { key: 'camel', label: 'Camels', icon: 'camel', dir: 'resources', dual: true, unit: '' },
+];
+const YIELDS: Dim[] = [
+  { key: 'food', label: 'Food', icon: 'food', dir: 'yields', dual: true, unit: '' },
+  { key: 'iron', label: 'Iron', icon: 'iron', dir: 'yields', dual: true, unit: '' },
+  { key: 'stone', label: 'Stone', icon: 'stone', dir: 'yields', dual: true, unit: '' },
+  { key: 'wood', label: 'Wood', icon: 'wood', dir: 'yields', dual: true, unit: '' },
+];
+
+const meanOf = (c: any, key: string) => c.dist?.[key]?.mean ?? null;
+const noneOf = (c: any, key: string) =>
+  !c.dist?.[key] || (c.dist[key].max ?? 0) <= 0;
+const densOf = (c: any, key: string) => {
+  const m = meanOf(c, key); const L = landMean[c.slug];
+  return m != null && L ? (m / L) * 100 : null;
+};
+const fmt = (v: number) =>
+  v >= 100 ? String(Math.round(v)) : v >= 10 ? v.toFixed(1) : v.toFixed(2);
+
+// build a ranked list for one dimension in one mode ('raw' | 'den')
+function ranked(key: string, mode: string) {
+  const rows = pool.map((c: any) => {
+    const raw = meanOf(c, key);
+    const v = mode === 'den' ? densOf(c, key) : raw;
+    return { c, v: v ?? 0, raw, none: noneOf(c, key) };
+  });
+  const vals = rows.map((r) => r.v);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  rows.sort((a, b) => b.v - a.v);
+  return rows.map((r, i) => {
+    const t = hi > lo ? (r.v - lo) / (hi - lo) : 0.5;
+    const tt = Math.max(0, Math.min(1, t));
+    return { ...r, rank: i + 1,
+      disp: mode === 'den' ? fmt(r.v) : (r.raw == null ? '—' : String(r.raw)),
+      w: r.none ? 100 : Math.round(8 + tt * 92),
+      col: r.none ? '#23262c' : `hsl(${Math.round(tt * 125)},58%,42%)` };
+  });
+}
+const tipOf = (c: any, key: string) => {
+  const d = c.dist?.[key];
+  if (!d || (d.max ?? 0) <= 0) return 'none on this map';
+  return `avg ${d.mean} ±${d.sd} (range ${d.min}–${d.max}) · per 100 land ≈ ${fmt(densOf(c, key) ?? 0)}`;
+};
+
+const GROUPS = [
+  { title: 'Tournament', sub: 'size-independent gameplay metrics', dims: TOURNAMENT },
+  { title: 'Resources', sub: 'count of each resource group', dims: RESOURCES },
+  { title: 'Yield potential', sub: 'best-improvement food / iron / stone / wood', dims: YIELDS },
+];
+---
+<Base title="Rankings">
+  <p class="lede">
+    The 18-map pool ranked on every dimension, best → worst, each variant
+    ranked on its own. Bars are relative within each list (green = most,
+    red = least); hover a row for the exact mean ±sd. <b>Totals</b> ranks
+    by average per map; <b>per&nbsp;100&nbsp;land&nbsp;tiles</b> divides
+    out map size (so big maps like the Tiny Deserts don't win on bulk
+    alone) — it answers "which map is <i>characteristically</i> rich in
+    this". The toggle affects resources &amp; yields only; the tournament
+    metrics are already size-independent.
+  </p>
+
+  <div class="modes">
+    <span class="modes__l">Rank by</span>
+    <button type="button" id="mRaw" class="mbtn on">Totals (mean / map)</button>
+    <button type="button" id="mDen" class="mbtn">Per 100 land tiles</button>
+  </div>
+
+  {GROUPS.map((g) => (
+    <section class="grp">
+      <div class="grp__h">
+        <h2 class="grp__t">{g.title}</h2>
+        <span class="grp__sub">{g.sub}</span>
+      </div>
+      <div class="cards">
+        {g.dims.map((dim: any) => (
+          <div class={`lbcard${dim.dual ? ' lbcard--dual' : ''}`}>
+            <div class="lbcard__h">
+              {dim.icon && <img src={`${baseUrl}img/icons/${dim.dir}/${dim.icon}.png`} alt="" />}
+              <span class="lbcard__t">{dim.label}</span>
+              {dim.unit && <span class="lbcard__u">{dim.unit}</span>}
+            </div>
+            {['raw', ...(dim.dual ? ['den'] : [])].map((mode: string) => (
+              <ol class={`lb lb--${mode}`}>
+                {ranked(dim.key, mode).map((r: any) => (
+                  <li class={`r${r.none ? ' r--none' : ''}`} title={tipOf(r.c, dim.key)}>
+                    <span class="r__n">{r.rank}</span>
+                    <span class="r__nm"><b>{nameOf(r.c)}</b><i>{subOf(r.c)}</i></span>
+                    <span class="r__bar"><span style={`width:${r.w}%;background:${r.col}`}></span></span>
+                    <span class="r__v">{r.none ? '0' : r.disp}</span>
+                  </li>
+                ))}
+              </ol>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <p class="back"><a href={baseUrl}>← Back to the map atlas</a></p>
+
+  <style>
+    .lede { font-family:var(--font-display); font-style:italic;
+      font-size:1.05rem; line-height:1.55; color:var(--text-soft);
+      max-width:90ch; margin:0.6rem 0 1.2rem; }
+    .modes { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;
+      margin:0 0 1.6rem; position:sticky; top:0; z-index:5;
+      background:var(--bg); padding:0.5rem 0; }
+    .modes__l { font-size:0.64rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--text-dim); margin-right:0.3rem; }
+    .mbtn { font-family:var(--font-ui); font-weight:600; font-size:0.8rem;
+      color:var(--text-soft); background:#16181d;
+      border:1px solid var(--border-strong); border-radius:7px;
+      padding:0.4rem 0.8rem; cursor:pointer; }
+    .mbtn:hover { color:var(--gold); border-color:var(--gold-deep); }
+    .mbtn.on { color:var(--gold); background:#231f0d;
+      border-color:var(--gold-deep); }
+    .grp { margin:0 0 2rem; }
+    .grp__h { display:flex; align-items:baseline; gap:0.7rem; flex-wrap:wrap;
+      border-bottom:1px solid var(--gold-deep); padding-bottom:0.3rem;
+      margin-bottom:0.9rem; }
+    .grp__t { font-family:var(--font-display); font-weight:700;
+      font-size:1.5rem; color:var(--gold); }
+    .grp__sub { font-family:var(--font-display); font-style:italic;
+      font-size:0.9rem; color:var(--text-faint); }
+    .cards { display:grid; gap:1rem;
+      grid-template-columns:repeat(auto-fill, minmax(330px, 1fr)); }
+    .lbcard { background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:8px; padding:0.7rem 0.85rem 0.5rem; }
+    .lbcard__h { display:flex; align-items:center; gap:0.5rem;
+      border-bottom:1px solid var(--border); padding-bottom:0.45rem;
+      margin-bottom:0.4rem; }
+    .lbcard__h img { width:24px; height:24px; object-fit:contain;
+      filter:drop-shadow(0 1px 1px #000); }
+    .lbcard__t { font-family:var(--font-display); font-weight:700;
+      font-size:1.15rem; color:var(--text); }
+    .lbcard__u { margin-left:auto; font-size:0.58rem; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--text-dim);
+      font-family:var(--font-mono); }
+    .lb { list-style:none; margin:0; padding:0; }
+    .lb--den { display:none; }
+    body.den .lbcard--dual .lb--raw { display:none; }
+    body.den .lbcard--dual .lb--den { display:block; }
+    .r { display:grid; grid-template-columns:1.4rem 1fr 64px 2.7rem;
+      align-items:center; gap:0.5rem; padding:0.16rem 0; }
+    .r__n { font-family:var(--font-mono); font-size:0.7rem;
+      color:var(--text-dim); text-align:right; }
+    .r:nth-child(1) .r__n { color:var(--gold); font-weight:700; }
+    .r:nth-child(2) .r__n, .r:nth-child(3) .r__n { color:var(--gold-soft); }
+    .r__nm { min-width:0; display:flex; flex-direction:column; line-height:1.1; }
+    .r__nm b { font-weight:600; font-size:0.82rem; color:var(--text);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .r__nm i { font-style:normal; font-size:0.6rem; color:var(--text-dim);
+      font-family:var(--font-mono); }
+    .r__bar { height:7px; border-radius:4px; background:#0e0f12;
+      border:1px solid var(--border); overflow:hidden; }
+    .r__bar span { display:block; height:100%; border-radius:4px 0 0 4px;
+      box-shadow:inset 0 0 0 1px #0006; }
+    .r__v { font-family:var(--font-mono); font-size:0.78rem;
+      color:var(--text-soft); text-align:right; }
+    .r--none { opacity:0.4; }
+    .r--none .r__bar { border-style:dashed; }
+    .r--none .r__v { color:var(--text-dim); }
+    .back { margin-top:2rem; font-family:var(--font-ui); font-size:0.85rem; }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var raw = document.getElementById('mRaw');
+      var den = document.getElementById('mDen');
+      if (!raw || !den) return;
+      raw.addEventListener('click', function () {
+        document.body.classList.remove('den');
+        raw.classList.add('on'); den.classList.remove('on');
+      });
+      den.addEventListener('click', function () {
+        document.body.classList.add('den');
+        den.classList.add('on'); raw.classList.remove('on');
+      });
+    })();
+  </script>
+</Base>
