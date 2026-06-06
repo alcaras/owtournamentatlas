@@ -273,13 +273,13 @@ const RES_BARS = [
 // bar treatment, icons from the yields/ set.
 const YIELD_BARS = [
   { key: 'food', icon: 'food', label: 'Food',
-    desc: 'Total best-improvement Food across the map' },
+    desc: 'Potential Food — every tile given the best food improvement it can take (Farm, etc.), summed' },
   { key: 'iron', icon: 'iron', label: 'Iron',
-    desc: 'Total best-improvement Iron across the map' },
+    desc: 'Potential Iron — every tile given the best iron improvement it can take (Mine), summed' },
   { key: 'stone', icon: 'stone', label: 'Stone',
-    desc: 'Total best-improvement Stone across the map' },
+    desc: 'Potential Stone — every tile given the best stone improvement it can take (Quarry), summed' },
   { key: 'wood', icon: 'wood', label: 'Wood',
-    desc: 'Total best-improvement Wood across the map' },
+    desc: 'Potential Wood — every tile given the best wood improvement it can take (Lumbermill), summed' },
 ] as const;
 // pool min/max of each resource's per-config mean → normalisation range,
 // so every bar reads "lots vs little of this RELATIVE to the other maps".
@@ -431,8 +431,8 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
               );
             })}
           </div>
-          <div class="rstrip__lab rstrip__lab--2">Yield on the map
-            <span class="rstrip__sub">total best-improvement food / iron / stone / wood · same relative scale · hover for exact amounts</span>
+          <div class="rstrip__lab rstrip__lab--2">Yield potential
+            <span class="rstrip__sub">max food / iron / stone / wood if every tile ran its best improvement for <i>that</i> yield · relative to the other maps · hover for exact amounts</span>
           </div>
           <div class="rstrip__ics">
             {YIELD_BARS.map((b: any) => {
