@@ -310,14 +310,34 @@ const GROUPS = [
       var links = [].slice.call(document.querySelectorAll('.snav__l'));
       var cards = links.map(function (l) {
         return document.getElementById('r-' + l.getAttribute('data-key')); });
+      var lockKey = null;   // last clicked — wins ties within its row
+      function setActive(i) {
+        links.forEach(function (l, j) { l.classList.toggle('on', j === i); });
+      }
+      links.forEach(function (l) {
+        l.addEventListener('click', function () {
+          lockKey = l.getAttribute('data-key'); spy();
+        });
+      });
       function spy() {
-        var best = 0, bt = -1e9;
+        // group the cards sharing the top-most in-view row (same grid row
+        // => same top), then prefer the clicked one within that row.
+        var bestTop = -1e9, group = [];
         cards.forEach(function (s, i) {
           if (!s) return;
           var t = s.getBoundingClientRect().top - 70;
-          if (t <= 0 && t > bt) { bt = t; best = i; }
+          if (t > 0) return;
+          if (t > bestTop + 1) { bestTop = t; group = [i]; }
+          else if (Math.abs(t - bestTop) <= 1) { group.push(i); }
         });
-        links.forEach(function (l, i) { l.classList.toggle('on', i === best); });
+        if (!group.length) { setActive(0); return; }
+        var pick = group[0];
+        if (lockKey) {
+          var f = group.find(function (i) {
+            return links[i].getAttribute('data-key') === lockKey; });
+          if (f != null) pick = f; else lockKey = null;  // scrolled past
+        }
+        setActive(pick);
       }
       window.addEventListener('scroll', function () {
         window.requestAnimationFrame(spy); }, { passive: true });
