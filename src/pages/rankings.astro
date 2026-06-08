@@ -156,6 +156,19 @@ const GROUPS = [
     <button type="button" id="mDen" class="mbtn">Per 100 land tiles</button>
   </div>
 
+  <div class="rlayout">
+  <nav class="snav" id="snav">
+    {GROUPS.map((g) => (
+      <div class="snav__sec">
+        <div class="snav__t">{g.title}</div>
+        {g.dims.map((dim: any) => (
+          <a class="snav__l" data-key={dim.key} href={`#r-${dim.key}`}>{dim.label}</a>
+        ))}
+      </div>
+    ))}
+  </nav>
+  <div class="rmain">
+
   {GROUPS.map((g) => (
     <section class="grp">
       <div class="grp__h">
@@ -164,7 +177,7 @@ const GROUPS = [
       </div>
       <div class="cards">
         {g.dims.map((dim: any) => (
-          <div class={`lbcard${dim.dual ? ' lbcard--dual' : ''}`}>
+          <div class={`lbcard${dim.dual ? ' lbcard--dual' : ''}`} id={`r-${dim.key}`}>
             <div class="lbcard__h">
               {dim.icon && <img src={`${baseUrl}img/icons/${dim.dir}/${dim.icon}.png`} alt="" />}
               <span class="lbcard__t">{dim.label}</span>
@@ -187,6 +200,8 @@ const GROUPS = [
       </div>
     </section>
   ))}
+  </div>
+  </div>
 
   <p class="back"><a href={baseUrl}>← Back to the map atlas</a></p>
 
@@ -206,7 +221,29 @@ const GROUPS = [
     .mbtn:hover { color:var(--gold); border-color:var(--gold-deep); }
     .mbtn.on { color:var(--gold); background:#231f0d;
       border-color:var(--gold-deep); }
-    .grp { margin:0 0 2rem; }
+    /* ---- sidebar layout ---- */
+    .rlayout { display:grid; grid-template-columns:184px 1fr; gap:1.4rem;
+      align-items:start; }
+    @media (max-width:860px){ .rlayout{ grid-template-columns:1fr; } }
+    .rmain { min-width:0; }
+    .snav { position:sticky; top:58px; align-self:start;
+      max-height:calc(100vh - 72px); overflow:auto;
+      display:flex; flex-direction:column; gap:0.1rem; }
+    @media (max-width:860px){ .snav{ position:static; flex-flow:row wrap;
+      max-height:none; gap:0.1rem 0.6rem; margin-bottom:0.6rem; } }
+    .snav__sec { margin-bottom:0.6rem; }
+    .snav__t { font-size:0.58rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gold-soft);
+      margin-bottom:0.25rem; font-weight:700; }
+    .snav__l { display:block; color:var(--text-soft); text-decoration:none;
+      font-size:0.74rem; line-height:1.2; padding:0.12rem 0.4rem;
+      border-radius:4px; border-left:2px solid transparent; }
+    .snav__l:hover { color:var(--gold); background:var(--bg-elev);
+      text-decoration:none; }
+    .snav__l.on { color:var(--gold); font-weight:700;
+      border-left-color:var(--gold); background:var(--bg-elev); }
+    .grp { margin:0 0 2rem; scroll-margin-top:56px; }
+    .lbcard { scroll-margin-top:56px; }
     .grp__h { display:flex; align-items:baseline; gap:0.7rem; flex-wrap:wrap;
       border-bottom:1px solid var(--gold-deep); padding-bottom:0.3rem;
       margin-bottom:0.9rem; }
@@ -268,6 +305,23 @@ const GROUPS = [
         document.body.classList.add('den');
         den.classList.add('on'); raw.classList.remove('on');
       });
+    })();
+    (function () {
+      var links = [].slice.call(document.querySelectorAll('.snav__l'));
+      var cards = links.map(function (l) {
+        return document.getElementById('r-' + l.getAttribute('data-key')); });
+      function spy() {
+        var best = 0, bt = -1e9;
+        cards.forEach(function (s, i) {
+          if (!s) return;
+          var t = s.getBoundingClientRect().top - 70;
+          if (t <= 0 && t > bt) { bt = t; best = i; }
+        });
+        links.forEach(function (l, i) { l.classList.toggle('on', i === best); });
+      }
+      window.addEventListener('scroll', function () {
+        window.requestAnimationFrame(spy); }, { passive: true });
+      spy();
     })();
   </script>
 </Base>
