@@ -108,15 +108,48 @@ const sections = Object.keys(groupMap)
     navName(a).localeCompare(navName(b))),
 }));
 
-// Stable config number (001…018) in page display order — the order the
-// configs appear top-to-bottom (sections alphabetised, cfgs sorted
-// within). Shown as a badge on each config + in the sidebar so configs
-// can be referenced by number.
-const cfgNum: Record<string, string> = {};
-let _cfgI = 0;
+// Mnemonic config code — a short, decodable handle per config:
+//   FAM[variant] · [size][aspect][sym]
+// e.g. CRB·DWN = Coastal Rain Basin, Duel, Wide, No-sym;
+//      DOTAj·DQS = DOTA Jungle, Duel, sQuare, Sym.
+// Flags: size D=Duel T=Tiny · aspect Q=square W=wide · sym S=point-sym
+// N=none. Lowercase letter = variant (l/s seas, l/d/n coast, j/s/w/m
+// DOTA terrain). Legend rendered on the page under the lede.
+const FAM: Record<string, string> = {
+  'Archipelago': 'ARC', 'Arid Plateau': 'ARD', 'Coastal Rain Basin': 'CRB',
+  'Continent': 'CON', 'Desert': 'DES', 'Donut': 'DNT', 'DOTA': 'DOTA',
+  'Hardwood Forest': 'HWF', 'Highlands': 'HLD', 'Inland Sea': 'INS',
+  'Mountain Pass': 'MTP', 'Wetlands': 'WET',
+};
+const FAM_LEGEND = [
+  ['ARC', 'Archipelago'], ['ARD', 'Arid Plateau'], ['CRB', 'Coastal Rain Basin'],
+  ['CON', 'Continent'], ['DES', 'Desert'], ['DNT', 'Donut'],
+  ['DOTA', 'Duel of the Ancients'], ['HWF', 'Hardwood Forest'],
+  ['INS', 'Inland Sea'], ['MTP', 'Mountain Pass'], ['WET', 'Wetlands'],
+];
+function variantLetter(c: any): string {
+  const v = c.variant || '';
+  if (c.group === 'DOTA') return v ? v[0].toLowerCase() : '';
+  if (c.group === 'Arid Plateau')
+    return /large/i.test(v) ? 'l' : /small/i.test(v) ? 's' : '';
+  if (c.group === 'Desert') {
+    const coast = v.split(' · ')[0];
+    return /lush/i.test(coast) ? 'l' : /dry/i.test(coast) ? 'd'
+      : /none/i.test(coast) ? 'n' : '';
+  }
+  return '';
+}
+function cfgCode(c: any): string {
+  const fam = FAM[c.group] || c.group.slice(0, 3).toUpperCase();
+  const flags = (sizeOf(c) === 'Tiny' ? 'T' : 'D')
+    + (aspOf(c) === 'Wide' ? 'W' : 'Q')
+    + (symOf(c) === 'Sym' ? 'S' : 'N');
+  return `${fam}${variantLetter(c)}·${flags}`;
+}
+const codeOf: Record<string, string> = {};
 for (const sec of sections)
   for (const c of sec.cfgs)
-    cfgNum[c.slug] = String(++_cfgI).padStart(3, '0');
+    codeOf[c.slug] = cfgCode(c);
 
 // ---- Distribution charts ---------------------------------------------
 // Per-seed values for the pool, straight from gens.json (the per-map
@@ -352,6 +385,29 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     generated samples. Hover or click any preview to inspect.
   </p>
 
+  <details class="codekey">
+    <summary>ℹ︎ Map code key — e.g. <code>CRB·DWN</code> = Coastal Rain
+      Basin, Duel, Wide, No-sym</summary>
+    <div class="codekey__body">
+      <div class="codekey__row">
+        {FAM_LEGEND.map(([ab, full]) => (
+          <span class="codekey__fam"><code>{ab}</code> {full}</span>
+        ))}
+      </div>
+      <div class="codekey__flags">
+        After the <code>·</code> — <b>size</b> <code>D</code> Duel /
+        <code>T</code> Tiny · <b>aspect</b> <code>Q</code> square /
+        <code>W</code> wide · <b>sym</b> <code>S</code> point-sym /
+        <code>N</code> none. A <b>lowercase letter</b> on the family code
+        is the variant — Arid <code>l</code>/<code>s</code> (Large/Small
+        Seas), Desert <code>l</code>/<code>d</code>/<code>n</code> (Lush/
+        Dry/No coast), DOTA <code>j</code>/<code>s</code>/<code>w</code>/
+        <code>m</code> (Jungle/Sand/Water/Mountain). DOTA is always
+        Duel/square/point-sym.
+      </div>
+    </div>
+  </details>
+
   <nav class="snav" id="snav">
     <div class="rand">
       <button type="button" id="randPick" class="rand__btn">🎲 Random map</button>
@@ -363,7 +419,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         <div class="snav__t">{sec.title}</div>
         {sec.cfgs.map((c: any) => (
           <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
-             title={c.label}><span class="snav__n">{cfgNum[c.slug]}</span>{navLabel(c, sec.cfgs)}</a>
+             title={c.label}><span class="snav__code">{codeOf[c.slug]}</span>{navLabel(c, sec.cfgs)}</a>
         ))}
       </div>
     ))}
@@ -398,7 +454,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
           </div>
         </details>
         <div class="cfg__hd">
-          <span class="cfg__num">{cfgNum[c.slug]}</span>
+          <span class="cfg__code" title={c.label}>{codeOf[c.slug]}</span>
           <span class="cfg__name">{navName(c)}</span>
           <span class="cfg__chips">
             {c.setting.split(' · ').map((p: string) => (<span class="ch">{p}</span>))}
@@ -503,6 +559,22 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
       max-width:80ch; margin:0.6rem 0 1.4rem; }
+    .codekey { max-width:80ch; margin:-0.7rem 0 1.4rem;
+      background:#14150f; border:1px solid var(--gold-deep);
+      border-radius:8px; }
+    .codekey > summary { cursor:pointer; list-style:none;
+      padding:0.5rem 0.8rem; font-size:0.86rem; color:var(--text-soft); }
+    .codekey > summary::-webkit-details-marker { display:none; }
+    .codekey > summary:hover { color:var(--gold); }
+    .codekey code { font-family:var(--font-mono, monospace);
+      font-weight:700; color:var(--gold); font-size:0.92em; }
+    .codekey__body { padding:0 0.8rem 0.7rem; font-size:0.82rem;
+      line-height:1.6; color:var(--text-soft); }
+    .codekey__row { display:flex; flex-wrap:wrap; gap:0.3rem 1rem;
+      padding:0.3rem 0 0.55rem; border-top:1px solid #2a2713;
+      margin-top:0.2rem; }
+    .codekey__fam { white-space:nowrap; }
+    .codekey__flags { border-top:1px solid #2a2713; padding-top:0.55rem; }
     .pool { display:flex; flex-direction:column; gap:2rem; }
     .tier { display:flex; flex-direction:column; gap:0.8rem; }
     .tier__h { display:flex; align-items:baseline; gap:0.7rem;
@@ -527,12 +599,12 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .gal { order:4; }
     .cfg__name { font-family:var(--font-display); font-weight:700;
       font-size:1.18rem; color:var(--text); }
-    .cfg__num { font-family:var(--font-mono, monospace); font-weight:700;
-      font-size:0.92rem; letter-spacing:0.06em; color:var(--gold);
+    .cfg__code { font-family:var(--font-mono, monospace); font-weight:700;
+      font-size:0.92rem; letter-spacing:0.04em; color:var(--gold);
       background:linear-gradient(#231f0d,#1a1709);
       border:1px solid var(--gold-deep); border-radius:6px;
       padding:0.12rem 0.5rem; box-shadow:0 1px 2px #0008;
-      align-self:center; }
+      white-space:nowrap; align-self:center; }
     .cfg__chips { display:inline-flex; gap:0.35rem; flex-wrap:wrap; }
     .ch { font-family:var(--font-display); font-weight:700;
       font-size:0.84rem; color:var(--gold);
@@ -556,9 +628,10 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       text-decoration:none; }
     .snav__l.on { color:var(--gold); font-weight:700;
       border-left-color:var(--gold); background:var(--bg-elev); }
-    .snav__n { font-family:var(--font-mono, monospace); font-weight:700;
-      font-size:0.72rem; color:var(--gold-soft); margin-right:0.4rem; }
-    .snav__l.on .snav__n { color:var(--gold); }
+    .snav__code { display:inline-block; min-width:5.6em;
+      font-family:var(--font-mono, monospace); font-weight:700;
+      font-size:0.68rem; color:var(--gold-soft); margin-right:0.45rem; }
+    .snav__l.on .snav__code { color:var(--gold); }
     .pills { display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:0.7rem; }
     .pill { flex:1 1 240px; background:#16181d;
       border:1px solid var(--gold-deep); border-radius:8px;
