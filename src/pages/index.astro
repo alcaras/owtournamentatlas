@@ -234,7 +234,12 @@ function setup(c: any): Row[] {
   ];
   for (const [l, v] of (SCRIPT_OPTS[`${c.group}|${c.variant || ''}`] || []))
     rows.push({ label: l, value: v });
-  rows.push({ label: 'Point Symmetry', value: sym ? 'ON' : 'OFF', toggle: true });
+  // DOTA is always point-symmetric in-game — there's no toggle to set, so
+  // listing it as a manual ON step is misleading (it's a default, not a
+  // step). Other scripts genuinely vary point-sym on/off, so keep the
+  // toggle there. The DOTA case is noted under the rows instead.
+  if (c.group !== 'DOTA')
+    rows.push({ label: 'Point Symmetry', value: sym ? 'ON' : 'OFF', toggle: true });
   rows.push({ label: 'Mirror Map', value: 'ON', toggle: true });
   return rows;
 }
@@ -379,7 +384,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
                   : <span class="ow__sel">{r.value}<svg viewBox="0 0 16 16" class="ow__cv"><path d="M3 5l5 6 5-6z"/></svg></span>}
               </div>
             ))}
-            <div class="ow__note">Everything is always mirrored. Everything else: tournament defaults.</div>
+            <div class="ow__note">Everything is always mirrored. Everything else: tournament defaults.{c.group === 'DOTA' && ' DOTA is always point-symmetric — that\'s a default, not a toggle to set.'}</div>
           </div>
         </details>
         <div class="cfg__hd">
