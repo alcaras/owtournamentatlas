@@ -108,6 +108,16 @@ const sections = Object.keys(groupMap)
     navName(a).localeCompare(navName(b))),
 }));
 
+// Stable config number (001…018) in page display order — the order the
+// configs appear top-to-bottom (sections alphabetised, cfgs sorted
+// within). Shown as a badge on each config + in the sidebar so configs
+// can be referenced by number.
+const cfgNum: Record<string, string> = {};
+let _cfgI = 0;
+for (const sec of sections)
+  for (const c of sec.cfgs)
+    cfgNum[c.slug] = String(++_cfgI).padStart(3, '0');
+
 // ---- Distribution charts ---------------------------------------------
 // Per-seed values for the pool, straight from gens.json (the per-map
 // source of truth). Powers the pool-wide bar chart at the top and the
@@ -353,7 +363,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         <div class="snav__t">{sec.title}</div>
         {sec.cfgs.map((c: any) => (
           <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
-             title={c.label}>{navLabel(c, sec.cfgs)}</a>
+             title={c.label}><span class="snav__n">{cfgNum[c.slug]}</span>{navLabel(c, sec.cfgs)}</a>
         ))}
       </div>
     ))}
@@ -388,6 +398,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
           </div>
         </details>
         <div class="cfg__hd">
+          <span class="cfg__num">{cfgNum[c.slug]}</span>
           <span class="cfg__name">{navName(c)}</span>
           <span class="cfg__chips">
             {c.setting.split(' · ').map((p: string) => (<span class="ch">{p}</span>))}
@@ -516,6 +527,12 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .gal { order:4; }
     .cfg__name { font-family:var(--font-display); font-weight:700;
       font-size:1.18rem; color:var(--text); }
+    .cfg__num { font-family:var(--font-mono, monospace); font-weight:700;
+      font-size:0.92rem; letter-spacing:0.06em; color:var(--gold);
+      background:linear-gradient(#231f0d,#1a1709);
+      border:1px solid var(--gold-deep); border-radius:6px;
+      padding:0.12rem 0.5rem; box-shadow:0 1px 2px #0008;
+      align-self:center; }
     .cfg__chips { display:inline-flex; gap:0.35rem; flex-wrap:wrap; }
     .ch { font-family:var(--font-display); font-weight:700;
       font-size:0.84rem; color:var(--gold);
@@ -539,6 +556,9 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       text-decoration:none; }
     .snav__l.on { color:var(--gold); font-weight:700;
       border-left-color:var(--gold); background:var(--bg-elev); }
+    .snav__n { font-family:var(--font-mono, monospace); font-weight:700;
+      font-size:0.72rem; color:var(--gold-soft); margin-right:0.4rem; }
+    .snav__l.on .snav__n { color:var(--gold); }
     .pills { display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:0.7rem; }
     .pill { flex:1 1 240px; background:#16181d;
       border:1px solid var(--gold-deep); border-radius:8px;
