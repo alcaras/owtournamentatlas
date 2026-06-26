@@ -789,6 +789,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         var el=cfgs[Math.floor(Math.random()*cfgs.length)];
         var nm=el.querySelector('.cfg__name');
         if(hint&&nm) hint.textContent='→ '+nm.textContent;
+        if(el.id) history.replaceState(null,'','#'+el.id);
         el.scrollIntoView({behavior:'smooth',block:'start'});
         cfgs.forEach(function(c){ c.classList.remove('flash'); });
         void el.offsetWidth;            // restart the flash animation
