@@ -14,18 +14,29 @@ change the rules, change them there first and update this file.
 ## 1. Format
 
 ```
-[Aspect] [Size] [Map Script] [Option] [PS]
+[Aspect] [Size] [Option] [Map Script] [PS]
 ```
+
+The **Option (trait) sits directly before the Map Script** so the label
+reads as natural English — the trait is an adjective on the script noun:
+`Lush Desert`, `Jungle DOTA`, `Large Seas Arid Plateau`.
 
 Two forms per config:
 
-- **Full** — card titles, anywhere with room. Script spelled out, aspect
-  spelled out. e.g. `Square Duel Coastal Rain Basin PS`
+- **Full** — card titles, anywhere with room. Script + aspect + trait
+  spelled out. e.g. `Square Tiny No Coast Desert PS`
 - **Compressed** — sidebars, chips/tags, narrow columns, Discord. Script
-  abbreviated, `Square`→`Sq`. e.g. `Sq Duel CRB PS`
+  abbreviated, `Square`→`Sq`, trait trimmed (medium). e.g.
+  `Sq Tiny NoCst Desert PS`
 
-Only the **Map Script abbreviation** and **`Square`→`Sq`** differ between
-the two forms. Everything else (Size, Option, PS) is identical.
+Differences between the two forms: **Map Script abbreviation**,
+**`Square`→`Sq`**, and **trait trimming** (`Large/Small`→`Lg/Sm`,
+`No Coast`→`NoCst`). Size and PS are identical in both.
+
+Note: the literal "Lush Desert" appearing in a *label* is intentional and
+fine — it's distinct from the SETUP GUIDE's "Map Script" row, which must
+read the in-game script name **Desert** (Lush is the Desert Coast
+option). Labels describe; the setup row matches the game.
 
 ---
 
@@ -59,14 +70,17 @@ If your data only has the `setting` string
    shown, same in both forms.
 3. **Map Script** → from the lookup tables in §4. Full vs compressed
    picks the column.
-4. **Option** — shown **only when it varies across the pool** for that
-   script (so single-variant scripts like Archipelago and Donut omit it
-   as noise). Mapping:
-   - **DOTA** → the boundary terrain: `Jungle` / `Sand` / `Water` / `Mountain`.
-   - **Arid Plateau** → `Large Seas` / `Small Seas`.
-   - **Desert** → the coast only: `Lush` / `Dry` / `No Coast` (the
-     `variant` is `Lush · Std` etc — take the part before ` · `, and map
-     `None` → `No Coast`).
+4. **Option (trait)** — placed **before** the Map Script, and shown
+   **only when it varies across the pool** for that script (so single-
+   variant scripts like Archipelago and Donut omit it as noise). Mapping
+   (full / compressed):
+   - **DOTA** → boundary terrain: `Jungle` / `Sand` / `Water` /
+     `Mountain` (same in both forms).
+   - **Arid Plateau** → `Large Seas` / `Small Seas` (full),
+     `Lg Seas` / `Sm Seas` (compressed).
+   - **Desert** → coast only: `Lush` / `Dry` / `No Coast` (full),
+     `Lush` / `Dry` / `NoCst` (compressed). The `variant` is `Lush · Std`
+     etc — take the part before ` · `, map `None` → `No Coast`/`NoCst`.
    - everything else → omit.
    "Varies across the pool" = more than one distinct `variant` exists
    among the surfaced configs of that `group`. Compute it from the data,
@@ -117,13 +131,18 @@ function buildLabeler(pool) {
   for (const c of pool) (seen[c.group] ??= new Set()).add(c.variant || '');
   for (const g in seen) if (seen[g].size > 1) multiVariant.add(g);
 
-  const optionLabel = (c) => {
+  const optionLabel = (c, short = false) => {
     if (!multiVariant.has(c.group)) return '';
     if (c.group === 'Desert') {
-      const coast = (c.variant || '').split(' · ')[0];
-      return coast === 'None' ? 'No Coast' : coast;     // Lush / Dry / No Coast
+      const coast = (c.variant || '').split(' · ')[0];  // Lush / Dry / None
+      if (coast === 'None') return short ? 'NoCst' : 'No Coast';
+      return coast;                                       // Lush / Dry
     }
-    return c.variant || '';                              // Large Seas / Jungle / …
+    if (c.group === 'Arid Plateau') {
+      if (/large/i.test(c.variant)) return short ? 'Lg Seas' : 'Large Seas';
+      if (/small/i.test(c.variant)) return short ? 'Sm Seas' : 'Small Seas';
+    }
+    return c.variant || '';                               // DOTA: Jungle/Sand/Water/Mountain
   };
 
   return (c, short = false) => {
@@ -131,16 +150,16 @@ function buildLabeler(pool) {
     const size = c.size === 'tiny' ? 'Tiny' : 'Duel';
     const tbl  = short ? SCRIPT_SHORT : SCRIPT_FULL;
     const script = tbl[c.group] || c.group;
-    const opt = optionLabel(c);
+    const opt = optionLabel(c, short);                    // trait, before the script
     const ps  = (c.sym && c.group !== 'DOTA') ? 'PS' : '';
-    return [asp, size, script, opt, ps].filter(Boolean).join(' ');
+    return [asp, size, opt, script, ps].filter(Boolean).join(' ');
   };
 }
 
 // usage:
 // const label = buildLabeler(pool);
-// label(cfg)        -> full     "Square Duel Coastal Rain Basin PS"
-// label(cfg, true)  -> compressed "Sq Duel CRB PS"
+// label(cfg)        -> full       "Square Tiny No Coast Desert PS"
+// label(cfg, true)  -> compressed "Sq Tiny NoCst Desert PS"
 ```
 
 Notes:
@@ -159,17 +178,17 @@ Notes:
 |---|---|---|
 | `archipelago-land-lg-water-sm-smallest-square-sym` | Square Duel Archipelago PS | Sq Duel Arch PS |
 | `archipelago-land-lg-water-sm-smallest-wide-nosym` | Wide Duel Archipelago | Wide Duel Arch |
-| `arid-plateau-large-seas-smallest-square-sym` | Square Duel Arid Plateau Large Seas PS | Sq Duel AridP Large Seas PS |
-| `arid-plateau-small-seas-smallest-square-sym` | Square Duel Arid Plateau Small Seas PS | Sq Duel AridP Small Seas PS |
+| `arid-plateau-large-seas-smallest-square-sym` | Square Duel Large Seas Arid Plateau PS | Sq Duel Lg Seas AridP PS |
+| `arid-plateau-small-seas-smallest-square-sym` | Square Duel Small Seas Arid Plateau PS | Sq Duel Sm Seas AridP PS |
 | `coastal-rain-basin-smallest-wide-nosym` | Wide Duel Coastal Rain Basin | Wide Duel CRB |
 | `coastal-rain-basin-smallest-square-sym` | Square Duel Coastal Rain Basin PS | Sq Duel CRB PS |
 | `continent-smallest-wide-sym` | Wide Duel Continent PS | Wide Duel Cont PS |
-| `desert-lush-std-tiny-square-nosym` | Square Tiny Desert Lush | Sq Tiny Desert Lush |
-| `desert-none-std-tiny-square-sym` | Square Tiny Desert No Coast PS | Sq Tiny Desert No Coast PS |
+| `desert-lush-std-tiny-square-nosym` | Square Tiny Lush Desert | Sq Tiny Lush Desert |
+| `desert-none-std-tiny-square-sym` | Square Tiny No Coast Desert PS | Sq Tiny NoCst Desert PS |
 | `donut-irreg-low-smallest-square-sym` | Square Duel Donut PS | Sq Duel Donut PS |
-| `dota-jungle-smallest-square-sym` | Square Duel DOTA Jungle | Sq Duel DOTA Jungle |
-| `dota-sand-smallest-square-sym` | Square Duel DOTA Sand | Sq Duel DOTA Sand |
-| `dota-water-smallest-square-sym` | Square Duel DOTA Water | Sq Duel DOTA Water |
+| `dota-jungle-smallest-square-sym` | Square Duel Jungle DOTA | Sq Duel Jungle DOTA |
+| `dota-sand-smallest-square-sym` | Square Duel Sand DOTA | Sq Duel Sand DOTA |
+| `dota-water-smallest-square-sym` | Square Duel Water DOTA | Sq Duel Water DOTA |
 | `hardwood-forest-smallest-wide-nosym` | Wide Duel Hardwood Forest | Wide Duel Hardwood |
 | `inland-sea-smallest-square-sym` | Square Duel Inland Sea PS | Sq Duel InlSea PS |
 | `inland-sea-smallest-wide-nosym` | Wide Duel Inland Sea | Wide Duel InlSea |

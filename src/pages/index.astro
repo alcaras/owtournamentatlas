@@ -109,10 +109,12 @@ const sections = Object.keys(groupMap)
 }));
 
 // Readable config labels — two plain-English forms per config:
-//   full  = "[Aspect] [Size] [Map Script] [option] [PS]"  (card title)
-//   short = same, but the script abbreviated + Square→Sq    (sidebar/tag)
-// e.g. full  "Square Duel Coastal Rain Basin PS"
-//      short "Sq Duel CRB PS".
+//   full  = "[Aspect] [Size] [Trait] [Map Script] [PS]"   (card title)
+//   short = same, script abbreviated + Square→Sq + trait trimmed (sidebar/tag)
+// Trait sits adjacent-before the script so it reads as natural English
+// ("Lush Desert", "Jungle DOTA", "Large Seas Arid Plateau").
+// e.g. full  "Square Tiny No Coast Desert PS"
+//      short "Sq Tiny NoCst Desert PS".
 // Only options that VARY across the pool are shown (Archipelago/Donut
 // have a single variant in the pool, so it's omitted as noise). DOTA is
 // point-sym-locked in-game so PS is implied and omitted there; PS is
@@ -140,21 +142,26 @@ const multiVariant = new Set<string>();
   for (const c of pool) (seen[c.group] ??= new Set()).add(c.variant || '');
   for (const g in seen) if (seen[g].size > 1) multiVariant.add(g);
 }
-function optionLabel(c: any): string {
+function optionLabel(c: any, short = false): string {
   if (!multiVariant.has(c.group)) return '';
   if (c.group === 'Desert') {
-    const coast = (c.variant || '').split(' · ')[0];
-    return coast === 'None' ? 'No Coast' : coast;   // Lush / Dry / No Coast
+    const coast = (c.variant || '').split(' · ')[0];   // Lush / Dry / None
+    if (coast === 'None') return short ? 'NoCst' : 'No Coast';
+    return coast;                                       // Lush / Dry
   }
-  return c.variant || '';                            // Large Seas / Jungle / …
+  if (c.group === 'Arid Plateau') {
+    if (/large/i.test(c.variant)) return short ? 'Lg Seas' : 'Large Seas';
+    if (/small/i.test(c.variant)) return short ? 'Sm Seas' : 'Small Seas';
+  }
+  return c.variant || '';                              // DOTA: Jungle/Sand/Water/Mountain
 }
 function cfgLabel(c: any, short = false): string {
   const asp = aspOf(c) === 'Wide' ? 'Wide' : (short ? 'Sq' : 'Square');
-  const size = sizeOf(c);                             // Duel / Tiny
+  const size = sizeOf(c);                              // Duel / Tiny
   const script = (short ? SCRIPT_SHORT : SCRIPT_FULL)[c.group] || c.group;
-  const opt = optionLabel(c);
+  const opt = optionLabel(c, short);
   const ps = (symOf(c) === 'Sym' && c.group !== 'DOTA') ? 'PS' : '';
-  return [asp, size, script, opt, ps].filter(Boolean).join(' ');
+  return [asp, size, opt, script, ps].filter(Boolean).join(' ');
 }
 const labelFull: Record<string, string> = {};
 const labelShort: Record<string, string> = {};
