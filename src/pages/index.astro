@@ -460,6 +460,14 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         </details>
         <div class="cfg__hd">
           <span class="cfg__name">{labelFull[c.slug]}</span>
+          <button class="cfg__link" type="button" data-anchor={anchorOf[c.slug]}
+            title="Copy link to this map" aria-label="Copy link to this map">
+            <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+              <path d="M6.5 9.5l3-3M7 4.5l1-1a2.5 2.5 0 0 1 3.5 3.5l-1 1M9 11.5l-1 1A2.5 2.5 0 0 1 4.5 9l1-1"
+                fill="none" stroke="currentColor" stroke-width="1.4"
+                stroke-linecap="round"/>
+            </svg>
+          </button>
           <span class="cfg__tag" title="compressed label">{labelShort[c.slug]}</span>
           <button class="cfg__copy" type="button" data-copy={labelShort[c.slug]}
             title="Copy short name" aria-label={`Copy "${labelShort[c.slug]}"`}>
@@ -584,7 +592,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       letter-spacing:0.08em; }
     .cfg { position:relative; display:flex; flex-direction:column;
       background:var(--bg-elev); border:1px solid var(--border);
-      border-radius:6px; padding:0.8rem 1rem; }
+      border-radius:6px; padding:0.8rem 1rem; scroll-margin-top:1rem; }
     .cfg__hd { order:0; display:flex; align-items:baseline; gap:0.8rem;
       flex-wrap:wrap; padding-right:10.5rem; }
     .pills { order:1; }
@@ -599,21 +607,23 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       background:#15160f; border:1px solid var(--gold-deep);
       border-radius:5px; padding:0.08rem 0.42rem; white-space:nowrap;
       align-self:center; }
-    .cfg__copy { position:relative; display:inline-flex; align-items:center;
-      justify-content:center; align-self:center; cursor:pointer;
-      color:var(--gold-soft); background:#15160f;
+    .cfg__copy, .cfg__link { position:relative; display:inline-flex;
+      align-items:center; justify-content:center; align-self:center;
+      cursor:pointer; color:var(--gold-soft); background:#15160f;
       border:1px solid var(--gold-deep); border-radius:5px;
-      padding:0.12rem 0.28rem; line-height:0; transition:color .12s,
-      border-color .12s; }
-    .cfg__copy:hover { color:var(--gold); border-color:var(--gold-soft);
-      background:#2e2810; }
-    .cfg__copy.ok { color:#7bd88f; border-color:#3f7a4d; }
-    .cfg__copy.ok::after { content:'Copied!'; position:absolute;
+      padding:0.12rem 0.28rem; line-height:0;
+      transition:color .12s, border-color .12s; }
+    .cfg__copy:hover, .cfg__link:hover { color:var(--gold);
+      border-color:var(--gold-soft); background:#2e2810; }
+    .cfg__copy.ok, .cfg__link.ok { color:#7bd88f; border-color:#3f7a4d; }
+    .cfg__copy.ok::after, .cfg__link.ok::after { position:absolute;
       left:50%; bottom:calc(100% + 5px); transform:translateX(-50%);
       font-family:var(--font-ui); font-weight:600; font-size:0.66rem;
       color:#7bd88f; background:#0e0f12; border:1px solid #3f7a4d;
       border-radius:4px; padding:0.1rem 0.35rem; white-space:nowrap;
       pointer-events:none; }
+    .cfg__copy.ok::after { content:'Copied!'; }
+    .cfg__link.ok::after { content:'Link copied!'; }
     .cfg__chips { display:inline-flex; gap:0.35rem; flex-wrap:wrap; }
     .ch { font-family:var(--font-display); font-weight:700;
       font-size:0.84rem; color:var(--gold);
@@ -865,7 +875,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
   </style>
 
   <script is:inline>
-    /* copy-short-name buttons */
+    /* copy-name / copy-link buttons */
     (function(){
       function copyText(t){
         if(navigator.clipboard && navigator.clipboard.writeText)
@@ -877,16 +887,39 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         document.body.removeChild(ta);
         return Promise.resolve();
       }
+      function flash(b){
+        b.classList.add('ok'); clearTimeout(b._t);
+        b._t=setTimeout(function(){ b.classList.remove('ok'); },1200);
+      }
       document.querySelectorAll('.cfg__copy').forEach(function(b){
         b.addEventListener('click',function(e){
           e.preventDefault();
-          copyText(b.getAttribute('data-copy')||'').then(function(){
-            b.classList.add('ok');
-            clearTimeout(b._t);
-            b._t=setTimeout(function(){ b.classList.remove('ok'); },1200);
+          copyText(b.getAttribute('data-copy')||'').then(function(){ flash(b); });
+        });
+      });
+      document.querySelectorAll('.cfg__link').forEach(function(b){
+        b.addEventListener('click',function(e){
+          e.preventDefault();
+          var a=b.getAttribute('data-anchor')||'';
+          var url=location.origin+location.pathname+'#'+a;
+          copyText(url).then(function(){
+            flash(b);
+            if(history.replaceState) history.replaceState(null,'','#'+a);
           });
         });
       });
+    })();
+    /* re-scroll to the hashed config after images settle (gallery images
+       are lazy → loading them shifts layout, which would otherwise leave
+       the title above the viewport). */
+    (function(){
+      function go(){
+        if(!location.hash) return;
+        var el=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if(el) el.scrollIntoView({block:'start'});
+      }
+      window.addEventListener('load',function(){ setTimeout(go,0); });
+      window.addEventListener('hashchange',go);
     })();
     (function(){
       var links=[].slice.call(document.querySelectorAll('.snav__l'));
