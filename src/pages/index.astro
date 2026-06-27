@@ -461,6 +461,15 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         <div class="cfg__hd">
           <span class="cfg__name">{labelFull[c.slug]}</span>
           <span class="cfg__tag" title="compressed label">{labelShort[c.slug]}</span>
+          <button class="cfg__copy" type="button" data-copy={labelShort[c.slug]}
+            title="Copy short name" aria-label={`Copy "${labelShort[c.slug]}"`}>
+            <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+              <rect x="5" y="5" width="9" height="9" rx="1.5" fill="none"
+                stroke="currentColor" stroke-width="1.4"/>
+              <path d="M3 11V3a1 1 0 0 1 1-1h7" fill="none"
+                stroke="currentColor" stroke-width="1.4"/>
+            </svg>
+          </button>
         </div>
         <div class="pills">
           <div class="pill">
@@ -590,6 +599,21 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       background:#15160f; border:1px solid var(--gold-deep);
       border-radius:5px; padding:0.08rem 0.42rem; white-space:nowrap;
       align-self:center; }
+    .cfg__copy { position:relative; display:inline-flex; align-items:center;
+      justify-content:center; align-self:center; cursor:pointer;
+      color:var(--gold-soft); background:#15160f;
+      border:1px solid var(--gold-deep); border-radius:5px;
+      padding:0.12rem 0.28rem; line-height:0; transition:color .12s,
+      border-color .12s; }
+    .cfg__copy:hover { color:var(--gold); border-color:var(--gold-soft);
+      background:#2e2810; }
+    .cfg__copy.ok { color:#7bd88f; border-color:#3f7a4d; }
+    .cfg__copy.ok::after { content:'Copied!'; position:absolute;
+      left:50%; bottom:calc(100% + 5px); transform:translateX(-50%);
+      font-family:var(--font-ui); font-weight:600; font-size:0.66rem;
+      color:#7bd88f; background:#0e0f12; border:1px solid #3f7a4d;
+      border-radius:4px; padding:0.1rem 0.35rem; white-space:nowrap;
+      pointer-events:none; }
     .cfg__chips { display:inline-flex; gap:0.35rem; flex-wrap:wrap; }
     .ch { font-family:var(--font-display); font-weight:700;
       font-size:0.84rem; color:var(--gold);
@@ -841,6 +865,29 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
   </style>
 
   <script is:inline>
+    /* copy-short-name buttons */
+    (function(){
+      function copyText(t){
+        if(navigator.clipboard && navigator.clipboard.writeText)
+          return navigator.clipboard.writeText(t);
+        var ta=document.createElement('textarea');
+        ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+      document.querySelectorAll('.cfg__copy').forEach(function(b){
+        b.addEventListener('click',function(e){
+          e.preventDefault();
+          copyText(b.getAttribute('data-copy')||'').then(function(){
+            b.classList.add('ok');
+            clearTimeout(b._t);
+            b._t=setTimeout(function(){ b.classList.remove('ok'); },1200);
+          });
+        });
+      });
+    })();
     (function(){
       var links=[].slice.call(document.querySelectorAll('.snav__l'));
       var secs=links.map(function(l){
