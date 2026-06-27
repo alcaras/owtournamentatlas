@@ -109,12 +109,14 @@ const sections = Object.keys(groupMap)
 }));
 
 // Mnemonic config code — a short, decodable handle per config:
-//   FAM[variant] · [size][aspect][sym]
-// e.g. CRB·DWN = Coastal Rain Basin, Duel, Wide, No-sym;
-//      DOTAj·DQS = DOTA Jungle, Duel, sQuare, Sym.
-// Flags: size D=Duel T=Tiny · aspect Q=square W=wide · sym S=point-sym
-// N=none. Lowercase letter = variant (l/s seas, l/d/n coast, j/s/w/m
-// DOTA terrain). Legend rendered on the page under the lede.
+//   FAM[variant]-[size][aspect][-PS]
+// e.g. CON-DW-PS = Continent, Duel, Wide, Point-Sym;
+//      CRB-DW = Coastal Rain Basin, Duel, Wide (no point-sym);
+//      DOTAj-DQ-PS = DOTA Jungle, Duel, sQuare, Point-Sym.
+// Flags: size D=Duel T=Tiny · aspect Q=square W=wide · point-sym shown
+// as a -PS suffix (omitted when off; mirror is always on). Lowercase
+// letter = variant (l/s seas, l/d/n coast, j/s/w/m DOTA terrain).
+// Legend rendered on the page under the lede.
 const FAM: Record<string, string> = {
   'Archipelago': 'ARC', 'Arid Plateau': 'ARD', 'Coastal Rain Basin': 'CRB',
   'Continent': 'CON', 'Desert': 'DES', 'Donut': 'DNT', 'DOTA': 'DOTA',
@@ -141,10 +143,10 @@ function variantLetter(c: any): string {
 }
 function cfgCode(c: any): string {
   const fam = FAM[c.group] || c.group.slice(0, 3).toUpperCase();
-  const flags = (sizeOf(c) === 'Tiny' ? 'T' : 'D')
-    + (aspOf(c) === 'Wide' ? 'W' : 'Q')
-    + (symOf(c) === 'Sym' ? 'S' : 'N');
-  return `${fam}${variantLetter(c)}·${flags}`;
+  const sa = (sizeOf(c) === 'Tiny' ? 'T' : 'D')
+    + (aspOf(c) === 'Wide' ? 'W' : 'Q');
+  const ps = symOf(c) === 'Sym' ? '-PS' : '';
+  return `${fam}${variantLetter(c)}-${sa}${ps}`;
 }
 const codeOf: Record<string, string> = {};
 for (const sec of sections)
@@ -386,8 +388,8 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
   </p>
 
   <details class="codekey">
-    <summary>ℹ︎ Map code key — e.g. <code>CRB·DWN</code> = Coastal Rain
-      Basin, Duel, Wide, No-sym</summary>
+    <summary>ℹ︎ Map code key — e.g. <code>CON-DW-PS</code> = Continent,
+      Duel, Wide, Point-Sym</summary>
     <div class="codekey__body">
       <div class="codekey__row">
         {FAM_LEGEND.map(([ab, full]) => (
@@ -395,15 +397,15 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         ))}
       </div>
       <div class="codekey__flags">
-        After the <code>·</code> — <b>size</b> <code>D</code> Duel /
-        <code>T</code> Tiny · <b>aspect</b> <code>Q</code> square /
-        <code>W</code> wide · <b>sym</b> <code>S</code> point-sym /
-        <code>N</code> none. A <b>lowercase letter</b> on the family code
-        is the variant — Arid <code>l</code>/<code>s</code> (Large/Small
-        Seas), Desert <code>l</code>/<code>d</code>/<code>n</code> (Lush/
-        Dry/No coast), DOTA <code>j</code>/<code>s</code>/<code>w</code>/
-        <code>m</code> (Jungle/Sand/Water/Mountain). DOTA is always
-        Duel/square/point-sym.
+        After the <code>-</code> — <b>size</b> <code>D</code> Duel /
+        <code>T</code> Tiny, <b>aspect</b> <code>Q</code> square /
+        <code>W</code> wide. A <code>-PS</code> suffix means
+        <b>point symmetry</b> is on (omitted when off; mirror is always
+        on). A <b>lowercase letter</b> on the family code is the
+        variant — Arid <code>l</code>/<code>s</code> (Large/Small Seas),
+        Desert <code>l</code>/<code>d</code>/<code>n</code> (Lush/Dry/No
+        coast), DOTA <code>j</code>/<code>s</code>/<code>w</code>/<code>m</code>
+        (Jungle/Sand/Water/Mountain). DOTA is always Duel/square/point-sym.
       </div>
     </div>
   </details>
