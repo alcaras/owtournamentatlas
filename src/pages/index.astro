@@ -108,50 +108,61 @@ const sections = Object.keys(groupMap)
     navName(a).localeCompare(navName(b))),
 }));
 
-// Mnemonic config code — a short, decodable handle per config:
-//   FAM[variant]-[size][aspect][-PS]
-// e.g. CON-DW-PS = Continent, Duel, Wide, Point-Sym;
-//      CRB-DW = Coastal Rain Basin, Duel, Wide (no point-sym);
-//      DOTAj-DQ-PS = DOTA Jungle, Duel, sQuare, Point-Sym.
-// Flags: size D=Duel T=Tiny · aspect Q=square W=wide · point-sym shown
-// as a -PS suffix (omitted when off; mirror is always on). Lowercase
-// letter = variant (l/s seas, l/d/n coast, j/s/w/m DOTA terrain).
-// Legend rendered on the page under the lede.
-const FAM: Record<string, string> = {
-  'Archipelago': 'ARC', 'Arid Plateau': 'ARD', 'Coastal Rain Basin': 'CRB',
-  'Continent': 'CON', 'Desert': 'DES', 'Donut': 'DNT', 'DOTA': 'DOTA',
-  'Hardwood Forest': 'HWF', 'Highlands': 'HLD', 'Inland Sea': 'INS',
-  'Mountain Pass': 'MTP', 'Wetlands': 'WET',
+// Readable config labels — two plain-English forms per config:
+//   full  = "[Aspect] [Size] [Map Script] [option] [PS]"  (card title)
+//   short = same, but the script abbreviated + Square→Sq    (sidebar/tag)
+// e.g. full  "Square Duel Coastal Rain Basin PS"
+//      short "Sq Duel CRB PS".
+// Only options that VARY across the pool are shown (Archipelago/Donut
+// have a single variant in the pool, so it's omitted as noise). DOTA is
+// point-sym-locked in-game so PS is implied and omitted there; PS is
+// shown for every other point-symmetric config. Mirror is always on, so
+// it is never shown.
+const SCRIPT_FULL: Record<string, string> = {
+  'Archipelago': 'Archipelago', 'Arid Plateau': 'Arid Plateau',
+  'Coastal Rain Basin': 'Coastal Rain Basin', 'Continent': 'Continent',
+  'Desert': 'Desert', 'Donut': 'Donut', 'DOTA': 'DOTA',
+  'Hardwood Forest': 'Hardwood Forest', 'Highlands': 'Highlands',
+  'Inland Sea': 'Inland Sea', 'Mountain Pass': 'Mountain Pass',
+  'Wetlands': 'Wetlands',
 };
-const FAM_LEGEND = [
-  ['ARC', 'Archipelago'], ['ARD', 'Arid Plateau'], ['CRB', 'Coastal Rain Basin'],
-  ['CON', 'Continent'], ['DES', 'Desert'], ['DNT', 'Donut'],
-  ['DOTA', 'Duel of the Ancients'], ['HWF', 'Hardwood Forest'],
-  ['INS', 'Inland Sea'], ['MTP', 'Mountain Pass'], ['WET', 'Wetlands'],
-];
-function variantLetter(c: any): string {
-  const v = c.variant || '';
-  if (c.group === 'DOTA') return v ? v[0].toLowerCase() : '';
-  if (c.group === 'Arid Plateau')
-    return /large/i.test(v) ? 'l' : /small/i.test(v) ? 's' : '';
+const SCRIPT_SHORT: Record<string, string> = {
+  'Archipelago': 'Arch', 'Arid Plateau': 'AridP',
+  'Coastal Rain Basin': 'CRB', 'Continent': 'Cont', 'Desert': 'Desert',
+  'Donut': 'Donut', 'DOTA': 'DOTA', 'Hardwood Forest': 'Hardwood',
+  'Highlands': 'Highlands', 'Inland Sea': 'InlSea',
+  'Mountain Pass': 'MtnPass', 'Wetlands': 'Wetlands',
+};
+// which script groups have >1 variant in the pool (so the option matters)
+const multiVariant = new Set<string>();
+{
+  const seen: Record<string, Set<string>> = {};
+  for (const c of pool) (seen[c.group] ??= new Set()).add(c.variant || '');
+  for (const g in seen) if (seen[g].size > 1) multiVariant.add(g);
+}
+function optionLabel(c: any): string {
+  if (!multiVariant.has(c.group)) return '';
   if (c.group === 'Desert') {
-    const coast = v.split(' · ')[0];
-    return /lush/i.test(coast) ? 'l' : /dry/i.test(coast) ? 'd'
-      : /none/i.test(coast) ? 'n' : '';
+    const coast = (c.variant || '').split(' · ')[0];
+    return coast === 'None' ? 'No Coast' : coast;   // Lush / Dry / No Coast
   }
-  return '';
+  return c.variant || '';                            // Large Seas / Jungle / …
 }
-function cfgCode(c: any): string {
-  const fam = FAM[c.group] || c.group.slice(0, 3).toUpperCase();
-  const sa = (sizeOf(c) === 'Tiny' ? 'T' : 'D')
-    + (aspOf(c) === 'Wide' ? 'W' : 'Q');
-  const ps = symOf(c) === 'Sym' ? '-PS' : '';
-  return `${fam}${variantLetter(c)}-${sa}${ps}`;
+function cfgLabel(c: any, short = false): string {
+  const asp = aspOf(c) === 'Wide' ? 'Wide' : (short ? 'Sq' : 'Square');
+  const size = sizeOf(c);                             // Duel / Tiny
+  const script = (short ? SCRIPT_SHORT : SCRIPT_FULL)[c.group] || c.group;
+  const opt = optionLabel(c);
+  const ps = (symOf(c) === 'Sym' && c.group !== 'DOTA') ? 'PS' : '';
+  return [asp, size, script, opt, ps].filter(Boolean).join(' ');
 }
-const codeOf: Record<string, string> = {};
+const labelFull: Record<string, string> = {};
+const labelShort: Record<string, string> = {};
 for (const sec of sections)
-  for (const c of sec.cfgs)
-    codeOf[c.slug] = cfgCode(c);
+  for (const c of sec.cfgs) {
+    labelFull[c.slug] = cfgLabel(c, false);
+    labelShort[c.slug] = cfgLabel(c, true);
+  }
 
 // ---- Distribution charts ---------------------------------------------
 // Per-seed values for the pool, straight from gens.json (the per-map
@@ -387,28 +398,6 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     generated samples. Hover or click any preview to inspect.
   </p>
 
-  <details class="codekey">
-    <summary>ℹ︎ Map code key — e.g. <code>CON-DW-PS</code> = Continent,
-      Duel, Wide, Point-Sym</summary>
-    <div class="codekey__body">
-      <div class="codekey__row">
-        {FAM_LEGEND.map(([ab, full]) => (
-          <span class="codekey__fam"><code>{ab}</code> {full}</span>
-        ))}
-      </div>
-      <div class="codekey__flags">
-        After the <code>-</code> — <b>size</b> <code>D</code> Duel /
-        <code>T</code> Tiny, <b>aspect</b> <code>Q</code> square /
-        <code>W</code> wide. A <code>-PS</code> suffix means
-        <b>point symmetry</b> is on (omitted when off; mirror is always
-        on). A <b>lowercase letter</b> on the family code is the
-        variant — Arid <code>l</code>/<code>s</code> (Large/Small Seas),
-        Desert <code>l</code>/<code>d</code>/<code>n</code> (Lush/Dry/No
-        coast), DOTA <code>j</code>/<code>s</code>/<code>w</code>/<code>m</code>
-        (Jungle/Sand/Water/Mountain). DOTA is always Duel/square/point-sym.
-      </div>
-    </div>
-  </details>
 
   <nav class="snav" id="snav">
     <div class="rand">
@@ -421,7 +410,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         <div class="snav__t">{sec.title}</div>
         {sec.cfgs.map((c: any) => (
           <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
-             title={c.label}><span class="snav__code">{codeOf[c.slug]}</span>{navLabel(c, sec.cfgs)}</a>
+             title={labelFull[c.slug]}>{labelShort[c.slug]}</a>
         ))}
       </div>
     ))}
@@ -456,11 +445,8 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
           </div>
         </details>
         <div class="cfg__hd">
-          <span class="cfg__code" title={c.label}>{codeOf[c.slug]}</span>
-          <span class="cfg__name">{navName(c)}</span>
-          <span class="cfg__chips">
-            {c.setting.split(' · ').map((p: string) => (<span class="ch">{p}</span>))}
-          </span>
+          <span class="cfg__name">{labelFull[c.slug]}</span>
+          <span class="cfg__tag" title="compressed label">{labelShort[c.slug]}</span>
         </div>
         <div class="pills">
           <div class="pill">
@@ -561,22 +547,6 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
       max-width:80ch; margin:0.6rem 0 1.4rem; }
-    .codekey { max-width:80ch; margin:-0.7rem 0 1.4rem;
-      background:#14150f; border:1px solid var(--gold-deep);
-      border-radius:8px; }
-    .codekey > summary { cursor:pointer; list-style:none;
-      padding:0.5rem 0.8rem; font-size:0.86rem; color:var(--text-soft); }
-    .codekey > summary::-webkit-details-marker { display:none; }
-    .codekey > summary:hover { color:var(--gold); }
-    .codekey code { font-family:var(--font-mono, monospace);
-      font-weight:700; color:var(--gold); font-size:0.92em; }
-    .codekey__body { padding:0 0.8rem 0.7rem; font-size:0.82rem;
-      line-height:1.6; color:var(--text-soft); }
-    .codekey__row { display:flex; flex-wrap:wrap; gap:0.3rem 1rem;
-      padding:0.3rem 0 0.55rem; border-top:1px solid #2a2713;
-      margin-top:0.2rem; }
-    .codekey__fam { white-space:nowrap; }
-    .codekey__flags { border-top:1px solid #2a2713; padding-top:0.55rem; }
     .pool { display:flex; flex-direction:column; gap:2rem; }
     .tier { display:flex; flex-direction:column; gap:0.8rem; }
     .tier__h { display:flex; align-items:baseline; gap:0.7rem;
@@ -601,12 +571,11 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .gal { order:4; }
     .cfg__name { font-family:var(--font-display); font-weight:700;
       font-size:1.18rem; color:var(--text); }
-    .cfg__code { font-family:var(--font-mono, monospace); font-weight:700;
-      font-size:0.92rem; letter-spacing:0.04em; color:var(--gold);
-      background:linear-gradient(#231f0d,#1a1709);
-      border:1px solid var(--gold-deep); border-radius:6px;
-      padding:0.12rem 0.5rem; box-shadow:0 1px 2px #0008;
-      white-space:nowrap; align-self:center; }
+    .cfg__tag { font-family:var(--font-mono, monospace); font-weight:600;
+      font-size:0.72rem; letter-spacing:0.02em; color:var(--gold-soft);
+      background:#15160f; border:1px solid var(--gold-deep);
+      border-radius:5px; padding:0.08rem 0.42rem; white-space:nowrap;
+      align-self:center; }
     .cfg__chips { display:inline-flex; gap:0.35rem; flex-wrap:wrap; }
     .ch { font-family:var(--font-display); font-weight:700;
       font-size:0.84rem; color:var(--gold);
@@ -630,10 +599,6 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       text-decoration:none; }
     .snav__l.on { color:var(--gold); font-weight:700;
       border-left-color:var(--gold); background:var(--bg-elev); }
-    .snav__code { display:inline-block; min-width:5.6em;
-      font-family:var(--font-mono, monospace); font-weight:700;
-      font-size:0.68rem; color:var(--gold-soft); margin-right:0.45rem; }
-    .snav__l.on .snav__code { color:var(--gold); }
     .pills { display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:0.7rem; }
     .pill { flex:1 1 240px; background:#16181d;
       border:1px solid var(--gold-deep); border-radius:8px;
