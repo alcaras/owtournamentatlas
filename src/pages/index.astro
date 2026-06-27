@@ -165,10 +165,17 @@ function cfgLabel(c: any, short = false): string {
 }
 const labelFull: Record<string, string> = {};
 const labelShort: Record<string, string> = {};
+// URL anchor = the compressed label, slugified — e.g. "Sq Duel Sand DOTA"
+// → #cfg-sq-duel-sand-dota (readable hash; the config `slug` stays the
+// data key). Compressed labels are unique, so the anchors are too.
+const anchorOf: Record<string, string> = {};
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 for (const sec of sections)
   for (const c of sec.cfgs) {
     labelFull[c.slug] = cfgLabel(c, false);
     labelShort[c.slug] = cfgLabel(c, true);
+    anchorOf[c.slug] = slugify(labelShort[c.slug]);
   }
 
 // ---- Distribution charts ---------------------------------------------
@@ -416,7 +423,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       <div class="snav__sec">
         <div class="snav__t">{sec.title}</div>
         {sec.cfgs.map((c: any) => (
-          <a class="snav__l" data-slug={c.slug} href={`#cfg-${c.slug}`}
+          <a class="snav__l" data-anchor={anchorOf[c.slug]} href={`#${anchorOf[c.slug]}`}
              title={labelFull[c.slug]}>{labelShort[c.slug]}</a>
         ))}
       </div>
@@ -431,7 +438,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
           <span class="tier__n">{sec.cfgs.length === 1 ? '1 map' : `${sec.cfgs.length} maps`}</span>
         </div>
         {sec.cfgs.map((c: any) => (
-      <div class="cfg" id={`cfg-${c.slug}`}>
+      <div class="cfg" id={anchorOf[c.slug]}>
         <details class="setup">
           <summary><span class="setup__btn">⚙ SETUP GUIDE</span></summary>
           <div class="ow">
@@ -837,7 +844,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     (function(){
       var links=[].slice.call(document.querySelectorAll('.snav__l'));
       var secs=links.map(function(l){
-        return document.getElementById('cfg-'+l.getAttribute('data-slug')); });
+        return document.getElementById(l.getAttribute('data-anchor')); });
       function spy(){
         var best=0, bt=-1e9;
         secs.forEach(function(s,i){
