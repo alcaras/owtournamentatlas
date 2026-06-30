@@ -66,6 +66,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         <tr><td>Playable tiles</td><td>{g.tiles ?? '—'}</td></tr>
         <tr><td>Land tiles</td><td>{g.landTiles ?? '—'}</td></tr>
         <tr id="reachrow" style="cursor:crosshair"><td>Cap-reachable land <span class="rh">(hover)</span></td><td><b id="s_reach">—</b></td></tr>
+        <tr id="chokerow" style="cursor:crosshair"><td>Mid-land choke <span class="rh">(hover → seam + cut)</span></td><td><b>{g.choke ?? '—'}</b></td></tr>
         <tr><td>Freshwater tiles</td><td id="s_fw">—</td></tr>
         <tr><td>River tiles</td><td id="s_riv">—</td></tr>
         <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
@@ -197,7 +198,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           tip=document.getElementById('tip'), ctx=cv.getContext('2d'),
           S=11, HW=Math.sqrt(3)*S, VS=1.5*S, PAD=4, D=null, baseImg=null,
           icons={}, activeRes=null, pinRes=null, yieldHi=null, csHi=false, unHi=false,
-          capHi=false, k=1, tx=0, ty=0;
+          capHi=false, chokeHi=false, k=1, tx=0, ty=0;
       // OW origin is bottom-left (y grows north). Flip data-row → screen-Y
       // so row 0 paints at the bottom. Horizontal stagger stays keyed to the
       // true data-y parity so the odd-r tiling (and rivers/caps via cen) stay
@@ -338,6 +339,20 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           for(var i=0;i<D.cs.length;i++){ if(!D.cs[i]||D.bnd[i])continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
+        if(chokeHi){
+          // collision seam (where the two cap-floods meet) in amber, then
+          // the actual narrowest land cut on top in red — that's the choke.
+          var seam=D.frontHexes||[], cut=D.chokeCut||[];
+          ctx.fillStyle='rgba(240,190,60,0.30)';
+          ctx.strokeStyle='#f0be3c'; ctx.lineWidth=Math.max(1,S/5);
+          seam.forEach(function(p){ var ce=cen(p[0],p[1]);
+            hexp(ce[0],ce[1],S*0.92); ctx.fill(); ctx.stroke(); });
+          ctx.strokeStyle='#ff3b30'; ctx.lineWidth=Math.max(2,S/3);
+          ctx.shadowColor='#ff3b30'; ctx.shadowBlur=S;
+          cut.forEach(function(p){ var ce=cen(p[0],p[1]);
+            hexp(ce[0],ce[1],S*0.95); ctx.stroke(); });
+          ctx.shadowBlur=0;
+        }
         if(capHi){
           var lp=(D.capPath&&D.capPath.length>1)?D.capPath:null,
               wp=(D.capPathW&&D.capPathW.length>1)?D.capPathW:null,
@@ -444,6 +459,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         rr.addEventListener('mouseenter',function(){ if(D){unHi=true;overlay(-1);} });
         rr.addEventListener('mouseleave',function(){ unHi=false; if(D)overlay(-1); });
       })(document.getElementById('reachrow'));
+      (function(cr){ if(!cr)return;
+        cr.addEventListener('mouseenter',function(){ if(D){chokeHi=true;overlay(-1);} });
+        cr.addEventListener('mouseleave',function(){ chokeHi=false; if(D)overlay(-1); });
+      })(document.getElementById('chokerow'));
       // zoom
       wrap.addEventListener('wheel',function(e){ if(!D)return; e.preventDefault();
         var r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top,
