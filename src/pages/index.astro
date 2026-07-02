@@ -275,9 +275,14 @@ const SCRIPT_OPTS: Record<string, [string, string][]> = {
   'Arid Plateau|Small Seas': [['Arid Water Size', 'Small']],
   'Arid Plateau|Large Seas': [['Arid Water Size', 'Large']],
   'Coastal Rain Basin|': [],
-  'DOTA|Jungle': [['Separating Terrain', 'Jungle']],
-  'DOTA|Sand': [['Separating Terrain', 'Sand']],
-  'DOTA|Water': [['Separating Terrain', 'Water']],
+  // DOTA (2026-07-01 patch): the single "Separating Terrain" was split
+  // into inner (still labelled "Separating Terrain" in-game) + "Outer
+  // Terrain", plus a new "Path Width" (default Wide). Pool pins
+  // inner==outer to the variant + a Narrow path — see configs._dota.
+  'DOTA|Jungle': [['Separating Terrain', 'Jungle'], ['Outer Terrain', 'Jungle'], ['Path Width', 'Narrow']],
+  'DOTA|Mountain': [['Separating Terrain', 'Mountains'], ['Outer Terrain', 'Mountains'], ['Path Width', 'Narrow']],
+  'DOTA|Water': [['Separating Terrain', 'Water'], ['Outer Terrain', 'Water'], ['Path Width', 'Narrow']],
+  'DOTA|Sand': [['Separating Terrain', 'Sand'], ['Outer Terrain', 'Sand'], ['Path Width', 'Narrow']],
   'Inland Sea|': [],
   'Continent|': [['Continent Terrain', 'None']],
   'Hardwood Forest|': [],
