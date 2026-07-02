@@ -284,7 +284,9 @@ const SCRIPT_OPTS: Record<string, [string, string][]> = {
   'DOTA|Water': [['Separating Terrain', 'Water'], ['Outer Terrain', 'Water'], ['Path Width', 'Narrow']],
   'DOTA|Sand': [['Separating Terrain', 'Sand'], ['Outer Terrain', 'Sand'], ['Path Width', 'Narrow']],
   'Inland Sea|': [],
-  'Continent|': [['Continent Terrain', 'None']],
+  // In-game the dropdown is labelled "Extreme Terrain" (None/Either/
+  // Tundra/Desert), NOT "Continent Terrain" — match what the player sees.
+  'Continent|': [['Extreme Terrain', 'None']],
   'Hardwood Forest|': [],
   'Archipelago|Land Lg · Water Sm': [
     ['Archipelago Landmass', 'Large'],
