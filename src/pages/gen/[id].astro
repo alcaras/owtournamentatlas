@@ -225,6 +225,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         var W=D.w,H=D.h,Lt=D.L.terr,Lh=D.L.hgt,Lv=D.L.veg;
         ctx.fillStyle='#0b0c0f'; ctx.fillRect(0,0,cv.width,cv.height);
         function isW(j){ return (Lt[D.terr[j]]||'').toUpperCase()==='WATER'; }
+        function resIcon(i,ce){ if(D.res[i]<0)return;
+          var im=icons[slug(D.L.res[D.res[i]])];
+          if(im&&im.complete&&im.naturalWidth){ var iz=S*1.5;
+            ctx.drawImage(im,ce[0]-iz/2,ce[1]-iz/2,iz,iz); } }
         function coastal(x,y){ for(var q=0;q<6;q++){
           var nx=x+(y%2===0?DXe:DXo)[q],ny=y+DY[q];
           if(nx<0||ny<0||nx>=W||ny>=H)continue;
@@ -242,7 +246,10 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           var ce=cen(x,y);
           ctx.fillStyle='rgb('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+')';
           hexp(ce[0],ce[1],S); ctx.fill();
-          if(D.bnd[i]||water) continue;
+          if(D.bnd[i]) continue;
+          // water tiles skip land decoration but still carry resources
+          // (Nets: Fish/Pearl/Crab) — draw the icon before bailing
+          if(water){ resIcon(i,ce); continue; }
           // HILL channel: tile-wide shaded relief (independent of veg)
           if(h.indexOf('HILL')>=0){
             ctx.save(); hexp(ce[0],ce[1],S); ctx.clip();
@@ -284,9 +291,7 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
               ctx.beginPath(); ctx.moveTo(rx,ce[1]+S*0.36);
               ctx.lineTo(rx,ce[1]-S*0.18); ctx.stroke(); }
             ctx.lineCap='butt'; }
-          if(D.res[i]>=0){ var im=icons[slug(D.L.res[D.res[i]])];
-            if(im&&im.complete&&im.naturalWidth){ var iz=S*1.5;
-              ctx.drawImage(im,ce[0]-iz/2,ce[1]-iz/2,iz,iz); } }
+          resIcon(i,ce);
           if(D.cs[i]){ ctx.fillStyle='#ff2daa';
             ctx.beginPath(); ctx.arc(ce[0],ce[1],S*0.34,0,7); ctx.fill(); }
         }
