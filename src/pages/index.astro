@@ -641,6 +641,12 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       top:104px; width:180px; display:flex; flex-direction:column;
       gap:0.1rem; max-height:calc(100vh - 130px); overflow:auto; z-index:20; }
     @media (max-width:1360px){ .snav{ left:8px; } }
+    /* mid-range (15" laptops): the pinned nav has no gutter — push the
+       whole centered column right so the nav never overlaps content.
+       200px = 8 left + 180 nav + 12 gap; equals the auto-centre margin
+       at exactly 1580px, so the handoff is seamless. */
+    @media (max-width:1580px) and (min-width:1041px){
+      :global(.wrap){ margin-left:200px; } }
     @media (max-width:1040px){ .snav{ position:static; width:auto;
       flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
     .snav__sec { margin-bottom:0.7rem; }

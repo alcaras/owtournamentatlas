@@ -356,6 +356,10 @@ const abbr = (c: Cfg) => {
       gap:0.12rem; font-size:0.78rem; max-height:calc(100vh - 100px);
       overflow:auto; z-index:20; }
     @media (max-width:1340px){ .snav{ left:8px; } }
+    /* mid-range (15" laptops): reserve a gutter for the pinned nav
+       (8 + 168 + 12 = 188px; matches auto-centre margin at 1556px). */
+    @media (max-width:1556px) and (min-width:991px){
+      :global(.wrap){ margin-left:188px; } }
     @media (max-width:990px){ .snav{ position:static; width:auto;
       flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
     .snav__cv { background:#231f0d; color:var(--gold); cursor:pointer;

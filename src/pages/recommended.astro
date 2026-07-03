@@ -221,6 +221,10 @@ const pill = (label: string, o: any) => o == null
       gap:0.12rem; font-size:0.78rem; max-height:calc(100vh - 100px);
       overflow:auto; z-index:20; }
     @media (max-width:1320px){ .snav{ left:8px; } }
+    /* mid-range (15" laptops): reserve a gutter for the pinned nav
+       (8 + 160 + 12 = 180px; matches auto-centre margin at 1540px). */
+    @media (max-width:1540px) and (min-width:981px){
+      :global(.wrap){ margin-left:180px; } }
     @media (max-width:980px){ .snav{ position:static; width:auto;
       flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
     .snav__cv { background:#231f0d; color:var(--gold); cursor:pointer;

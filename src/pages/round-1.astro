@@ -431,6 +431,10 @@ function setup(c: any): Row[] {
       top:104px; width:180px; display:flex; flex-direction:column;
       gap:0.1rem; max-height:calc(100vh - 130px); overflow:auto; z-index:20; }
     @media (max-width:1360px){ .snav{ left:8px; } }
+    /* mid-range (15" laptops): reserve a gutter for the pinned nav
+       (8 + 180 + 12 = 200px; matches auto-centre margin at 1580px). */
+    @media (max-width:1580px) and (min-width:1041px){
+      :global(.wrap){ margin-left:200px; } }
     @media (max-width:1040px){ .snav{ position:static; width:auto;
       flex-flow:row wrap; max-height:none; margin-bottom:1rem; } }
     .snav__sec { margin-bottom:0.7rem; }
