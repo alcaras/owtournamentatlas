@@ -3,7 +3,11 @@ import Base from '../layouts/Base.astro';
 import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
 import tour from '../data/tournament-games.json';
+import { imgDimsBySlug } from '../lib/img-dims';
 const baseUrl = import.meta.env.BASE_URL;
+
+// Reserve gallery <img> boxes so #cfg- anchors land — src/lib/img-dims.ts.
+const dimBySlug = await imgDimsBySlug(dist.configs);
 
 const genMap: Record<string, any> = {};
 for (const gn of (gensData as any).gens)
@@ -150,7 +154,8 @@ const pill = (label: string, o: any) => o == null
                   return (
                     <a class="gal__cell" href={`${baseUrl}gen/${id}`} target="_blank" rel="noopener">
                       <img src={`${baseUrl}img/${p}`} loading="lazy"
-                           alt={`${c.group} sample`} />
+                           alt={`${c.group} sample`}
+                           width={dimBySlug[c.slug].w} height={dimBySlug[c.slug].h} />
                       <div class={'cnbar ' + (gm.conn ? 'ok' : 'no')}>
                         {gm.conn ? 'LAND-CONNECTED' : 'NO LAND CONNECTION'}
                         {gm.split && <span class="splitf">⚠ split landmass</span>}</div>

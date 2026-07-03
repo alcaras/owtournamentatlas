@@ -2,8 +2,7 @@
 import Base from '../layouts/Base.astro';
 import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
-import { openSync, readSync, closeSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { imgDimsBySlug } from '../lib/img-dims';
 const baseUrl = import.meta.env.BASE_URL;
 
 // The finalised tournament pool — 16 maps, organised by map script.
@@ -89,28 +88,9 @@ for (const c of dist.configs) bySlug[c.slug] = c;
 const pool = POOL.map((s) => bySlug[s]).filter(Boolean);
 const N = pool[0]?.n ?? 0;
 
-// Build-time PNG dimension probe. The gallery images are `loading="lazy"` with
-// no intrinsic size declared, so before they load their box is 0px tall —
-// loading them then shifts every config below them down the page. That layout
-// shift is what makes a cold #anchor deep-link miss: the browser (and our
-// load-time re-scroll) lands on the target, then lazy images above it load and
-// shove it off-screen. Stamping each <img> with its real width/height reserves
-// the box up front (CSS keeps width:100%/height:auto), so there's no shift and
-// the anchor lands. Images are uniform within a config, so one probe per config
-// covers its whole gallery.
-function pngSize(rel: string): { w: number; h: number } {
-  const abs = fileURLToPath(new URL(`../../public/img/${rel}`, import.meta.url));
-  const fd = openSync(abs, 'r');
-  try {
-    const buf = Buffer.alloc(24);
-    readSync(fd, buf, 0, 24, 0);           // IHDR width/height are at bytes 16/20
-    return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
-  } finally {
-    closeSync(fd);
-  }
-}
-const dimBySlug: Record<string, { w: number; h: number }> = {};
-for (const c of pool) if (c.imgs?.length) dimBySlug[c.slug] = pngSize(c.imgs[0]);
+// Reserve each gallery <img>'s box before it lazy-loads so #anchor
+// deep-links land without layout shift — see src/lib/img-dims.ts.
+const dimBySlug = await imgDimsBySlug(pool);
 
 // Group by map script — DOTA by subtype, Desert by coast, else the
 // script. Sections are alphabetised; cfgs within a section sorted
@@ -584,7 +564,7 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
               return (
                 <a class="gal__cell" href={`${baseUrl}gen/${id}`} target="_blank" rel="noopener">
                   <img src={`${baseUrl}img/${p}`} loading="lazy" alt={`${c.group} sample`}
-                    width={dimBySlug[c.slug]?.w} height={dimBySlug[c.slug]?.h} />
+                    width={dimBySlug[c.slug].w} height={dimBySlug[c.slug].h} />
                   <div class="cap">
                     <span><i>sites</i><b>{gm.sites ?? '—'}</b></span>
                     <span><i>land</i><b>{gm.land ?? '—'}</b></span>
@@ -948,17 +928,16 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
         });
       });
     })();
-    /* re-scroll to the hashed config after images settle (gallery images
-       are lazy → loading them shifts layout, which would otherwise leave
-       the title above the viewport). */
+    /* in-page hash navigation (gallery imgs carry width/height now, so
+       native fragment scrolling lands on cold loads — no load-time
+       re-scroll needed; it could yank the viewport from a user who had
+       already scrolled away on a slow connection). */
     (function(){
-      function go(){
+      window.addEventListener('hashchange',function(){
         if(!location.hash) return;
         var el=document.getElementById(decodeURIComponent(location.hash.slice(1)));
         if(el) el.scrollIntoView({block:'start'});
-      }
-      window.addEventListener('load',function(){ setTimeout(go,0); });
-      window.addEventListener('hashchange',go);
+      });
     })();
     (function(){
       var links=[].slice.call(document.querySelectorAll('.snav__l'));

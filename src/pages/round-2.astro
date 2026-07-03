@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import gensData from '../data/gens.json';
+import { imgDimsBySlug } from '../lib/img-dims';
 const baseUrl = import.meta.env.BASE_URL;
 
 // ---- Round 2 ballot — three groups ---------------------------------
@@ -117,6 +118,11 @@ const SECTIONS = [
 ];
 const N = SECTIONS.reduce((s, x) => s + x.list.length, 0);
 const PREVIEWS = 6;
+// Reserve gallery <img> boxes so #cfg- anchors land — src/lib/img-dims.ts.
+// Ballot configs carry per-seed rows (gens.json), not an imgs array; the
+// first row's img stands in for the (dimension-uniform) gallery.
+const dimBySlug = await imgDimsBySlug(SECTIONS.flatMap((s) => s.list)
+  .map((c) => ({ slug: c.slug, imgs: c.rows.length ? [c.rows[0].img] : [] })));
 // group a section's configs by map script (list is pre-sorted by group)
 function byScript(list: Cfg[]): [string, Cfg[]][] {
   const m = new Map<string, Cfg[]>();
@@ -256,7 +262,8 @@ const abbr = (c: Cfg) => {
                   <a class="gal__cell" href={`${baseUrl}gen/${r.id}`}
                      target="_blank" rel="noopener">
                     <img src={`${baseUrl}img/${r.img}`} loading="lazy"
-                         alt={`seed ${r.seed}`} />
+                         alt={`seed ${r.seed}`}
+                         width={dimBySlug[c.slug].w} height={dimBySlug[c.slug].h} />
                     <div class="cap">
                       <span><i>sites</i><b>{r.sites}</b></span>
                       <span><i>land</i><b>{r.land}</b></span>

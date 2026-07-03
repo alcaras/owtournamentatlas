@@ -5,6 +5,7 @@
 import Base from '../layouts/Base.astro';
 import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
+import { imgDimsBySlug } from '../lib/img-dims';
 const baseUrl = import.meta.env.BASE_URL;
 
 // The Round 1 voted tournament pool, grouped by ballot tier.
@@ -69,6 +70,8 @@ const sections = TIERS.map((t) => ({
     .sort((a: any, b: any) => navName(a).localeCompare(navName(b))),
 }));
 const pool = sections.flatMap((s) => s.cfgs);
+// Reserve gallery <img> boxes so #cfg- anchors land — src/lib/img-dims.ts.
+const dimBySlug = await imgDimsBySlug(pool);
 const N = pool[0]?.n ?? 0;
 
 // ---- Distribution charts ---------------------------------------------
@@ -369,7 +372,8 @@ function setup(c: any): Row[] {
               const gm = genMap[id] || {};
               return (
                 <a class="gal__cell" href={`${baseUrl}gen/${id}`} target="_blank" rel="noopener">
-                  <img src={`${baseUrl}img/${p}`} loading="lazy" alt={`${c.group} sample`} />
+                  <img src={`${baseUrl}img/${p}`} loading="lazy" alt={`${c.group} sample`}
+                    width={dimBySlug[c.slug].w} height={dimBySlug[c.slug].h} />
                   <div class="cap">
                     <span><i>sites</i><b>{gm.sites ?? '—'}</b></span>
                     <span><i>land</i><b>{gm.land ?? '—'}</b></span>
