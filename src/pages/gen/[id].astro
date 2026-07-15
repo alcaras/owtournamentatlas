@@ -39,9 +39,30 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
   <div id="mapwrap"><canvas id="cv"></canvas><div id="tip"></div>
     <button id="reset" type="button">⤾ reset view</button>
     <div id="zhint">scroll = zoom · drag = pan</div></div>
+  <div id="chips">
+    <span class="rh">overlays (hover = peek · click = pin):</span>
+    <button class="chip" id="ch-sites" type="button">city sites{g.sites != null ? ` · ${g.sites}` : ''}</button>
+    <button class="chip" id="ch-choke" type="button">choke{g.choke != null ? ` · ${g.choke}` : ''}</button>
+    <button class="chip" id="ch-wall" type="button">wall{g.wall != null ? ` · ${g.wall}` : ''}</button>
+    <button class="chip" id="ch-reach" type="button">reach</button>
+  </div>
 
-  <h2 class="sec">Resources <span class="rh">(hover a pill → highlight on map · grey = absent)</span></h2>
-  <div id="respanel"></div>
+  <div class="duo">
+    <div class="duo__l">
+      <h2 class="sec">Resources <span class="rh">(hover a pill → highlight on map · grey = absent)</span></h2>
+      <div id="respanel"></div>
+    </div>
+    <div class="duo__r">
+      <h2 class="sec">Tiles by exact yield <span class="rh">(hover → highlight)</span></h2>
+      <table class="kv yt"><thead><tr><th>yld</th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/food.png`} alt="Food"/></th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/iron.png`} alt="Iron"/></th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/stone.png`} alt="Stone"/></th>
+        <th><img class="yi" src={`${baseUrl}img/icons/yields/wood.png`} alt="Wood"/></th></tr></thead>
+        <tbody id="ytbody"><tr><td colspan="5" class="dim">loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
 
   <h2 class="sec">Stats</h2>
   <div class="stats">
@@ -67,20 +88,11 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         <tr><td>Land tiles</td><td>{g.landTiles ?? '—'}</td></tr>
         <tr id="reachrow" style="cursor:crosshair"><td>Cap-reachable land <span class="rh">(hover)</span></td><td><b id="s_reach">—</b></td></tr>
         <tr id="chokerow" style="cursor:crosshair"><td>Mid-land choke <span class="rh">(hover → seam + cut)</span></td><td><b>{g.choke ?? '—'}</b></td></tr>
+        <tr id="wallrow" style="cursor:pointer"><td>Wall cost <span class="rh">(click to pin doors on map)</span></td><td><b>{g.wall ?? '—'}</b>{g.doors ? <span class="rh"> · doors {g.doors.join('/')}</span> : ''}</td></tr>
         <tr><td>Freshwater tiles</td><td id="s_fw">—</td></tr>
         <tr><td>River tiles</td><td id="s_riv">—</td></tr>
         <tr><td>Ocean %</td><td>{g.oceanPct ?? '—'}%</td></tr>
         <tr><td>Tribes / Res</td><td>{g.tribes ?? '—'} / {g.res ?? '—'}</td></tr>
-      </table>
-    </div>
-    <div class="col">
-      <h3>Tiles by exact yield <span class="rh">(hover → highlight)</span></h3>
-      <table class="kv yt"><thead><tr><th>yld</th>
-        <th><img class="yi" src={`${baseUrl}img/icons/yields/food.png`} alt="Food"/></th>
-        <th><img class="yi" src={`${baseUrl}img/icons/yields/iron.png`} alt="Iron"/></th>
-        <th><img class="yi" src={`${baseUrl}img/icons/yields/stone.png`} alt="Stone"/></th>
-        <th><img class="yi" src={`${baseUrl}img/icons/yields/wood.png`} alt="Wood"/></th></tr></thead>
-        <tbody id="ytbody"><tr><td colspan="5" class="dim">loading…</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -97,6 +109,15 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1rem; line-height:1.55; color:var(--text-soft);
       max-width:92ch; margin:0.2rem 0 1rem; }
+    .duo { display:grid; grid-template-columns: minmax(0,1fr) minmax(280px,420px);
+      gap:1.6rem; align-items:start; }
+    @media (max-width:900px){ .duo { grid-template-columns:1fr; } }
+    #chips { display:flex; gap:0.45rem; align-items:center; margin:0.45rem 0 0.2rem; flex-wrap:wrap; }
+    .chip { background:#1c1f24; color:var(--text); border:1px solid #3a3f47;
+      border-radius:999px; padding:0.16rem 0.7rem; font-size:0.82rem;
+      cursor:pointer; font-family:var(--font-ui); }
+    .chip:hover { border-color:#8a929e; }
+    .chip.on { background:rgba(255,149,0,0.16); border-color:#ff9500; }
     #mapwrap { position:relative; width:100%; height:72vh; overflow:hidden;
       border-radius:5px; border:1px solid var(--border-strong);
       background:#0b0c0f; cursor:grab; touch-action:none; }
@@ -198,7 +219,8 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           tip=document.getElementById('tip'), ctx=cv.getContext('2d'),
           S=11, HW=Math.sqrt(3)*S, VS=1.5*S, PAD=4, D=null, baseImg=null,
           icons={}, activeRes=null, pinRes=null, yieldHi=null, csHi=false, unHi=false,
-          capHi=false, chokeHi=false, k=1, tx=0, ty=0;
+          capHi=false, chokeHi=false, wallHi=false, wallPin=false,
+          chokePin=false, csPin=false, unPin=false, k=1, tx=0, ty=0;
       // OW origin is bottom-left (y grows north). Flip data-row → screen-Y
       // so row 0 paints at the bottom. Horizontal stagger stays keyed to the
       // true data-y parity so the odd-r tiling (and rivers/caps via cen) stay
@@ -332,19 +354,19 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
             if(D.bnd[i]||v<lo||(hh!=null&&v>=hh))continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
-        if(unHi && D.un){
+        if((unHi||unPin) && D.un){
           ctx.strokeStyle='#ff5c3a'; ctx.lineWidth=Math.max(2,S/3);
           ctx.shadowColor='#ff5c3a'; ctx.shadowBlur=S;
           for(var i=0;i<D.un.length;i++){ if(!D.un[i])continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
-        if(csHi || (hi>=0 && D.cs[hi])){
+        if(csHi || csPin || (hi>=0 && D.cs[hi])){
           ctx.strokeStyle='#ff2daa'; ctx.lineWidth=Math.max(2,S/3);
           ctx.shadowColor='#ff2daa'; ctx.shadowBlur=S;
           for(var i=0;i<D.cs.length;i++){ if(!D.cs[i]||D.bnd[i])continue;
             var ce=cen(i%W,(i/W)|0); hexp(ce[0],ce[1],S*0.95); ctx.stroke(); }
           ctx.shadowBlur=0; }
-        if(chokeHi){
+        if(chokeHi||chokePin){
           // collision seam (where the two cap-floods meet) in amber, then
           // the actual narrowest land cut on top in red — that's the choke.
           var seam=D.frontHexes||[], cut=D.chokeCut||[];
@@ -355,6 +377,16 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           ctx.strokeStyle='#ff3b30'; ctx.lineWidth=Math.max(2,S/3);
           ctx.shadowColor='#ff3b30'; ctx.shadowBlur=S;
           cut.forEach(function(p){ var ce=cen(p[0],p[1]);
+            hexp(ce[0],ce[1],S*0.95); ctx.stroke(); });
+          ctx.shadowBlur=0;
+        }
+        if(wallHi||wallPin){
+          // wall: the door hexes — the minimal set severing the two
+          // full-split empires (orange).
+          var wh=D.wallHexes||[];
+          ctx.strokeStyle='#ff9500'; ctx.lineWidth=Math.max(2,S/3);
+          ctx.shadowColor='#ff9500'; ctx.shadowBlur=S;
+          wh.forEach(function(p){ var ce=cen(p[0],p[1]);
             hexp(ce[0],ce[1],S*0.95); ctx.stroke(); });
           ctx.shadowBlur=0;
         }
@@ -445,6 +477,11 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
           im.src=base+'img/icons/resources/'+sg+'.png'; });
         drawBase();
         fitView();
+        // grey out overlay chips with nothing to show on this seed
+        var chR=document.getElementById('ch-reach');
+        if(chR && !(D.un||[]).some(function(x){return x;})) chR.style.display='none';
+        var chW=document.getElementById('ch-wall');
+        if(chW && !(D.wallHexes||[]).length) chW.style.display='none';
       });
       function fitView(){
         // show the entire map by default: scale to contain, then
@@ -468,6 +505,26 @@ const { g, resTax } = Astro.props as { g: any; resTax: any };
         cr.addEventListener('mouseenter',function(){ if(D){chokeHi=true;overlay(-1);} });
         cr.addEventListener('mouseleave',function(){ chokeHi=false; if(D)overlay(-1); });
       })(document.getElementById('chokerow'));
+      (function(wr){ if(!wr)return;
+        wr.addEventListener('mouseenter',function(){ if(D){wallHi=true;overlay(-1);} });
+        wr.addEventListener('mouseleave',function(){ wallHi=false; if(D)overlay(-1); });
+        wr.addEventListener('click',function(){ if(!D)return;
+          wallPin=!wallPin;
+          wr.style.background=wallPin?'rgba(255,149,0,0.18)':'';
+          overlay(-1); });
+      })(document.getElementById('wallrow'));
+      // overlay chips under the map: hover = peek, click = pin
+      function chip(id, setHi, setPin, getPin){
+        var el=document.getElementById(id); if(!el)return;
+        el.addEventListener('mouseenter',function(){ if(D){setHi(true);overlay(-1);} });
+        el.addEventListener('mouseleave',function(){ setHi(false); if(D)overlay(-1); });
+        el.addEventListener('click',function(){ if(!D)return;
+          setPin(!getPin()); el.classList.toggle('on',getPin()); overlay(-1); });
+      }
+      chip('ch-sites', function(v){csHi=v;}, function(v){csPin=v;}, function(){return csPin;});
+      chip('ch-reach', function(v){unHi=v;}, function(v){unPin=v;}, function(){return unPin;});
+      chip('ch-choke', function(v){chokeHi=v;}, function(v){chokePin=v;}, function(){return chokePin;});
+      chip('ch-wall',  function(v){wallHi=v;}, function(v){wallPin=v;}, function(){return wallPin;});
       // zoom
       wrap.addEventListener('wheel',function(e){ if(!D)return; e.preventDefault();
         var r=wrap.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top,

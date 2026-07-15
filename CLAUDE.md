@@ -130,6 +130,18 @@ configs via direct URL — harmless, just unlinked from `/recommended`.)
   unreachable landmass). Split must NOT override "land-connected".
 - **`capPath`:** shortest cap→cap land-hex path, same adjacency/land
   rules as the reach BFS (so it stays coherent). `[]` if none.
+- **`wall` / `doors` / `wallHexes`** (lab `wall.py`, in per-gen JSON +
+  gens.json + atlas-dist `dist.wall`): min vertex cut between the two
+  FULL-SPLIT empires — every city site founded, Voronoi-assigned to its
+  nearer capital (hex distance; ties stay neutral); site tiles are flow
+  terminals (uncuttable), the wall may stand on any other walkable hex.
+  `doors` = the cut's connected clusters (one door = one crossing),
+  desc. Same land graph + `_odd_r_neighbors` as reach/capPath/choke.
+  This is the "choke-off-ability" stat; the older `choke` is the land
+  width AT the capital-equidistant midline band (by design — it rates
+  the fair-contest line, NOT sealability; validated against a live
+  save 2026-07-14 where midline said 30 and the true wall was 15).
+  `wall` can be null (opposing sites adjacent → no finite wall).
 - **owmapgen has no `HEIGHT_OCEAN`** — all sea is `HEIGHT_COAST`.
   Derive ocean/coast/lake by land-adjacency for rendering.
 - **River borders:** a tile a river *borders* counts as a river tile
