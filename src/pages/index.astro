@@ -373,34 +373,32 @@ const YIELD_BARS = [
 // the rankings page carries. Same bar treatment as resources & yields;
 // glyphs are the inline SVG sprite at the top of <body> (no PNG assets).
 const TERRAIN_BARS = [
-  { key: 'trees', icon: 'trees', label: 'Trees',
-    desc: '% of tiles carrying forest — lumbermill sites and ranged cover' },
-  { key: 'jungle', icon: 'jungle', label: 'Jungle',
-    desc: '% of tiles carrying jungle — clearcut-only (never millable), double move cost' },
-  { key: 'scrub', icon: 'scrub', label: 'Scrub',
-    desc: '% of tiles carrying scrub — 10 wood per chop, no mill' },
-  { key: 'veg', icon: 'veg', label: 'Vegetation',
-    desc: '% of tiles carrying any vegetation (forest + scrub + jungle)' },
-  { key: 'marsh', icon: 'marsh', label: 'Marsh',
-    desc: '% of tiles that are marsh terrain' },
-  { key: 'hillsPct', icon: 'hills', label: 'Hills %',
-    desc: 'Hills as a SHARE of the map — mines get +60% iron on them. Same tiles as the Windmill bar, which counts them instead; a big map can rank high on count and low on share' },
-  { key: 'river', icon: 'river', label: 'River',
-    desc: '% of tiles bordering a river — fresh-water farms, +60% lumbermills, watermills' },
-  { key: 'nomad', icon: 'sand', label: 'Arid/Sand',
-    desc: '% of tiles that are arid or sand — sand takes no farm, mine or flat quarry' },
-  { key: 'oceanPct', icon: 'water', label: 'Ocean',
-    desc: '% of the map that is water — land units cannot cross it' },
-  { key: 'hills', icon: 'windmill', label: 'Windmill',
-    desc: 'Hill tiles COUNTED — every one is a windmill site. Same tiles as the Hills % bar, which gives their share of the map instead', pp: true },
-  { key: 'watermill', icon: 'watermill', label: 'Watermill',
-    desc: 'Tiles by a river — watermill-eligible sites (count per map)', pp: true },
-  { key: 'clearcutSF', icon: 'clearcut', label: 'Clearcut S+F',
-    desc: 'Clearcut scrub + forest — one-time wood from chopping every scrub (20) and forest (40) tile', pp: true },
-  { key: 'clearcutWJ', icon: 'clearcut2', label: 'Clearcut S+F+J',
-    desc: 'Clearcut scrub + forest + jungle — the same total plus jungle at 60 wood per tile (identical to S+F on jungle-free maps)', pp: true },
-  { key: 'rangedCover', icon: 'cover', label: 'Ranged cover',
-    desc: 'Vegetation defence index (scrub 25 / forest 50 / jungle 75) — how much cover ranged units find' },
+  { key: 'treesTiles', icon: 'trees', label: 'Trees', pp: true,
+    desc: 'Forest tiles — lumbermill sites, ranged cover, 40 wood a chop' },
+  { key: 'jungleTiles', icon: 'jungle', label: 'Jungle', pp: true,
+    desc: 'Jungle tiles — clearcut only (never millable), double move cost, 60 wood a chop' },
+  { key: 'scrubTiles', icon: 'scrub', label: 'Scrub', pp: true,
+    desc: 'Scrub tiles — 10 wood a chop, no mill' },
+  { key: 'vegTiles', icon: 'veg', label: 'Vegetation', pp: true,
+    desc: 'All vegetated tiles (forest + scrub + jungle)' },
+  { key: 'marshTiles', icon: 'marsh', label: 'Marsh', pp: true,
+    desc: 'Marsh tiles' },
+  { key: 'hills', icon: 'hills', label: 'Hills', pp: true,
+    desc: 'Hill tiles — mines take +60% iron here, and every one is a windmill site' },
+  { key: 'watermill', icon: 'watermill', label: 'Watermill', pp: true,
+    desc: 'Land tiles beside a river — watermill sites, fresh water for farms, +60% lumbermills' },
+  { key: 'riverTiles', icon: 'river', label: 'River', pp: true,
+    desc: 'Tiles bordering a river (a tile counts if it or a neighbour carries a river edge)' },
+  { key: 'aridTiles', icon: 'sand', label: 'Arid/Sand', pp: true,
+    desc: 'Arid and sand tiles — sand takes no farm, mine or flat quarry' },
+  { key: 'waterTiles', icon: 'water', label: 'Water', pp: true,
+    desc: 'Water tiles — land units cannot cross them' },
+  { key: 'clearcutSF', icon: 'clearcut', label: 'Clearcut S+F', pp: true,
+    desc: 'Clearcut scrub + forest — one-time wood from chopping every scrub (20) and forest (40) tile' },
+  { key: 'clearcutWJ', icon: 'clearcut2', label: 'Clearcut S+F+J', pp: true,
+    desc: 'Clearcut scrub + forest + jungle — the same total plus jungle at 60 wood per tile (identical to S+F on jungle-free maps)' },
+  { key: 'rangedCover', icon: 'cover', label: 'Ranged cover', unit: 'idx',
+    desc: 'INDEX, not a count: vegetation weighted by its ranged-attack penalty (scrub 25 / forest 50 / jungle 75), 0–100' },
 ] as const;
 
 // ---- size-neutral comparison -----------------------------------------
@@ -451,6 +449,8 @@ for (const gn of (gensData as any).gens) {
 const DENSITY_KEYS = new Set<string>([
   ...RES_BARS.map((b: any) => b.key), ...YIELD_BARS.map((b: any) => b.key),
   'watermill', 'clearcutWJ', 'clearcutSF', 'hills',
+  'treesTiles', 'scrubTiles', 'jungleTiles', 'vegTiles', 'marshTiles',
+  'aridTiles', 'waterTiles', 'riverTiles',
   'expansion', 'sites',
 ]);
 // bars and ranks compare WHOLE-MAP TOTALS — the number actually printed
@@ -497,14 +497,18 @@ const half = (v: number) => {
   const h = v / 2;
   return h >= 10 ? h.toFixed(0) : h.toFixed(1).replace(/\.0$/, '');
 };
-const barTip = (b: any, d: any, c?: any, perPlayer = false) =>
-  (!d || (d.max ?? 0) <= 0)
+const barTip = (b: any, d: any, c?: any, perPlayer = false) => {
+  const u = (b as any).unit === '%' ? '%' : '';
+  const what = (b as any).unit === '%' ? 'of all tiles'
+    : (b as any).unit === 'idx' ? '(index, 0–100)' : 'per map';
+  return (!d || (d.max ?? 0) <= 0)
     ? `${b.label} — ${b.desc}\nNone on this map.`
-    : `${b.label} — ${b.desc}\navg ${d.mean} per map (±${d.sd} sd, `
-      + `range ${d.min}–${d.max}). Bar = relative to other maps.`
+    : `${b.label} — ${b.desc}\navg ${d.mean}${u} ${what} (±${d.sd}${u} sd, `
+      + `range ${d.min}${u}–${d.max}${u}). Bar = relative to other maps.`
       + (perPlayer ? `\n≈ ${half(d.mean)} per player — the map is mirrored, `
           + `so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '')
       + (c ? rankTip(c, b.key) : '');
+};
 
 // Wall cost and Mid-land choke read the other way round: a LOW number is
 // the remarkable one (sealable / pinched). Rank them fewest-first and
@@ -782,7 +786,7 @@ const barStyle = (c: any, key: string) => {
             })}
           </div>
           <div class="rstrip__lab rstrip__lab--2">Terrain &amp; topology
-            <span class="rstrip__sub">what the ground is made of · bar = rank among the 18 maps, on map totals · hover for exact amounts <i>and per-player site counts</i></span>
+            <span class="rstrip__sub">tile counts, never percentages — so they halve per player like everything else · bar = rank among the 18 maps · hover for exact amounts <i>and per-player counts</i></span>
           </div>
           <div class="rstrip__ics">
             {TERRAIN_BARS.map((b: any) => {
