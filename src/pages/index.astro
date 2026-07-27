@@ -417,6 +417,14 @@ for (const k in landBy) {
   const a = landBy[k];
   landMean[k] = a.reduce((x: number, y: number) => x + y, 0) / a.length;
 }
+const tileBy: Record<string, number[]> = {};
+for (const gn of (gensData as any).gens)
+  if (gn.tiles != null) (tileBy[gn.cslug] ??= []).push(gn.tiles);
+const tileMean: Record<string, number> = {};
+for (const k in tileBy) {
+  const a = tileBy[k];
+  tileMean[k] = a.reduce((x: number, y: number) => x + y, 0) / a.length;
+}
 // dims that scale with map area → compared per 100 land tiles
 const DENSITY_KEYS = new Set<string>([
   ...RES_BARS.map((b: any) => b.key), ...YIELD_BARS.map((b: any) => b.key),
@@ -473,6 +481,11 @@ const barTip = (b: any, d: any, c?: any, perPlayer = false) =>
           + `so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '')
       + (c ? rankTip(c, b.key) : '');
 
+// Wall cost and Mid-land choke read the other way round: a LOW number is
+// the remarkable one (sealable / pinched). Rank them fewest-first and
+// flip their bar so the green end means "tight" on both.
+const INVERT = new Set<string>(['wall', 'choke']);
+
 // ---- rank badges ------------------------------------------------------
 // The rankings page's actual payload is POSITION, not value. Every bar
 // and pill carries "#n" = this config's rank in the 18-map pool, sorted
@@ -485,7 +498,9 @@ for (const k of RANK_KEYS) {
   const rows = pool
     .map((c: any) => ({ slug: c.slug, v: cmpVal(c, k) }))
     .filter((r: any) => r.v != null)
-    .sort((a: any, b: any) => (b.v as number) - (a.v as number));
+    .sort((a: any, b: any) => INVERT.has(k)
+      ? (a.v as number) - (b.v as number)
+      : (b.v as number) - (a.v as number));
   rankOf[k] = {};
   rows.forEach((r: any, i: number) => { rankOf[k][r.slug] = i + 1; });
 }
@@ -495,7 +510,8 @@ const rankTip = (c: any, k: string) => {
   const r = rk(c, k);
   if (!r) return '';
   const d = dens(c, k);
-  return `\nRank ${r} of ${rankN(k)} in the pool by map total (highest first).`
+  return `\nRank ${r} of ${rankN(k)} in the pool by map total `
+    + `(${INVERT.has(k) ? 'fewest first — a low number is the tight end' : 'highest first'}).`
     + (d != null ? ` Size-neutral cross-check: ≈ ${fmtD(d)} per 100 land tiles.` : '');
 };
 
@@ -512,6 +528,48 @@ for (const k of PILL_KEYS) {
     hi: ms.length ? Math.max(...ms) : 0 };
 }
 // the six headline pills, data-driven so wall/choke ride the same layout
+// ---- facts strip -------------------------------------------------------
+// The remaining /gen stats that have no bar: the rest of the capital
+// distance block and the map-shape counts. Text-only so they read as
+// reference, not as another thing to compare.
+const one = (c: any, k: string) => c.dist?.[k];
+const md = (c: any, k: string, unit = '') => {
+  const d = one(c, k);
+  return d ? { v: `${d.mean}${unit}`,
+    t: `avg ${d.mean}${unit} (±${d.sd} sd, range ${d.min}–${d.max}, med ${d.med})` }
+    : null;
+};
+const factRows = (c: any) => {
+  const L = landMean[c.slug], T = tileMean[c.slug];
+  const dist = [
+    ['Land-connected', c.connPct >= 100 ? 'always' : `${c.connPct}%`,
+      `Capitals share a land route. Seeds with no connected pair are dropped from the pool — ${c.dropPct}% of attempts here.`],
+    ['Crow', md(c, 'crow')?.v, md(c, 'crow')?.t
+      + ' — straight-line capital→capital distance, ignoring terrain.'],
+    ['Land path', md(c, 'land')?.v, md(c, 'land')?.t
+      + ' — capital→capital along walkable land.'],
+    ['Scout', md(c, 'scout', ' turns')?.v, md(c, 'scout')?.t
+      + ' — turns for a scout to cross between capitals.'],
+    ['Move-cost L / W / Hatti',
+      [one(c, 'slLand')?.mean, one(c, 'slSea')?.mean, one(c, 'slHatti')?.mean]
+        .map((x: any) => x ?? '—').join(' / '),
+      'Terrain-weighted move cost capital→capital: by land, by water, and for Hatti (who ignore some terrain costs).'],
+  ];
+  const map = [
+    ['Playable tiles', T ? Math.round(T) : '—', 'Mean in-bounds tiles per map.'],
+    ['Land tiles', L ? Math.round(L) : '—', 'Mean walkable land tiles per map.'],
+    ['Cap-reachable', `${c.reachMean}%`,
+      `Share of land walkable from the capital. SPLIT (under 85%) on ${c.splitPct}% of seeds.`],
+    ['River tiles', md(c, 'river', '%')?.v, md(c, 'river', '%')?.t
+      + ' — % of tiles bordering a river.'],
+    ['Ocean', `${c.oceanPct}%`, 'Share of the map that is water.'],
+    ['Tribes / Res', `${c.tribes} / ${c.res}`,
+      'Mean tribal sites and total resources per map.'],
+  ];
+  return [{ lab: 'Capital distance', items: dist },
+          { lab: 'Map shape', items: map }];
+};
+
 // Six pills on a 3x2 grid. Row-major order is chosen so each COLUMN is a
 // themed pair: room to grow | how far apart | how sealable.
 const PILL_DEFS = [
@@ -520,18 +578,19 @@ const PILL_DEFS = [
   { key: 'land', label: 'Land hex distance', grp: 'Distance',
     tip: 'Capital→capital distance along land. Longer vs shorter, relative to the other maps.' },
   { key: 'wall', label: 'Wall cost', grp: 'Topology',
-    tip: 'Hexes needed to seal EVERY land route between the two full-split empires (min-cut; sites are uncuttable). Low = sealable, high = open field. Land only — water is not counted.' },
+    tip: 'Hexes needed to seal EVERY land route between the two full-split empires (min-cut; sites are uncuttable). Low = sealable, high = open field — ranked and coloured fewest-first, so a full green bar means the most sealable map in the pool. Land only; water is not counted.' },
   { key: 'expansion', label: 'Expansion space', grp: 'Room', pp: true,
     tip: 'Urbanizable tiles — Lush/Temperate/Arid that are Flat or Hill (can host a city/urban; excludes sand, marsh, tundra, jungle, water, mountain). More = roomier, less = cramped.' },
   { key: 'slLand', label: 'Land hex cost', grp: 'Distance',
     tip: 'Capital→capital move-cost along land (terrain-weighted). Higher vs lower, relative to the other maps.' },
   { key: 'choke', label: 'Mid-land choke', grp: 'Topology',
-    tip: 'Land width at the capital-equidistant midline — the fair-contest line. Low = the middle pinches, high = broad meeting ground. Not the same question as Wall cost.' },
+    tip: 'Land width at the capital-equidistant midline — the fair-contest line. Low = the middle pinches, high = broad meeting ground — ranked and coloured narrowest-first. Not the same question as Wall cost.' },
 ] as const;
 
-const barStyle = (mean: number | undefined | null, range: { lo: number; hi: number }) => {
+const barStyle = (mean: number | undefined | null, range: { lo: number; hi: number }, inv = false) => {
   if (mean == null) return 'width:0%;background:#333';
-  const t = range.hi > range.lo ? (mean - range.lo) / (range.hi - range.lo) : 0.5;
+  const t0 = range.hi > range.lo ? (mean - range.lo) / (range.hi - range.lo) : 0.5;
+  const t = inv ? 1 - t0 : t0;
   const tt = Math.max(0, Math.min(1, t));
   return `width:${Math.round(8 + tt * 92)}%;background:hsl(${Math.round(tt * 125)},58%,42%)`;
 };
@@ -638,16 +697,26 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             return (
               <div class="pill">
                 <div class="pill__l"><span class="pill__g">{pd.grp}</span>{pd.label}
-                  {r && <span class="pill__rk" title={`Rank ${r} of ${rankN(pd.key)} in the pool by map total (highest first)`}>#{r}</span>}
+                  {r && <span class="pill__rk" title={`Rank ${r} of ${rankN(pd.key)} in the pool by map total (${INVERT.has(pd.key) ? 'fewest first — low = tight' : 'highest first'})`}>#{r}</span>}
                 </div>
                 {d ? (<>
                   <div class="pill__v"><b>{d.mean}</b> <span class="pm">±{d.sd}</span></div>
                   <div class="pill__r">min {d.min} · <b>med {d.med}</b> · max {d.max}</div>
-                  <div class="pill__bar" title={pd.tip + (pd.pp ? `\n≈ ${half(d.mean)} per player — the map is mirrored, so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '') + rankTip(c, pd.key)}><span style={barStyle(cmpVal(c, pd.key), pillRange[pd.key])}></span></div>
+                  <div class="pill__bar" title={pd.tip + (pd.pp ? `\n≈ ${half(d.mean)} per player — the map is mirrored, so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '') + rankTip(c, pd.key)}><span style={barStyle(cmpVal(c, pd.key), pillRange[pd.key], INVERT.has(pd.key))}></span></div>
                 </>) : <div class="pill__v dash">—</div>}
               </div>
             );
           })}
+        </div>
+        <div class="facts">
+          {factRows(c).map((row: any) => (
+            <div class="facts__row">
+              <span class="facts__lab">{row.lab}</span>
+              {row.items.map((it: any) => (
+                <span class="fct" title={it[2]}><i>{it[0]}</i><b>{it[1]}</b></span>
+              ))}
+            </div>
+          ))}
         </div>
         <div class="rstrip">
           <div class="rstrip__lab">Resource abundance
@@ -854,6 +923,15 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
       100% { box-shadow:0 0 0 1px var(--border); }
     }
     /* ---- resource abundance strip ---- */
+    .facts { margin-top:0.7rem; display:flex; flex-direction:column; gap:0.3rem; }
+    .facts__row { display:flex; flex-wrap:wrap; align-items:baseline; gap:0.4rem; }
+    .facts__lab { font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--text-dim); min-width:8.2rem; }
+    .fct { font-size:0.74rem; color:var(--text-faint); cursor:help;
+      background:#16181d; border:1px solid var(--border); border-radius:4px;
+      padding:0.08rem 0.42rem; }
+    .fct i { font-style:normal; color:var(--text-dim); margin-right:0.32rem; }
+    .fct b { color:var(--text-soft); font-variant-numeric:tabular-nums; }
     .rstrip { margin-top:0.7rem; }
     .rstrip__lab { font-size:0.62rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.5rem; }

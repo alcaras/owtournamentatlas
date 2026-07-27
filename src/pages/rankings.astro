@@ -62,8 +62,12 @@ const TOURNAMENT: Dim[] = [
   { key: 'sites', label: 'City sites', unit: 'sites' },
   { key: 'land', label: 'Land hex distance', unit: 'hexes' },
   { key: 'slLand', label: 'Land hex cost', unit: 'moves' },
-  { key: 'choke', label: 'Mid-land choke', unit: 'hexes at narrowest midway crossing · lo=chokepoint' },
-  { key: 'wall', label: 'Wall cost', unit: 'hexes to seal every door between full-split empires · lo=sealable' },
+  { key: 'slSea', label: 'Water move cost', unit: 'moves cap→cap by water' },
+  { key: 'slHatti', label: 'Hatti move cost', unit: 'moves cap→cap, Hatti terrain rules' },
+  { key: 'crow', label: 'Crow distance', unit: 'hexes, straight line cap→cap' },
+  { key: 'scout', label: 'Scout crossing', unit: 'turns for a scout to cross' },
+  { key: 'choke', label: 'Mid-land choke', unit: 'hexes at narrowest midway crossing · narrowest first' },
+  { key: 'wall', label: 'Wall cost', unit: 'hexes to seal every door between full-split empires · most sealable first' },
   { key: 'expansion', label: 'Expansion space', unit: 'urbanizable · excl. jungle' },
   { key: 'hills', label: 'Hills / windmill sites', unit: 'hill tiles (windmill-eligible)' },
   { key: 'watermill', label: 'Watermill sites', unit: 'eligible (by a river)' },
@@ -110,6 +114,9 @@ const fmt = (v: number) =>
   v >= 100 ? String(Math.round(v)) : v >= 10 ? v.toFixed(1) : v.toFixed(2);
 
 // build a ranked list for one dimension in one mode ('raw' | 'den')
+// wall & choke: low = the notable end (sealable / pinched), so they rank
+// fewest-first and their bars flip — green means tight on both pages.
+const INVERT = new Set<string>(['wall', 'choke']);
 function ranked(key: string, mode: string) {
   const rows = pool.map((c: any) => {
     const raw = meanOf(c, key);
@@ -118,9 +125,11 @@ function ranked(key: string, mode: string) {
   });
   const vals = rows.map((r) => r.v);
   const lo = Math.min(...vals), hi = Math.max(...vals);
-  rows.sort((a, b) => b.v - a.v);
+  const inv = INVERT.has(key);
+  rows.sort((a, b) => (inv ? a.v - b.v : b.v - a.v));
   return rows.map((r, i) => {
-    const t = hi > lo ? (r.v - lo) / (hi - lo) : 0.5;
+    const t0 = hi > lo ? (r.v - lo) / (hi - lo) : 0.5;
+    const t = inv ? 1 - t0 : t0;
     const tt = Math.max(0, Math.min(1, t));
     return { ...r, rank: i + 1,
       disp: mode === 'den' ? fmt(r.v) : (r.raw == null ? '—' : String(r.raw)),
