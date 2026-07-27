@@ -423,15 +423,16 @@ const DENSITY_KEYS = new Set<string>([
   'windmill', 'watermill', 'clearcutWJ', 'clearcutSF', 'hills',
   'expansion', 'sites',
 ]);
-// comparison value for a config on a key: density where it applies
-const cmpVal = (c: any, k: string) => {
+// bars and ranks compare WHOLE-MAP TOTALS — the number actually printed
+// on the card. Density (per 100 land tiles) is carried in the tooltip as
+// the size-neutral cross-check, not as the ranking basis.
+const cmpVal = (c: any, k: string) => c.dist?.[k]?.mean ?? null;
+const dens = (c: any, k: string) => {
+  if (!DENSITY_KEYS.has(k)) return null;
   const m = c.dist?.[k]?.mean;
-  if (m == null) return null;
-  if (!DENSITY_KEYS.has(k)) return m;
   const L = landMean[c.slug];
-  return L ? (m / L) * 100 : null;
+  return m != null && L ? (m / L) * 100 : null;
 };
-const dens = (c: any, k: string) => (DENSITY_KEYS.has(k) ? cmpVal(c, k) : null);
 const fmtD = (v: number) =>
   v >= 100 ? String(Math.round(v)) : v >= 10 ? v.toFixed(1) : v.toFixed(2);
 
@@ -494,9 +495,8 @@ const rankTip = (c: any, k: string) => {
   const r = rk(c, k);
   if (!r) return '';
   const d = dens(c, k);
-  return `\nRank ${r} of ${rankN(k)} in the pool`
-    + (d != null ? ` — per 100 land tiles ≈ ${fmtD(d)} (size-neutral).`
-                 : ' (highest first).');
+  return `\nRank ${r} of ${rankN(k)} in the pool by map total (highest first).`
+    + (d != null ? ` Size-neutral cross-check: ≈ ${fmtD(d)} per 100 land tiles.` : '');
 };
 
 // ---- hero-pill relative bars -----------------------------------------
@@ -638,7 +638,7 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             return (
               <div class="pill">
                 <div class="pill__l"><span class="pill__g">{pd.grp}</span>{pd.label}
-                  {r && <span class="pill__rk" title={`Rank ${r} of ${rankN(pd.key)} in the pool${dens(c, pd.key) != null ? ' — ranked per 100 land tiles (size-neutral)' : ''}`}>#{r}</span>}
+                  {r && <span class="pill__rk" title={`Rank ${r} of ${rankN(pd.key)} in the pool by map total (highest first)`}>#{r}</span>}
                 </div>
                 {d ? (<>
                   <div class="pill__v"><b>{d.mean}</b> <span class="pm">±{d.sd}</span></div>
@@ -681,7 +681,7 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             })}
           </div>
           <div class="rstrip__lab rstrip__lab--2">Terrain &amp; topology
-            <span class="rstrip__sub">what the ground is made of · % dims compare as-is, counts compare per 100 land tiles · hover for exact amounts <i>and per-player site counts</i></span>
+            <span class="rstrip__sub">what the ground is made of · bars &amp; ranks compare map totals · hover for exact amounts <i>and per-player site counts</i></span>
           </div>
           <div class="rstrip__ics">
             {TERRAIN_BARS.map((b: any) => {
