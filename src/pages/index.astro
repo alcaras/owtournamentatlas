@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import dist from '../data/atlas-dist.json';
 import gensData from '../data/gens.json';
+import gensData from '../data/gens.json';
 import { imgDimsBySlug } from '../lib/img-dims';
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -368,11 +369,77 @@ const YIELD_BARS = [
   { key: 'wood', icon: 'wood', label: 'Wood',
     desc: 'Potential Wood — every tile given the best wood improvement it can take (Lumbermill), summed' },
 ] as const;
+// terrain / topology composition — the rest of the tournament dimensions
+// the rankings page carries. Same bar treatment as resources & yields;
+// glyphs are the inline SVG sprite at the top of <body> (no PNG assets).
+const TERRAIN_BARS = [
+  { key: 'trees', icon: 'trees', label: 'Trees',
+    desc: '% of tiles carrying forest — lumbermill sites and ranged cover' },
+  { key: 'jungle', icon: 'jungle', label: 'Jungle',
+    desc: '% of tiles carrying jungle — clearcut-only (never millable), double move cost' },
+  { key: 'scrub', icon: 'scrub', label: 'Scrub',
+    desc: '% of tiles carrying scrub — 10 wood per chop, no mill' },
+  { key: 'veg', icon: 'veg', label: 'Vegetation',
+    desc: '% of tiles carrying any vegetation (forest + scrub + jungle)' },
+  { key: 'marsh', icon: 'marsh', label: 'Marsh',
+    desc: '% of tiles that are marsh terrain' },
+  { key: 'hillsPct', icon: 'hills', label: 'Hills %',
+    desc: '% of tiles that are hills — mines get +60% iron here' },
+  { key: 'river', icon: 'river', label: 'River',
+    desc: '% of tiles bordering a river — fresh-water farms, +60% lumbermills, watermills' },
+  { key: 'nomad', icon: 'sand', label: 'Arid/Sand',
+    desc: '% of tiles that are arid or sand — sand takes no farm, mine or flat quarry' },
+  { key: 'oceanPct', icon: 'water', label: 'Ocean',
+    desc: '% of the map that is water — land units cannot cross it' },
+  { key: 'windmill', icon: 'windmill', label: 'Windmill',
+    desc: 'Hill tiles — windmill-eligible sites (count per map)' },
+  { key: 'watermill', icon: 'watermill', label: 'Watermill',
+    desc: 'Tiles by a river — watermill-eligible sites (count per map)' },
+  { key: 'clearcutSF', icon: 'clearcut', label: 'Clearcut S+F',
+    desc: 'Clearcut scrub + forest — one-time wood from chopping every scrub (20) and forest (40) tile' },
+  { key: 'clearcutWJ', icon: 'clearcut2', label: 'Clearcut S+F+J',
+    desc: 'Clearcut scrub + forest + jungle — the same total plus jungle at 60 wood per tile (identical to S+F on jungle-free maps)' },
+  { key: 'rangedCover', icon: 'cover', label: 'Ranged cover',
+    desc: 'Vegetation defence index (scrub 25 / forest 50 / jungle 75) — how much cover ranged units find' },
+] as const;
+
+// ---- size-neutral comparison -----------------------------------------
+// Printed numbers stay whole-map TOTALS (that is what the seeds contain),
+// but bars and ranks for anything that scales with map area are computed
+// PER 100 LAND TILES — otherwise the Tiny maps win every count on bulk
+// alone. Percentages, distances and cut widths are already size-neutral
+// and rank on their raw value.
+const landBy: Record<string, number[]> = {};
+for (const gn of (gensData as any).gens)
+  if (gn.landTiles != null) (landBy[gn.cslug] ??= []).push(gn.landTiles);
+const landMean: Record<string, number> = {};
+for (const k in landBy) {
+  const a = landBy[k];
+  landMean[k] = a.reduce((x: number, y: number) => x + y, 0) / a.length;
+}
+// dims that scale with map area → compared per 100 land tiles
+const DENSITY_KEYS = new Set<string>([
+  ...RES_BARS.map((b: any) => b.key), ...YIELD_BARS.map((b: any) => b.key),
+  'windmill', 'watermill', 'clearcutWJ', 'clearcutSF', 'hills',
+  'expansion', 'sites',
+]);
+// comparison value for a config on a key: density where it applies
+const cmpVal = (c: any, k: string) => {
+  const m = c.dist?.[k]?.mean;
+  if (m == null) return null;
+  if (!DENSITY_KEYS.has(k)) return m;
+  const L = landMean[c.slug];
+  return L ? (m / L) * 100 : null;
+};
+const dens = (c: any, k: string) => (DENSITY_KEYS.has(k) ? cmpVal(c, k) : null);
+const fmtD = (v: number) =>
+  v >= 100 ? String(Math.round(v)) : v >= 10 ? v.toFixed(1) : v.toFixed(2);
+
 // pool min/max of each resource's per-config mean → normalisation range,
 // so every bar reads "lots vs little of this RELATIVE to the other maps".
 const resRange: Record<string, { lo: number; hi: number }> = {};
-for (const b of [...RES_BARS, ...YIELD_BARS]) {
-  const ms = pool.map((c: any) => c.dist?.[b.key]?.mean)
+for (const b of [...RES_BARS, ...YIELD_BARS, ...TERRAIN_BARS]) {
+  const ms = pool.map((c: any) => cmpVal(c, b.key))
     .filter((v: any) => v != null);
   resRange[b.key] = { lo: ms.length ? Math.min(...ms) : 0,
     hi: ms.length ? Math.max(...ms) : 0 };
@@ -381,7 +448,7 @@ for (const b of [...RES_BARS, ...YIELD_BARS]) {
 const barOf = (c: any, key: string) => {
   const d = c.dist?.[key];
   const r = resRange[key] || { lo: 0, hi: 0 };
-  const mean = d?.mean ?? 0;
+  const mean = cmpVal(c, key) ?? 0;      // density where size matters
   const none = !d || (d.max ?? 0) <= 0;   // map never has this at all
   const t = r.hi > r.lo ? (mean - r.lo) / (r.hi - r.lo) : 0.5;
   const tt = Math.max(0, Math.min(1, t));
@@ -389,24 +456,80 @@ const barOf = (c: any, key: string) => {
     w: none ? 100 : Math.round(8 + tt * 92),
     col: none ? '#23262c' : `hsl(${Math.round(tt * 125)},58%,42%)` };
 };
-const barTip = (b: any, d: any) =>
+// every pool map is mirrored, so a whole-map count splits exactly in
+// half between the two players — spell that out rather than making the
+// reader divide.
+const half = (v: number) => {
+  const h = v / 2;
+  return h >= 10 ? h.toFixed(0) : h.toFixed(1).replace(/\.0$/, '');
+};
+const barTip = (b: any, d: any, c?: any, perPlayer = false) =>
   (!d || (d.max ?? 0) <= 0)
     ? `${b.label} — ${b.desc}\nNone on this map.`
     : `${b.label} — ${b.desc}\navg ${d.mean} per map (±${d.sd} sd, `
-      + `range ${d.min}–${d.max}). Bar = relative to other maps.`;
+      + `range ${d.min}–${d.max}). Bar = relative to other maps.`
+      + (perPlayer ? `\n≈ ${half(d.mean)} per player — the map is mirrored, `
+          + `so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '')
+      + (c ? rankTip(c, b.key) : '');
+
+// ---- rank badges ------------------------------------------------------
+// The rankings page's actual payload is POSITION, not value. Every bar
+// and pill carries "#n" = this config's rank in the 18-map pool, sorted
+// high→low on the size-neutral basis above.
+const rankOf: Record<string, Record<string, number>> = {};
+const RANK_KEYS = [...RES_BARS, ...YIELD_BARS, ...TERRAIN_BARS]
+  .map((b: any) => b.key)
+  .concat(['sites', 'land', 'slLand', 'expansion', 'wall', 'choke']);
+for (const k of RANK_KEYS) {
+  const rows = pool
+    .map((c: any) => ({ slug: c.slug, v: cmpVal(c, k) }))
+    .filter((r: any) => r.v != null)
+    .sort((a: any, b: any) => (b.v as number) - (a.v as number));
+  rankOf[k] = {};
+  rows.forEach((r: any, i: number) => { rankOf[k][r.slug] = i + 1; });
+}
+const rankN = (k: string) => Object.keys(rankOf[k] || {}).length;
+const rk = (c: any, k: string) => rankOf[k]?.[c.slug];
+const rankTip = (c: any, k: string) => {
+  const r = rk(c, k);
+  if (!r) return '';
+  const d = dens(c, k);
+  return `\nRank ${r} of ${rankN(k)} in the pool`
+    + (d != null ? ` — per 100 land tiles ≈ ${fmtD(d)} (size-neutral).`
+                 : ' (highest first).');
+};
 
 // ---- hero-pill relative bars -----------------------------------------
 // Same green→red language as the resource bars, applied to the headline
 // stats so each pill also shows where this script sits vs the pool.
-const PILL_KEYS = ['sites', 'land', 'slLand', 'expansion'] as const;
+const PILL_KEYS = ['sites', 'land', 'slLand', 'expansion',
+  'wall', 'choke'] as const;
 const pillRange: Record<string, { lo: number; hi: number }> = {};
 for (const k of PILL_KEYS) {
-  const ms = pool.map((c: any) => c.dist?.[k]?.mean)
+  const ms = pool.map((c: any) => cmpVal(c, k))
     .filter((v: any) => v != null);
   pillRange[k] = { lo: ms.length ? Math.min(...ms) : 0,
     hi: ms.length ? Math.max(...ms) : 0 };
 }
-const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) => {
+// the six headline pills, data-driven so wall/choke ride the same layout
+// Six pills on a 3x2 grid. Row-major order is chosen so each COLUMN is a
+// themed pair: room to grow | how far apart | how sealable.
+const PILL_DEFS = [
+  { key: 'sites', label: 'City sites', grp: 'Room',
+    tip: 'City sites on the map. More vs fewer, relative to the other maps.' },
+  { key: 'land', label: 'Land hex distance', grp: 'Distance',
+    tip: 'Capital→capital distance along land. Longer vs shorter, relative to the other maps.' },
+  { key: 'wall', label: 'Wall cost', grp: 'Topology',
+    tip: 'Hexes needed to seal EVERY land route between the two full-split empires (min-cut; sites are uncuttable). Low = sealable, high = open field. Land only — water is not counted.' },
+  { key: 'expansion', label: 'Expansion space', grp: 'Room',
+    tip: 'Urbanizable tiles — Lush/Temperate/Arid that are Flat or Hill (can host a city/urban; excludes sand, marsh, tundra, jungle, water, mountain). More = roomier, less = cramped.' },
+  { key: 'slLand', label: 'Land hex cost', grp: 'Distance',
+    tip: 'Capital→capital move-cost along land (terrain-weighted). Higher vs lower, relative to the other maps.' },
+  { key: 'choke', label: 'Mid-land choke', grp: 'Topology',
+    tip: 'Land width at the capital-equidistant midline — the fair-contest line. Low = the middle pinches, high = broad meeting ground. Not the same question as Wall cost.' },
+] as const;
+
+const barStyle = (mean: number | undefined | null, range: { lo: number; hi: number }) => {
   if (mean == null) return 'width:0%;background:#333';
   const t = range.hi > range.lo ? (mean - range.lo) / (range.hi - range.lo) : 0.5;
   const tt = Math.max(0, Math.min(1, t));
@@ -414,6 +537,23 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
 };
 ---
 <Base title="Tournament Pool" hideNav={true}>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="g-trees" viewBox="0 0 24 24"><path d="M8 4l4 6H4zM8 8l4 6H4zM8 14v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M17 8l3.5 6h-7zM17 14v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="g-jungle" viewBox="0 0 24 24"><path d="M12 20V9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 9c-4-5-8-3-9 0 3 2 7 2 9 0zM12 9c4-5 8-3 9 0-3 2-7 2-9 0zM12 9c0-5-3-6-5-6 0 3 2 5 5 6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="g-scrub" viewBox="0 0 24 24"><path d="M4 18c0-3 2-4 3.5-4S11 15 11 18zM13 18c0-2.2 1.6-3.4 3-3.4S19 15.8 19 18z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 20h18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+    <symbol id="g-marsh" viewBox="0 0 24 24"><path d="M7 17V8M7 8c-2 1-3 3-2.5 5M11 17V6M11 6c2 1.4 2.8 3.6 2 5.6M16 17v-6M16 11c-1.6.8-2.4 2.2-2 3.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 19c2-1.2 3.5-1.2 5.5 0s3.5 1.2 5.5 0 3.5-1.2 5.5 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="g-hills" viewBox="0 0 24 24"><path d="M2 18l6.5-8 4.5 5.4M9.5 18l5-6.5L22 18z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="g-river" viewBox="0 0 24 24"><path d="M4 5c3 2.5 3 4.5 0 7s-3 4.5 0 7M13 5c3 2.5 3 4.5 0 7s-3 4.5 0 7M20 6.5c1.6 1.6 1.6 3.4 0 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="g-sand" viewBox="0 0 24 24"><circle cx="17.5" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2 17c2.5-4 5-4 7.5 0M8 17c2.5-3.4 5-3.4 7.5 0M2 20.5h20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="g-water" viewBox="0 0 24 24"><path d="M2 8c2-1.4 3.6-1.4 5.5 0s3.5 1.4 5.5 0 3.6-1.4 5.5 0 1.5 0 3.5 0M2 13c2-1.4 3.6-1.4 5.5 0s3.5 1.4 5.5 0 3.6-1.4 5.5 0M2 18c2-1.4 3.6-1.4 5.5 0s3.5 1.4 5.5 0 3.6-1.4 5.5 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="g-windmill" viewBox="0 0 24 24"><circle cx="12" cy="9" r="1.6" fill="currentColor"/><path d="M12 7.4V2.5M13.4 10.1l4.2 2.4M10.6 10.1l-4.2 2.4M9 20h6l-1.4-8.6h-3.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="g-watermill" viewBox="0 0 24 24"><circle cx="12" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 5v12M6 11h12M7.8 6.8l8.4 8.4M16.2 6.8l-8.4 8.4" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 20.5c2-1.2 3.6-1.2 5.5 0s3.5 1.2 5.5 0 3.6-1.2 5.5 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="g-clearcut" viewBox="0 0 24 24"><path d="M5 20h7M8.5 20v-4M8.5 16l-3-3M8.5 16l3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14 11.5l5.5-5.5M17.2 4.3l2.5 2.5-2 2-2.5-2.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13 13.8l1.6-1.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="g-veg" viewBox="0 0 24 24"><path d="M20 4c0 8-5 12-11 12-2.2 0-3.6-.6-4.6-1.4C5.8 8.4 11.4 4.6 20 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 20c1.5-4.5 5-8 11-10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="g-clearcut2" viewBox="0 0 24 24"><ellipse cx="7" cy="9" rx="3.4" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><ellipse cx="15" cy="9" rx="3.4" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><ellipse cx="11" cy="15" rx="3.4" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 20h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="g-cover" viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.6c0 4.3-2.9 7.6-7 9.2-4.1-1.6-7-4.9-7-9.2V5.6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 8.5l2.6 4.4H9.4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  </defs></svg>
+
   <p class="lede">
     The <b>{pool.length}-map tournament pool</b>, grouped by map script.
     The reference for in-game setup — pills show the live distribution
@@ -492,49 +632,35 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
           </button>
         </div>
         <div class="pills">
-          <div class="pill">
-            <div class="pill__l">City sites</div>
-            <div class="pill__v"><b>{c.dist.sites?.mean ?? '—'}</b> <span class="pm">±{c.dist.sites?.sd ?? 0}</span></div>
-            <div class="pill__r">min {c.dist.sites?.min} · <b>med {c.dist.sites?.med}</b> · max {c.dist.sites?.max}</div>
-            <div class="pill__bar" title="More vs fewer city sites, relative to the other maps"><span style={barStyle(c.dist.sites?.mean, pillRange.sites)}></span></div>
-          </div>
-          <div class="pill">
-            <div class="pill__l">Land hex distance</div>
-            {c.dist.land ? (<>
-              <div class="pill__v"><b>{c.dist.land.mean}</b> <span class="pm">±{c.dist.land.sd}</span></div>
-              <div class="pill__r">min {c.dist.land.min} · <b>med {c.dist.land.med}</b> · max {c.dist.land.max}</div>
-              <div class="pill__bar" title="Longer vs shorter cap→cap land distance, relative to the other maps"><span style={barStyle(c.dist.land.mean, pillRange.land)}></span></div>
-            </>) : <div class="pill__v dash">—</div>}
-          </div>
-          <div class="pill">
-            <div class="pill__l">Land hex cost</div>
-            {c.dist.slLand ? (<>
-              <div class="pill__v"><b>{c.dist.slLand.mean}</b> <span class="pm">±{c.dist.slLand.sd}</span></div>
-              <div class="pill__r">min {c.dist.slLand.min} · <b>med {c.dist.slLand.med}</b> · max {c.dist.slLand.max}</div>
-              <div class="pill__bar" title="Higher vs lower move-cost, relative to the other maps"><span style={barStyle(c.dist.slLand.mean, pillRange.slLand)}></span></div>
-            </>) : <div class="pill__v dash">—</div>}
-          </div>
-          <div class="pill">
-            <div class="pill__l">Expansion space</div>
-            {c.dist.expansion ? (<>
-              <div class="pill__v"><b>{c.dist.expansion.mean}</b> <span class="pm">±{c.dist.expansion.sd}</span></div>
-              <div class="pill__r">min {c.dist.expansion.min} · <b>med {c.dist.expansion.med}</b> · max {c.dist.expansion.max}</div>
-              <div class="pill__bar" title="Urbanizable tiles — Lush/Temperate/Arid that are Flat or Hill (can host a city/urban; excludes sand, marsh, tundra, jungle, water, mountain). More = roomier, less = cramped, vs other maps."><span style={barStyle(c.dist.expansion.mean, pillRange.expansion)}></span></div>
-            </>) : <div class="pill__v dash">—</div>}
-          </div>
+          {PILL_DEFS.map((pd: any) => {
+            const d = c.dist?.[pd.key];
+            const r = rk(c, pd.key);
+            return (
+              <div class="pill">
+                <div class="pill__l"><span class="pill__g">{pd.grp}</span>{pd.label}
+                  {r && <span class="pill__rk" title={`Rank ${r} of ${rankN(pd.key)} in the pool${dens(c, pd.key) != null ? ' — ranked per 100 land tiles (size-neutral)' : ''}`}>#{r}</span>}
+                </div>
+                {d ? (<>
+                  <div class="pill__v"><b>{d.mean}</b> <span class="pm">±{d.sd}</span></div>
+                  <div class="pill__r">min {d.min} · <b>med {d.med}</b> · max {d.max}</div>
+                  <div class="pill__bar" title={pd.tip + rankTip(c, pd.key)}><span style={barStyle(cmpVal(c, pd.key), pillRange[pd.key])}></span></div>
+                </>) : <div class="pill__v dash">—</div>}
+              </div>
+            );
+          })}
         </div>
         <div class="rstrip">
           <div class="rstrip__lab">Resource abundance
-            <span class="rstrip__sub">green = lots · red = little, <i>relative to the other maps</i> · hover for exact amounts</span>
+            <span class="rstrip__sub">green = lots · red = little, <i>relative to the other maps</i> · hover for exact amounts <i>and per-player counts</i></span>
           </div>
           <div class="rstrip__ics">
             {RES_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d)}>
+                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c, true)}>
                   <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
-                  <div class="ric__c">{b.label}</div>
+                  <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
                 </div>
               );
             })}
@@ -546,10 +672,25 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
             {YIELD_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d)}>
+                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c)}>
                   <img src={`${baseUrl}img/icons/yields/${b.icon}.png`} alt={b.label} />
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
-                  <div class="ric__c">{b.label}</div>
+                  <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
+                </div>
+              );
+            })}
+          </div>
+          <div class="rstrip__lab rstrip__lab--2">Terrain &amp; topology
+            <span class="rstrip__sub">what the ground is made of · % dims compare as-is, counts compare per 100 land tiles · hover for exact amounts</span>
+          </div>
+          <div class="rstrip__ics">
+            {TERRAIN_BARS.map((b: any) => {
+              const bar = barOf(c, b.key);
+              return (
+                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c)}>
+                  <svg class="tic" viewBox="0 0 24 24" aria-label={b.label}><use href={`#g-${b.icon}`} /></svg>
+                  <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
+                  <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
                 </div>
               );
             })}
@@ -666,8 +807,13 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
       text-decoration:none; }
     .snav__l.on { color:var(--gold); font-weight:700;
       border-left-color:var(--gold); background:var(--bg-elev); }
-    .pills { display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:0.7rem; }
-    .pill { flex:1 1 240px; background:#16181d;
+    .pills { display:grid; gap:0.7rem; margin-top:0.7rem;
+      grid-template-columns:repeat(3, minmax(0,1fr)); }
+    @media (max-width:960px){ .pills { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+    @media (max-width:560px){ .pills { grid-template-columns:1fr; } }
+    .pill__g { display:block; font-size:0.55rem; letter-spacing:0.16em;
+      color:var(--text-dim); margin-bottom:0.12rem; }
+    .pill { background:#16181d;
       border:1px solid var(--gold-deep); border-radius:8px;
       padding:0.55rem 0.85rem; }
     .pill__l { font-size:0.62rem; letter-spacing:0.14em;
@@ -727,6 +873,14 @@ const barStyle = (mean: number | undefined, range: { lo: number; hi: number }) =
     .ric__c { font-size:0.58rem; color:var(--text-faint);
       font-family:var(--font-ui); text-align:center; line-height:1.1; }
     /* none on this map (no seed had it) — fully greyed out */
+    .ric__rk { color:var(--gold-deep); margin-left:0.22rem;
+      font-variant-numeric:tabular-nums; }
+    .tic { width:30px; height:30px; color:var(--text-soft); opacity:0.92; }
+    .ric--none .tic { color:var(--text-dim); opacity:0.5; }
+    .pill__rk { float:right; font-size:0.62rem; letter-spacing:0.04em;
+      color:var(--gold); background:#20222a; border:1px solid var(--gold-deep);
+      border-radius:999px; padding:0.02rem 0.34rem; cursor:help;
+      font-variant-numeric:tabular-nums; }
     .ric--none { opacity:0.38; }
     .ric--none img { filter:grayscale(1) brightness(0.75); }
     .ric--none .ric__bar { border-style:dashed; }
