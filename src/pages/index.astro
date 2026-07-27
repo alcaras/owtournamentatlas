@@ -720,7 +720,8 @@ const barStyle = (c: any, key: string) => {
             const d = c.dist?.[pd.key];
             const r = rk(c, pd.key);
             return (
-              <div class="pill">
+              <a class="pill" href={`${baseUrl}rankings?c=${c.slug}#r-${pd.key}`}
+                title={`See every map ranked on ${pd.label}`}>
                 <div class="pill__l"><span class="pill__g">{pd.grp}</span>{pd.label}
                   {r && <span class="pill__rk" title={`Rank ${r} of ${rankN(pd.key)} in the pool by map total (${INVERT.has(pd.key) ? 'fewest first — low = tight' : 'highest first'})`}>#{r}</span>}
                 </div>
@@ -729,7 +730,7 @@ const barStyle = (c: any, key: string) => {
                   <div class="pill__r">min {d.min} · <b>med {d.med}</b> · max {d.max}</div>
                   <div class="pill__bar" title={pd.tip + (pd.pp ? `\n≈ ${half(d.mean)} per player — the map is mirrored, so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '') + rankTip(c, pd.key)}><span style={barStyle(c, pd.key)}></span></div>
                 </>) : <div class="pill__v dash">—</div>}
-              </div>
+              </a>
             );
           })}
         </div>
@@ -751,11 +752,11 @@ const barStyle = (c: any, key: string) => {
             {RES_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c, true)}>
+                <a class={`ric${bar.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${b.key}`} title={barTip(b, bar.d, c, true)}>
                   <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
                   <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
-                </div>
+                </a>
               );
             })}
           </div>
@@ -766,11 +767,11 @@ const barStyle = (c: any, key: string) => {
             {YIELD_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c)}>
+                <a class={`ric${bar.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${b.key}`} title={barTip(b, bar.d, c)}>
                   <img src={`${baseUrl}img/icons/yields/${b.icon}.png`} alt={b.label} />
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
                   <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
-                </div>
+                </a>
               );
             })}
           </div>
@@ -781,11 +782,11 @@ const barStyle = (c: any, key: string) => {
             {TERRAIN_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c, !!b.pp)}>
+                <a class={`ric${bar.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${b.key}`} title={barTip(b, bar.d, c, !!b.pp)}>
                   <svg class="tic" viewBox="0 0 24 24" aria-label={b.label}><use href={`#g-${b.icon}`} /></svg>
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
                   <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
-                </div>
+                </a>
               );
             })}
           </div>
@@ -956,6 +957,11 @@ const barStyle = (c: any, key: string) => {
     .facts__row { display:flex; flex-wrap:wrap; align-items:baseline; gap:0.4rem; }
     .facts__lab { font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase;
       color:var(--text-dim); min-width:8.2rem; }
+    a.pill, a.ric { text-decoration:none; color:inherit; }
+    a.pill { transition:border-color .12s, background .12s; }
+    a.pill:hover { border-color:var(--gold-deep); background:#191c22; }
+    a.ric:hover .ric__c { color:var(--gold); }
+    a.ric:hover img, a.ric:hover .tic { filter:brightness(1.25); }
     .fct { font-size:0.74rem; color:var(--text-faint); cursor:help;
       background:#16181d; border:1px solid var(--border); border-radius:4px;
       padding:0.08rem 0.42rem; }

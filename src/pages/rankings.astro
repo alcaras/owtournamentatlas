@@ -197,7 +197,7 @@ const GROUPS = [
             {['raw', ...(dim.dual ? ['den'] : [])].map((mode: string) => (
               <ol class={`lb lb--${mode}`}>
                 {ranked(dim.key, mode).map((r: any) => (
-                  <li class={`r${r.none ? ' r--none' : ''}`} title={tipOf(r.c, dim.key)}>
+                  <li class={`r${r.none ? ' r--none' : ''}`} data-slug={r.c.slug} title={tipOf(r.c, dim.key)}>
                     <span class="r__n">{r.rank}</span>
                     <span class="r__nm"><b>{nameOf(r.c)}</b><i>{subOf(r.c)}</i></span>
                     <span class="r__bar"><span style={`width:${r.w}%;background:${r.col}`}></span></span>
@@ -217,6 +217,14 @@ const GROUPS = [
   <p class="back"><a href={baseUrl}>← Back to the map atlas</a></p>
 
   <style>
+    /* arriving from a pool card: /rankings?c=<slug>#r-<dim> highlights
+       that map's row in every list and pulses the one you clicked. */
+    .r.is-hi { background:rgba(255,193,64,0.10);
+      box-shadow:inset 2px 0 0 var(--gold); border-radius:3px; }
+    .r.is-hi .r__nm b { color:var(--gold); }
+    .lbcard.is-target { outline:1px solid var(--gold-deep);
+      outline-offset:3px; border-radius:6px; }
+
     .lede { font-family:var(--font-display); font-style:italic;
       font-size:1.05rem; line-height:1.55; color:var(--text-soft);
       max-width:90ch; margin:0.6rem 0 1.2rem; }
@@ -354,5 +362,24 @@ const GROUPS = [
         window.requestAnimationFrame(spy); }, { passive: true });
       spy();
     })();
-  </script>
+  
+  // ---- cross-link from the pool cards ---------------------------------
+  // index.astro links each pill/bar to /rankings?c=<slug>#r-<key>. Mark
+  // that config in every ranking list so it can be found by eye, and put
+  // a ring on the dimension that was clicked.
+  (function () {
+    var slug = new URLSearchParams(location.search).get('c');
+    if (!slug) return;
+    var rows = document.querySelectorAll('li.r[data-slug="' + slug + '"]');
+    for (var i = 0; i < rows.length; i++) rows[i].classList.add('is-hi');
+    var card = location.hash && document.querySelector(location.hash);
+    if (card) {
+      card.classList.add('is-target');
+      var row = card.querySelector('li.r.is-hi');
+      requestAnimationFrame(function () {
+        (row || card).scrollIntoView({ block: 'center' });
+      });
+    }
+  })();
+</script>
 </Base>
