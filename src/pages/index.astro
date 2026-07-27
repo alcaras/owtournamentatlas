@@ -843,11 +843,15 @@ const barStyle = (c: any, key: string) => {
       border-radius:6px; padding:0.8rem 1rem; scroll-margin-top:1rem; }
     .cfg__hd { order:0; display:flex; align-items:baseline; gap:0.8rem;
       flex-wrap:wrap; padding-right:10.5rem; }
-    .pills { order:1; }
-    .rstrip { order:2; }
-    .cfgdist { order:2; }
-    .setup { order:3; }
-    .gal { order:4; }
+    /* flex order inside .cfg — the SETUP GUIDE summary is pinned top-right,
+       so its panel must open directly under the header, not below the
+       strips. */
+    .setup { order:1; }
+    .pills { order:2; }
+    .facts { order:3; }
+    .rstrip { order:4; }
+    .cfgdist { order:4; }
+    .gal { order:5; }
     .cfg__name { font-family:var(--font-display); font-weight:700;
       font-size:1.18rem; color:var(--text); }
     .cfg__tag { font-family:var(--font-mono, monospace); font-weight:600;
