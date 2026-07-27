@@ -518,7 +518,9 @@ const INVERT = new Set<string>(['wall', 'choke']);
 const rankOf: Record<string, Record<string, number>> = {};
 const RANK_KEYS = [...RES_BARS, ...YIELD_BARS, ...TERRAIN_BARS]
   .map((b: any) => b.key)
-  .concat(['sites', 'land', 'slLand', 'expansion', 'wall', 'choke']);
+  .concat(['sites', 'land', 'slLand', 'expansion', 'wall', 'choke',
+           'crow', 'scout', 'slSea', 'slHatti',
+           'tiles', 'landTiles', 'walkable', 'reachPct', 'tribes', 'res']);
 for (const k of RANK_KEYS) {
   const rows = pool
     .map((c: any) => ({ slug: c.slug, v: cmpVal(c, k) }))
@@ -558,41 +560,40 @@ for (const k of PILL_KEYS) {
 // distance block and the map-shape counts. Text-only so they read as
 // reference, not as another thing to compare.
 const one = (c: any, k: string) => c.dist?.[k];
-const r1 = (v: number) => (Math.round(v * 10) / 10).toString();
-// a fact chip: label, value, ±sd, tooltip
-const fx = (lab: string, v: any, sd: any, tip: string) => ({ lab, v, sd, tip });
-const fromDist = (c: any, k: string, lab: string, unit: string, tip: string) => {
+// a % metric's spread is in percentage points, so the unit rides the sd
+// too — "99% ±2.9%", not "99% ±2.9". Word units (" turns") stay on the
+// value alone, where repeating them would just be noise.
+const sdU = (unit: string) => (unit === '%' ? '%' : '');
+// Facts carry the same furniture as the pills and bars: value, spread,
+// pool rank, and a link into the matching rankings list. Anything already
+// shown as a pill (land path, land move-cost) or a terrain bar (river,
+// ocean) is deliberately absent — this strip is only what has no bar.
+const fact = (c: any, k: string, lab: string, unit: string, tip: string) => {
   const d = one(c, k);
-  return d ? fx(lab, `${d.mean}${unit}`, d.sd,
-    `${tip}\navg ${d.mean}${unit} ±${d.sd} sd · median ${d.med} · range ${d.min}–${d.max}`)
-    : fx(lab, '—', null, tip);
-};
-const fromGens = (c: any, k: string, lab: string, unit: string, tip: string, dp = 0) => {
-  const g = genAgg[c.slug]?.[k];
-  return g ? fx(lab, `${g.mean.toFixed(dp)}${unit}`, r1(g.sd),
-    `${tip}\navg ${g.mean.toFixed(dp)}${unit} ±${r1(g.sd)} sd · range ${g.min}–${g.max}`)
-    : fx(lab, '—', null, tip);
+  if (!d) return { lab, v: '—', sd: null, rank: null, key: k, tip };
+  return { lab, key: k, v: `${d.mean}${unit}`, sd: `${d.sd}${sdU(unit)}`,
+    rank: rk(c, k),
+    tip: `${tip}\navg ${d.mean}${unit} ±${d.sd}${sdU(unit)} sd · median ${d.med}${unit} · range ${d.min}${unit}–${d.max}${unit}`
+      + rankTip(c, k) };
 };
 const factRows = (c: any) => {
   const dist = [
-    fx('Land-connected', c.connPct >= 100 ? 'always' : `${c.connPct}%`, null,
-      `Capitals share a land route. Seeds with no connected pair are dropped from the pool — ${c.dropPct}% of attempts here.`),
-    fromDist(c, 'crow', 'Crow', '', 'Straight-line capital→capital distance, ignoring terrain.'),
-    fromDist(c, 'land', 'Land path', '', 'Capital→capital along walkable land.'),
-    fromDist(c, 'scout', 'Scout', ' turns', 'Turns for a scout to cross between capitals.'),
-    fromDist(c, 'slLand', 'Move-cost land', '', 'Terrain-weighted move cost capital→capital by land.'),
-    fromDist(c, 'slSea', 'Move-cost water', '', 'Terrain-weighted move cost capital→capital by water.'),
-    fromDist(c, 'slHatti', 'Move-cost Hatti-land', '', 'Move cost capital→capital by land under Hatti terrain rules.'),
+    { lab: 'Land-connected', key: null, v: c.connPct >= 100 ? 'always' : `${c.connPct}%`,
+      sd: null, rank: null,
+      tip: `Capitals share a land route. Seeds with no connected pair are dropped from the pool — ${c.dropPct}% of attempts here.` },
+    fact(c, 'crow', 'Crow', '', 'Straight-line capital→capital distance, ignoring terrain.'),
+    fact(c, 'scout', 'Scout', ' turns', 'Turns for a scout to cross between capitals.'),
+    fact(c, 'slSea', 'Move-cost water', '', 'Terrain-weighted move cost capital→capital by water.'),
+    fact(c, 'slHatti', 'Move-cost Hatti-land', '', 'Move cost capital→capital by land under Hatti terrain rules.'),
   ];
   const map = [
-    fromGens(c, 'tiles', 'Playable tiles', '', 'In-bounds tiles per map.'),
-    fromGens(c, 'landTiles', 'Land tiles', '', 'Walkable land tiles per map.'),
-    fromGens(c, 'reachPct', 'Cap-reachable', '%',
+    fact(c, 'tiles', 'Playable tiles', '', 'In-bounds tiles per map.'),
+    fact(c, 'landTiles', 'Land tiles', '', 'Non-water tiles per map.'),
+    fact(c, 'walkable', 'Walkable', '', 'Land minus mountains, volcanoes and lakes — where units can actually go.'),
+    fact(c, 'reachPct', 'Cap-reachable', '%',
       `Share of land walkable from the capital. SPLIT (under 85%) on ${c.splitPct}% of seeds.`),
-    fromDist(c, 'river', 'River tiles', '%', 'Tiles bordering a river.'),
-    fromDist(c, 'oceanPct', 'Ocean', '%', 'Share of the map that is water.'),
-    fromDist(c, 'tribes', 'Tribal sites', '', 'Tribal settlements per map.'),
-    fromDist(c, 'res', 'Resources', '', 'Total resource tiles per map.'),
+    fact(c, 'tribes', 'Tribal sites', '', 'Tribal settlements per map.'),
+    fact(c, 'res', 'Resources', '', 'Total resource tiles per map.'),
   ];
   return [{ lab: 'Capital distance', items: dist },
           { lab: 'Map shape', items: map }];
@@ -739,7 +740,12 @@ const barStyle = (c: any, key: string) => {
             <div class="facts__row">
               <span class="facts__lab">{row.lab}</span>
               {row.items.map((it: any) => (
-                <span class="fct" title={it.tip}><i>{it.lab}</i><b>{it.v}</b>{it.sd != null && <s>±{it.sd}</s>}</span>
+                it.key
+                  ? <a class="fct" href={`${baseUrl}rankings?c=${c.slug}#r-${it.key}`} title={it.tip}>
+                      <i>{it.lab}</i><b>{it.v}</b>{it.sd != null && <s>±{it.sd}</s>}
+                      {it.rank && <em>#{it.rank}</em>}
+                    </a>
+                  : <span class="fct" title={it.tip}><i>{it.lab}</i><b>{it.v}</b></span>
               ))}
             </div>
           ))}
@@ -969,6 +975,11 @@ const barStyle = (c: any, key: string) => {
     .fct b { color:var(--text-soft); font-variant-numeric:tabular-nums; }
     .fct s { text-decoration:none; color:var(--text-dim); margin-left:0.22rem;
       font-size:0.92em; font-variant-numeric:tabular-nums; }
+    .fct em { font-style:normal; color:var(--gold-deep); margin-left:0.3rem;
+      font-size:0.92em; font-variant-numeric:tabular-nums; }
+    a.fct { text-decoration:none; }
+    a.fct:hover { border-color:var(--gold-deep); background:#191c22; }
+    a.fct:hover b { color:var(--gold); }
     .rstrip { margin-top:0.7rem; }
     .rstrip__lab { font-size:0.62rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.5rem; }
