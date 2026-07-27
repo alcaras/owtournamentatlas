@@ -78,6 +78,7 @@ const TOURNAMENT: Dim[] = [
   { key: 'hills', label: 'Hills / windmill sites', unit: 'hill tiles (windmill-eligible)' },
   { key: 'watermill', label: 'Watermill sites', unit: 'eligible (by a river)' },
   { key: 'nomad', label: 'Nomad', unit: '% arid / sand tiles' },
+  { key: 'oceanPct', label: 'Ocean', unit: '% of the map that is water' },
   { key: 'trees', label: 'Trees', unit: '% tiles with trees' },
   { key: 'jungle', label: 'Jungle', unit: '% tiles with jungle' },
   { key: 'marsh', label: 'Marsh', unit: '% tiles marsh' },
@@ -381,9 +382,8 @@ const GROUPS = [
     var card = location.hash && document.querySelector(location.hash);
     if (card) {
       card.classList.add('is-target');
-      var row = card.querySelector('li.r.is-hi');
       requestAnimationFrame(function () {
-        (row || card).scrollIntoView({ block: 'center' });
+        card.scrollIntoView({ block: 'start' });
       });
     }
   })();

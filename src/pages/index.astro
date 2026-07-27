@@ -391,7 +391,7 @@ const TERRAIN_BARS = [
     desc: '% of tiles that are arid or sand — sand takes no farm, mine or flat quarry' },
   { key: 'oceanPct', icon: 'water', label: 'Ocean',
     desc: '% of the map that is water — land units cannot cross it' },
-  { key: 'windmill', icon: 'windmill', label: 'Windmill',
+  { key: 'hills', icon: 'windmill', label: 'Windmill',
     desc: 'Hill tiles — windmill-eligible sites (count per map)', pp: true },
   { key: 'watermill', icon: 'watermill', label: 'Watermill',
     desc: 'Tiles by a river — watermill-eligible sites (count per map)', pp: true },
@@ -450,7 +450,7 @@ for (const gn of (gensData as any).gens) {
 // dims that scale with map area → compared per 100 land tiles
 const DENSITY_KEYS = new Set<string>([
   ...RES_BARS.map((b: any) => b.key), ...YIELD_BARS.map((b: any) => b.key),
-  'windmill', 'watermill', 'clearcutWJ', 'clearcutSF', 'hills',
+  'watermill', 'clearcutWJ', 'clearcutSF', 'hills',
   'expansion', 'sites',
 ]);
 // bars and ranks compare WHOLE-MAP TOTALS — the number actually printed
