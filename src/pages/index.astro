@@ -392,13 +392,13 @@ const TERRAIN_BARS = [
   { key: 'oceanPct', icon: 'water', label: 'Ocean',
     desc: '% of the map that is water — land units cannot cross it' },
   { key: 'windmill', icon: 'windmill', label: 'Windmill',
-    desc: 'Hill tiles — windmill-eligible sites (count per map)' },
+    desc: 'Hill tiles — windmill-eligible sites (count per map)', pp: true },
   { key: 'watermill', icon: 'watermill', label: 'Watermill',
-    desc: 'Tiles by a river — watermill-eligible sites (count per map)' },
+    desc: 'Tiles by a river — watermill-eligible sites (count per map)', pp: true },
   { key: 'clearcutSF', icon: 'clearcut', label: 'Clearcut S+F',
-    desc: 'Clearcut scrub + forest — one-time wood from chopping every scrub (20) and forest (40) tile' },
+    desc: 'Clearcut scrub + forest — one-time wood from chopping every scrub (20) and forest (40) tile', pp: true },
   { key: 'clearcutWJ', icon: 'clearcut2', label: 'Clearcut S+F+J',
-    desc: 'Clearcut scrub + forest + jungle — the same total plus jungle at 60 wood per tile (identical to S+F on jungle-free maps)' },
+    desc: 'Clearcut scrub + forest + jungle — the same total plus jungle at 60 wood per tile (identical to S+F on jungle-free maps)', pp: true },
   { key: 'rangedCover', icon: 'cover', label: 'Ranged cover',
     desc: 'Vegetation defence index (scrub 25 / forest 50 / jungle 75) — how much cover ranged units find' },
 ] as const;
@@ -515,13 +515,13 @@ for (const k of PILL_KEYS) {
 // Six pills on a 3x2 grid. Row-major order is chosen so each COLUMN is a
 // themed pair: room to grow | how far apart | how sealable.
 const PILL_DEFS = [
-  { key: 'sites', label: 'City sites', grp: 'Room',
+  { key: 'sites', label: 'City sites', grp: 'Room', pp: true,
     tip: 'City sites on the map. More vs fewer, relative to the other maps.' },
   { key: 'land', label: 'Land hex distance', grp: 'Distance',
     tip: 'Capital→capital distance along land. Longer vs shorter, relative to the other maps.' },
   { key: 'wall', label: 'Wall cost', grp: 'Topology',
     tip: 'Hexes needed to seal EVERY land route between the two full-split empires (min-cut; sites are uncuttable). Low = sealable, high = open field. Land only — water is not counted.' },
-  { key: 'expansion', label: 'Expansion space', grp: 'Room',
+  { key: 'expansion', label: 'Expansion space', grp: 'Room', pp: true,
     tip: 'Urbanizable tiles — Lush/Temperate/Arid that are Flat or Hill (can host a city/urban; excludes sand, marsh, tundra, jungle, water, mountain). More = roomier, less = cramped.' },
   { key: 'slLand', label: 'Land hex cost', grp: 'Distance',
     tip: 'Capital→capital move-cost along land (terrain-weighted). Higher vs lower, relative to the other maps.' },
@@ -643,7 +643,7 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
                 {d ? (<>
                   <div class="pill__v"><b>{d.mean}</b> <span class="pm">±{d.sd}</span></div>
                   <div class="pill__r">min {d.min} · <b>med {d.med}</b> · max {d.max}</div>
-                  <div class="pill__bar" title={pd.tip + rankTip(c, pd.key)}><span style={barStyle(cmpVal(c, pd.key), pillRange[pd.key])}></span></div>
+                  <div class="pill__bar" title={pd.tip + (pd.pp ? `\n≈ ${half(d.mean)} per player — the map is mirrored, so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '') + rankTip(c, pd.key)}><span style={barStyle(cmpVal(c, pd.key), pillRange[pd.key])}></span></div>
                 </>) : <div class="pill__v dash">—</div>}
               </div>
             );
@@ -681,13 +681,13 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             })}
           </div>
           <div class="rstrip__lab rstrip__lab--2">Terrain &amp; topology
-            <span class="rstrip__sub">what the ground is made of · % dims compare as-is, counts compare per 100 land tiles · hover for exact amounts</span>
+            <span class="rstrip__sub">what the ground is made of · % dims compare as-is, counts compare per 100 land tiles · hover for exact amounts <i>and per-player site counts</i></span>
           </div>
           <div class="rstrip__ics">
             {TERRAIN_BARS.map((b: any) => {
               const bar = barOf(c, b.key);
               return (
-                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c)}>
+                <div class={`ric${bar.none ? ' ric--none' : ''}`} title={barTip(b, bar.d, c, !!b.pp)}>
                   <svg class="tic" viewBox="0 0 24 24" aria-label={b.label}><use href={`#g-${b.icon}`} /></svg>
                   <div class="ric__bar"><span style={`width:${bar.w}%;background:${bar.col}`}></span></div>
                   <div class="ric__c">{b.label}{!bar.none && rk(c, b.key) && <span class="ric__rk">#{rk(c, b.key)}</span>}</div>
