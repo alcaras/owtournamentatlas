@@ -425,6 +425,28 @@ for (const k in tileBy) {
   const a = tileBy[k];
   tileMean[k] = a.reduce((x: number, y: number) => x + y, 0) / a.length;
 }
+// mean ±sd straight from the per-gen rows for the counts atlas-dist
+// doesn't aggregate (playable tiles, land tiles, cap-reachable %)
+const genAgg: Record<string, Record<string, { mean: number; sd: number; min: number; max: number }>> = {};
+for (const gn of (gensData as any).gens) {
+  for (const k of ['tiles', 'landTiles', 'reachPct'] as const) {
+    if (gn[k] == null) continue;
+    ((genAgg[gn.cslug] ??= {})[k] ??= { mean: 0, sd: 0, min: Infinity, max: -Infinity }) as any;
+  }
+}
+{
+  const acc: Record<string, Record<string, number[]>> = {};
+  for (const gn of (gensData as any).gens)
+    for (const k of ['tiles', 'landTiles', 'reachPct'] as const)
+      if (gn[k] != null) ((acc[gn.cslug] ??= {})[k] ??= []).push(gn[k]);
+  for (const cs in acc) for (const k in acc[cs]) {
+    const a = acc[cs][k];
+    const m = a.reduce((x, y) => x + y, 0) / a.length;
+    const v = a.reduce((x, y) => x + (y - m) ** 2, 0) / a.length;
+    genAgg[cs][k] = { mean: m, sd: Math.sqrt(v),
+      min: Math.min(...a), max: Math.max(...a) };
+  }
+}
 // dims that scale with map area → compared per 100 land tiles
 const DENSITY_KEYS = new Set<string>([
   ...RES_BARS.map((b: any) => b.key), ...YIELD_BARS.map((b: any) => b.key),
@@ -453,14 +475,17 @@ for (const b of [...RES_BARS, ...YIELD_BARS, ...TERRAIN_BARS]) {
   resRange[b.key] = { lo: ms.length ? Math.min(...ms) : 0,
     hi: ms.length ? Math.max(...ms) : 0 };
 }
-// per-config bar: t∈[0,1] vs the pool range → fill width + red→amber→green
+// per-config bar: fill + red→amber→green from this config's POSITION in
+// the pool, not its raw magnitude. Magnitude scaling collapses whenever
+// one map is an outlier — on choke the 11 tightest maps all landed within
+// 11px of each other because two Tiny deserts stretched the scale — and it
+// let a bar disagree with the #n badge sitting next to it. Exact values
+// stay in the number above the bar and in the tooltip.
 const barOf = (c: any, key: string) => {
   const d = c.dist?.[key];
-  const r = resRange[key] || { lo: 0, hi: 0 };
-  const mean = cmpVal(c, key) ?? 0;      // density where size matters
   const none = !d || (d.max ?? 0) <= 0;   // map never has this at all
-  const t = r.hi > r.lo ? (mean - r.lo) / (r.hi - r.lo) : 0.5;
-  const tt = Math.max(0, Math.min(1, t));
+  const r = rk(c, key), n = rankN(key);
+  const tt = (!r || n < 2) ? 0.5 : (n - r) / (n - 1);
   return { d, none, t: tt,
     w: none ? 100 : Math.round(8 + tt * 92),
     col: none ? '#23262c' : `hsl(${Math.round(tt * 125)},58%,42%)` };
@@ -533,38 +558,41 @@ for (const k of PILL_KEYS) {
 // distance block and the map-shape counts. Text-only so they read as
 // reference, not as another thing to compare.
 const one = (c: any, k: string) => c.dist?.[k];
-const md = (c: any, k: string, unit = '') => {
+const r1 = (v: number) => (Math.round(v * 10) / 10).toString();
+// a fact chip: label, value, ±sd, tooltip
+const fx = (lab: string, v: any, sd: any, tip: string) => ({ lab, v, sd, tip });
+const fromDist = (c: any, k: string, lab: string, unit: string, tip: string) => {
   const d = one(c, k);
-  return d ? { v: `${d.mean}${unit}`,
-    t: `avg ${d.mean}${unit} (±${d.sd} sd, range ${d.min}–${d.max}, med ${d.med})` }
-    : null;
+  return d ? fx(lab, `${d.mean}${unit}`, d.sd,
+    `${tip}\navg ${d.mean}${unit} ±${d.sd} sd · median ${d.med} · range ${d.min}–${d.max}`)
+    : fx(lab, '—', null, tip);
+};
+const fromGens = (c: any, k: string, lab: string, unit: string, tip: string, dp = 0) => {
+  const g = genAgg[c.slug]?.[k];
+  return g ? fx(lab, `${g.mean.toFixed(dp)}${unit}`, r1(g.sd),
+    `${tip}\navg ${g.mean.toFixed(dp)}${unit} ±${r1(g.sd)} sd · range ${g.min}–${g.max}`)
+    : fx(lab, '—', null, tip);
 };
 const factRows = (c: any) => {
-  const L = landMean[c.slug], T = tileMean[c.slug];
   const dist = [
-    ['Land-connected', c.connPct >= 100 ? 'always' : `${c.connPct}%`,
-      `Capitals share a land route. Seeds with no connected pair are dropped from the pool — ${c.dropPct}% of attempts here.`],
-    ['Crow', md(c, 'crow')?.v, md(c, 'crow')?.t
-      + ' — straight-line capital→capital distance, ignoring terrain.'],
-    ['Land path', md(c, 'land')?.v, md(c, 'land')?.t
-      + ' — capital→capital along walkable land.'],
-    ['Scout', md(c, 'scout', ' turns')?.v, md(c, 'scout')?.t
-      + ' — turns for a scout to cross between capitals.'],
-    ['Move-cost L / W / Hatti',
-      [one(c, 'slLand')?.mean, one(c, 'slSea')?.mean, one(c, 'slHatti')?.mean]
-        .map((x: any) => x ?? '—').join(' / '),
-      'Terrain-weighted move cost capital→capital: by land, by water, and for Hatti (who ignore some terrain costs).'],
+    fx('Land-connected', c.connPct >= 100 ? 'always' : `${c.connPct}%`, null,
+      `Capitals share a land route. Seeds with no connected pair are dropped from the pool — ${c.dropPct}% of attempts here.`),
+    fromDist(c, 'crow', 'Crow', '', 'Straight-line capital→capital distance, ignoring terrain.'),
+    fromDist(c, 'land', 'Land path', '', 'Capital→capital along walkable land.'),
+    fromDist(c, 'scout', 'Scout', ' turns', 'Turns for a scout to cross between capitals.'),
+    fromDist(c, 'slLand', 'Move-cost land', '', 'Terrain-weighted move cost capital→capital by land.'),
+    fromDist(c, 'slSea', 'Move-cost water', '', 'Terrain-weighted move cost capital→capital by water.'),
+    fromDist(c, 'slHatti', 'Move-cost Hatti-land', '', 'Move cost capital→capital by land under Hatti terrain rules.'),
   ];
   const map = [
-    ['Playable tiles', T ? Math.round(T) : '—', 'Mean in-bounds tiles per map.'],
-    ['Land tiles', L ? Math.round(L) : '—', 'Mean walkable land tiles per map.'],
-    ['Cap-reachable', `${c.reachMean}%`,
-      `Share of land walkable from the capital. SPLIT (under 85%) on ${c.splitPct}% of seeds.`],
-    ['River tiles', md(c, 'river', '%')?.v, md(c, 'river', '%')?.t
-      + ' — % of tiles bordering a river.'],
-    ['Ocean', `${c.oceanPct}%`, 'Share of the map that is water.'],
-    ['Tribes / Res', `${c.tribes} / ${c.res}`,
-      'Mean tribal sites and total resources per map.'],
+    fromGens(c, 'tiles', 'Playable tiles', '', 'In-bounds tiles per map.'),
+    fromGens(c, 'landTiles', 'Land tiles', '', 'Walkable land tiles per map.'),
+    fromGens(c, 'reachPct', 'Cap-reachable', '%',
+      `Share of land walkable from the capital. SPLIT (under 85%) on ${c.splitPct}% of seeds.`),
+    fromDist(c, 'river', 'River tiles', '%', 'Tiles bordering a river.'),
+    fromDist(c, 'oceanPct', 'Ocean', '%', 'Share of the map that is water.'),
+    fromDist(c, 'tribes', 'Tribal sites', '', 'Tribal settlements per map.'),
+    fromDist(c, 'res', 'Resources', '', 'Total resource tiles per map.'),
   ];
   return [{ lab: 'Capital distance', items: dist },
           { lab: 'Map shape', items: map }];
@@ -587,12 +615,9 @@ const PILL_DEFS = [
     tip: 'Land width at the capital-equidistant midline — the fair-contest line. Low = the middle pinches, high = broad meeting ground — ranked and coloured narrowest-first. Not the same question as Wall cost.' },
 ] as const;
 
-const barStyle = (mean: number | undefined | null, range: { lo: number; hi: number }, inv = false) => {
-  if (mean == null) return 'width:0%;background:#333';
-  const t0 = range.hi > range.lo ? (mean - range.lo) / (range.hi - range.lo) : 0.5;
-  const t = inv ? 1 - t0 : t0;
-  const tt = Math.max(0, Math.min(1, t));
-  return `width:${Math.round(8 + tt * 92)}%;background:hsl(${Math.round(tt * 125)},58%,42%)`;
+const barStyle = (c: any, key: string) => {
+  const b = barOf(c, key);
+  return `width:${b.w}%;background:${b.col}`;
 };
 ---
 <Base title="Tournament Pool" hideNav={true}>
@@ -702,7 +727,7 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
                 {d ? (<>
                   <div class="pill__v"><b>{d.mean}</b> <span class="pm">±{d.sd}</span></div>
                   <div class="pill__r">min {d.min} · <b>med {d.med}</b> · max {d.max}</div>
-                  <div class="pill__bar" title={pd.tip + (pd.pp ? `\n≈ ${half(d.mean)} per player — the map is mirrored, so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '') + rankTip(c, pd.key)}><span style={barStyle(cmpVal(c, pd.key), pillRange[pd.key], INVERT.has(pd.key))}></span></div>
+                  <div class="pill__bar" title={pd.tip + (pd.pp ? `\n≈ ${half(d.mean)} per player — the map is mirrored, so each side holds half (range ${half(d.min)}–${half(d.max)}).` : '') + rankTip(c, pd.key)}><span style={barStyle(c, pd.key)}></span></div>
                 </>) : <div class="pill__v dash">—</div>}
               </div>
             );
@@ -713,14 +738,14 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             <div class="facts__row">
               <span class="facts__lab">{row.lab}</span>
               {row.items.map((it: any) => (
-                <span class="fct" title={it[2]}><i>{it[0]}</i><b>{it[1]}</b></span>
+                <span class="fct" title={it.tip}><i>{it.lab}</i><b>{it.v}</b>{it.sd != null && <s>±{it.sd}</s>}</span>
               ))}
             </div>
           ))}
         </div>
         <div class="rstrip">
           <div class="rstrip__lab">Resource abundance
-            <span class="rstrip__sub">green = lots · red = little, <i>relative to the other maps</i> · hover for exact amounts <i>and per-player counts</i></span>
+            <span class="rstrip__sub">bar = rank among the 18 maps (green = most, red = least) · hover for exact amounts <i>and per-player counts</i></span>
           </div>
           <div class="rstrip__ics">
             {RES_BARS.map((b: any) => {
@@ -735,7 +760,7 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             })}
           </div>
           <div class="rstrip__lab rstrip__lab--2">Yield potential
-            <span class="rstrip__sub">max food / iron / stone / wood if every tile ran its best improvement for <i>that</i> yield · relative to the other maps · hover for exact amounts</span>
+            <span class="rstrip__sub">max food / iron / stone / wood if every tile ran its best improvement for <i>that</i> yield · bar = rank among the 18 maps · hover for exact amounts</span>
           </div>
           <div class="rstrip__ics">
             {YIELD_BARS.map((b: any) => {
@@ -750,7 +775,7 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
             })}
           </div>
           <div class="rstrip__lab rstrip__lab--2">Terrain &amp; topology
-            <span class="rstrip__sub">what the ground is made of · bars &amp; ranks compare map totals · hover for exact amounts <i>and per-player site counts</i></span>
+            <span class="rstrip__sub">what the ground is made of · bar = rank among the 18 maps, on map totals · hover for exact amounts <i>and per-player site counts</i></span>
           </div>
           <div class="rstrip__ics">
             {TERRAIN_BARS.map((b: any) => {
@@ -932,6 +957,8 @@ const barStyle = (mean: number | undefined | null, range: { lo: number; hi: numb
       padding:0.08rem 0.42rem; }
     .fct i { font-style:normal; color:var(--text-dim); margin-right:0.32rem; }
     .fct b { color:var(--text-soft); font-variant-numeric:tabular-nums; }
+    .fct s { text-decoration:none; color:var(--text-dim); margin-left:0.22rem;
+      font-size:0.92em; font-variant-numeric:tabular-nums; }
     .rstrip { margin-top:0.7rem; }
     .rstrip__lab { font-size:0.62rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--text-dim); margin-bottom:0.5rem; }
