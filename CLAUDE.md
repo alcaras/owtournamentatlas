@@ -142,6 +142,28 @@ configs via direct URL — harmless, just unlinked from `/recommended`.)
   the fair-contest line, NOT sealability; validated against a live
   save 2026-07-14 where midline said 30 and the true wall was 15).
   `wall` can be null (opposing sites adjacent → no finite wall).
+- **Tile-count keys in `atlas-dist` `dist.*` (2026-07-27):** the pool
+  compares COUNTS, never percentages — a count halves per player on a
+  mirrored map, a share doesn't. `build_dist` publishes `treesTiles`,
+  `scrubTiles`, `jungleTiles`, `vegTiles`, `marshTiles`, `aridTiles`,
+  `waterTiles`, `riverTiles`, plus `tiles` / `landTiles` / `walkable` /
+  `reachPct`. The older percentage keys (`trees`, `scrub`, `jungle`,
+  `veg`, `marsh`, `nomad`, `hillsPct`, `river`, `oceanPct`) still exist
+  in the data but are no longer surfaced by any page.
+- **`landTiles` ≠ `walkable` — different denominators, both real.**
+  `landTiles` (from the sample row) = every non-water tile, mountains
+  included. `walkable` (per-gen `landTotal`) also drops mountain /
+  volcano / lake and is the denominator `reachPct` divides by. They can
+  differ ~10% (Wide Duel Archipelago: 1082 vs 981). Pick deliberately.
+- **`hills` and `windmill` are byte-identical duplicate keys** (every
+  hill is a windmill site) — surface one, not both, or the same hexes
+  read as two unrelated stats. `hillsPct` is the same tiles again as a
+  share; count and share rank the pool differently (a big map can be
+  #11 by count and #17 by share), which reads as a contradiction when
+  both are on screen.
+- **`clearcutWJ` is scrub + forest + JUNGLE** (20/40/60), not "wood +
+  jungle" — the old label was simply wrong. `clearcutSF` is scrub +
+  forest only; identical on jungle-free maps.
 - **owmapgen has no `HEIGHT_OCEAN`** — all sea is `HEIGHT_COAST`.
   Derive ocean/coast/lake by land-adjacency for rendering.
 - **River borders:** a tile a river *borders* counts as a river tile
@@ -220,6 +242,36 @@ three stats only: city sites · land-hex distance · land-hex move cost.
    wheel zoom + drag pan; reset-view button.
 6. Calibration page: plain table, **no** ideal/acceptable highlighting
    or legend (the criteria are targets, not gates — see below).
+7. **Pool cards (`index.astro`) carry every dimension `/rankings`
+   does** — 6 pills (sites · land distance · wall / expansion · land
+   cost · choke, a 3x2 grid whose COLUMNS are themed pairs), a facts
+   strip, and three bar strips (resources · yields · terrain). Rules
+   that took a while to settle, don't relitigate:
+   - **Bars encode POOL RANK, not magnitude.** Magnitude scaling
+     collapses under outliers (on choke the 11 tightest maps all landed
+     within 11px because two Tiny deserts stretched the scale) and let
+     a bar contradict the `#n` badge beside it. Exact values live in
+     the printed number and the tooltip.
+   - **Ranks are by whole-map total**; per-100-land-tiles rides along in
+     the tooltip as a size-neutral cross-check.
+   - **`wall` and `choke` rank and colour FEWEST-FIRST** (`INVERT` set
+     in both pages) — low is the notable end, so #1 = most sealable and
+     green = tight.
+   - Tooltips give the **per-player** figure for every count (mirrored
+     maps ⇒ exactly half) and `±sd` carries the unit on percentages
+     (`99% ±2%`) but not on word units (`19.8 turns ±4.2`).
+   - The facts strip holds only what has NO bar (crow, scout, water /
+     Hatti move cost, tile counts, cap-reachable, tribes, resources);
+     anything duplicating a pill or a bar was removed.
+   - Every pill, bar and fact links to
+     `/rankings?c=<slug>#r-<dim>`; the rankings page reads `?c=`,
+     highlights that config in every list and scrolls the clicked card
+     to the top. **Keep the two dim lists in sync** — a card link to a
+     key `/rankings` doesn't publish is a dead anchor (this bit us with
+     `oceanPct` and `windmill`).
+8. `.cfg` on the pool page is a **flex column with explicit `order`** —
+   the SETUP GUIDE summary is pinned to the header, so its panel must
+   stay `order:1` or it opens somewhere far below its own button.
 
 ---
 
@@ -251,6 +303,21 @@ blind, no-screen tournament.
 - Don't add yield aliases for combat words; mountain/volcano are not
   improvable; honest "misc" beats a wrong colour. (Same spirit as the
   owreference rules.)
+- **`yield_model.py` misprices resource tiles** (verified against the
+  game source + in-game tooltips 2026-07-14): a resource's `aiYieldReveal`
+  is a ONE-TIME discovery bonus, not recurring income, and `harvestTile`
+  is blocked inside city territory (`canHarvestTile`) — frontier
+  resources are a renewable gather (regrow ~8 turns; Persia's +50%
+  harvest applies there, which is its real kit). An improved in-border
+  resource pays its harvest once at build, then only the class-table
+  yield (`improvementClass.xml aaiResourceYieldOutput` — e.g. grain /
+  livestock / game / fish = +2 GROWTH, horses = +0.5 orders). The
+  atlas's yield numbers are "best-improvement potential" and stand, but
+  don't read them as per-turn resource income.
+- Game-rule research for the tournament lives in `notes/` (gitignored):
+  map economy per config, opening playbook, seed-by-seed starts, nation
+  draft card, and `choke-metric-v2.md` which records why the midline
+  `choke` stat needed the `wall` companion.
 
 ---
 
