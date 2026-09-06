@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ModInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <displayName>Tiny and Wide maps</displayName>
+  <description>Adds Tiny (44x44) and Teeny (34x34) map sizes and also Very Wide (40% of height) and Ultrawide (20% of height) aspect ratios (MP only).  Intended for MP duels.  I recommend combining Very Wide and Tiny on a mapscript that supports Mirror Maps.  Works with most map scripts -  Multiple Continents and Hardwood Forest can fail to generate correctly.</description>
+  <modpicture>TinyAndWideMaps.jpg</modpicture>
+  <author>fluffybunnyOldWorld</author>
+  <modplatform>Workshop</modplatform>
+  <modioID>4681614</modioID>
+  <modioFileID>0</modioFileID>
+  <workshopOwnerID>76561197970698176</workshopOwnerID>
+  <workshopFileID>3415007692</workshopFileID>
+  <modversion>2.0</modversion>
+  <modbuild>1.0.78527</modbuild>
+  <tags />
+  <singlePlayer>true</singlePlayer>
+  <multiplayer>true</multiplayer>
+  <scenario>false</scenario>
+  <scenarioToggle>false</scenarioToggle>
+  <blocksMods>false</blocksMods>
+  <modDependencies />
+  <modIncompatibilities />
+  <modWhitelist />
+  <gameContentRequired>NONE</gameContentRequired>
+</ModInfo>

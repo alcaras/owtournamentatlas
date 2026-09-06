@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2014 rel. 2 (x64) (http://www.altova.com) by Soren Johnson (private) -->
+<Root>
+	<Entry>
+		<zType>MAPSIZE_TEENY</zType>
+		<Name>TEXT_MAPSIZE_TEENY</Name>
+		<iTiles>1200</iTiles>
+		<iMaxOpponents>2</iMaxOpponents>
+		<iVP>10</iVP>
+	</Entry>
+	<Entry>
+		<zType>MAPSIZE_TINY</zType>
+		<Name>TEXT_MAPSIZE_TINY</Name>
+		<iTiles>2000</iTiles>
+		<iMaxOpponents>2</iMaxOpponents>
+		<iVP>20</iVP>
+	</Entry>
+</Root>
