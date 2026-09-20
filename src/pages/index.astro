@@ -546,7 +546,7 @@ const rankTip = (c: any, k: string) => {
     + (d != null ? ` Size-neutral cross-check: ≈ ${fmtD(d)} per 100 land tiles.` : '');
 };
 
-// ---- resource variance (LOCAL EXPERIMENT — pick with ?rv=a|b|c) ------
+// ---- resource variance (E is live; ?rv=cur|a|b|c|d keep the alternatives) --
 // A player read a tall Grove bar as "lots of groves", rolled a map with
 // 2 and felt baited: the bar was the MEAN's pool rank and the spread
 // lived only in the tooltip. These variants lead with the FLOOR — the
@@ -808,7 +808,7 @@ const barStyle = (c: any, key: string) => {
   <style is:global>
     /* resource-variance experiment: only the chosen strip variant shows */
     .rvar { display:none; }
-    html:not([data-rv]) .rvar[data-rv="cur"],
+    html:not([data-rv]) .rvar[data-rv="e"],
     html[data-rv="cur"] .rvar[data-rv="cur"],
     html[data-rv="a"] .rvar[data-rv="a"],
     html[data-rv="b"] .rvar[data-rv="b"],
@@ -816,7 +816,8 @@ const barStyle = (c: any, key: string) => {
     html[data-rv="d"] .rvar[data-rv="d"],
     html[data-rv="e"] .rvar[data-rv="e"] { display:block; }
     .rvar-y { display:none; }
-    html:not([data-rv="e"]) .rvar-y[data-rv="cur"],
+    html[data-rv]:not([data-rv="e"]) .rvar-y[data-rv="cur"],
+    html:not([data-rv]) .rvar-y[data-rv="e"],
     html[data-rv="e"] .rvar-y[data-rv="e"] { display:block; }
     /* ?only=<card-id>: screenshot mode — one card, no gallery/nav */
     html.shot .cfg { margin:6px; }
@@ -863,9 +864,11 @@ const barStyle = (c: any, key: string) => {
   <p class="lede">
     The <b>{pool.length}-map tournament pool</b>, grouped by map script.
     The reference for in-game setup — pills show the live distribution
-    of each config (city sites, distances, urban tiles), the resource
-    bars show how rich each map runs in a resource <i>relative to the
-    other maps</i> (hover for exact amounts), the SETUP GUIDE button
+    of each config (city sites, distances, urban tiles), the resource,
+    yield and terrain charts show what <i>this map</i> deals per player
+    — bar = median, whisker = the usual span, so the luck is visible —
+    (comparing maps is the <a href={`${baseUrl}rankings`}>rankings</a>
+    page's job), the SETUP GUIDE button
     gives the exact in-game Advanced Options, and the gallery shows
     generated samples. Hover or click any preview to inspect.
   </p>

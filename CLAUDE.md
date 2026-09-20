@@ -247,11 +247,29 @@ three stats only: city sites · land-hex distance · land-hex move cost.
    cost · choke, a 3x2 grid whose COLUMNS are themed pairs), a facts
    strip, and three bar strips (resources · yields · terrain). Rules
    that took a while to settle, don't relitigate:
-   - **Bars encode POOL RANK, not magnitude.** Magnitude scaling
+   - **The three strips are ABSOLUTE, this-map-only (2026-09-20).**
+     Player feedback: a `#n` rank badge on a card was read as "most
+     abundant resource on this map", and a tall (rank) Grove bar hid
+     that the map deals 2 groves 1 in 10 times. So resources / yields /
+     terrain are now bar+whisker charts of what THIS map deals per
+     player: bar = median, whisker = 10th–90th pct, dotted hairline =
+     extremes, ONE scale per strip (terrain: one scale across all four
+     composition rows), resources sorted most-abundant first, no pool
+     rank. Yields are real units (game ×10 ÷ 10, mirrored ÷ 2, per
+     turn). Terrain rows are partitions of the map (climate · relief ·
+     water · vegetation) from `build_dist` `gen_extra` comp counts
+     (`cLush`/`hFlat`/`wCoast`/`vTrees`… dist keys), painted in the
+     `/gen` canvas palette. **Comparing maps is `/rankings`' job.**
+     The superseded designs stay reachable for reference via
+     `?rv=cur|a|b|c|d` (`cur` = the old rank bars, `a/b/c` = floor-
+     number / range-band / seed-dot experiments, `d` = unsorted E);
+     `?only=<card-id>&part=res&keep=y` is a screenshot mode.
+   - **Pills still encode POOL RANK, not magnitude.** Magnitude scaling
      collapses under outliers (on choke the 11 tightest maps all landed
      within 11px because two Tiny deserts stretched the scale) and let
      a bar contradict the `#n` badge beside it. Exact values live in
-     the printed number and the tooltip.
+     the printed number and the tooltip. (Open question: should the
+     pills' `#n` badges go too, so the card is wholly "this map"?)
    - **Ranks are by whole-map total**; per-100-land-tiles rides along in
      the tooltip as a size-neutral cross-check.
    - **`wall` and `choke` rank and colour FEWEST-FIRST** (`INVERT` set
