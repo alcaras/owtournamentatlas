@@ -651,8 +651,8 @@ const YIELD_ABS = [
   { key: 'iron', label: 'Iron', icon: 'yields/iron', desc: 'every tile given its best iron improvement (Mine), summed' },
   { key: 'stone', label: 'Stone', icon: 'yields/stone', desc: 'every tile given its best stone improvement (Quarry), summed' },
   { key: 'wood', label: 'Wood', icon: 'yields/wood', desc: 'every tile given its best wood improvement (Lumbermill), summed' },
-  { key: 'moneyPre', label: 'Money', icon: 'resources/gold', desc: 'every money resource worked — gold & silver 5, salt / gem / fur / dye / pearl 2 per turn (mine · camp · nets)' },
-  { key: 'moneyLC', label: 'Money +LC', icon: 'resources/gold', desc: 'money above plus the Land Consolidation groves — spices 4, incense & lavender 2 per turn' },
+  { key: 'moneyPre', label: 'Money', icon: 'yields/money', desc: 'every money resource worked — gold & silver 5, salt / gem / fur / dye / pearl 2 per turn (mine · camp · nets)' },
+  { key: 'moneyLC', label: 'Money +LC', icon: 'yields/money', desc: 'money above plus the Land Consolidation groves — spices 4, incense & lavender 2 per turn' },
 ] as const;
 const fmtY = (v: number) => (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1).replace(/\.0$/, '') : v.toFixed(1));
 const rvYields = (c: any) => {
