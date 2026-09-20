@@ -546,6 +546,78 @@ const rankTip = (c: any, k: string) => {
     + (d != null ? ` Size-neutral cross-check: ≈ ${fmtD(d)} per 100 land tiles.` : '');
 };
 
+// ---- resource variance (LOCAL EXPERIMENT — pick with ?rv=a|b|c) ------
+// A player read a tall Grove bar as "lots of groves", rolled a map with
+// 2 and felt baited: the bar was the MEAN's pool rank and the spread
+// lived only in the tooltip. These variants lead with the FLOOR — the
+// 10th-percentile count per player, "9 in 10 maps give each side at
+// least this many" — colour/rank it against the other maps' floors, and
+// keep the 10th–90th span on screen so the variance is never hidden.
+const RV_GROUPS: Record<string, string[]> = (() => {
+  const tax = Object.fromEntries((gensData as any).resTax as [string, string[]][]);
+  return { grove: tax.Grove, pasture: tax.Pasture, grain: tax.Farm,
+    nets: tax.Nets, camp: tax.Camp,
+    precious: ['Gem', 'Gold', 'Silver', 'Pearl', 'Jade', 'Ebony'],
+    ore: ['Ore'], marble: ['Marble'], horse: ['Horse'], ele: ['Elephant'],
+    camel: ['Camel'] };
+})();
+// per-seed whole-map counts per config × resource (variant C's dots);
+// same grouping build_dist uses, so they agree with dist.p10/p90.
+const rvSeeds: Record<string, Record<string, number[]>> = {};
+for (const gn of (gensData as any).gens) {
+  if (!POOL_SLUGS.has(gn.cslug)) continue;
+  const by = (rvSeeds[gn.cslug] ||= {});
+  for (const [k, names] of Object.entries(RV_GROUPS))
+    (by[k] ||= []).push(names.reduce((t, n) => t + (gn.resources?.[n] || 0), 0));
+}
+// rank by floor (p10), highest first; ties broken by median then mean so
+// two maps with the same floor still order by what is typical.
+const rvRank: Record<string, Record<string, number>> = {};
+const rvScale: Record<string, number> = {};   // pool-wide per-player max
+for (const b of RES_BARS) {
+  const rows = pool.map((c: any) => ({ slug: c.slug, d: c.dist?.[b.key] }))
+    .filter((r: any) => r.d && (r.d.max ?? 0) > 0)
+    .sort((a: any, z: any) => (z.d.p10 - a.d.p10) || (z.d.med - a.d.med) || (z.d.mean - a.d.mean));
+  rvRank[b.key] = {};
+  rows.forEach((r: any, i: number) => { rvRank[b.key][r.slug] = i + 1; });
+  rvScale[b.key] = Math.max(1, ...rows.map((r: any) => r.d.max / 2));
+}
+const rvOf = (c: any, b: any) => {
+  const d = c.dist?.[b.key];
+  const none = !d || (d.max ?? 0) <= 0;
+  const r = rvRank[b.key]?.[c.slug], n = Object.keys(rvRank[b.key] || {}).length;
+  const t = (!r || n < 2) ? 0.5 : (n - r) / (n - 1);
+  const hue = Math.round(t * 125);
+  const seeds = (rvSeeds[c.slug]?.[b.key] || []).map((v: number) => v / 2);
+  const sc = rvScale[b.key] || 1;
+  const tip = none
+    ? `${b.label} — ${b.desc}\nNone on this map.`
+    : `${b.label} — ${b.desc}\n`
+      + `Floor ${half(d.p10)} per player: 9 in 10 generated maps give each side at least this many `
+      + `(10th percentile of ${d.n} seeds). Typical span ${half(d.p10)}–${half(d.p90)} per player `
+      + `(10th–90th pct), median ${half(d.med)}, extremes ${half(d.min)}–${half(d.max)}.\n`
+      + `Whole map: avg ${d.mean} ±${d.sd} sd, range ${d.min}–${d.max} — every pool map is mirrored, so each side holds half.\n`
+      + `Rank ${r} of ${n} in the pool by floor (highest first).`;
+  return { d, none, r, n, t, seeds, sc, tip,
+    col: none ? '#23262c' : `hsl(${hue},58%,42%)`,
+    colT: none ? 'var(--text-dim)' : `hsl(${hue},62%,58%)`,
+    floor: none ? '—' : half(d.p10), hi: none ? '' : half(d.p90),
+    lo: none ? 0 : d.p10 / 2, hiN: none ? 0 : d.p90 / 2,
+    med: none ? 0 : d.med / 2, mn: none ? 0 : d.min / 2, mx: none ? 0 : d.max / 2,
+    pct: (v: number) => Math.round(1000 * v / sc) / 10 };
+};
+// variant C: stack seeds at each per-player count into a unit histogram
+const rvDots = (v: any) => {
+  const cnt: Record<number, number> = {};
+  const out: { x: number; y: number }[] = [];
+  for (const q of [...v.seeds].sort((a: number, b: number) => a - b)) {
+    const k = cnt[q] = (cnt[q] || 0) + 1;
+    out.push({ x: q, y: k });
+  }
+  const tall = Math.max(1, ...out.map((o) => o.y));
+  return { dots: out, step: Math.min(3.4, 18 / tall) };
+};
+
 // ---- hero-pill relative bars -----------------------------------------
 // Same green→red language as the resource bars, applied to the headline
 // stats so each pill also shows where this script sits vs the pool.
@@ -626,6 +698,38 @@ const barStyle = (c: any, key: string) => {
 };
 ---
 <Base title="Tournament Pool" hideNav={true}>
+  <style is:global>
+    /* resource-variance experiment: only the chosen strip variant shows */
+    .rvar { display:none; }
+    html:not([data-rv]) .rvar[data-rv="cur"],
+    html[data-rv="cur"] .rvar[data-rv="cur"],
+    html[data-rv="a"] .rvar[data-rv="a"],
+    html[data-rv="b"] .rvar[data-rv="b"],
+    html[data-rv="c"] .rvar[data-rv="c"] { display:block; }
+    /* ?only=<card-id>: screenshot mode — one card, no gallery/nav */
+    html.shot .cfg { margin:6px; }
+  </style>
+  <script is:inline>
+    (function(){
+      var q = new URLSearchParams(location.search);
+      var rv = q.get('rv'); if (rv) document.documentElement.setAttribute('data-rv', rv);
+      var only = q.get('only');
+      if (only) document.addEventListener('DOMContentLoaded', function(){
+        var el = document.getElementById(only); if (!el) return;
+        for (var e = el; e && e !== document.body; e = e.parentElement)
+          Array.prototype.forEach.call(e.parentElement.children, function(sib){
+            if (sib !== e) sib.style.display = 'none'; });
+        el.querySelectorAll('.gal, .setup').forEach(function(x){ x.style.display = 'none'; });
+        if (q.get('part') === 'res') {
+          el.querySelectorAll('.pills, .facts').forEach(function(x){ x.style.display = 'none'; });
+          el.querySelectorAll('.rstrip__lab--2').forEach(function(l){
+            l.style.display = 'none'; if (l.nextElementSibling) l.nextElementSibling.style.display = 'none'; });
+        }
+        document.documentElement.classList.add('shot');
+        setInterval(function(){ var t = document.querySelector('astro-dev-toolbar'); if (t) t.remove(); }, 50);
+      });
+    })();
+  </script>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
     <symbol id="g-trees" viewBox="0 0 24 24"><path d="M8 4l4 6H4zM8 8l4 6H4zM8 14v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M17 8l3.5 6h-7zM17 14v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
     <symbol id="g-jungle" viewBox="0 0 24 24"><path d="M12 20V9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 9c-4-5-8-3-9 0 3 2 7 2 9 0zM12 9c4-5 8-3 9 0-3 2-7 2-9 0zM12 9c0-5-3-6-5-6 0 3 2 5 5 6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
@@ -755,6 +859,7 @@ const barStyle = (c: any, key: string) => {
           ))}
         </div>
         <div class="rstrip">
+          <div class="rvar" data-rv="cur">
           <div class="rstrip__lab">Resource abundance
             <span class="rstrip__sub">bar = rank among the 18 maps (green = most, red = least) · hover for exact amounts <i>and per-player counts</i></span>
           </div>
@@ -769,6 +874,76 @@ const barStyle = (c: any, key: string) => {
                 </a>
               );
             })}
+          </div>
+          </div>
+          {/* A — floor number: the guaranteed-ish per-player count IS the graphic */}
+          <div class="rvar" data-rv="a">
+          <div class="rstrip__lab">Resource abundance <i class="rstrip__pp">per player</i>
+            <span class="rstrip__sub"><b>≥N</b> = floor: 9 in 10 generated maps give each side at least N · small = usual span (10th–90th pct) · colour &amp; #rank = floor vs the other {pool.length - 1} maps · hover for the full spread</span>
+          </div>
+          <div class="rstrip__ics">
+            {RES_BARS.map((b: any) => {
+              const v = rvOf(c, b);
+              return (
+                <a class={`ric ric--a${v.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${b.key}`} title={v.tip}>
+                  <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
+                  <div class="rv__floor" style={`color:${v.colT}`}>{v.none ? '—' : `≥${v.floor}`}</div>
+                  <div class="rv__span">{v.none ? 'none' : `${v.floor}–${v.hi}`}</div>
+                  <div class="ric__c">{b.label}{!v.none && v.r && <span class="ric__rk">#{v.r}</span>}</div>
+                </a>
+              );
+            })}
+          </div>
+          </div>
+          {/* B — range band: p10–p90 block on a shared per-resource scale, median tick, min–max hairline */}
+          <div class="rvar" data-rv="b">
+          <div class="rstrip__lab">Resource abundance <i class="rstrip__pp">per player</i>
+            <span class="rstrip__sub">block = where 8 in 10 maps land (10th–90th pct) on one scale per resource, so position = plenty, width = luck · tick = median · hairline = extremes · <b>bold</b> = floor · colour &amp; #rank = floor vs the other {pool.length - 1} maps</span>
+          </div>
+          <div class="rstrip__ics">
+            {RES_BARS.map((b: any) => {
+              const v = rvOf(c, b);
+              return (
+                <a class={`ric ric--b${v.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${b.key}`} title={v.tip}>
+                  <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
+                  <div class="rv__track">
+                    {!v.none && <i class="rv__hair" style={`left:${v.pct(v.mn)}%;width:${Math.max(0.5, v.pct(v.mx) - v.pct(v.mn))}%`}></i>}
+                    {!v.none && <span class="rv__band" style={`left:${v.pct(v.lo)}%;width:${Math.max(3, v.pct(v.hiN) - v.pct(v.lo))}%;background:${v.col}`}></span>}
+                    {!v.none && <em class="rv__med" style={`left:${v.pct(v.med)}%`}></em>}
+                  </div>
+                  <div class="rv__nums">{v.none ? <s>none</s> : <><b style={`color:${v.colT}`}>{v.floor}</b><s>–{v.hi}</s></>}</div>
+                  <div class="ric__c">{b.label}{!v.none && v.r && <span class="ric__rk">#{v.r}</span>}</div>
+                </a>
+              );
+            })}
+          </div>
+          </div>
+          {/* C — seed dots: every generated map as a dot at its per-player count; the floor as a gold line */}
+          <div class="rvar" data-rv="c">
+          <div class="rstrip__lab">Resource abundance <i class="rstrip__pp">per player</i>
+            <span class="rstrip__sub">one dot per generated map ({c.n} seeds) at its per-player count, one scale per resource · gold line = floor: 9 in 10 maps sit on or right of it · <b>bold</b> = that floor, small = 90th pct · colour &amp; #rank = floor vs the other {pool.length - 1} maps</span>
+          </div>
+          <div class="rstrip__ics">
+            {RES_BARS.map((b: any) => {
+              const v = rvOf(c, b);
+              const h = rvDots(v);
+              const X = (q: number) => 2 + (q / v.sc) * 60;
+              return (
+                <a class={`ric ric--c${v.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${b.key}`} title={v.tip}>
+                  <img src={`${baseUrl}img/icons/resources/${b.icon}.png`} alt={b.label} />
+                  <svg class="rv__dots" viewBox="0 0 64 22" preserveAspectRatio="none">
+                    <line x1="0" y1="21.5" x2="64" y2="21.5" class="rv__axis" />
+                    {!v.none && h.dots.map((o) => (
+                      <circle cx={X(o.x)} cy={20 - (o.y - 1) * h.step} r="1.55" fill={v.col} />
+                    ))}
+                    {!v.none && <line x1={X(v.lo)} y1="0" x2={X(v.lo)} y2="22" class="rv__p10" />}
+                  </svg>
+                  <div class="rv__nums">{v.none ? <s>none</s> : <><b style={`color:${v.colT}`}>{v.floor}</b><s>–{v.hi}</s></>}</div>
+                  <div class="ric__c">{b.label}{!v.none && v.r && <span class="ric__rk">#{v.r}</span>}</div>
+                </a>
+              );
+            })}
+          </div>
           </div>
           <div class="rstrip__lab rstrip__lab--2">Yield potential
             <span class="rstrip__sub">max food / iron / stone / wood if every tile ran its best improvement for <i>that</i> yield · bar = rank among the 18 maps · hover for exact amounts</span>
@@ -1011,6 +1186,36 @@ const barStyle = (c: any, key: string) => {
       color:var(--gold); background:#20222a; border:1px solid var(--gold-deep);
       border-radius:999px; padding:0.02rem 0.34rem; cursor:help;
       font-variant-numeric:tabular-nums; }
+    /* ---- resource variance variants (?rv=a|b|c) ---- */
+    .rstrip__pp { font-style:normal; text-transform:none; letter-spacing:0;
+      color:var(--gold-deep); font-size:0.6rem; margin-left:0.25rem; }
+    .rstrip__sub b { color:var(--text-soft); font-weight:600; }
+    .ric--a { gap:0.1rem; }
+    .rv__floor { font-family:var(--font-display); font-weight:700;
+      font-size:1.02rem; line-height:1.1; letter-spacing:-0.01em;
+      font-variant-numeric:tabular-nums; margin-top:0.15rem; }
+    .rv__span { font-size:0.6rem; color:var(--text-faint);
+      font-family:var(--font-ui); font-variant-numeric:tabular-nums;
+      line-height:1.1; margin-bottom:0.1rem; }
+    .ric--b, .ric--c { width:76px; gap:0.22rem; }
+    .rvar[data-rv="b"] .rstrip__ics, .rvar[data-rv="c"] .rstrip__ics { gap:0.6rem; }
+    .rv__track { position:relative; width:100%; height:9px;
+      background:#0e0f12; border:1px solid var(--border); border-radius:3px;
+      overflow:hidden; }
+    .rv__hair { position:absolute; top:3.5px; height:1px; background:#4a4e57; }
+    .rv__band { position:absolute; top:0; bottom:0; border-radius:2px;
+      box-shadow:inset 0 0 0 1px #0006; }
+    .rv__med { position:absolute; top:0; bottom:0; width:1.5px; margin-left:-0.75px;
+      background:#f4f0e6; opacity:0.9; }
+    .rv__nums { font-family:var(--font-ui); font-size:0.66rem; line-height:1.1;
+      font-variant-numeric:tabular-nums; color:var(--text-faint);
+      white-space:nowrap; }
+    .rv__nums b { font-weight:700; font-size:0.78rem; }
+    .rv__nums s { text-decoration:none; margin-left:0.1rem; }
+    .rv__dots { width:100%; height:28px; display:block; overflow:visible; }
+    .rv__axis { stroke:#2b2e35; stroke-width:1; }
+    .rv__p10 { stroke:var(--gold); stroke-width:1.1; opacity:0.95; }
+    .ric--none .rv__floor, .ric--none .rv__nums b { color:var(--text-dim); }
     .ric--none { opacity:0.38; }
     .ric--none img { filter:grayscale(1) brightness(0.75); }
     .ric--none .ric__bar { border-style:dashed; }
