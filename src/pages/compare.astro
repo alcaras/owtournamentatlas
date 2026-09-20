@@ -1,0 +1,239 @@
+---
+import Base from '../layouts/Base.astro';
+import dist from '../data/atlas-dist.json';
+import { orderedPool } from '../lib/pool';
+const baseUrl = import.meta.env.BASE_URL;
+
+// The whole pool on one page, one small chart per dimension: every map
+// on the x-axis in the SAME fixed order (pool-page order), so a map sits
+// in the same slot in every panel and the eye can walk down the page.
+// Bar = median, whisker = 10th–90th pct, dotted hairline = extremes —
+// the same language as the pool cards, just with maps side by side.
+// This is the "compare maps" view; the cards stay "this map only".
+const { pool, short } = orderedPool(dist.configs as any[]);
+
+// Dimensions, grouped as on the cards. `div` turns the whole-map figure
+// into what one player sees: 2 for mirrored counts, 20 for game ×10
+// yields per player, 1 for map-level distances / walls.
+type Dim = { key: string; label: string; unit: string; div: number;
+  col?: string; fmt?: (v: number) => string };
+const cnt = (v: number) => (v >= 10 ? v.toFixed(0) : v.toFixed(1).replace(/\.0$/, ''));
+const one = (v: number) => (v >= 100 ? v.toFixed(0) : v.toFixed(1).replace(/\.0$/, ''));
+const HEAD: Dim[] = [
+  { key: 'sites', label: 'City sites', unit: 'per player', div: 2 },
+  { key: 'expansion', label: 'Expansion space', unit: 'urbanizable tiles per player', div: 2 },
+  { key: 'land', label: 'Land hex distance', unit: 'capital → capital, hexes', div: 1 },
+  { key: 'slLand', label: 'Land hex cost', unit: 'capital → capital move cost', div: 1 },
+  { key: 'wall', label: 'Wall cost', unit: 'hexes to seal every land route (low = sealable)', div: 1 },
+  { key: 'choke', label: 'Mid-land choke', unit: 'land width at the midline (low = pinched)', div: 1 },
+];
+const RES: Dim[] = [
+  { key: 'grain', label: 'Grain', unit: 'per player', div: 2 },
+  { key: 'pasture', label: 'Pasture', unit: 'per player', div: 2 },
+  { key: 'camp', label: 'Camp', unit: 'per player', div: 2 },
+  { key: 'grove', label: 'Grove', unit: 'per player', div: 2 },
+  { key: 'nets', label: 'Nets', unit: 'per player', div: 2 },
+  { key: 'ore', label: 'Ore', unit: 'per player', div: 2 },
+  { key: 'precious', label: 'Precious', unit: 'per player', div: 2 },
+  { key: 'marble', label: 'Marble', unit: 'per player', div: 2 },
+  { key: 'horse', label: 'Horses', unit: 'per player', div: 2 },
+  { key: 'ele', label: 'Elephants', unit: 'per player', div: 2 },
+  { key: 'camel', label: 'Camels', unit: 'per player', div: 2 },
+];
+const YLD: Dim[] = [
+  { key: 'food', label: 'Food', unit: 'per player per turn, best improvement everywhere', div: 20, col: '#8a6d2f' },
+  { key: 'iron', label: 'Iron', unit: 'per player per turn', div: 20, col: '#8a6d2f' },
+  { key: 'stone', label: 'Stone', unit: 'per player per turn', div: 20, col: '#8a6d2f' },
+  { key: 'wood', label: 'Wood', unit: 'per player per turn', div: 20, col: '#8a6d2f' },
+  { key: 'moneyPre', label: 'Money', unit: 'per player per turn, every money resource worked', div: 20, col: '#8a6d2f' },
+  { key: 'moneyLC', label: 'Money +LC', unit: 'the same plus Land Consolidation groves', div: 20, col: '#8a6d2f' },
+];
+const TERR: { name: string; dims: Dim[] }[] = [
+  { name: 'Climate', dims: [
+    { key: 'cLush', label: 'Lush', unit: 'land tiles per player', div: 2, col: 'rgb(74,110,56)' },
+    { key: 'cTemperate', label: 'Temperate', unit: 'land tiles per player', div: 2, col: 'rgb(104,138,74)' },
+    { key: 'cArid', label: 'Arid', unit: 'land tiles per player', div: 2, col: 'rgb(170,148,95)' },
+    { key: 'cSand', label: 'Sand', unit: 'land tiles per player', div: 2, col: 'rgb(206,184,120)' },
+    { key: 'cTundra', label: 'Tundra', unit: 'land tiles per player', div: 2, col: 'rgb(200,205,210)' },
+    { key: 'cMarsh', label: 'Marsh', unit: 'land tiles per player', div: 2, col: 'rgb(96,110,80)' } ] },
+  { name: 'Relief', dims: [
+    { key: 'hFlat', label: 'Flat', unit: 'land tiles per player', div: 2, col: 'rgb(120,140,96)' },
+    { key: 'hHill', label: 'Hill', unit: 'land tiles per player', div: 2, col: 'rgb(150,132,92)' },
+    { key: 'hMountain', label: 'Mountain', unit: 'land tiles per player', div: 2, col: 'rgb(132,132,138)' },
+    { key: 'hVolcano', label: 'Volcano', unit: 'land tiles per player', div: 2, col: 'rgb(150,70,50)' } ] },
+  { name: 'Water', dims: [
+    { key: 'wOcean', label: 'Ocean', unit: 'tiles per player', div: 2, col: 'rgb(38,71,110)' },
+    { key: 'wCoast', label: 'Coast', unit: 'tiles per player', div: 2, col: 'rgb(60,104,150)' },
+    { key: 'wLake', label: 'Lake', unit: 'tiles per player', div: 2, col: 'rgb(60,140,150)' },
+    { key: 'riverTiles', label: 'River', unit: 'river-bordering land tiles per player', div: 2, col: 'rgb(70,150,235)' } ] },
+  { name: 'Vegetation', dims: [
+    { key: 'vNone', label: 'Open', unit: 'land tiles per player', div: 2, col: 'rgb(112,126,90)' },
+    { key: 'vScrub', label: 'Scrub', unit: 'land tiles per player', div: 2, col: 'rgb(140,150,80)' },
+    { key: 'vTrees', label: 'Forest', unit: 'land tiles per player', div: 2, col: 'rgb(56,92,48)' },
+    { key: 'vJungle', label: 'Jungle', unit: 'land tiles per player', div: 2, col: 'rgb(30,74,44)' } ] },
+];
+
+// One panel: fixed geometry, y-scale = tallest 90th pct in the panel
+// (extremes clip), 2 recessive gridlines, median printed on each bar.
+const W = 470, H = 132, PL = 34, PR = 6, PT = 14, PB = 6;
+const panel = (dim: Dim) => {
+  const rows = pool.map((c: any) => {
+    const d = c.dist?.[dim.key];
+    const none = !d || (d.max ?? 0) <= 0;
+    const u = (v: number) => v / dim.div;
+    return { c, d, none,
+      med: none ? 0 : u(d.med), lo: none ? 0 : u(d.p10), hi: none ? 0 : u(d.p90),
+      mn: none ? 0 : u(d.min), mx: none ? 0 : u(d.max) };
+  });
+  const sc = Math.max(1e-9, ...rows.map((r) => r.hi));
+  const f = dim.fmt || (dim.div === 20 ? one : dim.div === 2 ? cnt : one);
+  const y = (v: number) => Math.max(PT, H - PB - (v / sc) * (H - PB - PT));
+  const n = rows.length, slot = (W - PL - PR) / n, bw = Math.max(6, slot - 6);
+  // gridline at a round step near the top
+  const raw = sc / 2, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw) || raw;
+  const grid = [step, step * 2].filter((g) => g <= sc * 1.02);
+  return { rows: rows.map((r, i) => ({ ...r, x: PL + i * slot + (slot - bw) / 2, bw,
+      yMed: y(r.med), yLo: y(r.lo), yHi: y(r.hi), yMn: y(r.mn), yMx: y(r.mx),
+      disp: r.none ? '' : f(r.med),
+      tip: r.none ? `${short[r.c.slug]} — ${dim.label}: none on this map.`
+        : `${short[r.c.slug]} — ${dim.label} (${dim.unit})\nmedian ${f(r.med)} · usual span ${f(r.lo)}–${f(r.hi)} (10th–90th pct) · extremes ${f(r.mn)}–${f(r.mx)} · ${r.d.n} generated maps\nwhole map: avg ${r.d.mean} ±${r.d.sd} sd` })),
+    grid: grid.map((g) => ({ v: g, y: y(g), lab: f(g) })), sc, y0: H - PB, fmtMax: f(sc) };
+};
+const SECTIONS = [
+  { title: 'Headline', sub: 'the six card pills', dims: HEAD, col: '#5b6f8a' },
+  { title: 'Resources', sub: 'per player — every pool map is mirrored, so each side holds half', dims: RES, col: '#4f7a3a' },
+  { title: 'Yield potential', sub: 'per player per turn, in game units (÷10), if every tile ran its best improvement for that yield', dims: YLD, col: '#8a6d2f' },
+  ...TERR.map((t) => ({ title: `Terrain · ${t.name}`, sub: 'tiles per player; each terrain group splits the map one way', dims: t.dims, col: '' })),
+];
+const order = pool.map((c: any) => ({ slug: c.slug, short: short[c.slug] }));
+---
+<Base title="Compare">
+  <p class="lede">
+    The 18-map pool side by side, one small chart per dimension. Every
+    chart has the maps in the <b>same order</b> (the pool page's), so a
+    map sits in the same slot everywhere — hover any bar to light that
+    map up in every chart, click to pin it, or arrive with
+    <code>?c=&lt;slug&gt;</code>. Bar = median, whisker = the usual span
+    (10th–90th percentile of the generated maps), dotted hairline =
+    extremes. Each chart has its own scale; numbers are per player
+    where that makes sense. For "which map has the most X" as a list,
+    see <a href={`${baseUrl}rankings`}>rankings</a>.
+  </p>
+
+  <div class="legend" id="legend">
+    {order.map((o, i) => (
+      <button type="button" class="lg" data-slug={o.slug} title={`Pin ${o.short} in every chart`}><i>{i + 1}</i>{o.short}</button>
+    ))}
+  </div>
+
+  {SECTIONS.map((sec) => (
+    <section class="sec">
+      <h2 class="sec__t">{sec.title} <span class="sec__s">{sec.sub}</span></h2>
+      <div class="grid">
+        {sec.dims.map((dim) => {
+          const p = panel(dim);
+          const col = dim.col || sec.col;
+          return (
+            <figure class="pnl" id={`p-${dim.key}`}>
+              <figcaption><b>{dim.label}</b> <span>{dim.unit}</span></figcaption>
+              <svg viewBox={`0 0 ${W} ${H}`} class="chart" role="img" aria-label={`${dim.label} across the pool`}>
+                {p.grid.map((g) => (
+                  <g><line x1={PL} x2={W - PR} y1={g.y} y2={g.y} class="grid" />
+                     <text x={PL - 4} y={g.y + 3} class="gl">{g.lab}</text></g>
+                ))}
+                <line x1={PL} x2={W - PR} y1={p.y0} y2={p.y0} class="axis" />
+                {p.rows.map((r, i) => (
+                  <g class={`bar${r.none ? ' none' : ''}`} data-slug={r.c.slug} data-i={i}>
+                    <title>{r.tip}</title>
+                    <rect class="hit" x={r.x - 3} y={PT - 10} width={r.bw + 6} height={H - PT + 10} />
+                    {!r.none && <rect class="fill" x={r.x} y={r.yMed} width={r.bw} height={p.y0 - r.yMed} style={`fill:${col}`} rx="1.5" />}
+                    {!r.none && <line class="ext" x1={r.x + r.bw / 2} x2={r.x + r.bw / 2} y1={r.yMn} y2={r.yMx} />}
+                    {!r.none && <line class="wh" x1={r.x + r.bw / 2} x2={r.x + r.bw / 2} y1={r.yLo} y2={r.yHi} />}
+                    {!r.none && <line class="wh" x1={r.x + r.bw / 2 - 3.5} x2={r.x + r.bw / 2 + 3.5} y1={r.yLo} y2={r.yLo} />}
+                    {!r.none && <line class="wh" x1={r.x + r.bw / 2 - 3.5} x2={r.x + r.bw / 2 + 3.5} y1={r.yHi} y2={r.yHi} />}
+                    <text class="v" x={r.x + r.bw / 2} y={Math.min(r.yHi, r.yMed) - 3}>{r.none ? '—' : r.disp}</text>
+                    <text class="ix" x={r.x + r.bw / 2} y={H + 8}>{i + 1}</text>
+                  </g>
+                ))}
+              </svg>
+            </figure>
+          );
+        })}
+      </div>
+    </section>
+  ))}
+
+  <style>
+    .lede { color:var(--text-soft); max-width:84ch; margin:0.4rem 0 1rem; line-height:1.5; }
+    .lede code { font-family:var(--font-mono, monospace); font-size:0.85em; color:var(--gold); }
+    .legend { position:sticky; top:0; z-index:5; display:flex; flex-wrap:wrap; gap:0.3rem 0.4rem;
+      padding:0.5rem 0; margin-bottom:0.6rem; background:var(--bg, #0d0e11);
+      border-bottom:1px solid var(--border); }
+    .lg { font-family:var(--font-ui); font-size:0.7rem; color:var(--text-soft);
+      background:#16181d; border:1px solid var(--border); border-radius:999px;
+      padding:0.12rem 0.55rem 0.12rem 0.3rem; cursor:pointer; display:inline-flex;
+      align-items:center; gap:0.35rem; }
+    .lg i { font-style:normal; font-variant-numeric:tabular-nums; color:var(--text-faint);
+      background:#0e0f12; border-radius:999px; min-width:1.25em; text-align:center;
+      padding:0 0.25em; font-size:0.66rem; }
+    .lg:hover, .lg.hi { border-color:var(--gold-deep); color:var(--gold); }
+    .lg.pin { background:#231f0d; border-color:var(--gold); color:var(--gold); }
+    .sec { margin-top:1.4rem; }
+    .sec__t { font-family:var(--font-display); font-size:1.15rem; color:var(--gold);
+      margin:0 0 0.5rem; }
+    .sec__s { font-family:var(--font-ui); font-size:0.7rem; color:var(--text-faint);
+      font-weight:400; margin-left:0.6rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(440px, 1fr)); gap:0.7rem 1.2rem; }
+    @media (max-width:520px){ .grid{ grid-template-columns:1fr; } }
+    .pnl { margin:0; background:var(--bg-elev); border:1px solid var(--border); border-radius:6px;
+      padding:0.45rem 0.6rem 0.35rem; }
+    .pnl figcaption { font-family:var(--font-ui); font-size:0.74rem; color:var(--text);
+      margin-bottom:0.15rem; }
+    .pnl figcaption b { font-weight:600; }
+    .pnl figcaption span { color:var(--text-faint); font-size:0.66rem; margin-left:0.4rem; }
+    .chart { width:100%; height:auto; display:block; overflow:visible; margin-bottom:0.55rem; }
+    .grid { }
+    .chart line.grid { stroke:#2a2d34; stroke-width:1; }
+    .chart .gl { font:8.5px var(--font-ui); fill:var(--text-faint); text-anchor:end; }
+    .chart .axis { stroke:#3a3e47; stroke-width:1; }
+    .chart .hit { fill:transparent; }
+    .chart .fill { stroke:#0006; stroke-width:0.8; }
+    .chart .wh { stroke:#e8e2d0; stroke-width:1.2; stroke-linecap:round; }
+    .chart .ext { stroke:#6b6f78; stroke-width:1; stroke-dasharray:1.5 2; }
+    .chart .v { font:8.5px var(--font-ui); fill:var(--text-soft); text-anchor:middle;
+      font-variant-numeric:tabular-nums; }
+    .chart .ix { font:7.5px var(--font-ui); fill:var(--text-faint); text-anchor:middle; }
+    .chart .bar { cursor:pointer; }
+    .chart .bar.none .v { fill:var(--text-dim); }
+    .chart .bar.hi .fill, .chart .bar.pin .fill { stroke:var(--gold); stroke-width:1.5; filter:brightness(1.25); }
+    .chart .bar.hi .v, .chart .bar.pin .v, .chart .bar.hi .ix, .chart .bar.pin .ix { fill:var(--gold); font-weight:600; }
+    .chart .bar.pin .ix { font-weight:700; }
+  </style>
+
+  <script is:inline>
+    (function(){
+      var pin = null;
+      function mark(slug, cls, on){
+        document.querySelectorAll('[data-slug="'+slug+'"]').forEach(function(el){
+          el.classList.toggle(cls, on); });
+      }
+      function setPin(slug){
+        if (pin) mark(pin, 'pin', false);
+        pin = (pin === slug) ? null : slug;
+        if (pin) mark(pin, 'pin', true);
+        var u = new URL(location.href);
+        if (pin) u.searchParams.set('c', pin); else u.searchParams.delete('c');
+        history.replaceState(null, '', u);
+      }
+      document.querySelectorAll('[data-slug]').forEach(function(el){
+        var s = el.getAttribute('data-slug');
+        el.addEventListener('mouseenter', function(){ mark(s, 'hi', true); });
+        el.addEventListener('mouseleave', function(){ mark(s, 'hi', false); });
+        el.addEventListener('click', function(e){ e.preventDefault(); setPin(s); });
+      });
+      var c = new URLSearchParams(location.search).get('c');
+      if (c && document.querySelector('[data-slug="'+c+'"]')) { pin = c; mark(c, 'pin', true); }
+    })();
+  </script>
+</Base>

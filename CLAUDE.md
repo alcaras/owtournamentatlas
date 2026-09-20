@@ -287,6 +287,17 @@ three stats only: city sites · land-hex distance · land-hex move cost.
      to the top. **Keep the two dim lists in sync** — a card link to a
      key `/rankings` doesn't publish is a dead anchor (this bit us with
      `oceanPct` and `windmill`).
+9. **`/compare` (`compare.astro`) is the visual "maps side by side"
+   page** (2026-09-20, from the same player feedback): one small
+   bar+whisker panel per dimension (headline pills · resources · yields
+   · terrain rows), every panel with the 18 maps on the x-axis in the
+   SAME fixed pool-page order (numbered 1–18; sticky legend maps the
+   numbers to names), own y-scale per panel, per-player units as on the
+   cards. Hover a bar → that map lights in every panel; click / `?c=`
+   pins it. `src/lib/pool.ts` holds the pool list + short-label rules
+   for it — `index.astro` / `rankings.astro` still carry their own
+   copies; keep them in sync (or migrate them to the lib). `/rankings`
+   stays the list form.
 8. `.cfg` on the pool page is a **flex column with explicit `order`** —
    the SETUP GUIDE summary is pinned to the header, so its panel must
    stay `order:1` or it opens somewhere far below its own button.
