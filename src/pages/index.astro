@@ -678,6 +678,53 @@ const rvYields = (c: any) => {
     .sort((a, z) => (z.srt - a.srt) || (z.hi - a.hi));
 };
 
+// Terrain composition, same treatment: four partitions of the map's
+// land (climate · relief · vegetation) plus the water split, as in-bounds
+// tile counts per player on ONE shared scale — they are slices of the
+// same map, so "flat 465 vs forest 105" should compare. Bar colours are
+// the /gen canvas terrain palette, so the chart doubles as the map key.
+// Data: build_dist gen_extra comp counts (c*/h*/w*/v* keys in dist).
+const TERR_GROUPS = [
+  { name: 'Climate', note: 'land tiles by terrain', bars: [
+    { key: 'cLush', label: 'Lush', col: 'rgb(74,110,56)', desc: 'Lush terrain — the richest farmland' },
+    { key: 'cTemperate', label: 'Temperate', col: 'rgb(104,138,74)', desc: 'Temperate terrain' },
+    { key: 'cArid', label: 'Arid', col: 'rgb(170,148,95)', desc: 'Arid terrain' },
+    { key: 'cSand', label: 'Sand', col: 'rgb(206,184,120)', desc: 'Sand (desert) — no city sites' },
+    { key: 'cTundra', label: 'Tundra', col: 'rgb(200,205,210)', desc: 'Tundra — no city sites' },
+    { key: 'cMarsh', label: 'Marsh', col: 'rgb(96,110,80)', desc: 'Marsh — no city sites' } ] },
+  { name: 'Relief', note: 'land tiles by height', bars: [
+    { key: 'hFlat', label: 'Flat', col: 'rgb(120,140,96)', desc: 'Flat land' },
+    { key: 'hHill', label: 'Hill', col: 'rgb(150,132,92)', desc: 'Hills — every one is a windmill site' },
+    { key: 'hMountain', label: 'Mountain', col: 'rgb(132,132,138)', desc: 'Mountains — impassable, un-improvable' },
+    { key: 'hVolcano', label: 'Volcano', col: 'rgb(150,70,50)', desc: 'Volcanoes — impassable' } ] },
+  { name: 'Water', note: 'water tiles, plus river-bordering land', bars: [
+    { key: 'wOcean', label: 'Ocean', col: 'rgb(38,71,110)', desc: 'Sea with no land neighbour' },
+    { key: 'wCoast', label: 'Coast', col: 'rgb(60,104,150)', desc: 'Sea touching land — where nets, harbours and embarking happen' },
+    { key: 'wLake', label: 'Lake', col: 'rgb(60,140,150)', desc: 'Lakes (inland, impassable)' },
+    { key: 'riverTiles', label: 'River', col: 'rgb(70,150,235)', desc: 'LAND tiles bordering a river (own edge or a neighbour\'s) — overlaps the land rows' } ] },
+  { name: 'Vegetation', note: 'land tiles by cover', bars: [
+    { key: 'vNone', label: 'Open', col: 'rgb(112,126,90)', desc: 'Land with no vegetation' },
+    { key: 'vScrub', label: 'Scrub', col: 'rgb(140,150,80)', desc: 'Scrub — 20 wood clearcut, −25 ranged' },
+    { key: 'vTrees', label: 'Forest', col: 'rgb(56,92,48)', desc: 'Forest — 40 wood clearcut, −50 ranged, lumbermill site' },
+    { key: 'vJungle', label: 'Jungle', col: 'rgb(30,74,44)', desc: 'Jungle — 60 wood clearcut, −75 ranged, blocks expansion' } ] },
+] as const;
+const rvTerrain = (c: any) => {
+  const rows = TERR_GROUPS.map((g: any) => ({ g, bars: g.bars.map((b: any) => {
+    const d = c.dist?.[b.key];
+    const none = !d || (d.max ?? 0) <= 0;
+    return { b, d, none,
+      med: none ? 0 : d.med / 2, lo: none ? 0 : d.p10 / 2, hi: none ? 0 : d.p90 / 2,
+      mn: none ? 0 : d.min / 2, mx: none ? 0 : d.max / 2 };
+  }) }));
+  const sc = Math.max(1, ...rows.flatMap((r) => r.bars.map((x: any) => x.hi)));
+  return rows.map((r) => ({ ...r, bars: r.bars.map((x: any) => ({ ...x, sc,
+    tip: x.none ? `${x.b.label} — ${x.b.desc}\nNone on this map.`
+      : `${x.b.label} — ${x.b.desc}\nPer player (map is mirrored, each side holds half): `
+        + `median ${half(x.d.med)} tiles, usual span ${half(x.d.p10)}–${half(x.d.p90)} (10th–90th pct), `
+        + `extremes ${half(x.d.min)}–${half(x.d.max)}, over ${x.d.n} generated maps.\n`
+        + `Whole map: avg ${x.d.mean} ±${x.d.sd} sd, range ${x.d.min}–${x.d.max}.` })) }));
+};
+
 // ---- hero-pill relative bars -----------------------------------------
 // Same green→red language as the resource bars, applied to the headline
 // stats so each pill also shows where this script sits vs the pool.
@@ -1103,6 +1150,7 @@ const barStyle = (c: any, key: string) => {
             })}
           </div>
           </div>
+          <div class="rvar-y" data-rv="cur">
           <div class="rstrip__lab rstrip__lab--2">Terrain &amp; topology
             <span class="rstrip__sub">tile counts, never percentages — so they halve per player like everything else · bar = rank among the 18 maps · hover for exact amounts <i>and per-player counts</i></span>
           </div>
@@ -1117,6 +1165,39 @@ const barStyle = (c: any, key: string) => {
                 </a>
               );
             })}
+          </div>
+          </div>
+          <div class="rvar-y" data-rv="e">
+          <div class="rstrip__lab rstrip__lab--2">Terrain on this map
+            <span class="rstrip__sub">tiles <b>per player</b> · each row splits the map one way (climate · relief · water · cover) · bar = median · whisker = usual span (10th–90th pct) · hairline = extremes · <i>one</i> scale across all four rows, so any two bars compare · bar colours = the map preview's colours · hover for numbers</span>
+          </div>
+          <div class="rv__tgrid">
+            {rvTerrain(c).map((r: any) => (
+              <div class="rv__tgroup">
+                <div class="rv__tcap">{r.g.name} <i>{r.g.note}</i></div>
+                <div class="rstrip__ics rstrip__ics--d">
+                  {r.bars.map((x: any) => {
+                    const H = 60, Y = (v: number) => Math.max(1.5, H - (v / x.sc) * (H - 3));
+                    return (
+                      <a class={`ric ric--d ric--t${x.none ? ' ric--none' : ''}`} href={`${baseUrl}rankings?c=${c.slug}#r-${x.b.key}`} title={x.tip}>
+                        <div class="rv__n">{x.none ? '—' : half(x.d.med)}</div>
+                        <svg class="rv__vbar" viewBox={`0 0 52 ${H + 1}`}>
+                          <line x1="6" y1={H + 0.5} x2="46" y2={H + 0.5} class="rv__axis" />
+                          {!x.none && <rect x="17" y={Y(x.med)} width="18" height={H - Y(x.med)} class="rv__bar" style={`fill:${x.b.col}`} />}
+                          {!x.none && <line x1="26" y1={Y(x.mn)} x2="26" y2={Y(x.mx)} class="rv__ext" />}
+                          {!x.none && <line x1="26" y1={Y(x.lo)} x2="26" y2={Y(x.hi)} class="rv__whisk" />}
+                          {!x.none && <line x1="21" y1={Y(x.lo)} x2="31" y2={Y(x.lo)} class="rv__whisk" />}
+                          {!x.none && <line x1="21" y1={Y(x.hi)} x2="31" y2={Y(x.hi)} class="rv__whisk" />}
+                        </svg>
+                        <span class="rv__sw" style={`background:${x.b.col}`}></span>
+                        <div class="ric__c">{x.b.label}</div>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
           </div>
         </div>
         <details class="gal" open>
@@ -1366,6 +1447,16 @@ const barStyle = (c: any, key: string) => {
     .rv__vbar { width:52px; height:61px; display:block; overflow:visible; }
     .rv__bar { fill:#4f7a3a; stroke:#0006; stroke-width:1; }
     .rv__bar--y { fill:#8a6d2f; }
+    .rv__tgrid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 1.4rem; }
+    @media (max-width:760px){ .rv__tgrid{ grid-template-columns:1fr; } }
+    .rv__tcap { font-family:var(--font-ui); font-size:0.64rem; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--text-soft); margin:0.3rem 0 0.15rem; }
+    .rv__tcap i { font-style:normal; text-transform:none; letter-spacing:0;
+      color:var(--text-faint); margin-left:0.35rem; }
+    .ric--t { width:50px; }
+    .rv__sw { display:block; width:14px; height:14px; border-radius:3px;
+      border:1px solid #0008; margin-top:0.25rem; }
+    .ric--none .rv__sw { opacity:0.35; }
     .ric--y { width:58px; }
     .rv__whisk { stroke:#e8e2d0; stroke-width:1.4; stroke-linecap:round; }
     .rv__ext { stroke:#6b6f78; stroke-width:1; stroke-dasharray:1.5 2; }
